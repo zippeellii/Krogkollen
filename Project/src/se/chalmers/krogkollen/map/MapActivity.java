@@ -1,26 +1,24 @@
-package se.chalmers.krogkollen;
+package se.chalmers.krogkollen.map;
 
-import se.chalmers.krogkollen.map.MapActivity;
+import se.chalmers.krogkollen.R;
+import se.chalmers.krogkollen.R.layout;
+import se.chalmers.krogkollen.R.menu;
 import android.os.Bundle;
 import android.app.Activity;
-import android.content.Intent;
 import android.view.Menu;
 
-public class MainActivity extends Activity {
+public class MapActivity extends Activity {
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		setContentView(R.layout.activity_main);
-		Intent intent = new Intent(this, MapActivity.class);
-		startActivity(intent);
-		
+		setContentView(R.layout.activity_map);
 	}
 
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
 		// Inflate the menu; this adds items to the action bar if it is present.
-		getMenuInflater().inflate(R.menu.main, menu);
+		getMenuInflater().inflate(R.menu.map, menu);
 		return true;
 	}
 

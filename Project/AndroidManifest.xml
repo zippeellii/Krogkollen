@@ -40,7 +40,7 @@
 
         <meta-data
             android:name="com.google.android.maps.v2.API_KEY"
-            android:value="AIzaSyCaaLs60uQ8L_qjM2ZyHtyHRRYO3miWvKA" />
+            android:value="AIzaSyCRucmz7vhihr7MDjtm125OGj7mwba_u70" />
 
         <activity
             android:name="se.chalmers.krogkollen.map.MapActivity"

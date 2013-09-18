@@ -32,5 +32,12 @@ local.properties
 *~
 *.swp
 
-#Mac Files
+# Mac Files
 .DS_Store
+
+# Eclipse
+.classpath
+.project
+
+# Proguard
+proguard/

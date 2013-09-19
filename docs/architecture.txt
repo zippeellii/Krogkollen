@@ -31,7 +31,6 @@ IPresenter
 IMapPresenter implements IPresenter
 	public abstract void pubClicked(Pub pub) // Denna kallas när en vy säger att en pub klickats på
 	public abstract List<IPub> search(String search) // Denna kallas när man söker, ska innehålla algoritm som returnerar en träfflista med pubbar
-	private abstract void calculateQueueTimes() // Hämtar kötider från alla pubbar som visas
 	public abstract void refresh() // kallar på calculateQueueTimes
 
 IPub

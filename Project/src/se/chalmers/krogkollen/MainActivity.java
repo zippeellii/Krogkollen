@@ -1,10 +1,12 @@
 package se.chalmers.krogkollen;
 
-import se.chalmers.krogkollen.map.MapActivity;
-import android.os.Bundle;
 import android.app.Activity;
 import android.content.Intent;
+import android.os.Bundle;
 import android.view.Menu;
+import se.chalmers.krogkollen.map.MapActivity;
+
+import java.util.Scanner;
 
 public class MainActivity extends Activity {
 
@@ -14,7 +16,12 @@ public class MainActivity extends Activity {
 		setContentView(R.layout.activity_main);
 		Intent intent = new Intent(this, MapActivity.class);
 		startActivity(intent);
-		
+		// tjo swe
+
+
+        Scanner sc = new Scanner(System.in);
+
+
 	}
 
 	@Override

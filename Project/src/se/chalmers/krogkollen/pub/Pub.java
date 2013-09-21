@@ -6,14 +6,15 @@ import com.google.android.gms.maps.model.LatLng;
  *
  */
 public class Pub implements IPub{
-	
+
 	private String name;
 	private String description;
 	private String openingHours;
 	private int ageRestriction;
 	private int queueTime;
 	private LatLng coordinates;
-	
+	private final int ID;
+
 	/**
 	 * A constructor for creating a new pub
 	 * @param name - the name of the pub
@@ -24,12 +25,13 @@ public class Pub implements IPub{
 	 * @param latitude - the latitude coordinate
 	 * @param longitude - the longitude coordinate
 	 */
-	public Pub(String name, String description, String openingHours, int ageRestriction, int queueTime, double latitude, double longitude){
+	public Pub(String name, String description, String openingHours, int ageRestriction, int queueTime, double latitude, double longitude, int id){
 		this.name = name;
 		this.description = description;
 		this.openingHours = openingHours;
 		this.ageRestriction = ageRestriction;
-		this.queueTime = queueTime;
+		this.setQueueTime(queueTime);
+		this.ID = id;
 		coordinates = new LatLng(latitude, longitude);
 	}
 
@@ -67,6 +69,23 @@ public class Pub implements IPub{
 	@Override
 	public LatLng getCoordinates() {
 		return new LatLng(this.coordinates.latitude, this.coordinates.longitude);
+	}
+
+	@Override
+	public void setQueueTime(int queueTime) {
+		//If something is wrong
+		if(queueTime < 0){
+			this.queueTime = 0;
+		}
+		else{
+			this.queueTime = queueTime;
+		}
+
+	}
+
+	@Override
+	public int getID() {
+		return this.ID;
 	}
 
 }

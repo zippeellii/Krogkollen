@@ -1,5 +1,7 @@
 package se.chalmers.krogkollen.pub;
 
+import com.google.android.gms.maps.model.LatLng;
+
 /**
  * Interface for a Pub object
  * 
@@ -38,5 +40,8 @@ public interface IPub {
 	 */
 	public int getQueueTimeLastUpdatedTimestamp();
 	
-	//public Point getCoordinates(); // TODO how to handle coordinates? sync with Google maps
+	/**
+	 * @return the LatLng object for the pub, which describes the latitude and longitude coordinates
+	 */
+	public LatLng getCoordinates();
 }

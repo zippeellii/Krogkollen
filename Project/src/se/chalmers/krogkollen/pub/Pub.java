@@ -64,4 +64,9 @@ public class Pub implements IPub{
 		return 0;
 	}
 
+	@Override
+	public LatLng getCoordinates() {
+		return new LatLng(this.coordinates.latitude, this.coordinates.longitude);
+	}
+
 }

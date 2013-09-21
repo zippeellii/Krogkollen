@@ -51,11 +51,6 @@ public interface IPub {
 	public LatLng getCoordinates();
 	
 	/**
-	 * Sets the unique ID for the pub
-	 */
-	public void setID(int id);
-	
-	/**
 	 * @return the unique ID for the pub
 	 */
 	public int getID();

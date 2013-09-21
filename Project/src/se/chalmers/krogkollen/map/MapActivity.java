@@ -10,6 +10,7 @@ import com.google.android.gms.maps.model.MarkerOptions;
 import se.chalmers.krogkollen.R;
 import se.chalmers.krogkollen.R.layout;
 import se.chalmers.krogkollen.R.menu;
+import se.chalmers.krogkollen.pub.IPub;
 import android.location.Location;
 import android.location.LocationManager;
 import android.os.Bundle;
@@ -17,7 +18,7 @@ import android.app.Activity;
 import android.content.Context;
 import android.view.Menu;
 
-public class MapActivity extends Activity {
+public class MapActivity extends Activity implements IMapView{
 
     private GoogleMap mMap;
     private UserLocation userLocation;
@@ -55,4 +56,22 @@ public class MapActivity extends Activity {
             }
         }
     }
+
+	@Override
+	public void navigate(Class<?> destination) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void showErrorMessage(String message) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void addPubToMap(IPub pub) {
+		// TODO Auto-generated method stub
+		
+	}
 }

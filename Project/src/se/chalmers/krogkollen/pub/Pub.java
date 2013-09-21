@@ -24,6 +24,7 @@ public class Pub implements IPub{
 	 * @param queueTime- the present queue time
 	 * @param latitude - the latitude coordinate
 	 * @param longitude - the longitude coordinate
+	 * @param id - the id of the pub
 	 */
 	public Pub(String name, String description, String openingHours, int ageRestriction, int queueTime, double latitude, double longitude, int id){
 		this.name = name;
@@ -73,7 +74,7 @@ public class Pub implements IPub{
 
 	@Override
 	public void setQueueTime(int queueTime) {
-		//If something is wrong
+		//No negative time allowed
 		if(queueTime < 0){
 			this.queueTime = 0;
 		}

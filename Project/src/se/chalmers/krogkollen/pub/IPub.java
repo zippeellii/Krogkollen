@@ -36,6 +36,11 @@ public interface IPub {
 	public int getQueueTime();
 	
 	/**
+	 * Sets the queuetime for the pub
+	 */
+	public void setQueueTime(int queueTime);
+	
+	/**
 	 * @return the timestamp of when the queue time was last updated
 	 */
 	public int getQueueTimeLastUpdatedTimestamp();
@@ -44,4 +49,14 @@ public interface IPub {
 	 * @return the LatLng object for the pub, which describes the latitude and longitude coordinates
 	 */
 	public LatLng getCoordinates();
+	
+	/**
+	 * Sets the unique ID for the pub
+	 */
+	public void setID(int id);
+	
+	/**
+	 * @return the unique ID for the pub
+	 */
+	public int getID();
 }

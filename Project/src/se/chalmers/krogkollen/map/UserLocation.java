@@ -1,19 +1,27 @@
 package se.chalmers.krogkollen.map;
 
-import com.google.android.gms.maps.model.LatLng;
-
-import android.content.Context;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
 import android.os.Bundle;
+import com.google.android.gms.maps.model.LatLng;
 
+/**
+ * A class handling the phones current position.
+ */
 public class UserLocation implements LocationListener{
 
 	private Location currentLocation;
 	private LocationManager locationManager;
+
+    // Reading interval, used to determine which reading is better.
 	private static final int TWO_MINUTES = 1000 * 60 * 2;
-	
+
+    /**
+     * Instantiate a user location object.
+     *
+     * @param locationManager location manager from an activity.
+     */
 	public UserLocation(LocationManager locationManager){
 		this.locationManager = locationManager;
 		
@@ -27,10 +35,20 @@ public class UserLocation implements LocationListener{
 		}
 	}
 
+    /**
+     * Returns current location.
+     *
+     * @return current location.
+     */
 	public Location getCurrentLocation(){
 		return this.currentLocation;
 	}
-	
+
+    /**
+     * Get the current location of the phone in latitude and longitude.
+     *
+     * @return current location.
+     */
 	public LatLng getCurrentLatLng(){
 		return new LatLng(this.currentLocation.getLatitude(), this.currentLocation.getLongitude());
 	}
@@ -51,10 +69,14 @@ public class UserLocation implements LocationListener{
 	@Override
 	public void onStatusChanged(String provider, int status, Bundle extras) {}
 	
-	/** Determines whether one Location reading is better than the current Location fix
-	  * @param location  The new Location that you want to evaluate
-	  * @param currentBestLocation  The current Location fix, to which you want to compare the new one
-	  */
+	/**
+     * ** Method written by Google, found in Android training examples for locations. **
+     *
+     * Determines whether one Location reading is better than the current Location fix.
+     *
+	 * @param location  The new Location that you want to evaluate
+	 * @param currentBestLocation  The current Location fix, to which you want to compare the new one
+	 */
 	protected boolean isBetterLocation(Location location, Location currentBestLocation) {
 	    if (currentBestLocation == null) {
 	        // A new location is always better than no location

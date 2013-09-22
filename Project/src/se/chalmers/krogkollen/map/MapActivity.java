@@ -20,6 +20,11 @@ import android.view.Menu;
 import se.chalmers.krogkollen.pub.Pub;
 import se.chalmers.krogkollen.pub.PubUtilities;
 
+/**
+ * The standard implementation of IMapView.
+ * 
+ * This is a normal map with the user marked on the map, and with a list of pubs marked on the map.
+ */
 public class MapActivity extends Activity implements IMapView{
 
     private GoogleMap mMap;
@@ -30,7 +35,7 @@ public class MapActivity extends Activity implements IMapView{
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_map);
         mMap = ((MapFragment) getFragmentManager().findFragmentById(R.id.map)).getMap();
-        addMarker();
+        addPubMarkers();
         this.userLocation = new UserLocation((LocationManager) this.getSystemService(Context.LOCATION_SERVICE));
         addUserMarker(this.userLocation.getCurrentLocation());
         mMap.animateCamera(CameraUpdateFactory.newCameraPosition(new CameraPosition(this.userLocation.getCurrentLatLng(), 15, 0, 0)));
@@ -42,19 +47,18 @@ public class MapActivity extends Activity implements IMapView{
 		getMenuInflater().inflate(R.menu.map, menu);
 		return true;
 	}
-	
-	private void addUserMarker(Location location){
+
+    @Override
+    public void addUserMarker(Location location){
 		mMap.addMarker(new MarkerOptions()
 						.position(new LatLng(location.getLatitude(), location.getLongitude()))
 						.title("User"));
 	}
-	
-    private void addMarker() {
+
+    @Override
+    public void addPubMarkers() {
         for (int i = 0; i < PubUtilities.getInstance().getPubList().size(); i++) {
-            IPub pub = PubUtilities.getInstance().getPubList().get(i);
-            mMap.addMarker(new MarkerOptions()
-                    .position(new LatLng(pub.getCoordinates().latitude, pub.getCoordinates().longitude))
-                    .title(pub.getName() + " - " + pub.getDescription()));
+            addPubToMap(PubUtilities.getInstance().getPubList().get(i));
         }
     }
 
@@ -72,7 +76,8 @@ public class MapActivity extends Activity implements IMapView{
 
 	@Override
 	public void addPubToMap(IPub pub) {
-		// TODO Auto-generated method stub
-		
+        mMap.addMarker(new MarkerOptions()
+                .position(new LatLng(pub.getCoordinates().latitude, pub.getCoordinates().longitude))
+                .title(pub.getName() + ": " + pub.getDescription()));
 	}
 }

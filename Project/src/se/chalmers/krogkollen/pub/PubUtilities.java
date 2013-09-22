@@ -1,7 +1,5 @@
 package se.chalmers.krogkollen.pub;
 
-import com.google.android.gms.maps.model.LatLng;
-
 import java.util.LinkedList;
 import java.util.List;
 

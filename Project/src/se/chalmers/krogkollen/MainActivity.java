@@ -6,9 +6,11 @@ import android.os.Bundle;
 import android.view.Menu;
 import se.chalmers.krogkollen.map.MapActivity;
 import se.chalmers.krogkollen.pub.PubUtilities;
-
-import java.util.Scanner;
-
+/**
+ * A class used for starting the application
+ * @author Jonathan Nilsfors
+ *
+ */
 public class MainActivity extends Activity {
 
 	@Override
@@ -16,6 +18,7 @@ public class MainActivity extends Activity {
         PubUtilities.getInstance().loadPubList();
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
+		//Automatically starts the map activity
 		Intent intent = new Intent(this, MapActivity.class);
 		startActivity(intent);
 	}

@@ -22,7 +22,7 @@ import se.chalmers.krogkollen.pub.PubUtilities;
 
 /**
  * The standard implementation of IMapView.
- * 
+ *
  * This is a normal map with the user marked on the map, and with a list of pubs marked on the map.
  */
 public class MapActivity extends Activity implements IMapView{

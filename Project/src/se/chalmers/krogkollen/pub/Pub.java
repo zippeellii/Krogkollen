@@ -3,6 +3,7 @@ import com.google.android.gms.maps.model.LatLng;
 /**
  * A class representing a pub
  * @author Jonathan Nilsfors
+ * @author Albin Garpetun
  *
  */
 public class Pub implements IPub{
@@ -14,17 +15,27 @@ public class Pub implements IPub{
 	private int queueTime;
 	private LatLng coordinates;
 	private final int ID;
+	
+	/**
+     * Instantiates the object, creating a dummy pub object.
+     *
+     * More constructors should be added, in case there is information missing.
+     */
+    public Pub () {
+        this("Name", "Description", "00:00 - 00:00", 18, 15, 0.0, 0.0, 0);
+    }
 
 	/**
 	 * A constructor for creating a new pub
-	 * @param name - the name of the pub
-	 * @param description - a short description of the pub
-	 * @param openingHours - the pubs opening hours
-	 * @param ageRestriction - the age restriction
-	 * @param queueTime- the present queue time
-	 * @param latitude - the latitude coordinate
-	 * @param longitude - the longitude coordinate
-	 * @param id - the id of the pub
+	 * 
+	 * @param name the name of the pub
+	 * @param description a short description of the pub
+	 * @param openingHours the pubs opening hours
+	 * @param ageRestriction the age restriction
+	 * @param queueTime the present queue time
+	 * @param latitude the latitude coordinate
+	 * @param longitude the longitude coordinate
+	 * @param id the unique id of the pub
 	 */
 	public Pub(String name, String description, String openingHours, int ageRestriction, int queueTime, double latitude, double longitude, int id){
 		this.name = name;

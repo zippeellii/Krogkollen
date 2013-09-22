@@ -59,7 +59,6 @@ public class PubUtilities {
         pubList.add(new Pub("Club Avancez", "-", "19:00 - 03:00", 18, 0, 0, new LatLng(57.693289,11.976017), 17));
         pubList.add(new Pub("Pub P", "?", "18:00 - 01:00", 18, 0, 0, new LatLng(57.706922,11.939643), 18));
         pubList.add(new Pub("11:an", "?", "18:00 - 01:00", 18, 0, 0, new LatLng(57.706555,11.936639), 19));
-
     }
 
     /**

@@ -51,10 +51,7 @@ public class MapActivity extends Activity implements IMapView{
 	
     private void addMarker() {
         for (int i = 0; i < PubUtilities.getInstance().getPubList().size(); i++) {
-            IPub pub = PubUtilities.getInstance().getPubList().get(i);
-            mMap.addMarker(new MarkerOptions()
-                    .position(new LatLng(pub.getCoordinates().latitude, pub.getCoordinates().longitude))
-                    .title(pub.getName() + " - " + pub.getDescription()));
+            addPubToMap(PubUtilities.getInstance().getPubList().get(i));
         }
     }
 
@@ -72,7 +69,8 @@ public class MapActivity extends Activity implements IMapView{
 
 	@Override
 	public void addPubToMap(IPub pub) {
-		// TODO Auto-generated method stub
-		
+        mMap.addMarker(new MarkerOptions()
+                .position(new LatLng(pub.getCoordinates().latitude, pub.getCoordinates().longitude))
+                .title(pub.getName() + ": " + pub.getDescription()));
 	}
 }

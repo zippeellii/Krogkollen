@@ -17,6 +17,8 @@ import android.os.Bundle;
 import android.app.Activity;
 import android.content.Context;
 import android.view.Menu;
+import se.chalmers.krogkollen.pub.Pub;
+import se.chalmers.krogkollen.pub.PubUtilities;
 
 public class MapActivity extends Activity implements IMapView{
 
@@ -48,12 +50,11 @@ public class MapActivity extends Activity implements IMapView{
 	}
 	
     private void addMarker() {
-        for (int i = 0; i < 100; i++) {
-            for (int j = 0; j < 100; j++) {
-                mMap.addMarker(new MarkerOptions()
-                        .position(new LatLng(i*10, j*10))
-                        .title(i*10 + " . " + j*10));
-            }
+        for (int i = 0; i < PubUtilities.getInstance().getPubList().size(); i++) {
+            IPub pub = PubUtilities.getInstance().getPubList().get(i);
+            mMap.addMarker(new MarkerOptions()
+                    .position(new LatLng(pub.getCoordinates().latitude, pub.getCoordinates().longitude))
+                    .title(pub.getName() + " - " + pub.getDescription()));
         }
     }
 

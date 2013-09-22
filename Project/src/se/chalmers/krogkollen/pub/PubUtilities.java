@@ -1,7 +1,5 @@
 package se.chalmers.krogkollen.pub;
 
-import com.google.android.gms.maps.model.LatLng;
-
 import java.util.LinkedList;
 import java.util.List;
 
@@ -40,7 +38,7 @@ public class PubUtilities {
      * For now this method only adds hardcoded pubs into the list.
      */
     public void loadPubList() {
-        pubList.add(new Pub("Hubben 2.0", "IT's pub", "22:00-05:00", 18, 0, 0, new LatLng(57.688221, 11.979539), 1));
+        pubList.add(new Pub("Hubben 2.0", "IT's pub", "22:00-05:00", 18, 4, 57.688221, 11.979539, 1));
     }
 
     /**

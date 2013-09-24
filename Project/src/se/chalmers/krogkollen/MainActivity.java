@@ -1,11 +1,15 @@
 package se.chalmers.krogkollen;
 
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
+import android.location.LocationManager;
 import android.os.Bundle;
 import android.view.Menu;
 import se.chalmers.krogkollen.map.MapActivity;
+import se.chalmers.krogkollen.map.UserLocation;
 import se.chalmers.krogkollen.pub.PubUtilities;
+
 /**
  * A class used for starting the application
  * @author Jonathan Nilsfors
@@ -18,7 +22,9 @@ public class MainActivity extends Activity {
         PubUtilities.getInstance().loadPubList();
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
-		//Automatically starts the map activity
+		
+		//initiate the user location and start the map activity.
+		UserLocation.init((LocationManager) this.getSystemService(Context.LOCATION_SERVICE));
 		Intent intent = new Intent(this, MapActivity.class);
 		startActivity(intent);
 	}

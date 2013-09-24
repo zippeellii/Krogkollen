@@ -1,62 +1,113 @@
 package se.chalmers.krogkollen.map;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import se.chalmers.krogkollen.utils.IObservable;
+import se.chalmers.krogkollen.utils.IObserver;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
 import android.os.Bundle;
+
 import com.google.android.gms.maps.model.LatLng;
 
 /**
  * A class handling the phones current position.
  */
-public class UserLocation implements LocationListener{
+public class UserLocation implements LocationListener, IObservable{
 
+	private static UserLocation instance = null;
+	
+	private List<IObserver> observers = new ArrayList<IObserver>();
+	
 	private Location currentLocation;
 	private LocationManager locationManager;
+	private String NetLocationProvider = LocationManager.NETWORK_PROVIDER;
+	private String GpsLocationProvider = LocationManager.GPS_PROVIDER;
 
     // Reading interval, used to determine which reading is better.
 	private static final int TWO_MINUTES = 1000 * 60 * 2;
 
     /**
-     * Instantiate a user location object.
+     * Instantiates a user location object.
      *
      * @param locationManager location manager from an activity.
      */
-	public UserLocation(LocationManager locationManager){
+	private UserLocation(LocationManager locationManager){
 		this.locationManager = locationManager;
-		
 		//Initiate first position of the user.
-		String locationProvider1 = LocationManager.NETWORK_PROVIDER;
-		String locationProvider2= LocationManager.GPS_PROVIDER;
-		if(isBetterLocation(this.locationManager.getLastKnownLocation(locationProvider1), this.locationManager.getLastKnownLocation(locationProvider2))){
-			this.currentLocation = this.locationManager.getLastKnownLocation(locationProvider1);
+		if(isBetterLocation(this.locationManager.getLastKnownLocation(NetLocationProvider), this.locationManager.getLastKnownLocation(GpsLocationProvider))){
+			this.currentLocation = this.locationManager.getLastKnownLocation(NetLocationProvider);
 		} else {
-			this.currentLocation = this.locationManager.getLastKnownLocation(locationProvider2);
+			this.currentLocation = this.locationManager.getLastKnownLocation(GpsLocationProvider);
 		}
+	}
+	
+	/**
+	 * Initiates a new UserLocation object with given LocationManager.
+	 * 
+	 * @param locationManager	LocationManager from an activity
+	 */
+	public static void init(LocationManager locationManager) {
+		if(instance != null){
+			throw new IllegalStateException("The user location has already been initialized!");
+		}
+		instance = new UserLocation(locationManager);
+	}
+	
+	/**
+	 * Returns an instance of this class if it's been initialized.
+	 * 
+	 * @return	an instance of UserLocation
+	 */
+	public static UserLocation getInstance() {
+		if(instance == null){
+			throw new IllegalStateException("The user location hasn't been initialized!");
+		}
+		return instance;
 	}
 
     /**
-     * Returns current location.
+     * Returns the current user location.
      *
-     * @return current location.
+     * @return current user location.
      */
 	public Location getCurrentLocation(){
 		return this.currentLocation;
 	}
 
     /**
-     * Get the current location of the phone in latitude and longitude.
+     * Get the current user location of the phone in latitude and longitude.
      *
-     * @return current location.
+     * @return current user location.
      */
 	public LatLng getCurrentLatLng(){
 		return new LatLng(this.currentLocation.getLatitude(), this.currentLocation.getLongitude());
+	}
+	
+	/**
+	 * Stop tracking the users location (to save battery).
+	 */
+	public void stopTrackingUser() {
+		locationManager.removeUpdates(this);
+	}
+	
+	/**
+	 * Start tracking the users location.
+	 */
+	public void startTrackingUser() {
+		this.locationManager.requestLocationUpdates(this.NetLocationProvider, 0, 0, this);
+		this.locationManager.requestLocationUpdates(this.GpsLocationProvider, 0, 0, this);
 	}
 	
 	@Override
 	public void onLocationChanged(Location location) {
 		if(isBetterLocation(location, this.currentLocation)){
 			this.currentLocation = location;
+		}
+		for(IObserver observer: observers) {
+			observer.update();
 		}
 	}
 
@@ -126,5 +177,14 @@ public class UserLocation implements LocationListener{
 	    }
 	    return provider1.equals(provider2);
 	}
-	
+
+	@Override
+	public void addObserver(IObserver observer) {
+		this.observers.add(observer);
+	}
+
+	@Override
+	public void removeObserver(IObserver observer) {
+		this.observers.remove(observer);
+	}
 }

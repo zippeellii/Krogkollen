@@ -1,6 +1,7 @@
 package se.chalmers.krogkollen.map;
 
-import android.location.Location;
+import com.google.android.gms.maps.model.LatLng;
+
 import se.chalmers.krogkollen.IView;
 import se.chalmers.krogkollen.pub.IPub;
 
@@ -28,5 +29,5 @@ public interface IMapView extends IView {
      * Adds the GPS-location of the phone as a marker in the map view.
      * @param location The location to be added.
      */
-    void addUserMarker(Location location);
+    void addUserMarker(LatLng latLng);
 }

@@ -12,9 +12,9 @@ import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapFragment;
 import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import se.chalmers.krogkollen.R;
-import se.chalmers.krogkollen.map.marker.MarkerFactory;
 import se.chalmers.krogkollen.pub.IPub;
 import se.chalmers.krogkollen.pub.PubUtilities;
 
@@ -30,8 +30,21 @@ public class MapActivity extends Activity implements IMapView{
         mMap = ((MapFragment) getFragmentManager().findFragmentById(R.id.map)).getMap();
         addMarker();
         this.userLocation = new UserLocation((LocationManager) this.getSystemService(Context.LOCATION_SERVICE));
+
+        mMap.setOnMarkerClickListener(new GoogleMap.OnMarkerClickListener() {
+            @Override
+            public boolean onMarkerClick(Marker marker) {
+                // open detailed view.
+                return false; // Keep default behavior i.e. move camera to marker.
+            }
+        });
+
+        // Add the marker that follows the user on the map.
         addUserMarker(this.userLocation.getCurrentLocation());
+
+        // Move to the current location of the user.
         mMap.animateCamera(CameraUpdateFactory.newCameraPosition(new CameraPosition(this.userLocation.getCurrentLatLng(), 15, 0, 0)));
+
         getActionBar().setDisplayUseLogoEnabled(false);
 	}
 
@@ -49,6 +62,14 @@ public class MapActivity extends Activity implements IMapView{
     public boolean onOptionsItemSelected(MenuItem menuItem) {
         if (menuItem.getItemId() == R.id.refresh_info) {
             // REFRESH MAP HERE PLS
+            return true;
+        }
+        if (menuItem.getItemId() == R.id.search) {
+            // ÖPPNA SÖKFÄLT
+            return true;
+        }
+        if (menuItem.getItemId() == R.id.open_list_view) {
+            // SKICKA INTENT - ÖPPNA LISTA
             return true;
         }
         return super.onOptionsItemSelected(menuItem);
@@ -97,6 +118,7 @@ public class MapActivity extends Activity implements IMapView{
                 drawable = R.drawable.gray_marker_bg;
                 break;
         }
-        mMap.addMarker(MarkerFactory.createMarkerOptions(getResources(), drawable, pub.getName(), pub.getOpeningHours(), new LatLng(pub.getCoordinates().latitude, pub.getCoordinates().longitude)));
+        mMap.addMarker(MarkerFactory.createMarkerOptions(getResources(), drawable, pub.getName(), pub.getOpeningHours(),
+               new LatLng(pub.getCoordinates().latitude, pub.getCoordinates().longitude)));
 	}
 }

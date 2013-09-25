@@ -1,4 +1,4 @@
-package se.chalmers.krogkollen.map.marker;
+package se.chalmers.krogkollen.map;
 
 import android.content.res.Resources;
 import android.graphics.*;
@@ -8,7 +8,9 @@ import com.google.android.gms.maps.model.MarkerOptions;
 
 /**
  * MarkerFactory (UTF-8)
- * <p/>
+ *
+ * Builds settings for markers in Google Maps V2 for Android.
+ *
  * Author: Johan Backman
  * Date: 2013-09-22
  */
@@ -29,7 +31,8 @@ public class MarkerFactory {
      * @param position where to place the marker.
      * @return a new google maps marker.
      */
-    public static MarkerOptions createMarkerOptions(Resources resources, int resourceId, String mainText, String denotedText, LatLng position) {
+    public static MarkerOptions createMarkerOptions(Resources resources, int resourceId, String mainText,
+                                                    String denotedText, LatLng position) {
 
         // Make the bitmap mutable, since an object retrieved from resources is set to immutable by default.
         Bitmap bitmap = BitmapFactory.decodeResource(resources, resourceId);

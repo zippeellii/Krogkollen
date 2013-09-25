@@ -7,7 +7,7 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 
 /**
- * MarkerFactory (UTF-8)
+ * MarkerOptionsFactory (UTF-8)
  *
  * Builds settings for markers in Google Maps V2 for Android.
  *
@@ -15,7 +15,7 @@ import com.google.android.gms.maps.model.MarkerOptions;
  * Date: 2013-09-22
  */
 
-public class MarkerFactory {
+public class MarkerOptionsFactory {
 
     private final static int bigTextRatio = 22;
     private final static int smallTextRatio = 30;
@@ -64,7 +64,8 @@ public class MarkerFactory {
         MarkerOptions options = new MarkerOptions()
                                 .position(position)
                                 .icon(BitmapDescriptorFactory.fromBitmap(bitmapResult))
-                                .anchor(0.3f, 0.94f);
+                                .anchor(0.3f, 0.94f)
+                                .title(mainText);
         return options;
     }
 

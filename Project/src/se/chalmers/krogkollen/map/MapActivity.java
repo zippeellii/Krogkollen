@@ -1,30 +1,25 @@
 package se.chalmers.krogkollen.map;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import android.app.Activity;
 import android.graphics.Point;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.SystemClock;
 import android.view.Menu;
-import android.view.animation.LinearInterpolator;
 import android.view.MenuItem;
+import android.view.animation.LinearInterpolator;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapFragment;
 import com.google.android.gms.maps.Projection;
-import com.google.android.gms.maps.model.BitmapDescriptorFactory;
-import com.google.android.gms.maps.model.CameraPosition;
-import com.google.android.gms.maps.model.LatLng;
-import com.google.android.gms.maps.model.Marker;
-import com.google.android.gms.maps.model.MarkerOptions;
-
+import com.google.android.gms.maps.model.*;
 import se.chalmers.krogkollen.R;
 import se.chalmers.krogkollen.pub.IPub;
 import se.chalmers.krogkollen.pub.PubUtilities;
 import se.chalmers.krogkollen.utils.IObserver;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * The standard implementation of IMapView.
@@ -32,6 +27,11 @@ import se.chalmers.krogkollen.utils.IObserver;
  * This is a normal map with the user marked on the map, and with a list of pubs marked on the map.
  */
 public class MapActivity extends Activity implements IMapView, IObserver{
+
+    /**
+     * Identifier for the intent used to start the activity for detailed view.
+     */
+    public static final String MARKER_MESSAGE = "se.chalmers.krogkollen.MARKER_MESSAGE";
 
     private GoogleMap mMap;
     private UserLocation userLocation;
@@ -43,15 +43,24 @@ public class MapActivity extends Activity implements IMapView, IObserver{
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_map);
 		
-		//get the map and add some markers for pubs.
+		// Get the map and add some markers for pubs.
         this.mMap = ((MapFragment) getFragmentManager().findFragmentById(R.id.map)).getMap();
         this.addPubMarkers();
 
         mMap.setOnMarkerClickListener(new GoogleMap.OnMarkerClickListener() {
             @Override
             public boolean onMarkerClick(Marker marker) {
-                // open detailed view.
-                return false; // Keep default behavior i.e. move camera to marker.
+
+                // Move camera to the clicked marker
+                mMap.animateCamera(CameraUpdateFactory.newCameraPosition(new CameraPosition(
+                        new LatLng(marker.getPosition().latitude, marker.getPosition().longitude), 18, 0, 0)));
+
+                // Open detailed view.
+                /*Intent detailedIntent = new Intent(getApplicationContext(), MainActivity.class);
+                detailedIntent.putExtra(MARKER_MESSAGE, marker.getTitle()); // Sends the name of the pub with the intent
+                startActivity(detailedIntent); */
+
+                return true; // Suppress default behavior; move camera and open info window.
             }
         });
 
@@ -62,7 +71,7 @@ public class MapActivity extends Activity implements IMapView, IObserver{
         addUserMarker(this.userLocation.getCurrentLatLng());
 
         // Move to the current location of the user.
-        mMap.animateCamera(CameraUpdateFactory.newCameraPosition(new CameraPosition(this.userLocation.getCurrentLatLng(), 15, 0, 0)));
+        mMap.animateCamera(CameraUpdateFactory.newCameraPosition(new CameraPosition(this.userLocation.getCurrentLatLng(), 16, 0, 0)));
 
         getActionBar().setDisplayUseLogoEnabled(false);
 	}
@@ -207,7 +216,7 @@ public class MapActivity extends Activity implements IMapView, IObserver{
                 drawable = R.drawable.gray_marker_bg;
                 break;
         }
-        mMap.addMarker(MarkerFactory.createMarkerOptions(getResources(), drawable, pub.getName(), pub.getOpeningHours(),
-               new LatLng(pub.getCoordinates().latitude, pub.getCoordinates().longitude)));
+        mMap.addMarker(MarkerOptionsFactory.createMarkerOptions(getResources(), drawable, pub.getName(), pub.getOpeningHours(),
+                new LatLng(pub.getCoordinates().latitude, pub.getCoordinates().longitude)));
 	}
 }

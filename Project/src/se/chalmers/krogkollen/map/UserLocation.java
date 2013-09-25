@@ -83,7 +83,7 @@ public class UserLocation implements LocationListener, IObservable{
      * @return current user location.
      */
 	public LatLng getCurrentLatLng(){
-		return new LatLng(this.currentLocation.getLatitude(), this.currentLocation.getLongitude());
+		return new LatLng(this.currentLocation.getLatitude(), this.currentLocation.getLongitude()); // TODO sometimes get NullPointerException here
 	}
 	
 	/**
@@ -135,7 +135,7 @@ public class UserLocation implements LocationListener, IObservable{
 	    }
 
 	    // Check whether the new location fix is newer or older
-	    long timeDelta = location.getTime() - currentBestLocation.getTime();
+	    long timeDelta = location.getTime() - currentBestLocation.getTime(); // TODO Sometimes get NullPointerException here
 	    boolean isSignificantlyNewer = timeDelta > TWO_MINUTES;
 	    boolean isSignificantlyOlder = timeDelta < -TWO_MINUTES;
 	    boolean isNewer = timeDelta > 0;

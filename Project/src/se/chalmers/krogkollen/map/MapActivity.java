@@ -24,6 +24,7 @@ import com.google.android.gms.maps.model.MarkerOptions;
 import se.chalmers.krogkollen.R;
 import se.chalmers.krogkollen.pub.IPub;
 import se.chalmers.krogkollen.pub.PubUtilities;
+import se.chalmers.krogkollen.utils.CallingActivity;
 import se.chalmers.krogkollen.utils.IObserver;
 
 /**
@@ -37,6 +38,7 @@ public class MapActivity extends Activity implements IMapView, IObserver{
     private UserLocation userLocation;
     private Marker userMarker;
     private List<Marker> pubMarkers = new ArrayList<Marker>();
+    private final int ZOOM = 15;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -47,12 +49,12 @@ public class MapActivity extends Activity implements IMapView, IObserver{
         this.mMap = ((MapFragment) getFragmentManager().findFragmentById(R.id.map)).getMap();
         this.addPubMarkers();
         
-        //set focus of the map on the users location.
+        //Start observing and tracking the user location and set focus of the map on the users location.
         this.userLocation = UserLocation.getInstance();
         this.userLocation.addObserver(this);
         this.userLocation.startTrackingUser();
         addUserMarker(this.userLocation.getCurrentLatLng());
-        this.mMap.animateCamera(CameraUpdateFactory.newCameraPosition(new CameraPosition(this.userLocation.getCurrentLatLng(), 15, 0, 0)));
+        this.centerOnUser();
 	}
 
 	@Override
@@ -107,8 +109,16 @@ public class MapActivity extends Activity implements IMapView, IObserver{
 	}
     
     /**
-	 * Moves the user marker smoothly to a new position, code is taken from a google maps v2 demo app.
-	 * http://stackoverflow.com/questions/13728041/move-markers-in-google-map-v2-android
+     * Centers the map on the users location.
+     */
+    public void centerOnUser() {
+    	this.mMap.animateCamera(CameraUpdateFactory.newCameraPosition(new CameraPosition(this.userLocation.getCurrentLatLng(), this.ZOOM, 0, 0)));
+    }
+    
+    /**
+	 * ** Method written by Google, found on stackoverflow.com **
+	 * ** http://stackoverflow.com/questions/13728041/move-markers-in-google-map-v2-android **
+	 * Moves the user marker smoothly to a new position.
 	 * 
 	 * @param marker	the marker that will be moved
 	 * @param toPosition	the position to where the marker will be moved
@@ -150,6 +160,28 @@ public class MapActivity extends Activity implements IMapView, IObserver{
 	public void onResume() {
 		super.onResume();
 		this.userLocation.startTrackingUser();
+	}
+	
+	@Override
+	public void onBackPressed() {
+		int activity = this.getIntent().getIntExtra("previous_activity", 0);
+		switch(activity) {
+		case CallingActivity.MAIN:
+			this.finish();
+			break;
+		case CallingActivity.MAP:
+			break;
+		case CallingActivity.LIST:
+			//Intent intent = new Intent(this, ListActivity.class);
+			//intent.putExtra(CallingActivity.MAP);
+			//this.startActivity(intent);
+			break;
+		case CallingActivity.DETAILED_VIEW:
+			break;
+		default:
+			this.finish();
+			break;
+		}
 	}
     
 	@Override

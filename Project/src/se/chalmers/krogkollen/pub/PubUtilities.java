@@ -68,4 +68,8 @@ public class PubUtilities {
         return pubList;
     }
 
+    public IPub getPub(int id){
+        return pubList.get(id);
+    }
+
 }

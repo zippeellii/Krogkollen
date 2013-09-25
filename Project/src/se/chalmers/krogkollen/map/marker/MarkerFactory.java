@@ -15,6 +15,10 @@ import com.google.android.gms.maps.model.MarkerOptions;
 
 public class MarkerFactory {
 
+    private final static int bigTextRatio = 22;
+    private final static int smallTextRatio = 30;
+    private final static int marginRatio = 60;
+
     /**
      * Creates marker options with the specified text and background from Android resources.
      *
@@ -35,24 +39,29 @@ public class MarkerFactory {
         // Create a canvas so the text can be drawn on the image.
         Canvas canvas = new Canvas(bitmapResult);
 
+        // Values used in the scaling of text and padding.
+        int screenWidth = resources.getDisplayMetrics().widthPixels;
+        int screenHeight = resources.getDisplayMetrics().heightPixels;
+        int minWidthHeight = Math.min(screenHeight, screenWidth);
+
         // Add text to canvas.
         Paint paint = new Paint();
         paint.setColor(Color.rgb(44,44,44));
-        paint.setTextSize(28);
+        paint.setTextSize(minWidthHeight / bigTextRatio);
         paint.setTypeface(Typeface.SANS_SERIF);
-        if (mainText.length() > 8) {                           // if the text is too long cut it
-            mainText = mainText.substring(0, 8);
+        if (mainText.length() > 10) {                           // if the text is too long cut it
+            mainText = mainText.substring(0, 10);
         }
-        canvas.drawText(mainText, 10, 34, paint);
+        canvas.drawText(mainText, 7 + minWidthHeight/marginRatio, 31 + minWidthHeight/marginRatio, paint);
         paint.setColor(Color.rgb(141,141,141));
-        paint.setTextSize(18);
-        canvas.drawText(denotedText, 10, 57, paint);
+        paint.setTextSize(minWidthHeight / smallTextRatio);
+        canvas.drawText(denotedText, 7 + minWidthHeight/marginRatio, 62 + minWidthHeight/marginRatio, paint);
 
         // Finalize the markerOptions.
         MarkerOptions options = new MarkerOptions()
                                 .position(position)
                                 .icon(BitmapDescriptorFactory.fromBitmap(bitmapResult))
-                                .anchor(0.3f, 0.96f);
+                                .anchor(0.3f, 0.94f);
         return options;
     }
 

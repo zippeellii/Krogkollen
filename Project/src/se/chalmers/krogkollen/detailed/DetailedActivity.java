@@ -37,6 +37,8 @@ public class DetailedActivity extends Activity {
     public void setText(){
         TextView pubTextView = (TextView) findViewById(R.id.pub_name);
         pubTextView.setText(testPub.getName());
+        TextView descriptionTextView = (TextView) findViewById(R.id.description);
+
 
 
 

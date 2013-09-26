@@ -17,6 +17,7 @@ import com.google.android.gms.maps.MapFragment;
 import com.google.android.gms.maps.Projection;
 import com.google.android.gms.maps.model.*;
 import se.chalmers.krogkollen.R;
+import se.chalmers.krogkollen.detailed.DetailedActivity;
 import se.chalmers.krogkollen.pub.IPub;
 import se.chalmers.krogkollen.pub.PubUtilities;
 import se.chalmers.krogkollen.utils.ActivityID;
@@ -59,14 +60,12 @@ public class MapActivity extends Activity implements IMapView, IObserver{
             @Override
             public boolean onMarkerClick(Marker marker) {
 
-                // Move camera to the clicked marker
+                // Move camera to the clicked marker.
                 mMap.animateCamera(CameraUpdateFactory.newCameraPosition(new CameraPosition(
                         new LatLng(marker.getPosition().latitude, marker.getPosition().longitude), 18, 0, 0)));
 
                 // Open detailed view.
-                /*Intent detailedIntent = new Intent(this, DetailedActivity.class);
-                detailedIntent.putExtra(MARKER_PUB_ID, marker.getTitle()); // Sends the name of the pub with the intent
-                startActivity(detailedIntent);*/
+                openDetailedView(marker.getId());
 
                 return true; // Suppress default behavior; move camera and open info window.
             }
@@ -87,6 +86,13 @@ public class MapActivity extends Activity implements IMapView, IObserver{
         actionBar.setDisplayHomeAsUpEnabled(true);
 	}
 
+    private void openDetailedView(String id) {
+        Intent detailedIntent = new Intent(this, DetailedActivity.class);
+        detailedIntent.putExtra(MARKER_PUB_ID, id); // Sends the name of the pub with the intent
+        startActivity(detailedIntent);
+    }
+
+    // Start the activity in a local method to keep the right context.
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
         super.onCreateOptionsMenu(menu);

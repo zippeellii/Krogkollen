@@ -8,5 +8,6 @@
     <string name="refresh">Refresh</string>
     <string name="open_list">Open list view</string>
     <string name="search">Search</string>
+    <string name="go_to_my_location">Min position</string>
 
 </resources>

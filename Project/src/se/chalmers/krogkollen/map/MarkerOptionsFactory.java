@@ -29,10 +29,11 @@ public class MarkerOptionsFactory {
      * @param mainText title text to be added on top of background.
      * @param denotedText title text to be added on top of background.
      * @param position where to place the marker.
+     * @param pubId identification number for a pub.
      * @return a new google maps marker.
      */
     public static MarkerOptions createMarkerOptions(Resources resources, int resourceId, String mainText,
-                                                    String denotedText, LatLng position) {
+                                                    String denotedText, LatLng position, int pubId) {
 
         // Make the bitmap mutable, since an object retrieved from resources is set to immutable by default.
         Bitmap bitmap = BitmapFactory.decodeResource(resources, resourceId);
@@ -55,17 +56,17 @@ public class MarkerOptionsFactory {
         if (mainText.length() > 10) {                           // if the text is too long cut it
             mainText = mainText.substring(0, 10);
         }
-        canvas.drawText(mainText, 7 + minWidthHeight/marginRatio, 31 + minWidthHeight/marginRatio, paint);
+        canvas.drawText(mainText, 7 + (minWidthHeight/marginRatio), 31 + (minWidthHeight/marginRatio), paint);
         paint.setColor(Color.rgb(141,141,141));
         paint.setTextSize(minWidthHeight / smallTextRatio);
-        canvas.drawText(denotedText, 7 + minWidthHeight/marginRatio, 62 + minWidthHeight/marginRatio, paint);
+        canvas.drawText(denotedText, 7 + (minWidthHeight/marginRatio), 62 + (minWidthHeight/marginRatio), paint);
 
         // Finalize the markerOptions.
         MarkerOptions options = new MarkerOptions()
                                 .position(position)
                                 .icon(BitmapDescriptorFactory.fromBitmap(bitmapResult))
                                 .anchor(0.3f, 0.94f)
-                                .title(mainText);
+                                .title("" + pubId);
         return options;
     }
 

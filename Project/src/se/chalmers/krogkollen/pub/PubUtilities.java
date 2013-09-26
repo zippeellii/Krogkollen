@@ -16,7 +16,7 @@ public class PubUtilities {
     private List<IPub> pubList = new LinkedList<IPub>();
     private static PubUtilities instance = null;
 
-    protected PubUtilities() {
+    private PubUtilities() {
         // Exists only to defeat instantiation.
     }
 

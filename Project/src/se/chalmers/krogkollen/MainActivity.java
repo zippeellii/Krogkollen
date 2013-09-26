@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.location.LocationManager;
 import android.os.Bundle;
 import android.view.Menu;
+import se.chalmers.krogkollen.detailed.DetailedActivity;
 import se.chalmers.krogkollen.map.MapActivity;
 import se.chalmers.krogkollen.map.UserLocation;
 import se.chalmers.krogkollen.pub.PubUtilities;

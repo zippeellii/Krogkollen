@@ -49,6 +49,8 @@ public interface IPub {
 	 * @return the LatLng object for the pub, which describes the latitude and longitude coordinates
 	 */
 	public LatLng getCoordinates();
+
+    public int getEntranceFee();
 	
 	/**
 	 * @return the unique ID for the pub

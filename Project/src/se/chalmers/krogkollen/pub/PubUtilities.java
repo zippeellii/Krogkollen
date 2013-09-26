@@ -14,7 +14,7 @@ import com.parse.ParseQuery;
 /**
  * A singleton holding a list of all the pubs, and is used to load data from the server.
  *
- * For now this class only contains hardcoded values, since we don't have support for a server.
+ * For now this class only contains hard coded values, since we don't have support for a server.
  *
  * @author Albin Garpetun
  * Created 2013-09-22
@@ -94,7 +94,7 @@ public class PubUtilities {
 		pubList.add(new Pub("11:an", "?", "18:00 - 01:00", 18, 3, 57.706555,11.936639, 19));
 		*/
 	}
-
+	
 	/**
 	 * Returns the list of pubs.
 	 *

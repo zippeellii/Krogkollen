@@ -53,5 +53,5 @@ public interface IPub {
 	/**
 	 * @return the unique ID for the pub
 	 */
-	public int getID();
+	public String getID();
 }

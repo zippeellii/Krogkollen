@@ -10,7 +10,7 @@ import android.os.Handler;
 import android.os.SystemClock;
 import android.view.Menu;
 import android.view.animation.LinearInterpolator;
-
+import android.view.MenuItem;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapFragment;
@@ -48,33 +48,65 @@ public class MapActivity extends Activity implements IMapView, IObserver{
 		//get the map and add some markers for pubs.
         this.mMap = ((MapFragment) getFragmentManager().findFragmentById(R.id.map)).getMap();
         this.addPubMarkers();
-        
-        //Start observing and tracking the user location and set focus of the map on the users location.
+
+        mMap.setOnMarkerClickListener(new GoogleMap.OnMarkerClickListener() {
+            @Override
+            public boolean onMarkerClick(Marker marker) {
+                // open detailed view.
+                return false; // Keep default behavior i.e. move camera to marker.
+            }
+        });
+
+        // Add services for auto update of the user's location.
         this.userLocation = UserLocation.getInstance();
         this.userLocation.addObserver(this);
         this.userLocation.startTrackingUser();
         addUserMarker(this.userLocation.getCurrentLatLng());
         this.centerOnUser();
+
+        // Move to the current location of the user.
+        mMap.animateCamera(CameraUpdateFactory.newCameraPosition(new CameraPosition(this.userLocation.getCurrentLatLng(), 15, 0, 0)));
+
+        getActionBar().setDisplayUseLogoEnabled(false);
 	}
 
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
+        super.onCreateOptionsMenu(menu);
+
 		// Inflate the menu; this adds items to the action bar if it is present.
-		getMenuInflater().inflate(R.menu.map, menu);
+        getMenuInflater().inflate(R.menu.map, menu);
+
 		return true;
 	}
 
 	/**
 	 * Adds a user marker to the map.
 	 * 
-	 * @param location the user location
+	 * @param latLng the user location
 	 */
 	public void addUserMarker(LatLng latLng){
 		userMarker = mMap.addMarker(new MarkerOptions()
 						.position(latLng)
-						.title("User")
 						.icon(BitmapDescriptorFactory.fromResource(R.drawable.user_marker)));
-	}
+ 	}
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem menuItem) {
+        if (menuItem.getItemId() == R.id.refresh_info) {
+            // REFRESH MAP HERE PLS
+            return true;
+        }
+        if (menuItem.getItemId() == R.id.search) {
+            // ÖPPNA SÖKFÄLT
+            return true;
+        }
+        if (menuItem.getItemId() == R.id.open_list_view) {
+            // SKICKA INTENT - ÖPPNA LISTA
+            return true;
+        }
+        return super.onOptionsItemSelected(menuItem);
+    }
 	
 	/**
 	 * Adds markers to the map for all pubs in PubUtilities.
@@ -95,13 +127,6 @@ public class MapActivity extends Activity implements IMapView, IObserver{
     	this.pubMarkers.clear();
     	this.addPubMarkers();
     }
-    
-    @Override
-	public void addPubToMap(IPub pub) {
-        this.pubMarkers.add(mMap.addMarker(new MarkerOptions()
-                .position(new LatLng(pub.getCoordinates().latitude, pub.getCoordinates().longitude))
-                .title(pub.getName() + ": " + pub.getDescription())));
-	}
     
     @Override
 	public void update() {
@@ -193,7 +218,29 @@ public class MapActivity extends Activity implements IMapView, IObserver{
 	@Override
 	public void showErrorMessage(String message) {
 		// TODO Auto-generated method stub
-		
+
 	}
-	
+
+	@Override
+	public void addPubToMap(IPub pub) {
+
+        int drawable;
+        // Determine which marker color to add.
+        switch (pub.getQueueTime()) {
+            case 1:
+                drawable = R.drawable.green_marker_bg;
+                break;
+            case 2:
+                drawable = R.drawable.yellow_marker_bg;
+                break;
+            case 3:
+                drawable = R.drawable.red_marker_bg;
+                break;
+            default:
+                drawable = R.drawable.gray_marker_bg;
+                break;
+        }
+        mMap.addMarker(MarkerFactory.createMarkerOptions(getResources(), drawable, pub.getName(), pub.getOpeningHours(),
+               new LatLng(pub.getCoordinates().latitude, pub.getCoordinates().longitude)));
+	}
 }

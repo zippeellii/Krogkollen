@@ -46,6 +46,7 @@
             android:name="se.chalmers.krogkollen.map.MapActivity"
             android:label="@string/title_activity_map" >
         </activity>
+        <activity android:name=".detailed.DetailedActivity"/>
     </application>
 
 </manifest>

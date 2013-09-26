@@ -2,6 +2,7 @@ package se.chalmers.krogkollen.map;
 
 import android.app.ActionBar;
 import android.app.Activity;
+import android.content.Intent;
 import android.graphics.Point;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -18,6 +19,7 @@ import com.google.android.gms.maps.model.*;
 import se.chalmers.krogkollen.R;
 import se.chalmers.krogkollen.pub.IPub;
 import se.chalmers.krogkollen.pub.PubUtilities;
+import se.chalmers.krogkollen.utils.ActivityID;
 import se.chalmers.krogkollen.utils.IObserver;
 
 import java.util.ArrayList;
@@ -36,9 +38,11 @@ public class MapActivity extends Activity implements IMapView, IObserver{
     public static final String MARKER_PUB_ID = "se.chalmers.krogkollen.MARKER_PUB_ID";
 
     private GoogleMap mMap;
+
     private UserLocation userLocation;
     private Marker userMarker;
     private List<Marker> pubMarkers = new ArrayList<Marker>();
+    private final int ZOOM = 15;
 
     private Menu mainMenu;
 
@@ -94,6 +98,11 @@ public class MapActivity extends Activity implements IMapView, IObserver{
 		return true;
 	}
 
+    /**
+     * Center the Google maps camera on the user.
+     *
+     * @param zoom how close to zoom in on the user.
+     */
     private void moveCameraToUser(int zoom) {
         mMap.animateCamera(CameraUpdateFactory.newCameraPosition(new CameraPosition(this.userLocation.getCurrentLatLng(), zoom, 0, 0)));
     }
@@ -169,8 +178,9 @@ public class MapActivity extends Activity implements IMapView, IObserver{
 	}
     
     /**
-	 * Moves the user marker smoothly to a new position, code is taken from a google maps v2 demo app.
-	 * http://stackoverflow.com/questions/13728041/move-markers-in-google-map-v2-android
+	 * ** Method written by Google, found on stackoverflow.com **
+	 * ** http://stackoverflow.com/questions/13728041/move-markers-in-google-map-v2-android **
+	 * Moves the user marker smoothly to a new position.
 	 * 
 	 * @param marker	the marker that will be moved
 	 * @param toPosition	the position to where the marker will be moved
@@ -212,6 +222,29 @@ public class MapActivity extends Activity implements IMapView, IObserver{
 	public void onResume() {
 		super.onResume();
 		this.userLocation.startTrackingUser();
+	}
+	
+	@Override
+	public void onBackPressed() {
+		int activity = this.getIntent().getIntExtra(ActivityID.ACTIVITY_ID, 0);
+		Intent intent;
+		switch(activity) {
+		case ActivityID.MAIN:
+			intent = new Intent(Intent.ACTION_MAIN);
+			intent.addCategory(Intent.CATEGORY_HOME);
+			startActivity(intent);
+			break;
+		case ActivityID.LIST:
+			//Intent intent = new Intent(this, ListActivity.class);
+			//intent.putExtra(CallingActivity.MAP);
+			//this.startActivity(intent);
+			break;
+		default:
+			intent = new Intent(Intent.ACTION_MAIN);
+			intent.addCategory(Intent.CATEGORY_HOME);
+			startActivity(intent);
+			break;
+		}
 	}
     
 	@Override

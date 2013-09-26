@@ -15,6 +15,7 @@ public class Pub implements IPub{
 	private int queueTime;
 	private LatLng coordinates;
 	private final int ID;
+    private int entranceFee;
 	
 	/**
      * Instantiates the object, creating a dummy pub object.
@@ -22,7 +23,7 @@ public class Pub implements IPub{
      * More constructors should be added, in case there is information missing.
      */
     public Pub () {
-        this("Name", "Description", "00:00 - 00:00", 18, 15, 0.0, 0.0, 0);
+        this("Name", "Description", "00:00 - 00:00", 18, 15, 0.0, 0.0,100, 0);
     }
 
 	/**
@@ -37,13 +38,15 @@ public class Pub implements IPub{
 	 * @param longitude the longitude coordinate
 	 * @param id the unique id of the pub
 	 */
-	public Pub(String name, String description, String openingHours, int ageRestriction, int queueTime, double latitude, double longitude, int id){
+	public Pub(String name, String description, String openingHours, int ageRestriction, int queueTime, double latitude,
+               double longitude,int entranceFee, int id){
 		this.name = name;
 		this.description = description;
 		this.openingHours = openingHours;
 		this.ageRestriction = ageRestriction;
 		this.setQueueTime(queueTime);
 		this.ID = id;
+        this.entranceFee = entranceFee;
 		coordinates = new LatLng(latitude, longitude);
 	}
 
@@ -83,6 +86,11 @@ public class Pub implements IPub{
 		return new LatLng(this.coordinates.latitude, this.coordinates.longitude);
 	}
 
+    @Override
+    public int getEntranceFee(){
+        return entranceFee;
+    }
+
 	@Override
 	public void setQueueTime(int queueTime) {
 		//No negative time allowed
@@ -98,6 +106,5 @@ public class Pub implements IPub{
 	@Override
 	public int getID() {
 		return this.ID;
-	}
-
+    }
 }

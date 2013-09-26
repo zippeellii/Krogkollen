@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.graphics.Point;
 import android.os.Bundle;
 import android.os.Handler;
@@ -24,7 +25,7 @@ import com.google.android.gms.maps.model.MarkerOptions;
 import se.chalmers.krogkollen.R;
 import se.chalmers.krogkollen.pub.IPub;
 import se.chalmers.krogkollen.pub.PubUtilities;
-import se.chalmers.krogkollen.utils.CallingActivity;
+import se.chalmers.krogkollen.utils.ActivityID;
 import se.chalmers.krogkollen.utils.IObserver;
 
 /**
@@ -33,8 +34,8 @@ import se.chalmers.krogkollen.utils.IObserver;
  * This is a normal map with the user marked on the map, and with a list of pubs marked on the map.
  */
 public class MapActivity extends Activity implements IMapView, IObserver{
-
-    private GoogleMap mMap;
+	
+	private GoogleMap mMap;
     private UserLocation userLocation;
     private Marker userMarker;
     private List<Marker> pubMarkers = new ArrayList<Marker>();
@@ -164,22 +165,23 @@ public class MapActivity extends Activity implements IMapView, IObserver{
 	
 	@Override
 	public void onBackPressed() {
-		int activity = this.getIntent().getIntExtra("previous_activity", 0);
+		int activity = this.getIntent().getIntExtra(ActivityID.ACTIVITY_ID, 0);
+		Intent intent;
 		switch(activity) {
-		case CallingActivity.MAIN:
-			this.finish();
+		case ActivityID.MAIN:
+			intent = new Intent(Intent.ACTION_MAIN);
+			intent.addCategory(Intent.CATEGORY_HOME);
+			startActivity(intent);
 			break;
-		case CallingActivity.MAP:
-			break;
-		case CallingActivity.LIST:
+		case ActivityID.LIST:
 			//Intent intent = new Intent(this, ListActivity.class);
 			//intent.putExtra(CallingActivity.MAP);
 			//this.startActivity(intent);
 			break;
-		case CallingActivity.DETAILED_VIEW:
-			break;
 		default:
-			this.finish();
+			intent = new Intent(Intent.ACTION_MAIN);
+			intent.addCategory(Intent.CATEGORY_HOME);
+			startActivity(intent);
 			break;
 		}
 	}

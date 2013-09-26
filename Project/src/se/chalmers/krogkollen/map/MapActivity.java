@@ -11,6 +11,7 @@ import android.os.SystemClock;
 import android.view.Menu;
 import android.view.animation.LinearInterpolator;
 import android.view.MenuItem;
+
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapFragment;
@@ -20,6 +21,8 @@ import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.parse.Parse;
+import com.parse.ParseObject;
 
 import se.chalmers.krogkollen.R;
 import se.chalmers.krogkollen.pub.IPub;
@@ -43,6 +46,7 @@ public class MapActivity extends Activity implements IMapView, IObserver{
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
+		
 		setContentView(R.layout.activity_map);
 		
 		//get the map and add some markers for pubs.
@@ -68,6 +72,7 @@ public class MapActivity extends Activity implements IMapView, IObserver{
         mMap.animateCamera(CameraUpdateFactory.newCameraPosition(new CameraPosition(this.userLocation.getCurrentLatLng(), 15, 0, 0)));
 
         getActionBar().setDisplayUseLogoEnabled(false);
+        
 	}
 
 	@Override

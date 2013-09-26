@@ -20,7 +20,7 @@ public class DetailedActivity extends Activity {
 
     IPub pub;
 
-    Pub testPub = new Pub("TestPub", "Beksrivning osv..", "17-03", 18, 30, 80.21, 90.23, 23);
+    Pub testPub = new Pub("TestPub", "Så kallad beskrivning... Viktigt. byter rad också. Vackert. Per och Filip levererar #öl", "17-03", 18, 30, 80.21, 90.23,100, 23);
 
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -38,9 +38,6 @@ public class DetailedActivity extends Activity {
         TextView pubTextView = (TextView) findViewById(R.id.pub_name);
         pubTextView.setText(testPub.getName());
         TextView descriptionTextView = (TextView) findViewById(R.id.description);
-
-
-
-
+        descriptionTextView.setText(testPub.getDescription());
     }
 }

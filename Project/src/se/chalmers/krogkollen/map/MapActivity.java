@@ -47,6 +47,10 @@ public class MapActivity extends Activity implements IMapView, IObserver{
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		
+		ParseObject testObject = new ParseObject("TestObject");
+		testObject.put("foo", "getter");
+		testObject.saveInBackground();
+		
 		setContentView(R.layout.activity_map);
 		
 		//get the map and add some markers for pubs.

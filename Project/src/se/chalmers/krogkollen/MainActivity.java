@@ -9,7 +9,7 @@ import android.view.Menu;
 import se.chalmers.krogkollen.map.MapActivity;
 import se.chalmers.krogkollen.map.UserLocation;
 import se.chalmers.krogkollen.pub.PubUtilities;
-import se.chalmers.krogkollen.utils.CallingActivity;
+import se.chalmers.krogkollen.utils.ActivityID;
 
 /**
  * A class used for starting the application
@@ -27,7 +27,7 @@ public class MainActivity extends Activity {
 		//initiate the user location and start the map activity.
 		UserLocation.init((LocationManager) this.getSystemService(Context.LOCATION_SERVICE));
 		Intent intent = new Intent(this, MapActivity.class);
-		intent.putExtra("previous_activity", CallingActivity.MAIN);
+		intent.putExtra("previous_activity", ActivityID.MAIN);
 		startActivity(intent);
 	}
 
@@ -36,11 +36,6 @@ public class MainActivity extends Activity {
 		// Inflate the menu; this adds items to the action bar if it is present.
 		getMenuInflater().inflate(R.menu.main, menu);
 		return true;
-	}
-	
-	public void onResume() {
-		super.onResume();
-		this.finish();
 	}
 
 }

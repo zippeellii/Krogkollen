@@ -1,7 +1,11 @@
 package se.chalmers.krogkollen.pub;
 
+import java.util.Calendar;
 import java.util.LinkedList;
 import java.util.List;
+
+import se.chalmers.krogkollen.utils.StringConverter;
+
 import com.parse.ParseObject;
 import com.parse.ParseQuery;
 
@@ -65,13 +69,15 @@ public class PubUtilities {
 		try {
 			tempList = query.find();
 			for(ParseObject object : tempList){
+				int hourFourDigit = StringConverter.convertCombinedStringto(object.getString("openingHours"), 5);
 				pubList.add(new Pub(object.getString("name"),
 						object.getString("description"),
 						object.getDouble("latitude"),
 						object.getDouble("longitude"),
 						object.getInt("ageRestriction"),
 						object.getInt("entranceFee"),
-						1, 1, // TODO fix
+						(hourFourDigit/100),
+						(hourFourDigit%100),
 						object.getInt("posRate"),
 						object.getInt("negRate"),
 						object.getInt("queueTime"),

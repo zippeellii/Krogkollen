@@ -7,7 +7,7 @@ public class StringConverter {
 	 * @param day - what day supposed to look for
 	 * @return the selected interval of the string in int
 	 */
-	public static int convertStringtoInt(String string, int day){
+	public static int convertCombinedStringto(String string, int day){
 		for(int i = 0; i < day; i++){
 			int index = string.indexOf(':');
 			string = string.substring(index+1);
@@ -15,6 +15,7 @@ public class StringConverter {
 		int index = string.indexOf(':');
 		string = string.substring(0, index);
 		return Integer.parseInt(string);
+
 	}
 
 }

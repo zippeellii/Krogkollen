@@ -3,7 +3,6 @@ package se.chalmers.krogkollen.pub;
 import java.util.LinkedList;
 import java.util.List;
 
-import android.util.Log;
 import se.chalmers.krogkollen.utils.StringConverter;
 import android.content.res.Resources;
 import com.parse.ParseObject;
@@ -127,7 +126,6 @@ public class PubUtilities {
 		return pubList;
 	}
 	
-	// TODO Check this method, id is a STring now
 	// TODO write Javadoc
     public IPub getPub(String id){
        for(IPub pub: pubList) {

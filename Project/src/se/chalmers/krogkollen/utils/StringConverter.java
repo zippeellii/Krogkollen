@@ -1,5 +1,6 @@
 package se.chalmers.krogkollen.utils;
 
+// TODO javadoc
 public class StringConverter {
 	/**
 	 * 
@@ -15,7 +16,5 @@ public class StringConverter {
 		int index = string.indexOf(':');
 		string = string.substring(0, index);
 		return Integer.parseInt(string);
-
 	}
-
 }

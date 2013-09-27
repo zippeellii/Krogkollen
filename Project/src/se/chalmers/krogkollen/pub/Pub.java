@@ -25,7 +25,7 @@ import com.google.android.gms.maps.model.LatLng;
  * 
  * @author Jonathan Nilsfors
  * @author Albin Garpetun
- * @author Oskar Kärrman
+ * @author Oskar Karrman
  *
  */
 public class Pub implements IPub{

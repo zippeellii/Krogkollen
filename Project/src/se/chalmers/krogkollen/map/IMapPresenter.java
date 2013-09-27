@@ -26,7 +26,7 @@ import se.chalmers.krogkollen.pub.IPub;
  *
  * Interface for a MapPresenter
  * 
- * @author Oskar Kärrman
+ * @author Oskar Karrman
  *
  */
 public interface IMapPresenter extends IPresenter {

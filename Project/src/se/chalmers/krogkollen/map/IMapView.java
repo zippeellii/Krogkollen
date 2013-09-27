@@ -25,7 +25,7 @@ import se.chalmers.krogkollen.pub.IPub;
  /**
  * Interface for a MapView object
  * 
- * @author Oskar Kärrman
+ * @author Oskar Karrman
  *
  */
 public interface IMapView extends IView {

@@ -21,7 +21,7 @@ package se.chalmers.krogkollen;
 
  /** 
  * 
- * @author Oskar Kärrman
+ * @author Oskar Karrman
  *
  */
 public interface IView {

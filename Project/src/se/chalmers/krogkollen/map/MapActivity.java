@@ -4,9 +4,9 @@ import android.app.ActionBar;
 import android.app.Activity;
 import android.content.Intent;
 import android.graphics.Point;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
+import android.os.Message;
 import android.os.SystemClock;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -22,6 +22,7 @@ import se.chalmers.krogkollen.pub.IPub;
 import se.chalmers.krogkollen.pub.PubUtilities;
 import se.chalmers.krogkollen.utils.ActivityID;
 import se.chalmers.krogkollen.utils.IObserver;
+import se.chalmers.krogkollen.utils.LoadingThread;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -107,6 +108,7 @@ public class MapActivity extends Activity implements IMapView, IObserver{
         actionBar.setDisplayHomeAsUpEnabled(true);
 	}
 
+	// TODO javadoc
     private void openDetailedView(String id) {
         Intent detailedIntent = new Intent(this, DetailedActivity.class);
         detailedIntent.putExtra(MARKER_PUB_ID, id); // Sends the name of the pub with the intent
@@ -150,21 +152,18 @@ public class MapActivity extends Activity implements IMapView, IObserver{
     public boolean onOptionsItemSelected(MenuItem menuItem) {
         switch (menuItem.getItemId()) {
             case R.id.refresh_info:
-
-                AsyncTask<Void, Void, Void>  refreshLoader = new AsyncTask<Void, Void, Void>() {
+                final Handler handler = new Handler() {
                     @Override
-                    protected Void doInBackground(Void... Voids) {
-                        refreshPubMarkers();
-                        return null;
-                    }
-
-                    @Override
-                    protected void onPostExecute(Void result) {
-                        mainMenu.getItem(R.id.refresh_info).setIcon(R.drawable.refresh_icon);
+                    public void handleMessage(Message message) {
+                        int state = message.getData().getInt(LoadingThread.STATE);
+                        if (state == 1) {
+                            mainMenu.getItem(R.id.refresh_info).setIcon(R.drawable.refresh_icon);
+                        }
                     }
                 };
-                refreshLoader.execute();
-                mainMenu.getItem(R.id.refresh_info).setIcon(R.drawable.refresh_icon);
+                LoadingThread loadingThread = new LoadingThread(handler);
+                loadingThread.start();
+                mainMenu.getItem(R.id.refresh_info).setIcon(R.layout.loading_indicator);
                 return true;
             case R.id.search:
                 // Open search
@@ -306,7 +305,7 @@ public class MapActivity extends Activity implements IMapView, IObserver{
                 drawable = R.drawable.gray_marker_bg;
                 break;
         }
-        mMap.addMarker(MarkerOptionsFactory.createMarkerOptions(getResources(), drawable, pub.getName(), pub.getTodaysOpeningHour(),
-                new LatLng(pub.getLatitude(), pub.getLongitude()), pub.getID()));
+        pubMarkers.add(mMap.addMarker(MarkerOptionsFactory.createMarkerOptions(getResources(), drawable, pub.getName(), pub.getTodaysOpeningHour(),
+                new LatLng(pub.getLatitude(), pub.getLongitude()), pub.getID())));
 	}
 }

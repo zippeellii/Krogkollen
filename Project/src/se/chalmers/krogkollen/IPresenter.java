@@ -21,7 +21,7 @@ package se.chalmers.krogkollen;
  *
  * Interface for a Presenter class in the MVP design pattern.
  * 
- * @author Oskar Kärrman
+ * @author Oskar Karrman
  *
  */
 public interface IPresenter {

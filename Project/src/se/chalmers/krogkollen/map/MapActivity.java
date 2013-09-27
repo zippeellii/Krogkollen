@@ -1,32 +1,30 @@
 package se.chalmers.krogkollen.map;
 
-import java.util.ArrayList;
-import java.util.List;
-
+import android.app.ActionBar;
 import android.app.Activity;
 import android.content.Intent;
 import android.graphics.Point;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.SystemClock;
 import android.view.Menu;
-import android.view.animation.LinearInterpolator;
 import android.view.MenuItem;
+import android.view.animation.LinearInterpolator;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapFragment;
 import com.google.android.gms.maps.Projection;
-import com.google.android.gms.maps.model.BitmapDescriptorFactory;
-import com.google.android.gms.maps.model.CameraPosition;
-import com.google.android.gms.maps.model.LatLng;
-import com.google.android.gms.maps.model.Marker;
-import com.google.android.gms.maps.model.MarkerOptions;
-
+import com.google.android.gms.maps.model.*;
 import se.chalmers.krogkollen.R;
+import se.chalmers.krogkollen.detailed.DetailedActivity;
 import se.chalmers.krogkollen.pub.IPub;
 import se.chalmers.krogkollen.pub.PubUtilities;
 import se.chalmers.krogkollen.utils.ActivityID;
 import se.chalmers.krogkollen.utils.IObserver;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * This file is part of Krogkollen.
@@ -49,27 +47,42 @@ import se.chalmers.krogkollen.utils.IObserver;
  * This is a normal map with the user marked on the map, and with a list of pubs marked on the map.
  */
 public class MapActivity extends Activity implements IMapView, IObserver{
-	
-	private GoogleMap mMap;
+
+    /**
+     * Identifier for the intent used to start the activity for detailed view.
+     */
+    public static final String MARKER_PUB_ID = "se.chalmers.krogkollen.MARKER_PUB_ID";
+
+    private GoogleMap mMap;
+
     private UserLocation userLocation;
     private Marker userMarker;
     private List<Marker> pubMarkers = new ArrayList<Marker>();
     private final int ZOOM = 15;
+
+    private Menu mainMenu;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_map);
 		
-		//get the map and add some markers for pubs.
+		// Get the map and add some markers for pubs.
         this.mMap = ((MapFragment) getFragmentManager().findFragmentById(R.id.map)).getMap();
         this.addPubMarkers();
 
         mMap.setOnMarkerClickListener(new GoogleMap.OnMarkerClickListener() {
             @Override
             public boolean onMarkerClick(Marker marker) {
-                // open detailed view.
-                return false; // Keep default behavior i.e. move camera to marker.
+
+                // Move camera to the clicked marker.
+                mMap.animateCamera(CameraUpdateFactory.newCameraPosition(new CameraPosition(
+                        new LatLng(marker.getPosition().latitude, marker.getPosition().longitude), 18, 0, 0)));
+
+                // Open detailed view.
+                openDetailedView(marker.getId());
+
+                return true; // Suppress default behavior; move camera and open info window.
             }
         });
 
@@ -78,23 +91,42 @@ public class MapActivity extends Activity implements IMapView, IObserver{
         this.userLocation.addObserver(this);
         this.userLocation.startTrackingUser();
         addUserMarker(this.userLocation.getCurrentLatLng());
-        this.centerOnUser();
 
         // Move to the current location of the user.
-        mMap.animateCamera(CameraUpdateFactory.newCameraPosition(new CameraPosition(this.userLocation.getCurrentLatLng(), 15, 0, 0)));
+        moveCameraToUser(16);
 
-        getActionBar().setDisplayUseLogoEnabled(false);
+        ActionBar actionBar = getActionBar();
+        //actionBar.setDisplayShowTitleEnabled(false);
+        actionBar.setIcon(R.drawable.list_icon);
+        actionBar.setDisplayHomeAsUpEnabled(true);
 	}
 
+    private void openDetailedView(String id) {
+        Intent detailedIntent = new Intent(this, DetailedActivity.class);
+        detailedIntent.putExtra(MARKER_PUB_ID, id); // Sends the name of the pub with the intent
+        startActivity(detailedIntent);
+    }
+
+    // Start the activity in a local method to keep the right context.
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
         super.onCreateOptionsMenu(menu);
 
 		// Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.map, menu);
+        mainMenu = menu;
 
 		return true;
 	}
+
+    /**
+     * Center the Google maps camera on the user.
+     *
+     * @param zoom how close to zoom in on the user.
+     */
+    private void moveCameraToUser(int zoom) {
+        mMap.animateCamera(CameraUpdateFactory.newCameraPosition(new CameraPosition(this.userLocation.getCurrentLatLng(), zoom, 0, 0)));
+    }
 
 	/**
 	 * Adds a user marker to the map.
@@ -109,19 +141,36 @@ public class MapActivity extends Activity implements IMapView, IObserver{
 
     @Override
     public boolean onOptionsItemSelected(MenuItem menuItem) {
-        if (menuItem.getItemId() == R.id.refresh_info) {
-            // REFRESH MAP HERE PLS
-            return true;
+        switch (menuItem.getItemId()) {
+            case R.id.refresh_info:
+
+                AsyncTask<Void, Void, Void>  refreshLoader = new AsyncTask<Void, Void, Void>() {
+                    @Override
+                    protected Void doInBackground(Void... Voids) {
+                        refreshPubMarkers();
+                        return null;
+                    }
+
+                    @Override
+                    protected void onPostExecute(Void result) {
+                        mainMenu.getItem(R.id.refresh_info).setIcon(R.drawable.refresh_icon);
+                    }
+                };
+                refreshLoader.execute();
+                mainMenu.getItem(R.id.refresh_info).setIcon(R.drawable.refresh_icon);
+                return true;
+            case R.id.search:
+                // Open search
+                return true;
+            case R.id.go_to_my_location:
+                moveCameraToUser(18);
+                return true;
+            case android.R.id.home:
+                // Open list view
+                return true;
+            default:
+                return super.onOptionsItemSelected(menuItem);
         }
-        if (menuItem.getItemId() == R.id.search) {
-            // ÖPPNA SÖKFÄLT
-            return true;
-        }
-        if (menuItem.getItemId() == R.id.open_list_view) {
-            // SKICKA INTENT - ÖPPNA LISTA
-            return true;
-        }
-        return super.onOptionsItemSelected(menuItem);
     }
 	
 	/**
@@ -148,13 +197,6 @@ public class MapActivity extends Activity implements IMapView, IObserver{
 	public void update() {
 		this.animateMarker(this.userMarker, this.userLocation.getCurrentLatLng());
 	}
-    
-    /**
-     * Centers the map on the users location.
-     */
-    public void centerOnUser() {
-    	this.mMap.animateCamera(CameraUpdateFactory.newCameraPosition(new CameraPosition(this.userLocation.getCurrentLatLng(), this.ZOOM, 0, 0)));
-    }
     
     /**
 	 * ** Method written by Google, found on stackoverflow.com **
@@ -257,7 +299,7 @@ public class MapActivity extends Activity implements IMapView, IObserver{
                 drawable = R.drawable.gray_marker_bg;
                 break;
         }
-        mMap.addMarker(MarkerFactory.createMarkerOptions(getResources(), drawable, pub.getName(), pub.getOpeningHours(),
-               new LatLng(pub.getCoordinates().latitude, pub.getCoordinates().longitude)));
+        mMap.addMarker(MarkerOptionsFactory.createMarkerOptions(getResources(), drawable, pub.getName(), pub.getOpeningHours(),
+                new LatLng(pub.getCoordinates().latitude, pub.getCoordinates().longitude), pub.getID()));
 	}
 }

@@ -26,6 +26,7 @@ This file is part of Krogkollen.
     <string name="refresh">Refresh</string>
     <string name="open_list">Open list view</string>
     <string name="search">Search</string>
+    <string name="go_to_my_location">Min position</string>
     <string name="pub_name">Pubnamn</string>
     <string name="description">Beskrivning</string>
     <string name="opening_hours">17.00-01.00</string>

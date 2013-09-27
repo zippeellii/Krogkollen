@@ -1,4 +1,6 @@
 package se.chalmers.krogkollen.pub;
+import se.chalmers.krogkollen.utils.OpeningHours;
+
 import com.google.android.gms.maps.model.LatLng;
 /**
  * This file is part of Krogkollen.
@@ -26,36 +28,75 @@ public class Pub implements IPub{
 
 	private String name;
 	private String description;
-	private String openingHours;
+	private int todaysOpeningHour;
+	private int todaysClosingHour;
+	private double latitude;
+	private double longitude;
 	private int ageRestriction;
 	private int queueTime;
-	private LatLng coordinates;
     private int entranceFee;
+    private int positiveRating;
+    private int negativeRating;
 	private final String ID;
 	
+	public Pub() {
+		this("Name", "Description", 0.0, 0.0, 0, 0, 0, 0, 0, 0, 0, "ID");
+	}
+	
 	/**
-     * Instantiates the object, creating a dummy pub object.
-     *
-     * More constructors should be added, in case there is information missing.
-     */
-    public Pub () {
-        //this("Name", "Description", "00:00 - 00:00", 18, 15, 0.0, 0.0, "0");
-    }
-
-	/**
-	 * A constructor for creating a new pub
+	 * Creates a new Pub object
 	 * 
-	 * @param name the name of the pub
-	 * @param description a short description of the pub
-	 * @param openingHours the pubs opening hours
-	 * @param ageRestriction the age restriction
-	 * @param queueTime the present queue time
-	 * @param latitude the latitude coordinate
-	 * @param longitude the longitude coordinate
-	 * @param id the unique id of the pub
+	 * @param name 				the name
+	 * @param description 		the description
+	 * @param latitude 			the latitude position
+	 * @param longitude 		the longitude position
+	 * @param ageRestriction 	the age restriction
+	 * @param entranceFee 		the entrance fee
+	 * @param todaysOpeningHour todays opening hour
+	 * @param todaysClosingHour todays closing hour
+	 * @param positiveRating 	positive rating of the pub
+	 * @param negativeRating 	negative rating of the pub
+	 * @param queueTime 		the current queue time of the pub
+	 * @param ID 				the ID of the pub
 	 */
-	public Pub(String name, String description, int openingHour, int closingHour, int ageRestriction, int queueTime, double latitude, double longitude, String id){
-
+	public Pub(	String name,
+				String description,
+				double latitude,
+				double longitude,
+				int ageRestriction,
+				int entranceFee,
+				int todaysOpeningHour,
+				int todaysClosingHour,
+				int positiveRating,
+				int negativeRating,
+				int queueTime,
+				String ID) {
+		this.name = name;
+		this.description = description;
+		this.latitude = latitude;
+		this.longitude = longitude;
+		this.ageRestriction = ageRestriction;
+		this.entranceFee = entranceFee;
+		this.todaysOpeningHour = todaysOpeningHour;
+		this.todaysClosingHour = todaysClosingHour;
+		this.positiveRating = positiveRating;
+		this.negativeRating = negativeRating;
+		this.queueTime = queueTime;
+		this.ID = ID;
+	}
+	
+	/**
+	 * @return todays opening and closing hours
+	 */
+	public OpeningHours getTodaysOpeningHours() {
+		return new OpeningHours(this.todaysOpeningHour, this.todaysClosingHour);
+	}
+	
+	/**
+	 * @return the coordinates of the pub
+	 */
+	public LatLng getCoordinates() {
+		return new LatLng(this.latitude, this.longitude);
 	}
 
 	@Override
@@ -67,8 +108,6 @@ public class Pub implements IPub{
 	public String getDescription() {
 		return this.description;
 	}
-	
-	public int get
 
 	@Override
 	public int getAgeRestriction() {
@@ -80,20 +119,9 @@ public class Pub implements IPub{
 		return this.queueTime;
 	}
 
-	@Override
-	public int getQueueTimeLastUpdatedTimestamp() {
-		// TODO Auto-generated method stub
-		return 0;
-	}
-
-	@Override
-	public LatLng getCoordinates() {
-		return new LatLng(this.coordinates.latitude, this.coordinates.longitude);
-	}
-
     @Override
     public int getEntranceFee(){
-        return entranceFee;
+        return this.entranceFee;
     }
 
 	@Override
@@ -115,37 +143,31 @@ public class Pub implements IPub{
 
 	@Override
 	public int getPositiveRating() {
-		// TODO Auto-generated method stub
-		return 0;
+		return this.positiveRating;
 	}
 
 	@Override
 	public int getNegativeRating() {
-		// TODO Auto-generated method stub
-		return 0;
+		return this.negativeRating;
 	}
 
 	@Override
 	public int getTodaysOpeningHour() {
-		// TODO Auto-generated method stub
-		return 0;
+		return this.todaysOpeningHour;
 	}
 
 	@Override
 	public int getTodaysClosingHour() {
-		// TODO Auto-generated method stub
-		return 0;
+		return this.todaysClosingHour;
 	}
 
 	@Override
 	public double getLatitude() {
-		// TODO Auto-generated method stub
-		return 0;
+		return this.latitude;
 	}
 
 	@Override
 	public double getLongitude() {
-		// TODO Auto-generated method stub
-		return 0;
+		return this.longitude;
 	}
 }

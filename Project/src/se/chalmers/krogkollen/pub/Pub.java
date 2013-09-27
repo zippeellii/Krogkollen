@@ -19,6 +19,7 @@ import com.google.android.gms.maps.model.LatLng;
  * A class representing a pub
  * @author Jonathan Nilsfors
  * @author Albin Garpetun
+ * @author Oskar Kärrman
  *
  */
 public class Pub implements IPub{
@@ -38,7 +39,7 @@ public class Pub implements IPub{
      * More constructors should be added, in case there is information missing.
      */
     public Pub () {
-        this("Name", "Description", "00:00 - 00:00", 18, 15, 0.0, 0.0, "0");
+        //this("Name", "Description", "00:00 - 00:00", 18, 15, 0.0, 0.0, "0");
     }
 
 	/**
@@ -53,15 +54,8 @@ public class Pub implements IPub{
 	 * @param longitude the longitude coordinate
 	 * @param id the unique id of the pub
 	 */
-	public Pub(String name, String description, String openingHours, int ageRestriction, int queueTime, double latitude, double longitude, String id){
-		this.name = name;
-		this.description = description;
-		this.openingHours = openingHours;
-		this.ageRestriction = ageRestriction;
-		this.setQueueTime(queueTime);
-		this.ID = id;
-        this.entranceFee = entranceFee;
-		coordinates = new LatLng(latitude, longitude);
+	public Pub(String name, String description, int openingHour, int closingHour, int ageRestriction, int queueTime, double latitude, double longitude, String id){
+
 	}
 
 	@Override
@@ -73,11 +67,8 @@ public class Pub implements IPub{
 	public String getDescription() {
 		return this.description;
 	}
-
-	@Override
-	public String getOpeningHours() {
-		return this.openingHours;
-	}
+	
+	public int get
 
 	@Override
 	public int getAgeRestriction() {
@@ -121,4 +112,40 @@ public class Pub implements IPub{
 	public String getID() {
 		return this.ID;
     }
+
+	@Override
+	public int getPositiveRating() {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
+	@Override
+	public int getNegativeRating() {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
+	@Override
+	public int getTodaysOpeningHour() {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
+	@Override
+	public int getTodaysClosingHour() {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
+	@Override
+	public double getLatitude() {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
+	@Override
+	public double getLongitude() {
+		// TODO Auto-generated method stub
+		return 0;
+	}
 }

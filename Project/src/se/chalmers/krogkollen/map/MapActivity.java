@@ -307,6 +307,6 @@ public class MapActivity extends Activity implements IMapView, IObserver{
                 break;
         }
         mMap.addMarker(MarkerOptionsFactory.createMarkerOptions(getResources(), drawable, pub.getName(), pub.getTodaysOpeningHour(),
-                new LatLng(pub.getLatitude(), pub.getLongitude()), pub.getName()));
+                new LatLng(pub.getLatitude(), pub.getLongitude()), pub.getID()));
 	}
 }

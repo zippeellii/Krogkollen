@@ -3,6 +3,7 @@ package se.chalmers.krogkollen.pub;
 import java.util.LinkedList;
 import java.util.List;
 
+import android.util.Log;
 import se.chalmers.krogkollen.utils.StringConverter;
 import android.content.res.Resources;
 import com.parse.ParseObject;
@@ -80,9 +81,9 @@ public class PubUtilities {
 						object.getInt("posRate"),
 						object.getInt("negRate"),
 						object.getInt("queueTime"),
-						object.getString("objectId")));
+						object.getObjectId()));
 
-			}
+            }
 		} catch (com.parse.ParseException e1) {
 			// TODO Auto-generated catch block
 			e1.printStackTrace();

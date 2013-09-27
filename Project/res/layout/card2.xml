@@ -38,6 +38,7 @@ This file is part of Krogkollen.
                 android:layout_height="wrap_content"
                 android:text="@string/opening_hours"
                 android:layout_weight="1"
+                android:gravity="center"
                 android:textColor="#777777"/>
 
         <TextView
@@ -46,6 +47,7 @@ This file is part of Krogkollen.
                 android:layout_height="wrap_content"
                 android:text="@string/age"
                 android:layout_weight="1"
+                android:gravity="center"
                 android:textColor="#777777"/>
 
         <TextView
@@ -54,6 +56,7 @@ This file is part of Krogkollen.
                 android:layout_height="wrap_content"
                 android:text="@string/entrance_fee"
                 android:layout_weight="1"
+                android:gravity="center"
                 android:textColor="#777777"/>
 
         <TextView
@@ -62,6 +65,7 @@ This file is part of Krogkollen.
                 android:layout_height="wrap_content"
                 android:text="@string/yellow_color"
                 android:layout_weight="1"
+                android:gravity="center"
                 android:textColor="#777777"/>
 
     </LinearLayout>

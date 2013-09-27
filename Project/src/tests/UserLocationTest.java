@@ -15,6 +15,7 @@ public class UserLocationTest {
 
     public void testGetCurrentLocation() throws Exception {
 
+
     }
 
     public void testGetCurrentLatLng() throws Exception {

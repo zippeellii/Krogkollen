@@ -25,7 +25,7 @@ public class OpeningHours {
         return this.closingHour;
     }
 
-    // TODO javadoc
+    @Override
     public String toString(){
         return getOpeningHour()+" - "+getClosingHour();
     }

@@ -29,7 +29,6 @@ import com.google.android.gms.maps.model.MarkerOptions;
  * Author: Johan Backman
  * Date: 2013-09-22
  */
-
 public class MarkerOptionsFactory {
 
     private final static int bigTextRatio = 22;

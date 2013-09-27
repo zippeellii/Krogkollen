@@ -70,11 +70,15 @@ public class PubUtilities {
 			for(ParseObject object : tempList){
 				pubList.add(new Pub(object.getString("name"),
 						object.getString("description"),
-						object.getString("openingHours"),
-						object.getInt("ageRestriction"),
-						object.getInt("queueTime"),
 						object.getDouble("latitude"),
 						object.getDouble("longitude"),
+						object.getInt("ageRestriction"),
+						object.getInt("entranceFee"),
+						object.getInt("todaysOpeningHour"),
+						object.getInt("todaysClosingHour"),
+						object.getInt("posRate"),
+						object.getInt("negRate"),
+						object.getInt("queueTime"),
 						object.getString("objectId")));
 
 			}

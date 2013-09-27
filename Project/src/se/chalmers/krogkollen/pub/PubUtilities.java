@@ -48,7 +48,27 @@ public class PubUtilities {
 	public void loadPubList() {
 
 		ParseQuery<ParseObject> query = ParseQuery.getQuery("Pub");
-		query.findInBackground(new FindCallback<ParseObject>() {
+		List <ParseObject> tempList;
+		try {
+			tempList = query.find();
+			for(ParseObject object : tempList){
+				pubList.add(new Pub(object.getString("name"),
+						object.getString("description"),
+						object.getString("openingHours"),
+						object.getInt("ageRestriction"),
+						object.getInt("queueTime"),
+						object.getDouble("latitude"),
+						object.getDouble("longitude"),
+						object.getString("objectId")));
+
+			}
+		} catch (com.parse.ParseException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
+
+
+		/*query.findInBackground(new FindCallback<ParseObject>() {
 			@Override
 			public void done(List<ParseObject> parsePubList, com.parse.ParseException e){
 				if(e == null){
@@ -62,7 +82,7 @@ public class PubUtilities {
 								object.getDouble("latitude"),
 								object.getDouble("longitude"),
 								object.getString("objectId")));
-						
+
 					}
 				}
 				else{
@@ -71,8 +91,9 @@ public class PubUtilities {
 			}
 
 		});
-		
-/*
+		Log.d("STRÄNG", "PUBAR I LISTAN : " + pubList.size());
+*/
+		/*
 		pubList.add(new Pub("Hubben 2.0", "IT's pub", "22:00-05:00", 18, 2, 57.688221, 11.979539, 1));
 		pubList.add(new Pub("Kajsabaren", "E", "18:00-01:00", 18, 1, 57.688248, 11.978506, 2));
 		pubList.add(new Pub("Databasen", "D", "19:00-01:00", 18, 3, 57.687502, 11.978667, 3));
@@ -92,9 +113,9 @@ public class PubUtilities {
 		pubList.add(new Pub("Club Avancez", "-", "19:00 - 03:00", 18, 0, 57.693289,11.976017, 17));
 		pubList.add(new Pub("Pub P", "?", "18:00 - 01:00", 18, 1, 57.706922,11.939643, 18));
 		pubList.add(new Pub("11:an", "?", "18:00 - 01:00", 18, 3, 57.706555,11.936639, 19));
-		*/
+		 */
 	}
-	
+
 	/**
 	 * Returns the list of pubs.
 	 *

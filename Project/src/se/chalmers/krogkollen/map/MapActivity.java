@@ -43,7 +43,6 @@ public class MapActivity extends Activity implements IMapView, IObserver{
     private UserLocation userLocation;
     private Marker userMarker;
     private List<Marker> pubMarkers = new ArrayList<Marker>();
-    private final int ZOOM = 15;
 
     private Menu mainMenu;
 
@@ -60,13 +59,17 @@ public class MapActivity extends Activity implements IMapView, IObserver{
             @Override
             public boolean onMarkerClick(Marker marker) {
 
+
                 // Move camera to the clicked marker.
                 mMap.animateCamera(CameraUpdateFactory.newCameraPosition(new CameraPosition(
                         new LatLng(marker.getPosition().latitude, marker.getPosition().longitude), 18, 0, 0)));
 
-                // Open detailed view.
-                openDetailedView(marker.getId());
-
+                if (!marker.getTitle().equalsIgnoreCase("user")) {
+                    // Open favorites.
+                } else {
+                    // Open detailed view.
+                    openDetailedView(marker.getId());
+                }
                 return true; // Suppress default behavior; move camera and open info window.
             }
         });
@@ -121,7 +124,8 @@ public class MapActivity extends Activity implements IMapView, IObserver{
 	public void addUserMarker(LatLng latLng){
 		userMarker = mMap.addMarker(new MarkerOptions()
 						.position(latLng)
-						.icon(BitmapDescriptorFactory.fromResource(R.drawable.user_marker)));
+						.icon(BitmapDescriptorFactory.fromResource(R.drawable.user_marker))
+                        .title("user"));
  	}
 
     @Override

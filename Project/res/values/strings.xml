@@ -1,9 +1,38 @@
 <?xml version="1.0" encoding="utf-8"?>
+
+<!--
+This file is part of Krogkollen.
+
+ Krogkollen is free software: you can redistribute it and/or modify
+ it under the terms of the GNU General Public License as published by
+ the Free Software Foundation, either version 3 of the License, or
+ (at your option) any later version.
+
+ Krogkollen is distributed in the hope that it will be useful,
+ but WITHOUT ANY WARRANTY; without even the implied warranty of
+ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ GNU General Public License for more details.
+
+ You should have received a copy of the GNU General Public License
+ along with Foobar.  If not, see <http://www.gnu.org/licenses/>.
+-->
+
 <resources>
 
     <string name="app_name">Krogkollen</string>
-    <string name="action_settings">Settings</string>
+    <string name="action_settings">Inställningar</string>
     <string name="hello_world">Startmenu</string>
-    <string name="title_activity_map">MapActivity</string>
+    <string name="title_activity_map">Krogkarta</string>
+    <string name="refresh">Uppdatera</string>
+    <string name="open_list">Öppna lista</string>
+    <string name="search">Sök</string>
+    <string name="go_to_my_location">Min position</string>
+    <string name="pub_name">Pubnamn</string>
+    <string name="description">Beskrivning</string>
+    <string name="opening_hours">17.00-01.00</string>
+    <string name="age">18</string>
+    <string name="queue_time">30 min</string>
+    <string name="entrance_fee">100kr</string>
+    <string name="yellow_color">yellow</string>
 
 </resources>

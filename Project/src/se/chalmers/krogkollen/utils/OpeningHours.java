@@ -27,6 +27,6 @@ public class OpeningHours {
 
     // TODO javadoc
     public String toString(){
-        return "Opening hour: "+getOpeningHour()+" Closing hour: "+getClosingHour();
+        return getOpeningHour()+" - "+getClosingHour();
     }
 }

@@ -10,7 +10,7 @@ package tests;
 public class UserLocationTest {
 
     public void setUp() throws Exception {
-
+            // TJU
     }
 
     public void testGetCurrentLocation() throws Exception {

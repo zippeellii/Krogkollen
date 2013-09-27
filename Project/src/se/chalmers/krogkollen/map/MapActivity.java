@@ -82,11 +82,11 @@ public class MapActivity extends Activity implements IMapView, IObserver{
                 mMap.animateCamera(CameraUpdateFactory.newCameraPosition(new CameraPosition(
                         new LatLng(marker.getPosition().latitude, marker.getPosition().longitude), 18, 0, 0)));
 
-                if (!marker.getTitle().equalsIgnoreCase("user")) {
+                if (marker.getTitle().equalsIgnoreCase("user")) {
                     // Open favorites.
                 } else {
                     // Open detailed view.
-                    openDetailedView(marker.getId());
+                    openDetailedView(marker.getTitle());
                 }
                 return true; // Suppress default behavior; move camera and open info window.
             }

@@ -131,7 +131,7 @@ public class PubUtilities {
 	// TODO write Javadoc
     public IPub getPub(String id){
        for(IPub pub: pubList) {
-            if(pub.getName().equals(id)){
+            if(pub.getID().equals(id)){
                 return pub;
             }
         }

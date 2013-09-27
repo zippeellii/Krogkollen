@@ -35,7 +35,7 @@ public class DetailedActivity extends Activity {
 
     IPub pub;
 
-    Pub testPub = new Pub("TestPub", "Så kallad beskrivning... Viktigt. byter rad också. Vackert. Per och Filip levererar #öl", "17-03", 18, 30, 80.21, 90.23,100, 23);
+    Pub testPub = new Pub();
 
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

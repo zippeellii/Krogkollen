@@ -29,8 +29,8 @@ public class Pub implements IPub{
 	private int ageRestriction;
 	private int queueTime;
 	private LatLng coordinates;
-	private final int ID;
     private int entranceFee;
+	private final String ID;
 	
 	/**
      * Instantiates the object, creating a dummy pub object.
@@ -38,7 +38,7 @@ public class Pub implements IPub{
      * More constructors should be added, in case there is information missing.
      */
     public Pub () {
-        this("Name", "Description", "00:00 - 00:00", 18, 15, 0.0, 0.0,100, 0);
+        this("Name", "Description", "00:00 - 00:00", 18, 15, 0.0, 0.0, "0");
     }
 
 	/**
@@ -53,8 +53,7 @@ public class Pub implements IPub{
 	 * @param longitude the longitude coordinate
 	 * @param id the unique id of the pub
 	 */
-	public Pub(String name, String description, String openingHours, int ageRestriction, int queueTime, double latitude,
-               double longitude,int entranceFee, int id){
+	public Pub(String name, String description, String openingHours, int ageRestriction, int queueTime, double latitude, double longitude, String id){
 		this.name = name;
 		this.description = description;
 		this.openingHours = openingHours;
@@ -119,7 +118,7 @@ public class Pub implements IPub{
 	}
 
 	@Override
-	public int getID() {
+	public String getID() {
 		return this.ID;
     }
 }

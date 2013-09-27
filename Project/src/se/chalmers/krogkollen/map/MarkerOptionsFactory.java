@@ -46,7 +46,7 @@ public class MarkerOptionsFactory {
      * @return a new google maps marker.
      */
     public static MarkerOptions createMarkerOptions(Resources resources, int resourceId, String mainText,
-                                                    String denotedText, LatLng position, int pubId) {
+                                                    String denotedText, LatLng position, String pubId) {
 
         // Make the bitmap mutable, since an object retrieved from resources is set to immutable by default.
         Bitmap bitmap = BitmapFactory.decodeResource(resources, resourceId);

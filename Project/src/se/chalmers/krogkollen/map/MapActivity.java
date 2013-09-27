@@ -16,6 +16,8 @@ import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapFragment;
 import com.google.android.gms.maps.Projection;
 import com.google.android.gms.maps.model.*;
+import com.parse.Parse;
+import com.parse.ParseObject;
 import se.chalmers.krogkollen.R;
 import se.chalmers.krogkollen.detailed.DetailedActivity;
 import se.chalmers.krogkollen.pub.IPub;
@@ -65,6 +67,7 @@ public class MapActivity extends Activity implements IMapView, IObserver{
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
+		
 		setContentView(R.layout.activity_map);
 		
 		// Get the map and add some markers for pubs.

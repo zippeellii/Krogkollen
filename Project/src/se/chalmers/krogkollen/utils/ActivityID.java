@@ -1,5 +1,6 @@
 package se.chalmers.krogkollen.utils;
 
+// TODO javadoc
 public class ActivityID {
 
 	public static final String ACTIVITY_ID = "se.chalmers.krogkollen.ACTIVITY_ID";

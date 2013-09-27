@@ -1,5 +1,6 @@
 package se.chalmers.krogkollen.utils;
 
+// TODO javadoc
 public class CallingActivity {
 
 	public static final int MAIN = 100;

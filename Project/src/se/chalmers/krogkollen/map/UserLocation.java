@@ -12,7 +12,7 @@ import android.os.Bundle;
 
 import com.google.android.gms.maps.model.LatLng;
 
-/**
+/*
  * This file is part of Krogkollen.
  *
  * Krogkollen is free software: you can redistribute it and/or modify
@@ -26,8 +26,10 @@ import com.google.android.gms.maps.model.LatLng;
  * GNU General Public License for more details.
  *
  * You should have received a copy of the GNU General Public License
- * along with Foobar.  If not, see <http://www.gnu.org/licenses/>.
- *
+ * along with Krogkollen.  If not, see <http://www.gnu.org/licenses/>.
+ */
+
+ /**
  * A class handling the phones current position.
  */
 public class UserLocation implements LocationListener, IObservable{

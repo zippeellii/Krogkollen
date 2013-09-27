@@ -6,16 +6,14 @@ import android.content.Intent;
 import android.location.LocationManager;
 import android.os.Bundle;
 import android.view.Menu;
-import se.chalmers.krogkollen.detailed.DetailedActivity;
 import com.parse.Parse;
 import com.parse.ParseAnalytics;
-import com.parse.ParseObject;
 import se.chalmers.krogkollen.map.MapActivity;
 import se.chalmers.krogkollen.map.UserLocation;
 import se.chalmers.krogkollen.pub.PubUtilities;
 import se.chalmers.krogkollen.utils.ActivityID;
 
-/**
+/*
  * This file is part of Krogkollen.
  *
  * Krogkollen is free software: you can redistribute it and/or modify
@@ -29,10 +27,15 @@ import se.chalmers.krogkollen.utils.ActivityID;
  * GNU General Public License for more details.
  *
  * You should have received a copy of the GNU General Public License
- * along with Foobar.  If not, see <http://www.gnu.org/licenses/>.
+ * along with Krogkollen.  If not, see <http://www.gnu.org/licenses/>.
+ */
+
+ /** 
  *
  * A class used for starting the application
+ * 
  * @author Jonathan Nilsfors
+ * @author Oskar Kärrman
  *
  */
 public class MainActivity extends Activity {

@@ -2,7 +2,7 @@ package se.chalmers.krogkollen.pub;
 import se.chalmers.krogkollen.utils.OpeningHours;
 
 import com.google.android.gms.maps.model.LatLng;
-/**
+/*
  * This file is part of Krogkollen.
  *
  * Krogkollen is free software: you can redistribute it and/or modify
@@ -14,11 +14,15 @@ import com.google.android.gms.maps.model.LatLng;
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- *
+ * 
  * You should have received a copy of the GNU General Public License
- * along with Foobar.  If not, see <http://www.gnu.org/licenses/>.
+ * along with Krogkollen.  If not, see <http://www.gnu.org/licenses/>.
+ */
+
+/**
  *
  * A class representing a pub
+ * 
  * @author Jonathan Nilsfors
  * @author Albin Garpetun
  * @author Oskar Kärrman
@@ -39,6 +43,9 @@ public class Pub implements IPub{
     private int negativeRating;
 	private final String ID;
 	
+	/**
+	 * Created a new Pub object with default values
+	 */
 	public Pub() {
 		this("Name", "Description", 0.0, 0.0, 0, 0, 0, 0, 0, 0, 0, "ID");
 	}

@@ -16,8 +16,6 @@ import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapFragment;
 import com.google.android.gms.maps.Projection;
 import com.google.android.gms.maps.model.*;
-import com.parse.Parse;
-import com.parse.ParseObject;
 import se.chalmers.krogkollen.R;
 import se.chalmers.krogkollen.detailed.DetailedActivity;
 import se.chalmers.krogkollen.pub.IPub;
@@ -28,7 +26,7 @@ import se.chalmers.krogkollen.utils.IObserver;
 import java.util.ArrayList;
 import java.util.List;
 
-/**
+/*
  * This file is part of Krogkollen.
  *
  * Krogkollen is free software: you can redistribute it and/or modify
@@ -42,8 +40,10 @@ import java.util.List;
  * GNU General Public License for more details.
  *
  * You should have received a copy of the GNU General Public License
- * along with Foobar.  If not, see <http://www.gnu.org/licenses/>.
- *
+ * along with Krogkollen.  If not, see <http://www.gnu.org/licenses/>.
+ */
+
+ /**
  * The standard implementation of IMapView.
  *
  * This is a normal map with the user marked on the map, and with a list of pubs marked on the map.
@@ -60,7 +60,7 @@ public class MapActivity extends Activity implements IMapView, IObserver{
     private UserLocation userLocation;
     private Marker userMarker;
     private List<Marker> pubMarkers = new ArrayList<Marker>();
-    private final int ZOOM = 15;
+    private final int ZOOM = 15; // TODO kolla denna variabel
 
     private Menu mainMenu;
 

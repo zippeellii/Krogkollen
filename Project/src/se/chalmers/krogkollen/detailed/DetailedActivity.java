@@ -1,8 +1,8 @@
 package se.chalmers.krogkollen.detailed;
 
 import android.app.Activity;
-import android.content.Intent;
 import android.os.Bundle;
+import android.view.Menu;
 import android.widget.TextView;
 import se.chalmers.krogkollen.R;
 import se.chalmers.krogkollen.pub.IPub;
@@ -32,6 +32,16 @@ public class DetailedActivity extends Activity {
 
         setText();
 
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        super.onCreateOptionsMenu(menu);
+
+        // Inflate the menu; this adds items to the action bar if it is present.
+        getMenuInflater().inflate(R.menu.detailed, menu);
+
+        return true;
     }
 
     public void setText(){

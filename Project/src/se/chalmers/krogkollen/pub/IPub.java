@@ -17,6 +17,8 @@ package se.chalmers.krogkollen.pub;
  * along with Krogkollen.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+import se.chalmers.krogkollen.utils.OpeningHours;
+
 /**
  *
  * Interface for a Pub object
@@ -90,4 +92,6 @@ public interface IPub {
 	 * @return the unique ID for the pub
 	 */
 	public String getID();
+
+    public OpeningHours getTodaysOpeningHours();
 }

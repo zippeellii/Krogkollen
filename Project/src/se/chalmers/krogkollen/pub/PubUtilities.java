@@ -71,7 +71,7 @@ public class PubUtilities {
 						object.getDouble("longitude"),
 						object.getInt("ageRestriction"),
 						object.getInt("entranceFee"),
-						object.getString("openingHours"),
+						1, 1, // TODO fix
 						object.getInt("posRate"),
 						object.getInt("negRate"),
 						object.getInt("queueTime"),

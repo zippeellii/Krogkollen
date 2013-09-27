@@ -1,11 +1,10 @@
 package se.chalmers.krogkollen.pub;
 
-import java.util.Calendar;
 import java.util.LinkedList;
 import java.util.List;
 
 import se.chalmers.krogkollen.utils.StringConverter;
-
+import android.content.res.Resources;
 import com.parse.ParseObject;
 import com.parse.ParseQuery;
 
@@ -129,8 +128,12 @@ public class PubUtilities {
 	
 	// TODO Check this method, id is a STring now
 	// TODO write Javadoc
-    public IPub getPub(int id){
-        return pubList.get(id);
+    public IPub getPub(String id){
+       for(IPub pub: pubList) {
+            if(pub.getName().equals(id)){
+                return pub;
+            }
+        }
+        throw  new Resources.NotFoundException("The ID does not match with any pub");
     }
-
 }

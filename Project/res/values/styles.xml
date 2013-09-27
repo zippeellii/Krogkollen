@@ -35,4 +35,11 @@
         <item name="android:homeAsUpIndicator">@drawable/transparent_spacer</item>
     </style>
 
+
+    <style name="ProgressIndicator" parent="@android:style/Widget.ProgressBar.Small">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:indeterminate">true</item>
+    </style>
+
 </resources>

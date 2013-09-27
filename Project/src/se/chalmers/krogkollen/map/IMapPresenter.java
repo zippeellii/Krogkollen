@@ -5,7 +5,7 @@ import java.util.List;
 import se.chalmers.krogkollen.IPresenter;
 import se.chalmers.krogkollen.pub.IPub;
 
-/**
+/*
  * This file is part of Krogkollen.
  *
  * Krogkollen is free software: you can redistribute it and/or modify
@@ -19,7 +19,10 @@ import se.chalmers.krogkollen.pub.IPub;
  * GNU General Public License for more details.
  *
  * You should have received a copy of the GNU General Public License
- * along with Foobar.  If not, see <http://www.gnu.org/licenses/>.
+ * along with Krogkollen.  If not, see <http://www.gnu.org/licenses/>.
+ */
+
+ /**
  *
  * Interface for a MapPresenter
  * 

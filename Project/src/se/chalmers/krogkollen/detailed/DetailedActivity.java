@@ -5,9 +5,11 @@ import android.os.Bundle;
 import android.view.Menu;
 import android.widget.TextView;
 import se.chalmers.krogkollen.R;
+import se.chalmers.krogkollen.map.MapActivity;
 import se.chalmers.krogkollen.pub.IPub;
 import se.chalmers.krogkollen.pub.Pub;
 import se.chalmers.krogkollen.pub.PubUtilities;
+import se.chalmers.krogkollen.utils.OpeningHours;
 
 /*
  * This file is part of Krogkollen.
@@ -27,22 +29,21 @@ import se.chalmers.krogkollen.pub.PubUtilities;
  *
  */
 
-// TODO write javadoc
+/**
+ * An activity for the detailed view.
+ */
 public class DetailedActivity extends Activity {
 
-    IPub pub;
-
-    Pub testPub = new Pub();
+    private IPub pub;
+    private TextView pubTextView, descriptionTextView,openingHoursTextView,
+            ageRestrictionTextView, entranceFeeTextView;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_detailed);
-        if (getIntent()!=null){
-            int pubID = getIntent().getIntExtra("pubID", 0);
-            pub = PubUtilities.getInstance().getPub(pubID);
-        }
-
+        String pubID = getIntent().getStringExtra(MapActivity.MARKER_PUB_ID);
+        pub = PubUtilities.getInstance().getPub(pubID);
         setText();
 
     }
@@ -57,11 +58,19 @@ public class DetailedActivity extends Activity {
         return true;
     }
 
-    // TODO: javadoc
+    /**
+     * Sets the pubs information into the detailed view
+     */
     public void setText(){
-        TextView pubTextView = (TextView) findViewById(R.id.pub_name);
-        pubTextView.setText(testPub.getName());
-        TextView descriptionTextView = (TextView) findViewById(R.id.description);
-        descriptionTextView.setText(testPub.getDescription());
+        pubTextView= (TextView) findViewById(R.id.pub_name);
+        pubTextView.setText(pub.getName());
+        descriptionTextView = (TextView) findViewById(R.id.description);
+        descriptionTextView.setText(pub.getDescription());
+        openingHoursTextView = (TextView) findViewById(R.id.opening_hours);
+        openingHoursTextView.setText((""+pub.getTodaysOpeningHour())+"-"+pub.getTodaysClosingHour());
+        ageRestrictionTextView = (TextView) findViewById(R.id.age);
+        ageRestrictionTextView.setText(""+pub.getAgeRestriction());
+        entranceFeeTextView = (TextView) findViewById(R.id.entrance_fee);
+        entranceFeeTextView.setText(""+pub.getEntranceFee());
     }
 }

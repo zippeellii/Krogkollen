@@ -52,7 +52,7 @@ This file is part of Krogkollen.
                 android:id="@+id/entrance_fee"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/description"
+                android:text="@string/entrance_fee"
                 android:layout_weight="1"
                 android:textColor="#777777"/>
 

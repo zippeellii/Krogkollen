@@ -21,3 +21,4 @@ Legend:
 + Created a class, Pub, representing a pub
 + Created an activity where our program starts
 + Added Google Maps to our activity
++ Created markers for all pubs at Pubrundan

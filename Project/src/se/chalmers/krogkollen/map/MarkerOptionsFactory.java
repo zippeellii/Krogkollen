@@ -81,7 +81,8 @@ public class MarkerOptionsFactory {
                                 .position(position)
                                 .icon(BitmapDescriptorFactory.fromBitmap(bitmapResult))
                                 .anchor(0.3f, 0.94f)
-                                .title("" + pubId);
+                                .title(pubId);
+
         return options;
     }
 

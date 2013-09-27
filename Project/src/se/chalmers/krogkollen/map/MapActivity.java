@@ -26,7 +26,24 @@ import se.chalmers.krogkollen.utils.IObserver;
 import java.util.ArrayList;
 import java.util.List;
 
-/**
+/*
+ * This file is part of Krogkollen.
+ *
+ * Krogkollen is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * Krogkollen is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with Krogkollen.  If not, see <http://www.gnu.org/licenses/>.
+ */
+
+ /**
  * The standard implementation of IMapView.
  *
  * This is a normal map with the user marked on the map, and with a list of pubs marked on the map.
@@ -49,6 +66,7 @@ public class MapActivity extends Activity implements IMapView, IObserver{
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
+		
 		setContentView(R.layout.activity_map);
 		
 		// Get the map and add some markers for pubs.
@@ -288,7 +306,7 @@ public class MapActivity extends Activity implements IMapView, IObserver{
                 drawable = R.drawable.gray_marker_bg;
                 break;
         }
-        mMap.addMarker(MarkerOptionsFactory.createMarkerOptions(getResources(), drawable, pub.getName(), pub.getOpeningHours(),
-                new LatLng(pub.getCoordinates().latitude, pub.getCoordinates().longitude), pub.getID()));
+        mMap.addMarker(MarkerOptionsFactory.createMarkerOptions(getResources(), drawable, pub.getName(), pub.getTodaysOpeningHour(),
+                new LatLng(pub.getLatitude(), pub.getLongitude()), pub.getID()));
 	}
 }

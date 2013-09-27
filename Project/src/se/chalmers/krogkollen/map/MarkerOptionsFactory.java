@@ -6,9 +6,24 @@ import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 
-/**
- * MarkerOptionsFactory (UTF-8)
+/*
+ * This file is part of Krogkollen.
  *
+ * Krogkollen is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * Krogkollen is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with Krogkollen.  If not, see <http://www.gnu.org/licenses/>.
+ */
+
+ /**
  * Builds settings for markers in Google Maps V2 for Android.
  *
  * Author: Johan Backman
@@ -33,7 +48,7 @@ public class MarkerOptionsFactory {
      * @return a new google maps marker.
      */
     public static MarkerOptions createMarkerOptions(Resources resources, int resourceId, String mainText,
-                                                    String denotedText, LatLng position, int pubId) {
+                                                    int denotedText, LatLng position, String pubId) {
 
         // Make the bitmap mutable, since an object retrieved from resources is set to immutable by default.
         Bitmap bitmap = BitmapFactory.decodeResource(resources, resourceId);
@@ -59,7 +74,7 @@ public class MarkerOptionsFactory {
         canvas.drawText(mainText, 7 + (minWidthHeight/marginRatio), 31 + (minWidthHeight/marginRatio), paint);
         paint.setColor(Color.rgb(141,141,141));
         paint.setTextSize(minWidthHeight / smallTextRatio);
-        canvas.drawText(denotedText, 7 + (minWidthHeight/marginRatio), 62 + (minWidthHeight/marginRatio), paint);
+        canvas.drawText((denotedText + ""), 7 + (minWidthHeight/marginRatio), 62 + (minWidthHeight/marginRatio), paint);
 
         // Finalize the markerOptions.
         MarkerOptions options = new MarkerOptions()

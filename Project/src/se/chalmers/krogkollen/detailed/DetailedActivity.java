@@ -9,19 +9,32 @@ import se.chalmers.krogkollen.pub.IPub;
 import se.chalmers.krogkollen.pub.Pub;
 import se.chalmers.krogkollen.pub.PubUtilities;
 
-/**
- * Created with IntelliJ IDEA.
- * User: perthoresson
- * Date: 2013-09-25
- * Time: 10:09
- * To change this template use File | Settings | File Templates.
+/*
+ * This file is part of Krogkollen.
+ *
+ * Krogkollen is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * Krogkollen is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with Krogkollen.  If not, see <http://www.gnu.org/licenses/>.
+ *
  */
+
+// TODO write javadoc
 public class DetailedActivity extends Activity {
 
     IPub pub;
 
-    Pub testPub = new Pub("TestPub", "Så kallad beskrivning... Viktigt. byter rad också. Vackert. Per och Filip levererar #öl", "17-03", 18, 30, 80.21, 90.23,100, 23);
+    Pub testPub = new Pub();
 
+    @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_detailed);
@@ -44,6 +57,7 @@ public class DetailedActivity extends Activity {
         return true;
     }
 
+    // TODO: javadoc
     public void setText(){
         TextView pubTextView = (TextView) findViewById(R.id.pub_name);
         pubTextView.setText(testPub.getName());

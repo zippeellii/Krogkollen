@@ -32,28 +32,4 @@ public class UserLocationTest {
     public void testOnLocationChanged() throws Exception {
 
     }
-
-    public void testOnProviderDisabled() throws Exception {
-
-    }
-
-    public void testOnProviderEnabled() throws Exception {
-
-    }
-
-    public void testOnStatusChanged() throws Exception {
-
-    }
-
-    public void testIsBetterLocation() throws Exception {
-
-    }
-
-    public void testAddObserver() throws Exception {
-
-    }
-
-    public void testRemoveObserver() throws Exception {
-
-    }
 }

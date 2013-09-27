@@ -23,7 +23,7 @@ import se.chalmers.krogkollen.utils.OpeningHours;
  *
  * Interface for a Pub object
  * 
- * @author Oskar Kärrman
+ * @author Oskar Karrman
  *
  */
 public interface IPub {

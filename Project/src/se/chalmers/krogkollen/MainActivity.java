@@ -35,7 +35,7 @@ import se.chalmers.krogkollen.utils.ActivityID;
  * A class used for starting the application
  * 
  * @author Jonathan Nilsfors
- * @author Oskar Kärrman
+ * @author Oskar Karrman
  *
  */
 public class MainActivity extends Activity {

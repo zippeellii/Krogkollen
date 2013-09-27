@@ -43,7 +43,6 @@ public class MapActivity extends Activity implements IMapView, IObserver{
     private UserLocation userLocation;
     private Marker userMarker;
     private List<Marker> pubMarkers = new ArrayList<Marker>();
-    private final int ZOOM = 15;
 
     private Menu mainMenu;
 

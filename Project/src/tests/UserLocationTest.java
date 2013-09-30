@@ -7,6 +7,7 @@ package tests;
  * Date: 2013-09-27
  */
 
+// TODO complete the test
 public class UserLocationTest {
 
     public void setUp() throws Exception {

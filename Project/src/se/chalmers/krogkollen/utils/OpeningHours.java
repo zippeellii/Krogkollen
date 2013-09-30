@@ -1,5 +1,6 @@
 package se.chalmers.krogkollen.utils;
 
+// TODO Kanske flytta till pub-paketet? diskuttera
 /**
  *
  * Class handling the opening and closing hours of a pub

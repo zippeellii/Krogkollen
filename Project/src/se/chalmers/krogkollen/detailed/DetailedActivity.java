@@ -7,6 +7,7 @@ import android.widget.TextView;
 import se.chalmers.krogkollen.R;
 import se.chalmers.krogkollen.map.MapActivity;
 import se.chalmers.krogkollen.pub.IPub;
+import se.chalmers.krogkollen.pub.Pub;
 import se.chalmers.krogkollen.pub.PubUtilities;
 
 /*
@@ -30,8 +31,9 @@ import se.chalmers.krogkollen.pub.PubUtilities;
 /**
  * An activity for the detailed view.
  */
-public class DetailedActivity extends Activity {
-
+public class DetailedActivity extends Activity implements IDetailedView {
+	
+	private IDetailedPresenter presenter;
     private IPub pub;
     private TextView pubTextView, descriptionTextView,openingHoursTextView,
             ageRestrictionTextView, entranceFeeTextView;
@@ -44,6 +46,8 @@ public class DetailedActivity extends Activity {
         pub = PubUtilities.getInstance().getPub(pubID);
         setText();
 
+        presenter = new DetailedPresenter();
+        presenter.setView(this);
     }
 
     @Override
@@ -59,7 +63,7 @@ public class DetailedActivity extends Activity {
     /**
      * Sets the pubs information into the detailed view
      */
-    public void setText(){
+    public void setText(){ // TODO flytta denna koden till updateText metoden 
         pubTextView= (TextView) findViewById(R.id.pub_name);
         pubTextView.setText(pub.getName());
         descriptionTextView = (TextView) findViewById(R.id.description);
@@ -71,4 +75,46 @@ public class DetailedActivity extends Activity {
         entranceFeeTextView = (TextView) findViewById(R.id.entrance_fee);
         entranceFeeTextView.setText(""+pub.getEntranceFee());
     }
+
+	@Override
+	public void navigate(Class<?> destination) {
+		// TODO I denna ska ni lägga koden som skickar tillbaka användaren till MapActivity
+		
+	}
+
+	@Override
+	public void showErrorMessage(String message) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void updateText() {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void updateRating() {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void updateQueueIndicator() {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void navigate(Class<?> destination, Bundle extras) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void refresh() {
+		// TODO Auto-generated method stub
+		
+	}
 }

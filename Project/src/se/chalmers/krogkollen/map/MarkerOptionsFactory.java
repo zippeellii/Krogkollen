@@ -23,6 +23,7 @@ import com.google.android.gms.maps.model.MarkerOptions;
  * along with Krogkollen.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+// TODO behöver denna klassen vara publik? annars ändra till paketsynlighet
  /**
  * Builds settings for markers in Google Maps V2 for Android.
  *

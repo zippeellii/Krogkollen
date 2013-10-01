@@ -1,5 +1,7 @@
 package se.chalmers.krogkollen;
 
+import android.os.Bundle;
+
 /*
  * This file is part of Krogkollen.
  *
@@ -32,6 +34,14 @@ public interface IView {
 	 * @param destination
 	 */
 	public abstract void navigate(Class<?> destination);
+	
+	/**
+	 * Navigates no another view
+	 * 
+	 * @param destination
+	 * @param extras
+	 */
+	public abstract void navigate(Class<?> destination, Bundle extras);
 	
 	/**
 	 * Shows an error message

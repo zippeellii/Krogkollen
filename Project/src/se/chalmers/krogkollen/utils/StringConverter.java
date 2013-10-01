@@ -1,6 +1,6 @@
 package se.chalmers.krogkollen.utils;
 
-// TODO javadoc
+// TODO javadoca
 public class StringConverter {
 	/**
 	 * 

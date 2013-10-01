@@ -42,14 +42,14 @@ public class MainActivity extends Activity {
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
-		
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_main);
+
 		// Initializes the Parse.com connection
 		Parse.initialize(this, "WgLQnilANHpjM3xITq0nM0eW8dByIgDDmxJzf6se", "9ZK7yjE1NiD244ymDHb8ZpbbWNNv3RuQq7ceEvJc");
 		ParseAnalytics.trackAppOpened(getIntent());
 	
         PubUtilities.getInstance().loadPubList();
-		super.onCreate(savedInstanceState);
-		setContentView(R.layout.activity_main);
 		
 		//initiate the user location and start the map activity.
 		UserLocation.init((LocationManager) this.getSystemService(Context.LOCATION_SERVICE));

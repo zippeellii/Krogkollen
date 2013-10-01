@@ -6,10 +6,11 @@ import android.content.Intent;
 import android.graphics.Point;
 import android.os.Bundle;
 import android.os.Handler;
-import android.os.Message;
 import android.os.SystemClock;
+import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 import android.view.animation.LinearInterpolator;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -22,7 +23,6 @@ import se.chalmers.krogkollen.pub.IPub;
 import se.chalmers.krogkollen.pub.PubUtilities;
 import se.chalmers.krogkollen.utils.ActivityID;
 import se.chalmers.krogkollen.utils.IObserver;
-import se.chalmers.krogkollen.utils.LoadingThread;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -77,7 +77,6 @@ public class MapActivity extends Activity implements IMapView, IObserver{
         mMap.setOnMarkerClickListener(new GoogleMap.OnMarkerClickListener() {
             @Override
             public boolean onMarkerClick(Marker marker) {
-
 
                 // Move camera to the clicked marker.
                 mMap.animateCamera(CameraUpdateFactory.newCameraPosition(new CameraPosition(
@@ -151,18 +150,14 @@ public class MapActivity extends Activity implements IMapView, IObserver{
     public boolean onOptionsItemSelected(MenuItem menuItem) {
         switch (menuItem.getItemId()) {
             case R.id.refresh_info:
-                final Handler handler = new Handler() {
-                    @Override
-                    public void handleMessage(Message message) {
-                        int state = message.getData().getInt(LoadingThread.STATE);
-                        if (state == 1) {
-                            mainMenu.getItem(R.id.refresh_info).setIcon(R.drawable.refresh_icon);
-                        }
-                    }
-                };
-                LoadingThread loadingThread = new LoadingThread(handler);
-                loadingThread.start();
-                mainMenu.getItem(R.id.refresh_info).setIcon(R.layout.loading_indicator);
+                LayoutInflater layoutInflater = LayoutInflater.from(this);
+                View abprogress = layoutInflater.inflate(R.layout.loading_indicator, null);
+                menuItem.setActionView(abprogress);
+
+                PubUtilities.getInstance().refreshPubList();
+                refreshPubMarkers();
+                menuItem.setActionView(null);
+
                 return true;
             case R.id.search:
                 // Open search

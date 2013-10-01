@@ -22,7 +22,7 @@ This file is part of Krogkollen.
     <string name="app_name">Krogkollen</string>
     <string name="action_settings">Inställningar</string>
     <string name="hello_world">Startmenu</string>
-    <string name="title_activity_map">Krogkarta</string>
+    <string name="title_activity_map">Krogkartan</string>
     <string name="refresh">Uppdatera</string>
     <string name="open_list">Öppna lista</string>
     <string name="search">Sök</string>

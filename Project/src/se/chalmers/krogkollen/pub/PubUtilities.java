@@ -1,13 +1,12 @@
 package se.chalmers.krogkollen.pub;
 
-import java.util.LinkedList;
-import java.util.List;
-
-import android.util.Log;
-import se.chalmers.krogkollen.utils.StringConverter;
 import android.content.res.Resources;
 import com.parse.ParseObject;
 import com.parse.ParseQuery;
+import se.chalmers.krogkollen.utils.StringConverter;
+
+import java.util.LinkedList;
+import java.util.List;
 
 /*
  * This file is part of Krogkollen.
@@ -126,6 +125,11 @@ public class PubUtilities {
 	public List<IPub> getPubList() {
 		return pubList;
 	}
+
+    public void refreshPubList() {
+        pubList.clear();
+        loadPubList();
+    }
 	
 	// TODO Check this method, id is a STring now
 	// TODO write Javadoc

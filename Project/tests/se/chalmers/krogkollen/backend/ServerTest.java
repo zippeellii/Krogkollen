@@ -1,13 +1,16 @@
 package se.chalmers.krogkollen.backend;
 
+import java.util.List;
+
+import se.chalmers.krogkollen.pub.IPub;
+import se.chalmers.krogkollen.pub.PubUtilities;
+
 /**
- * ServerTest (UTF-8)
- * <p/>
- * Author: Johan Backman
- * Date: 2013-09-27
+ * Test for the backend
+ * 
+ * @author Oskar Karrman
+ *
  */
-
-// TODO complete the test
 public class ServerTest {
-
+	List<IPub> list = PubUtilities.getInstance().getPubList();
 }

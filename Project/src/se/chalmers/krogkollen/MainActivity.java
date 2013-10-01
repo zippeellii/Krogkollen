@@ -8,6 +8,8 @@ import android.os.Bundle;
 import android.view.Menu;
 import com.parse.Parse;
 import com.parse.ParseAnalytics;
+
+import se.chalmers.krogkollen.backend.Backend;
 import se.chalmers.krogkollen.map.MapActivity;
 import se.chalmers.krogkollen.map.UserLocation;
 import se.chalmers.krogkollen.pub.PubUtilities;
@@ -43,10 +45,8 @@ public class MainActivity extends Activity {
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		
-		// TODO move to another class
-		// Initializes the Parse.com connection
-		Parse.initialize(this, "WgLQnilANHpjM3xITq0nM0eW8dByIgDDmxJzf6se", "9ZK7yjE1NiD244ymDHb8ZpbbWNNv3RuQq7ceEvJc");
-		ParseAnalytics.trackAppOpened(getIntent());
+		//Tells the backend to initialize its server connection
+		Backend.init(this, "WgLQnilANHpjM3xITq0nM0eW8dByIgDDmxJzf6se", "9ZK7yjE1NiD244ymDHb8ZpbbWNNv3RuQq7ceEvJc");
 	
         PubUtilities.getInstance().loadPubList();
 		super.onCreate(savedInstanceState);

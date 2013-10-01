@@ -6,6 +6,7 @@ import java.util.List;
 
 import android.content.Context;
 import com.parse.Parse;
+import com.parse.ParseException;
 import com.parse.ParseObject;
 import com.parse.ParseQuery;
 
@@ -57,20 +58,7 @@ public class Backend implements IParseBackend{
 			//Makes it possible to handle as a java.util.List
 			tempList = query.find();
 			for(ParseObject object : tempList){
-				int hourFourDigit = StringConverter.convertCombinedStringto(object.getString("openingHours"), 5);
-				tempPubList.add(new Pub(object.getString("name"),
-						object.getString("description"),
-						object.getDouble("latitude"),
-						object.getDouble("longitude"),
-						object.getInt("ageRestriction"),
-						object.getInt("entranceFee"),
-						(hourFourDigit/100),
-						(hourFourDigit%100),
-						object.getInt("posRate"),
-						object.getInt("negRate"),
-						object.getInt("queueTime"),
-						object.getObjectId()));
-
+				this.convertParseObjecttoIPub(object);
 			}
 		} catch (com.parse.ParseException e1) {
 			throw new NoBackendAccessException(e1.getMessage());
@@ -102,8 +90,14 @@ public class Backend implements IParseBackend{
 	@Override
 	public IPub getPubFromID(String id) throws NoBackendAccessException,
 	NotFoundInBackendException {
-		// TODO Auto-generated method stub
-		return null;
+		ParseObject object = new ParseObject("Pub");
+
+		try {
+			object = ParseQuery.getQuery("Pub").get(id);
+		} catch (ParseException e) {
+			throw new NoBackendAccessException(e.getMessage());
+		}
+		return this.convertParseObjecttoIPub(object);
 	}
 
 	@Override
@@ -137,5 +131,28 @@ public class Backend implements IParseBackend{
 		// TODO Auto-generated method stub
 		return null;
 	}
+
+	/**
+	 * A method for converting a ParseObject to an IPub
+	 * @param object the ParseObject
+	 * @return the IPub representation of the ParseObject
+	 */
+	public IPub convertParseObjecttoIPub(ParseObject object){
+		int hourFourDigit = StringConverter.convertCombinedStringto(object.getString("openingHours"), 5);
+		return new Pub(
+				object.getString("name"),
+				object.getString("description"),
+				object.getDouble("latitude"),
+				object.getDouble("longitude"),
+				object.getInt("ageRestriction"),
+				object.getInt("entranceFee"),
+				(hourFourDigit/100),
+				(hourFourDigit%100),
+				object.getInt("posRate"),
+				object.getInt("negRate"),
+				object.getInt("queueTime"),
+				object.getObjectId());
+	}
+
 
 }

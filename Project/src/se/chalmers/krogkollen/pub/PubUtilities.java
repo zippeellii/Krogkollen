@@ -3,10 +3,9 @@ package se.chalmers.krogkollen.pub;
 import java.util.LinkedList;
 import java.util.List;
 
-import se.chalmers.krogkollen.utils.StringConverter;
+import se.chalmers.krogkollen.backend.Backend;
+import se.chalmers.krogkollen.backend.NoBackendAccessException;
 import android.content.res.Resources;
-import com.parse.ParseObject;
-import com.parse.ParseQuery;
 
 /*
  * This file is part of Krogkollen.
@@ -62,59 +61,13 @@ public class PubUtilities {
 	 * For now this method only adds hardcoded pubs into the list.
 	 */
 	public void loadPubList() {
-
-		ParseQuery<ParseObject> query = ParseQuery.getQuery("Pub");
-		List <ParseObject> tempList;
-		try {
-			tempList = query.find();
-			for(ParseObject object : tempList){
-				int hourFourDigit = StringConverter.convertStringToFragmentedInt(object.getString("openingHours"), 5);
-				pubList.add(new Pub(object.getString("name"),
-						object.getString("description"),
-						object.getDouble("latitude"),
-						object.getDouble("longitude"),
-						object.getInt("ageRestriction"),
-						object.getInt("entranceFee"),
-						(hourFourDigit/100),
-						(hourFourDigit%100),
-						object.getInt("posRate"),
-						object.getInt("negRate"),
-						object.getInt("queueTime"),
-						object.getObjectId()));
-
-            }
-		} catch (com.parse.ParseException e1) {
-			// TODO Auto-generated catch block
-			e1.printStackTrace();
-		}
-
 		
-		// TODO Check code below, can it be removed?
-		/*query.findInBackground(new FindCallback<ParseObject>() {
-			@Override
-			public void done(List<ParseObject> parsePubList, com.parse.ParseException e){
-				if(e == null){
-					Log.d("pub", "Retrieved " + parsePubList.size() + " pubs");
-					for(ParseObject object : parsePubList){
-						pubList.add(new Pub(object.getString("name"),
-								object.getString("description"),
-								object.getString("openingHours"),
-								object.getInt("ageRestriction"),
-								object.getInt("queueTime"),
-								object.getDouble("latitude"),
-								object.getDouble("longitude"),
-								object.getString("objectId")));
-
-					}
-				}
-				else{
-					Log.d("pub", "Error: " + e.getMessage());
-				}
-			}
-
-		});
-		Log.d("STR�NG", "PUBAR I LISTAN : " + pubList.size());
-		 */
+		try {
+			pubList = Backend.getInstance().getAllPubs();
+		} catch (NoBackendAccessException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 
 	/**

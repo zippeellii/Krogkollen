@@ -6,8 +6,6 @@ import android.content.Intent;
 import android.location.LocationManager;
 import android.os.Bundle;
 import android.view.Menu;
-import com.parse.Parse;
-import com.parse.ParseAnalytics;
 
 import se.chalmers.krogkollen.backend.Backend;
 import se.chalmers.krogkollen.map.MapActivity;

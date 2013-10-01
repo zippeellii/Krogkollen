@@ -5,10 +5,7 @@ import java.util.List;
 
 import se.chalmers.krogkollen.backend.Backend;
 import se.chalmers.krogkollen.backend.NoBackendAccessException;
-import se.chalmers.krogkollen.utils.StringConverter;
 import android.content.res.Resources;
-import com.parse.ParseObject;
-import com.parse.ParseQuery;
 
 /*
  * This file is part of Krogkollen.

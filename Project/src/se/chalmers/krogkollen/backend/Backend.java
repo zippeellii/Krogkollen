@@ -5,7 +5,6 @@ import java.util.Date;
 import java.util.List;
 
 import android.content.Context;
-import android.util.Log;
 
 import com.parse.Parse;
 import com.parse.ParseException;

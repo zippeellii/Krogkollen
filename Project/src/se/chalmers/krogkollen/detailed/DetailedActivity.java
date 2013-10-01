@@ -7,7 +7,6 @@ import android.widget.TextView;
 import se.chalmers.krogkollen.R;
 import se.chalmers.krogkollen.map.MapActivity;
 import se.chalmers.krogkollen.pub.IPub;
-import se.chalmers.krogkollen.pub.Pub;
 import se.chalmers.krogkollen.pub.PubUtilities;
 
 /*
@@ -78,7 +77,7 @@ public class DetailedActivity extends Activity implements IDetailedView {
 
 	@Override
 	public void navigate(Class<?> destination) {
-		// TODO I denna ska ni lägga koden som skickar tillbaka användaren till MapActivity
+		// TODO I denna ska ni lï¿½gga koden som skickar tillbaka anvï¿½ndaren till MapActivity
 		
 	}
 

@@ -68,7 +68,7 @@ public class PubUtilities {
 		try {
 			tempList = query.find();
 			for(ParseObject object : tempList){
-				int hourFourDigit = StringConverter.convertCombinedStringto(object.getString("openingHours"), 5);
+				int hourFourDigit = StringConverter.convertStringToFragmentedInt(object.getString("openingHours"), 5);
 				pubList.add(new Pub(object.getString("name"),
 						object.getString("description"),
 						object.getDouble("latitude"),

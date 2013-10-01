@@ -1,4 +1,4 @@
-package tests;
+package se.chalmers.krogkollen.utils;
 
 import se.chalmers.krogkollen.utils.StringConverter;
 

@@ -1,4 +1,4 @@
-package tests;
+package se.chalmers.krogkollen.backend;
 
 /**
  * ServerTest (UTF-8)

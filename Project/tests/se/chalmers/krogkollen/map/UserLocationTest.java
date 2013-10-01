@@ -1,4 +1,4 @@
-package tests;
+package se.chalmers.krogkollen.map;
 
 /**
  * UserLocationTest (UTF-8)

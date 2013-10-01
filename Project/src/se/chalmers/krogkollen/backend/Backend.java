@@ -51,7 +51,7 @@ public class Backend implements IParseBackend{
 		List<IPub> tempPubList = new ArrayList<IPub>();
 		//Fetches the requested query from the server
 		ParseQuery<ParseObject> query = ParseQuery.getQuery("Pub");
-		//Declares a List to be able to 
+		//Declares a List to be able to handle the query 
 		List <ParseObject> tempList;
 		try {
 			//Done to simplify the handling of the query
@@ -83,8 +83,15 @@ public class Backend implements IParseBackend{
 	@Override
 	public int getQueueTime(IPub pub) throws NoBackendAccessException,
 	NotFoundInBackendException {
+		ParseObject object = new ParseObject("Pub");
+		
+		try{
+			object = ParseQuery.getQuery("Pub").get(pub.getID());
+		} catch(ParseException e) {
+			throw new NotFoundInBackendException(e.getMessage());
+		}
 		// TODO Auto-generated method stub
-		return 0;
+		return object.getInt("queueTime");
 	}
 
 	@Override
@@ -127,9 +134,16 @@ public class Backend implements IParseBackend{
 	}
 
 	@Override
-	public Date getLatestUpdatedTimestamp(IPub pub) {
+	public Date getLatestUpdatedTimestamp(IPub pub) throws NotFoundInBackendException {
+	ParseObject object = new ParseObject("Pub");
+		
+		try{
+			object = ParseQuery.getQuery("Pub").get(pub.getID());
+		} catch(ParseException e) {
+			throw new NotFoundInBackendException(e.getMessage());
+		}
 		// TODO Auto-generated method stub
-		return null;
+		return object.getUpdatedAt();
 	}
 
 	/**

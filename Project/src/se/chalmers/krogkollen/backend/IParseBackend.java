@@ -28,6 +28,6 @@ public interface IParseBackend extends IBackend {
 	 * @param pub the requested pub
 	 * @return latest update date
 	 */
-	public Date getLatestUpdatedTimestamp(IPub pub);
+	public Date getLatestUpdatedTimestamp(IPub pub) throws NotFoundInBackendException;
 
 }

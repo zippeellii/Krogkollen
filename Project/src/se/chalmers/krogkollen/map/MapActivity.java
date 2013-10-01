@@ -108,7 +108,11 @@ public class MapActivity extends Activity implements IMapView, IObserver{
         actionBar.setDisplayHomeAsUpEnabled(true);
 	}
 
-	// TODO javadoc
+     /**
+      * Opens a the detailed view, examining a pub. This should be called when a pub is clicked.
+      *
+      * @param id The ID of the pub to be opened in the detailed view.
+      */
     private void openDetailedView(String id) {
         Intent detailedIntent = new Intent(this, DetailedActivity.class);
         detailedIntent.putExtra(MARKER_PUB_ID, id); // Sends the name of the pub with the intent

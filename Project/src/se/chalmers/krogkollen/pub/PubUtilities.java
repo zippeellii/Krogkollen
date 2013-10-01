@@ -125,8 +125,13 @@ public class PubUtilities {
 	public List<IPub> getPubList() {
 		return pubList;
 	}
-	
-	// TODO write Javadoc
+
+    /**
+     * Returns a the pub connected with the ID given.
+     *
+     * @param id The ID of the pub to return
+     * @return The pub according to the ID given
+     */
     public IPub getPub(String id){
        for(IPub pub: pubList) {
             if(pub.getID().equals(id)){

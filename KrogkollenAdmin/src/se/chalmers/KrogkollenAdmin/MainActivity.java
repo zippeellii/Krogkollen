@@ -86,7 +86,7 @@ public class MainActivity extends Activity {
         } else {
             Toast toast = Toast.makeText(MainActivity.this, R.string.wrong_password_message,
                     Toast.LENGTH_SHORT);
-            toast.setDuration(3);
+            toast.setDuration(2);
             toast.show();
         }
     }

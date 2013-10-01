@@ -11,7 +11,7 @@
     <string name="red_title">Röd</string>
     <string name="yellow_title">Gul</string>
     <string name="green_title">Grön</string>
-    <string name="wrong_password_message">Wrong username or passwor</string>
+    <string name="wrong_password_message">Wrong username or passworD</string>
     <string name="name_field_hint">Skriv din pubs namn</string>
     <string name="password_field_hint">Skriv din pubs lösenord</string>
 </resources>

@@ -5,6 +5,8 @@ import java.util.Date;
 import java.util.List;
 
 import android.content.Context;
+import android.util.Log;
+
 import com.parse.Parse;
 import com.parse.ParseException;
 import com.parse.ParseObject;
@@ -58,7 +60,7 @@ public class Backend implements IParseBackend{
 			//Makes it possible to handle as a java.util.List
 			tempList = query.find();
 			for(ParseObject object : tempList){
-				this.convertParseObjecttoIPub(object);
+				tempPubList.add(this.convertParseObjecttoIPub(object));
 			}
 		} catch (com.parse.ParseException e1) {
 			throw new NoBackendAccessException(e1.getMessage());

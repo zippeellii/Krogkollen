@@ -19,6 +19,9 @@ import com.google.android.gms.maps.Projection;
 import com.google.android.gms.maps.model.*;
 
 import se.chalmers.krogkollen.R;
+import se.chalmers.krogkollen.backend.Backend;
+import se.chalmers.krogkollen.backend.NoBackendAccessException;
+import se.chalmers.krogkollen.backend.NotFoundInBackendException;
 import se.chalmers.krogkollen.detailed.DetailedActivity;
 import se.chalmers.krogkollen.pub.IPub;
 import se.chalmers.krogkollen.pub.PubUtilities;
@@ -301,22 +304,30 @@ public class MapActivity extends Activity implements IMapView, IObserver {
 	@Override
 	public void addPubToMap(IPub pub) {
 
-        int drawable;
+        int drawable = R.drawable.gray_marker_bg;
         // Determine which marker color to add.
-        switch (pub.getQueueTime()) {
-            case 1:
-                drawable = R.drawable.green_marker_bg;
-                break;
-            case 2:
-                drawable = R.drawable.yellow_marker_bg;
-                break;
-            case 3:
-                drawable = R.drawable.red_marker_bg;
-                break;
-            default:
-                drawable = R.drawable.gray_marker_bg;
-                break;
-        }
+        try {
+			switch (Backend.getInstance().getQueueTime(pub)) {
+			    case 1:
+			        drawable = R.drawable.green_marker_bg;
+			        break;
+			    case 2:
+			        drawable = R.drawable.yellow_marker_bg;
+			        break;
+			    case 3:
+			        drawable = R.drawable.red_marker_bg;
+			        break;
+			    default:
+			        drawable = R.drawable.gray_marker_bg;
+			        break;
+			}
+		} catch (NoBackendAccessException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (NotFoundInBackendException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
         pubMarkers.add(mMap.addMarker(MarkerOptionsFactory.createMarkerOptions(getResources(), drawable, pub.getName(), pub.getTodaysOpeningHour(),
                 new LatLng(pub.getLatitude(), pub.getLongitude()), pub.getID())));
 	}

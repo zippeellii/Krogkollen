@@ -34,5 +34,7 @@ This file is part of Krogkollen.
     <string name="queue_time">30 min</string>
     <string name="entrance_fee">100kr</string>
     <string name="yellow_color">yellow</string>
+    <string name="thumbs_up">0000</string>
+    <string name="thumbs_down">0000</string>
 
 </resources>

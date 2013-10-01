@@ -48,24 +48,37 @@ This file is part of Krogkollen.
             </LinearLayout>
 
             <LinearLayout
-                    android:orientation="horizontal"
-                    android:layout_weight="1"
-                    android:layout_height="match_parent"
-                    android:layout_width="0dp"></LinearLayout>
-
-            <LinearLayout
+                    android:layout_gravity="right"
                     android:orientation="horizontal"
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
-                    android:layout_weight="1">
+                    android:layout_weight="1"
+                    android:gravity="right">
+                <ImageButton
+                        android:id="@+id/thumbsUpButton"
+                        android:background="@drawable/thumb_up"
+                        android:layout_height="25dp"
+                        android:layout_width="25dp"
+                        android:layout_marginRight="5dp"></ImageButton>
                 <TextView
-                        android:layout_marginTop="0dp"
-                        android:id="@+id/pub_name"
+                        android:layout_marginRight="5dp"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="@string/pub_name"
-                        android:textAppearance="?android:attr/textAppearanceLarge"
-                        android:textColor="#333333"/>
+                        android:id="@+id/thumbsUpTextView"
+                        android:text="@string/thumbs_up"
+                        android:textColor="#777777"/>
+                <ImageButton
+                        android:id="@+id/thumbsDownButton"
+                        android:background="@drawable/thumb_down"
+                        android:layout_height="25dp"
+                        android:layout_width="25dp"></ImageButton>
+                <TextView
+                        android:layout_marginRight="5dp"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:id="@+id/thumbsDownTextView"
+                        android:text="@string/thumbs_down"
+                        android:textColor="#777777"/>
             </LinearLayout>
 
 

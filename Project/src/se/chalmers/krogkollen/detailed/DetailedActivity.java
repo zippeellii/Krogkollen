@@ -1,9 +1,14 @@
 package se.chalmers.krogkollen.detailed;
 
 import android.app.Activity;
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.Menu;
+import android.view.View;
+import android.widget.ImageButton;
 import android.widget.TextView;
+import android.widget.Toast;
 import se.chalmers.krogkollen.R;
 import se.chalmers.krogkollen.map.MapActivity;
 import se.chalmers.krogkollen.pub.IPub;
@@ -37,6 +42,8 @@ public class DetailedActivity extends Activity implements IDetailedView {
     private IPub pub;
     private TextView pubTextView, descriptionTextView,openingHoursTextView,
             ageRestrictionTextView, entranceFeeTextView;
+    private ImageButton thumbsUpButton;
+    private ImageButton thumbsDownButton;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -48,6 +55,11 @@ public class DetailedActivity extends Activity implements IDetailedView {
 
         presenter = new DetailedPresenter();
         presenter.setView(this);
+
+        addThumbsUpButtonListener();
+        addThumbsDownButtonListener();
+
+        setThumbs(getSharedPreferences(pub.getID(), 0).getInt(pub.getID(), 0));
     }
 
     @Override
@@ -114,4 +126,59 @@ public class DetailedActivity extends Activity implements IDetailedView {
 		// TODO Auto-generated method stub
 		
 	}
+
+    public void addThumbsUpButtonListener(){
+        thumbsUpButton = (ImageButton) findViewById(R.id.thumbsUpButton);
+        thumbsUpButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (getSharedPreferences(pub.getID(), 0).getInt(pub.getID(), 0)==1){
+                    setThumbs(0);
+                }else{
+                    setThumbs(1);
+                }
+            }
+        });
+    }
+
+    public void addThumbsDownButtonListener(){
+        thumbsDownButton = (ImageButton) findViewById(R.id.thumbsDownButton);
+        thumbsDownButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                presenter.ratingChanged(pub, -1);
+                if (getSharedPreferences(pub.getID(), 0).getInt(pub.getID(), 0)==-1){
+                    setThumbs(0);
+                }else{
+                    setThumbs(-1);
+                }
+            }
+        });
+    }
+
+    public void setThumbs(int thumb){
+        saveThumbState(thumb);
+        switch (thumb){
+            case -1:
+                thumbsDownButton.setBackgroundResource(R.drawable.thumb_down_selected);
+                thumbsUpButton.setBackgroundResource(R.drawable.thumb_up);
+                break;
+            case 1:
+                thumbsUpButton.setBackgroundResource(R.drawable.thumb_up_selected);
+                thumbsDownButton.setBackgroundResource(R.drawable.thumb_down);
+                break;
+            default:
+                thumbsDownButton.setBackgroundResource(R.drawable.thumb_down);
+                thumbsUpButton.setBackgroundResource(R.drawable.thumb_up);
+                break;
+        }
+
+    }
+
+    public void saveThumbState(int thumb){
+        SharedPreferences.Editor editor = getSharedPreferences(pub.getID(), 0).edit();
+        editor.putInt(pub.getID(), thumb);
+        editor.commit();
+    }
+
 }

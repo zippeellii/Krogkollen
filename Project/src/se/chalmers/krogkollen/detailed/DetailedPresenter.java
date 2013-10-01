@@ -1,5 +1,7 @@
 package se.chalmers.krogkollen.detailed;
 
+import android.content.Context;
+import android.content.SharedPreferences;
 import se.chalmers.krogkollen.IView;
 import se.chalmers.krogkollen.pub.IPub;
 
@@ -11,16 +13,15 @@ import se.chalmers.krogkollen.pub.IPub;
  */
 public class DetailedPresenter implements IDetailedPresenter {
 
+    private IView view;
+
 	@Override
 	public void setView(IView view) {
-		// TODO Auto-generated method stub
-		
+        this.view=view;
 	}
 
 	@Override
 	public void ratingChanged(IPub pub, int rating) {
-		// TODO Auto-generated method stub
-		
 	}
 
 }

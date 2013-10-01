@@ -1,5 +1,5 @@
 package se.chalmers.krogkollen.backend;
-
+import java.util.Date;
 import se.chalmers.krogkollen.pub.IPub;
 
 /**
@@ -22,5 +22,12 @@ public interface IParseBackend extends IBackend {
 	 * @return the requested value
 	 */
 	public int getNegativeRating(IPub pub);
+	
+	/**
+	 * Returns the date of which the pub was latest updated
+	 * @param pub the requested pub
+	 * @return latest update date
+	 */
+	public Date getLatestUpdatedTimestamp(IPub pub);
 
 }

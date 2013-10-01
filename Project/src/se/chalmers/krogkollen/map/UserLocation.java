@@ -29,7 +29,7 @@ import com.google.android.gms.maps.model.LatLng;
  * along with Krogkollen.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-// TODO behöver denna klassen vara publik? annars ändra till paketsynlighet
+// TODO behover denna klassen vara publik? annars andra till paketsynlighet
  /**
  * A class handling the phones current position.
  */

@@ -44,7 +44,7 @@ public class DetailedActivity extends Activity implements IDetailedView {
         setContentView(R.layout.activity_detailed);
         String pubID = getIntent().getStringExtra(MapActivity.MARKER_PUB_ID);
         pub = PubUtilities.getInstance().getPub(pubID);
-        setText();
+        updateText();
 
         presenter = new DetailedPresenter();
         presenter.setView(this);
@@ -60,10 +60,24 @@ public class DetailedActivity extends Activity implements IDetailedView {
         return true;
     }
 
+	@Override
+	public void navigate(Class<?> destination) {
+		// TODO I denna ska ni lï¿½gga koden som skickar tillbaka anvï¿½ndaren till MapActivity
+		
+	}
+
+	@Override
+	public void showErrorMessage(String message) {
+		// TODO Auto-generated method stub
+		
+	}
+
     /**
      * Sets the pubs information into the detailed view
      */
-    public void setText(){ // TODO flytta denna koden till updateText metoden 
+
+	@Override
+	public void updateText() {
         pubTextView= (TextView) findViewById(R.id.pub_name);
         pubTextView.setText(pub.getName());
         descriptionTextView = (TextView) findViewById(R.id.description);
@@ -74,23 +88,6 @@ public class DetailedActivity extends Activity implements IDetailedView {
         ageRestrictionTextView.setText(""+pub.getAgeRestriction());
         entranceFeeTextView = (TextView) findViewById(R.id.entrance_fee);
         entranceFeeTextView.setText(""+pub.getEntranceFee());
-    }
-
-	@Override
-	public void navigate(Class<?> destination) {
-		// TODO I denna ska ni lägga koden som skickar tillbaka användaren till MapActivity
-		
-	}
-
-	@Override
-	public void showErrorMessage(String message) {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public void updateText() {
-		// TODO Auto-generated method stub
 		
 	}
 

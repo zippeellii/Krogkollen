@@ -1,6 +1,8 @@
 package se.chalmers.krogkollen.utils;
 
-// TODO javadoc
+/**
+ * Interface describing something which can be observed by an IObserver
+ */
 public interface IObservable {
 	/**
 	 * Adds an observer to the observable object.

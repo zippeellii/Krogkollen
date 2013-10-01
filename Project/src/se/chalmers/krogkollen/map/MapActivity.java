@@ -296,14 +296,12 @@ public class MapActivity extends Activity implements IMapView, IObserver {
     
 	@Override
 	public void navigate(Class<?> destination) {
-		// TODO Auto-generated method stub
-		
+		// TODO Auto-generated method stub	
 	}
 
 	@Override
 	public void showErrorMessage(String message) {
 		// TODO Auto-generated method stub
-
 	}
 
 	@Override
@@ -327,11 +325,9 @@ public class MapActivity extends Activity implements IMapView, IObserver {
 			        break;
 			}
 		} catch (NoBackendAccessException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			this.showErrorMessage("No access to backend. Error message: " + e.getMessage());
 		} catch (NotFoundInBackendException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			this.showErrorMessage("Item not found in backend. Error message: " + e.getMessage());
 		}
         pubMarkers.add(mMap.addMarker(MarkerOptionsFactory.createMarkerOptions(getResources(), drawable, pub.getName(), pub.getTodaysOpeningHour(),
                 new LatLng(pub.getLatitude(), pub.getLongitude()), pub.getID())));

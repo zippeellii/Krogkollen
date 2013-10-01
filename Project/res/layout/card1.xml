@@ -46,6 +46,13 @@ This file is part of Krogkollen.
                         android:textAppearance="?android:attr/textAppearanceLarge"
                         android:textColor="#333333"/>
             </LinearLayout>
+
+            <LinearLayout
+                    android:orientation="horizontal"
+                    android:layout_weight="1"
+                    android:layout_height="match_parent"
+                    android:layout_width="0dp"></LinearLayout>
+
             <LinearLayout
                     android:orientation="horizontal"
                     android:layout_width="0dp"
@@ -60,6 +67,9 @@ This file is part of Krogkollen.
                         android:textAppearance="?android:attr/textAppearanceLarge"
                         android:textColor="#333333"/>
             </LinearLayout>
+
+
+
         </LinearLayout>
         <TextView
                 android:layout_marginTop="10dp"

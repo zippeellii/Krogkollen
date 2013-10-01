@@ -25,6 +25,7 @@ This file is part of Krogkollen.
             android:layout_marginBottom="5dp"
             android:gravity="center"
             android:background="@drawable/bg_card">
+
         <TextView
                 android:id="@+id/opening_hours"
                 android:layout_width="match_parent"
@@ -33,6 +34,10 @@ This file is part of Krogkollen.
                 android:layout_weight="1"
                 android:gravity="center"
                 android:textColor="#777777"/>
+        <View
+                android:layout_width="1dp"
+                android:layout_height="match_parent"
+                android:background="#EDEDED" />
         <TextView
                 android:id="@+id/age"
                 android:layout_width="match_parent"
@@ -41,6 +46,10 @@ This file is part of Krogkollen.
                 android:layout_weight="1"
                 android:gravity="center"
                 android:textColor="#777777"/>
+        <View
+                android:layout_width="1dp"
+                android:layout_height="match_parent"
+                android:background="#EDEDED" />
         <TextView
                 android:id="@+id/entrance_fee"
                 android:layout_width="match_parent"
@@ -49,6 +58,10 @@ This file is part of Krogkollen.
                 android:layout_weight="1"
                 android:gravity="center"
                 android:textColor="#777777"/>
+        <View
+                android:layout_width="1dp"
+                android:layout_height="match_parent"
+                android:background="#EDEDED" />
         <TextView
                 android:id="@+id/yellow_color"
                 android:layout_width="match_parent"

@@ -62,12 +62,9 @@ public class MapActivity extends Activity implements IMapView, IObserver{
         this.userLocation = UserLocation.getInstance();
         this.userLocation.addObserver(this);
         this.userLocation.startTrackingUser();
-        addUserMarker(this.userLocation.getCurrentLatLng());
-        this.centerOnUser();
-
-        // Move to the current location of the user.
-        mMap.animateCamera(CameraUpdateFactory.newCameraPosition(new CameraPosition(this.userLocation.getCurrentLatLng(), 15, 0, 0)));
-
+        //addUserMarker(this.userLocation.getCurrentLatLng());
+        //this.centerOnUser();
+        
         getActionBar().setDisplayUseLogoEnabled(false);
 	}
 
@@ -127,11 +124,40 @@ public class MapActivity extends Activity implements IMapView, IObserver{
     	}
     	this.pubMarkers.clear();
     	this.addPubMarkers();
+    	//refresh pubUtilities
     }
     
     @Override
-	public void update() {
-		this.animateMarker(this.userMarker, this.userLocation.getCurrentLatLng());
+	public void update(Status status) {
+		switch(status) {
+		case FIRST_LOCATION:
+			addUserMarker(this.userLocation.getCurrentLatLng());
+	        this.centerOnUser();
+			break;
+		case NORMAL_UPDATE:
+			this.animateMarker(this.userMarker, this.userLocation.getCurrentLatLng());
+			break;
+		case ALL_DISABLED:
+			//Show dialog
+			break;
+		case NET_DISABLED:
+			//Show dialog
+			break;
+		case GPS_DISABLED:
+			//Show dialog
+			break;
+		case ALL_ENABLED:
+			//Normal tracking
+			break;
+		case NET_ENABLED:
+			//Start tracking
+			break;
+		case GPS_ENABLED:
+			//Start tracking
+			break;
+		default:
+			break;
+		}	
 	}
     
     /**

@@ -5,6 +5,8 @@ import java.util.List;
 
 import se.chalmers.krogkollen.utils.IObservable;
 import se.chalmers.krogkollen.utils.IObserver;
+import se.chalmers.krogkollen.utils.IObserver.Status;
+
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
@@ -15,16 +17,18 @@ import com.google.android.gms.maps.model.LatLng;
 /**
  * A class handling the phones current position.
  */
-public class UserLocation implements LocationListener, IObservable{
+public class UserLocation implements LocationListener, IObservable {
 
 	private static UserLocation instance = null;
 	
 	private List<IObserver> observers = new ArrayList<IObserver>();
 	
-	private Location currentLocation;
+	private Location currentLocation = null;
 	private LocationManager locationManager;
-	private String NetLocationProvider = LocationManager.NETWORK_PROVIDER;
-	private String GpsLocationProvider = LocationManager.GPS_PROVIDER;
+	private String netLocationProvider = LocationManager.NETWORK_PROVIDER;
+	private String gpsLocationProvider = LocationManager.GPS_PROVIDER;
+	private boolean netProviderEnabled = false;
+	private boolean gpsProviderEnabled = false;
 
     // Reading interval, used to determine which reading is better.
 	private static final int TWO_MINUTES = 1000 * 60 * 2;
@@ -36,11 +40,25 @@ public class UserLocation implements LocationListener, IObservable{
      */
 	private UserLocation(LocationManager locationManager){
 		this.locationManager = locationManager;
-		//Initiate first position of the user.
-		if(isBetterLocation(this.locationManager.getLastKnownLocation(NetLocationProvider), this.locationManager.getLastKnownLocation(GpsLocationProvider))){
-			this.currentLocation = this.locationManager.getLastKnownLocation(NetLocationProvider);
-		} else {
-			this.currentLocation = this.locationManager.getLastKnownLocation(GpsLocationProvider);
+		
+		Location netLocation = this.locationManager.getLastKnownLocation(this.netLocationProvider);
+		Location gpsLocation = this.locationManager.getLastKnownLocation(this.gpsLocationProvider);
+		
+		//Initiate first position of the user if either gps or net providers are enabled.
+		if(netLocation == null && gpsLocation != null) {
+			this.currentLocation = gpsLocation;
+			this.gpsProviderEnabled = true;
+		} else if(netLocation != null && gpsLocation == null) {
+			this.currentLocation = netLocation;
+			this.netProviderEnabled = true;
+		} else if(netLocation != null && gpsLocation != null){
+			if(this.isBetterLocation(netLocation, gpsLocation)){
+				this.currentLocation = netLocation;
+			} else {
+				this.currentLocation = gpsLocation;
+			}
+			this.gpsProviderEnabled = true;
+			this.netProviderEnabled = true;
 		}
 	}
 	
@@ -67,6 +85,10 @@ public class UserLocation implements LocationListener, IObservable{
 		}
 		return instance;
 	}
+	
+	public boolean hasLocation() {
+		return this.currentLocation != null;
+	}
 
     /**
      * Returns the current user location.
@@ -83,7 +105,10 @@ public class UserLocation implements LocationListener, IObservable{
      * @return current user location.
      */
 	public LatLng getCurrentLatLng(){
-		return new LatLng(this.currentLocation.getLatitude(), this.currentLocation.getLongitude()); // TODO sometimes get NullPointerException here
+		if(this.currentLocation != null) {
+			return new LatLng(this.currentLocation.getLatitude(), this.currentLocation.getLongitude());
+		}
+		return null;
 	}
 	
 	/**
@@ -97,25 +122,65 @@ public class UserLocation implements LocationListener, IObservable{
 	 * Start tracking the users location.
 	 */
 	public void startTrackingUser() {
-		this.locationManager.requestLocationUpdates(this.NetLocationProvider, 0, 0, this);
-		this.locationManager.requestLocationUpdates(this.GpsLocationProvider, 0, 0, this);
+		this.locationManager.requestLocationUpdates(this.netLocationProvider, 0, 0, this);
+		this.locationManager.requestLocationUpdates(this.gpsLocationProvider, 0, 0, this);
 	}
 	
 	@Override
 	public void onLocationChanged(Location location) {
-		if(isBetterLocation(location, this.currentLocation)){
+		Status status = Status.NORMAL_UPDATE;
+		if(this.currentLocation == null) {
+			this.currentLocation = location;
+			status = Status.FIRST_LOCATION;
+		} else if (isBetterLocation(location, this.currentLocation)){
 			this.currentLocation = location;
 		}
+		
 		for(IObserver observer: observers) {
-			observer.update();
+			observer.update(status);
 		}
 	}
 
 	@Override
-	public void onProviderDisabled(String provider) {}
+	public void onProviderDisabled(String provider) {
+		if(provider.equals(this.netLocationProvider)) {
+			this.netProviderEnabled = false;
+		} else if(provider.equals(this.gpsLocationProvider)) {
+			this.gpsProviderEnabled = false;
+		}
+		Status status = Status.NORMAL_UPDATE;
+		if(!this.netProviderEnabled && !this.gpsProviderEnabled) {
+			status = Status.ALL_DISABLED;
+		} else if(!this.netProviderEnabled) {
+			status = Status.NET_DISABLED;
+		} else if(!this.gpsProviderEnabled) {
+			status = Status.GPS_DISABLED;
+		}
+		for(IObserver observer: observers) {
+			observer.update(status);
+		}
+	}
 
 	@Override
-	public void onProviderEnabled(String provider) {}
+	public void onProviderEnabled(String provider) {
+		if(provider.equals(this.netLocationProvider)) {
+			this.netProviderEnabled = true;
+		} else if(provider.equals(this.gpsLocationProvider)) {
+			this.gpsProviderEnabled = true;
+		}
+		Status status = Status.NORMAL_UPDATE;
+		if(this.netProviderEnabled && this.gpsProviderEnabled) {
+			status = Status.ALL_ENABLED;
+		} else if(this.netProviderEnabled) {
+			status = Status.NET_ENABLED;
+		} else if(this.gpsProviderEnabled) {
+			status = Status.GPS_ENABLED;
+		}
+		for(IObserver observer: observers) {
+			observer.update(status);
+		}
+		this.locationManager.requestLocationUpdates(provider, 0, 0, this);
+	}
 
 	@Override
 	public void onStatusChanged(String provider, int status, Bundle extras) {}
@@ -135,7 +200,7 @@ public class UserLocation implements LocationListener, IObservable{
 	    }
 
 	    // Check whether the new location fix is newer or older
-	    long timeDelta = location.getTime() - currentBestLocation.getTime(); // TODO Sometimes get NullPointerException here
+	    long timeDelta = location.getTime() - currentBestLocation.getTime();
 	    boolean isSignificantlyNewer = timeDelta > TWO_MINUTES;
 	    boolean isSignificantlyOlder = timeDelta < -TWO_MINUTES;
 	    boolean isNewer = timeDelta > 0;
@@ -181,6 +246,9 @@ public class UserLocation implements LocationListener, IObservable{
 	@Override
 	public void addObserver(IObserver observer) {
 		this.observers.add(observer);
+		if(this.currentLocation != null) {
+			observer.update(Status.FIRST_LOCATION);
+		}
 	}
 
 	@Override

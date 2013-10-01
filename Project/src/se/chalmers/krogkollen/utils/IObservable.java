@@ -1,6 +1,7 @@
 package se.chalmers.krogkollen.utils;
 
 public interface IObservable {
+	
 	/**
 	 * Adds an observer to the observable object.
 	 * @param observer the new observer

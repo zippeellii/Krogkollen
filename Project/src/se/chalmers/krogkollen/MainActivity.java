@@ -35,7 +35,7 @@ import se.chalmers.krogkollen.utils.ActivityID;
  * A class used for starting the application
  * 
  * @author Jonathan Nilsfors
- * @author Oskar Kärrman
+ * @author Oskar Karrman
  *
  */
 public class MainActivity extends Activity {
@@ -43,6 +43,7 @@ public class MainActivity extends Activity {
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		
+		// TODO move to another class
 		// Initializes the Parse.com connection
 		Parse.initialize(this, "WgLQnilANHpjM3xITq0nM0eW8dByIgDDmxJzf6se", "9ZK7yjE1NiD244ymDHb8ZpbbWNNv3RuQq7ceEvJc");
 		ParseAnalytics.trackAppOpened(getIntent());

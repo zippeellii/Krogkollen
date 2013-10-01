@@ -2,6 +2,9 @@ package se.chalmers.krogkollen.pub;
 
 import java.util.LinkedList;
 import java.util.List;
+
+import se.chalmers.krogkollen.utils.StringConverter;
+import android.content.res.Resources;
 import com.parse.ParseObject;
 import com.parse.ParseQuery;
 
@@ -65,19 +68,21 @@ public class PubUtilities {
 		try {
 			tempList = query.find();
 			for(ParseObject object : tempList){
+				int hourFourDigit = StringConverter.convertCombinedStringto(object.getString("openingHours"), 5);
 				pubList.add(new Pub(object.getString("name"),
 						object.getString("description"),
 						object.getDouble("latitude"),
 						object.getDouble("longitude"),
 						object.getInt("ageRestriction"),
 						object.getInt("entranceFee"),
-						1, 1, // TODO fix
+						(hourFourDigit/100),
+						(hourFourDigit%100),
 						object.getInt("posRate"),
 						object.getInt("negRate"),
 						object.getInt("queueTime"),
-						object.getString("objectId")));
+						object.getObjectId()));
 
-			}
+            }
 		} catch (com.parse.ParseException e1) {
 			// TODO Auto-generated catch block
 			e1.printStackTrace();
@@ -120,11 +125,19 @@ public class PubUtilities {
 	public List<IPub> getPubList() {
 		return pubList;
 	}
-	
-	// TODO Check this method, id is a STring now
-	// TODO write Javadoc
-    public IPub getPub(int id){
-        return pubList.get(id);
-    }
 
+    /**
+     * Returns a the pub connected with the ID given.
+     *
+     * @param id The ID of the pub to return
+     * @return The pub according to the ID given
+     */
+    public IPub getPub(String id){
+       for(IPub pub: pubList) {
+            if(pub.getID().equals(id)){
+                return pub;
+            }
+        }
+        throw  new Resources.NotFoundException("The ID does not match with any pub");
+    }
 }

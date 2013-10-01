@@ -17,11 +17,12 @@ package se.chalmers.krogkollen.pub;
  * along with Krogkollen.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+
 /**
  *
  * Interface for a Pub object
  * 
- * @author Oskar Kärrman
+ * @author Oskar Karrman
  *
  */
 public interface IPub {

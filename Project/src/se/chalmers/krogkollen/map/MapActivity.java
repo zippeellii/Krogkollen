@@ -4,24 +4,27 @@ import android.app.ActionBar;
 import android.app.Activity;
 import android.content.Intent;
 import android.graphics.Point;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
+import android.os.Message;
 import android.os.SystemClock;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.animation.LinearInterpolator;
+
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapFragment;
 import com.google.android.gms.maps.Projection;
 import com.google.android.gms.maps.model.*;
+
 import se.chalmers.krogkollen.R;
 import se.chalmers.krogkollen.detailed.DetailedActivity;
 import se.chalmers.krogkollen.pub.IPub;
 import se.chalmers.krogkollen.pub.PubUtilities;
 import se.chalmers.krogkollen.utils.ActivityID;
 import se.chalmers.krogkollen.utils.IObserver;
+import se.chalmers.krogkollen.utils.LoadingThread;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -48,14 +51,17 @@ import java.util.List;
  *
  * This is a normal map with the user marked on the map, and with a list of pubs marked on the map.
  */
-public class MapActivity extends Activity implements IMapView, IObserver{
-
+public class MapActivity extends Activity implements IMapView, IObserver {
+	// TODO IObserver + all observer-logik ska flyttas till MapPresenter
+	
     /**
      * Identifier for the intent used to start the activity for detailed view.
      */
     public static final String MARKER_PUB_ID = "se.chalmers.krogkollen.MARKER_PUB_ID";
 
     private GoogleMap mMap;
+    
+    private MapPresenter presenter;
 
     private UserLocation userLocation;
     private Marker userMarker;
@@ -69,9 +75,12 @@ public class MapActivity extends Activity implements IMapView, IObserver{
 		
 		setContentView(R.layout.activity_map);
 		
+		presenter = new MapPresenter();
+		presenter.setView(this);
+		
 		// Get the map and add some markers for pubs.
         this.mMap = ((MapFragment) getFragmentManager().findFragmentById(R.id.map)).getMap();
-        this.addPubMarkers();
+        this.addPubMarkers(); // TODO denna metod ska kallas av MapPresenter i onCreate
 
         mMap.setOnMarkerClickListener(new GoogleMap.OnMarkerClickListener() {
             @Override
@@ -92,12 +101,15 @@ public class MapActivity extends Activity implements IMapView, IObserver{
             }
         });
 
+        // TODO detta h�r ej till view, logik ska ligga i presentern
         // Add services for auto update of the user's location.
         this.userLocation = UserLocation.getInstance();
         this.userLocation.addObserver(this);
         this.userLocation.startTrackingUser();
         addUserMarker(this.userLocation.getCurrentLatLng());
 
+        
+        
         // Move to the current location of the user.
         moveCameraToUser(16);
 
@@ -107,6 +119,12 @@ public class MapActivity extends Activity implements IMapView, IObserver{
         actionBar.setDisplayHomeAsUpEnabled(true);
 	}
 
+     /**
+      * Opens a the detailed view, examining a pub. This should be called when a pub is clicked.
+      *
+      * @param id The ID of the pub to be opened in the detailed view.
+      */
+	// TODO denna ska kalla p� navigate-metoden, det finns en med extras
     private void openDetailedView(String id) {
         Intent detailedIntent = new Intent(this, DetailedActivity.class);
         detailedIntent.putExtra(MARKER_PUB_ID, id); // Sends the name of the pub with the intent
@@ -146,25 +164,23 @@ public class MapActivity extends Activity implements IMapView, IObserver{
                         .title("user"));
  	}
 
+	// TODO ej s�ker p� vad denna metod g�r, men om det finns logik s� ska den ligga i metoder i MapPresenter ist�llet
     @Override
     public boolean onOptionsItemSelected(MenuItem menuItem) {
         switch (menuItem.getItemId()) {
             case R.id.refresh_info:
-
-                AsyncTask<Void, Void, Void>  refreshLoader = new AsyncTask<Void, Void, Void>() {
+                final Handler handler = new Handler() {
                     @Override
-                    protected Void doInBackground(Void... Voids) {
-                        refreshPubMarkers();
-                        return null;
-                    }
-
-                    @Override
-                    protected void onPostExecute(Void result) {
-                        mainMenu.getItem(R.id.refresh_info).setIcon(R.drawable.refresh_icon);
+                    public void handleMessage(Message message) {
+                        int state = message.getData().getInt(LoadingThread.STATE);
+                        if (state == 1) {
+                            mainMenu.getItem(R.id.refresh_info).setIcon(R.drawable.refresh_icon);
+                        }
                     }
                 };
-                refreshLoader.execute();
-                mainMenu.getItem(R.id.refresh_info).setIcon(R.drawable.refresh_icon);
+                LoadingThread loadingThread = new LoadingThread(handler);
+                loadingThread.start();
+                mainMenu.getItem(R.id.refresh_info).setIcon(R.layout.loading_indicator);
                 return true;
             case R.id.search:
                 // Open search
@@ -306,7 +322,13 @@ public class MapActivity extends Activity implements IMapView, IObserver{
                 drawable = R.drawable.gray_marker_bg;
                 break;
         }
-        mMap.addMarker(MarkerOptionsFactory.createMarkerOptions(getResources(), drawable, pub.getName(), pub.getTodaysOpeningHour(),
-                new LatLng(pub.getLatitude(), pub.getLongitude()), pub.getID()));
+        pubMarkers.add(mMap.addMarker(MarkerOptionsFactory.createMarkerOptions(getResources(), drawable, pub.getName(), pub.getTodaysOpeningHour(),
+                new LatLng(pub.getLatitude(), pub.getLongitude()), pub.getID())));
+	}
+
+	@Override
+	public void navigate(Class<?> destination, Bundle extras) {
+		// TODO Auto-generated method stub
+		
 	}
 }

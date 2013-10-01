@@ -1,5 +1,6 @@
 package se.chalmers.krogkollen.utils;
 
+// TODO javadoca
 public class StringConverter {
 	/**
 	 * 
@@ -7,7 +8,7 @@ public class StringConverter {
 	 * @param day - what day supposed to look for
 	 * @return the selected interval of the string in int
 	 */
-	public static int convertStringtoInt(String string, int day){
+	public static int convertCombinedStringto(String string, int day){
 		for(int i = 0; i < day; i++){
 			int index = string.indexOf(':');
 			string = string.substring(index+1);
@@ -16,5 +17,4 @@ public class StringConverter {
 		string = string.substring(0, index);
 		return Integer.parseInt(string);
 	}
-
 }

@@ -6,6 +6,16 @@ Legend:
 * changes
 --------------------
 
+0.2.0 - Admin app, detailed view, backend
++ Created an admin app
++ Added queue indicators on the map markers
++ Added a detailed view for when a pub marker is clicked
++ Added a Parse.com backend
++ Added licensing and requirements
++ Added tests
+* Refactored the Pub class and everything dependant on it
+* Fixed where the back button directs the user
+
 0.1.0 - Maps
 + Created basic interfaces
 + Created a class, Pub, representing a pub

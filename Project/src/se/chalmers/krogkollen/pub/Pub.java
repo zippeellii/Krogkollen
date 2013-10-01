@@ -25,7 +25,7 @@ import com.google.android.gms.maps.model.LatLng;
  * 
  * @author Jonathan Nilsfors
  * @author Albin Garpetun
- * @author Oskar Kärrman
+ * @author Oskar Karrman
  *
  */
 public class Pub implements IPub{
@@ -44,14 +44,14 @@ public class Pub implements IPub{
 	private final String ID;
 	
 	/**
-	 * Created a new Pub object with default values
+	 * Create a new Pub object with default values
 	 */
 	public Pub() {
 		this("Name", "Description", 0.0, 0.0, 0, 0, 0, 0, 0, 0, 0, "ID");
 	}
 	
 	/**
-	 * Creates a new Pub object
+	 * Create a new Pub object
 	 * 
 	 * @param name 				the name
 	 * @param description 		the description

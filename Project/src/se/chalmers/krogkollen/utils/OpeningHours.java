@@ -1,5 +1,6 @@
 package se.chalmers.krogkollen.utils;
 
+// TODO Kanske flytta till pub-paketet? diskuttera
 /**
  *
  * Class handling the opening and closing hours of a pub
@@ -25,8 +26,8 @@ public class OpeningHours {
         return this.closingHour;
     }
 
-    // TODO javadoc
+    @Override
     public String toString(){
-        return "Opening hour: "+getOpeningHour()+" Closing hour: "+getClosingHour();
+        return getOpeningHour()+" - "+getClosingHour();
     }
 }

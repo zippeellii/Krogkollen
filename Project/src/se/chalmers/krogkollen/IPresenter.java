@@ -21,7 +21,7 @@ package se.chalmers.krogkollen;
  *
  * Interface for a Presenter class in the MVP design pattern.
  * 
- * @author Oskar Kärrman
+ * @author Oskar Karrman
  *
  */
 public interface IPresenter {
@@ -31,5 +31,5 @@ public interface IPresenter {
 	 * 
 	 * @param view the view to set as active
 	 */
-	public abstract void setView(Object view);
+	public abstract void setView(IView view);
 }

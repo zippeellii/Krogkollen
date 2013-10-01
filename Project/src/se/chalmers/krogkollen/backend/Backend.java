@@ -153,7 +153,7 @@ public class Backend implements IParseBackend{
 	 * @return the IPub representation of the ParseObject
 	 */
 	public IPub convertParseObjecttoIPub(ParseObject object){
-		int hourFourDigit = StringConverter.convertCombinedStringto(object.getString("openingHours"), 5);
+		int hourFourDigit = StringConverter.convertStringToFragmentedInt(object.getString("openingHours"), 5);
 		return new Pub(
 				object.getString("name"),
 				object.getString("description"),

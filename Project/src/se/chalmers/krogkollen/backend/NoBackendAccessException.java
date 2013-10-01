@@ -10,6 +10,11 @@ package se.chalmers.krogkollen.backend;
 public class NoBackendAccessException extends Exception {
 
 	/**
+	 * Generated serial version UID
+	 */
+	private static final long serialVersionUID = -7468080825750362150L;
+
+	/**
 	 * Create a new NoBackendAccessException without additional information
 	 */
 	public NoBackendAccessException() {}

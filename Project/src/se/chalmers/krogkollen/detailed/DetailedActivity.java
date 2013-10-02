@@ -181,4 +181,5 @@ public class DetailedActivity extends Activity implements IDetailedView {
         editor.commit();
     }
 
+
 }

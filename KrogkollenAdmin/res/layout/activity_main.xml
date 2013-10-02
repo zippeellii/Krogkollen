@@ -6,7 +6,7 @@
               android:background="#333333"
               android:layout_height="match_parent">
 
-    return null;  //To change body of implemented methods use File | Settings | File Templates.        <ImageView
+	<ImageView
                 android:id="@+id/admin_logo"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"

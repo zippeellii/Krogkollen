@@ -6,7 +6,6 @@ import java.util.List;
 import se.chalmers.krogkollen.utils.IObservable;
 import se.chalmers.krogkollen.utils.IObserver;
 import se.chalmers.krogkollen.utils.IObserver.Status;
-
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
@@ -15,7 +14,7 @@ import android.os.Bundle;
 import com.google.android.gms.maps.model.LatLng;
 
 /**
- * A class handling the phones current position.
+ * A class handling the phone's current position.
  */
 public class UserLocation implements LocationListener, IObservable {
 
@@ -27,8 +26,9 @@ public class UserLocation implements LocationListener, IObservable {
 	private LocationManager locationManager;
 	private String netLocationProvider = LocationManager.NETWORK_PROVIDER;
 	private String gpsLocationProvider = LocationManager.GPS_PROVIDER;
-	private boolean netProviderEnabled = false;
-	private boolean gpsProviderEnabled = false;
+	
+	private boolean netState;
+	private boolean gpsState;
 
     // Reading interval, used to determine which reading is better.
 	private static final int TWO_MINUTES = 1000 * 60 * 2;
@@ -45,20 +45,16 @@ public class UserLocation implements LocationListener, IObservable {
 		Location gpsLocation = this.locationManager.getLastKnownLocation(this.gpsLocationProvider);
 		
 		//Initiate first position of the user if either gps or net providers are enabled.
-		if(netLocation == null && gpsLocation != null) {
-			this.currentLocation = gpsLocation;
-			this.gpsProviderEnabled = true;
-		} else if(netLocation != null && gpsLocation == null) {
-			this.currentLocation = netLocation;
-			this.netProviderEnabled = true;
-		} else if(netLocation != null && gpsLocation != null){
+		if(netLocation != null && gpsLocation != null){
 			if(this.isBetterLocation(netLocation, gpsLocation)){
 				this.currentLocation = netLocation;
 			} else {
 				this.currentLocation = gpsLocation;
 			}
-			this.gpsProviderEnabled = true;
-			this.netProviderEnabled = true;
+		} else if(gpsLocation != null) {
+			this.currentLocation = gpsLocation;
+		} else if(netLocation != null) {
+			this.currentLocation = netLocation;
 		}
 	}
 	
@@ -68,10 +64,10 @@ public class UserLocation implements LocationListener, IObservable {
 	 * @param locationManager	LocationManager from an activity
 	 */
 	public static void init(LocationManager locationManager) {
-		if(instance != null){
-			throw new IllegalStateException("The user location has already been initialized!");
+		if(instance == null){
+			instance = new UserLocation(locationManager);
 		}
-		instance = new UserLocation(locationManager);
+		
 	}
 	
 	/**
@@ -84,10 +80,6 @@ public class UserLocation implements LocationListener, IObservable {
 			throw new IllegalStateException("The user location hasn't been initialized!");
 		}
 		return instance;
-	}
-	
-	public boolean hasLocation() {
-		return this.currentLocation != null;
 	}
 
     /**
@@ -109,13 +101,6 @@ public class UserLocation implements LocationListener, IObservable {
 			return new LatLng(this.currentLocation.getLatitude(), this.currentLocation.getLongitude());
 		}
 		return null;
-	}
-	
-	/**
-	 * Stop tracking the users location (to save battery).
-	 */
-	public void stopTrackingUser() {
-		locationManager.removeUpdates(this);
 	}
 	
 	/**
@@ -143,19 +128,16 @@ public class UserLocation implements LocationListener, IObservable {
 
 	@Override
 	public void onProviderDisabled(String provider) {
-		if(provider.equals(this.netLocationProvider)) {
-			this.netProviderEnabled = false;
-		} else if(provider.equals(this.gpsLocationProvider)) {
-			this.gpsProviderEnabled = false;
-		}
 		Status status = Status.NORMAL_UPDATE;
-		if(!this.netProviderEnabled && !this.gpsProviderEnabled) {
+		if(!this.locationManager.isProviderEnabled(this.netLocationProvider) 
+				&& !this.locationManager.isProviderEnabled(this.gpsLocationProvider)) {
 			status = Status.ALL_DISABLED;
-		} else if(!this.netProviderEnabled) {
+		} else if(!this.locationManager.isProviderEnabled(this.netLocationProvider)) {
 			status = Status.NET_DISABLED;
-		} else if(!this.gpsProviderEnabled) {
+		} else if(!this.locationManager.isProviderEnabled(this.gpsLocationProvider)) {
 			status = Status.GPS_DISABLED;
 		}
+		
 		for(IObserver observer: observers) {
 			observer.update(status);
 		}
@@ -163,27 +145,46 @@ public class UserLocation implements LocationListener, IObservable {
 
 	@Override
 	public void onProviderEnabled(String provider) {
-		if(provider.equals(this.netLocationProvider)) {
-			this.netProviderEnabled = true;
-		} else if(provider.equals(this.gpsLocationProvider)) {
-			this.gpsProviderEnabled = true;
-		}
-		Status status = Status.NORMAL_UPDATE;
-		if(this.netProviderEnabled && this.gpsProviderEnabled) {
-			status = Status.ALL_ENABLED;
-		} else if(this.netProviderEnabled) {
-			status = Status.NET_ENABLED;
-		} else if(this.gpsProviderEnabled) {
-			status = Status.GPS_ENABLED;
-		}
-		for(IObserver observer: observers) {
-			observer.update(status);
+		Location lastKnownLocation = this.locationManager.getLastKnownLocation(provider);
+		if(this.currentLocation == null && lastKnownLocation != null) {
+			this.currentLocation = lastKnownLocation;
+			for(IObserver observer: observers) {
+				observer.update(Status.FIRST_LOCATION);
+			}
+		} else if(this.currentLocation != null && lastKnownLocation != null) {
+			if(isBetterLocation(lastKnownLocation, this.currentLocation)) {
+				this.currentLocation = lastKnownLocation;
+				for(IObserver observer: observers) {
+					observer.update(Status.NORMAL_UPDATE);
+				}
+			}
 		}
 		this.locationManager.requestLocationUpdates(provider, 0, 0, this);
 	}
 
 	@Override
 	public void onStatusChanged(String provider, int status, Bundle extras) {}
+	
+	public void onPause() {
+		this.netState = this.locationManager.isProviderEnabled(this.netLocationProvider);
+		this.gpsState = this.locationManager.isProviderEnabled(this.gpsLocationProvider);
+		
+	}
+	
+	public void onResume() {
+		boolean newNetState = this.locationManager.isProviderEnabled(this.netLocationProvider);
+		boolean newGpsState = this.locationManager.isProviderEnabled(this.gpsLocationProvider);
+		if(!netState && newNetState) {
+			this.onProviderEnabled(this.netLocationProvider);
+		} else if(netState && !newNetState) {
+			this.onProviderDisabled(this.netLocationProvider);
+		}
+		if(!gpsState && newGpsState) {
+			this.onProviderEnabled(this.gpsLocationProvider);
+		} else if(gpsState && !newGpsState) {
+			this.onProviderDisabled(this.gpsLocationProvider);
+		}
+	}
 	
 	/**
      * ** Method written by Google, found in Android training examples for locations. **

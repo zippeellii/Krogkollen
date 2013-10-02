@@ -6,10 +6,7 @@ public interface IObserver {
 						NORMAL_UPDATE, 
 						ALL_DISABLED, 
 						NET_DISABLED, 
-						GPS_DISABLED,
-						ALL_ENABLED,
-						NET_ENABLED, 
-						GPS_ENABLED};
+						GPS_DISABLED};
 	
 	/**
 	 * Updates the observer.

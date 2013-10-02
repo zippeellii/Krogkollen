@@ -67,7 +67,6 @@ public class UserLocation implements LocationListener, IObservable {
 		if(instance == null){
 			instance = new UserLocation(locationManager);
 		}
-		
 	}
 	
 	/**
@@ -165,12 +164,20 @@ public class UserLocation implements LocationListener, IObservable {
 	@Override
 	public void onStatusChanged(String provider, int status, Bundle extras) {}
 	
+	/**
+	 * "Saves" the state of the location providers when this class is paused.
+	 * Should be called when corresponding activity is paused.
+	 */
 	public void onPause() {
 		this.netState = this.locationManager.isProviderEnabled(this.netLocationProvider);
 		this.gpsState = this.locationManager.isProviderEnabled(this.gpsLocationProvider);
-		
 	}
 	
+	/**
+	 * Compares the state of the location providers from what was saved in onPause,
+	 * to what their state is now and calls the appropriate methods.
+	 * Should be called when corresponding activity is resumed.
+	 */
 	public void onResume() {
 		boolean newNetState = this.locationManager.isProviderEnabled(this.netLocationProvider);
 		boolean newGpsState = this.locationManager.isProviderEnabled(this.gpsLocationProvider);
@@ -178,12 +185,13 @@ public class UserLocation implements LocationListener, IObservable {
 			this.onProviderEnabled(this.netLocationProvider);
 		} else if(netState && !newNetState) {
 			this.onProviderDisabled(this.netLocationProvider);
-		}
+		} 
 		if(!gpsState && newGpsState) {
 			this.onProviderEnabled(this.gpsLocationProvider);
 		} else if(gpsState && !newGpsState) {
 			this.onProviderDisabled(this.gpsLocationProvider);
-		}
+		} 
+		this.startTrackingUser();
 	}
 	
 	/**

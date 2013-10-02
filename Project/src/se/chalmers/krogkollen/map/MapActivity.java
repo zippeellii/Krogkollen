@@ -151,7 +151,7 @@ public class MapActivity extends Activity implements IMapView, IObserver{
 		//Create most of the dialog that will be shown if either wifi or gps are disabled.
 		Builder builder = new Builder(this);
 
-		//Checkbox, making it possible to chose not to show this dialog again.
+		//Check box, making it possible to chose not to show this dialog again.
 		final ArrayList<Integer> selected = new ArrayList<Integer>();
 
 		View checkBoxView = View.inflate(this, R.layout.checkbox, null);
@@ -289,7 +289,6 @@ public class MapActivity extends Activity implements IMapView, IObserver{
 	public void onResume() {
 		super.onResume();
 		this.userLocation.onResume();
-		this.userLocation.startTrackingUser();
 	}
 
 	@Override

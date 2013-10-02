@@ -18,13 +18,13 @@
 -->
 
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="se.chalmers.krogkollen"
-    android:versionCode="1"
-    android:versionName="1.0" >
+          package="se.chalmers.krogkollen"
+          android:versionCode="1"
+          android:versionName="0.3" >
 
     <uses-sdk
-        android:minSdkVersion="14"
-        android:targetSdkVersion="18" />
+            android:minSdkVersion="14"
+            android:targetSdkVersion="18" />
 
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
@@ -38,17 +38,18 @@
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
 
     <uses-feature
-        android:glEsVersion="0x00020000"
-        android:required="true" />
+            android:glEsVersion="0x00020000"
+            android:required="true" />
 
     <application
-        android:allowBackup="true"
-        android:icon="@drawable/ic_launcher"
-        android:label="@string/app_name"
-        android:theme="@style/AppTheme" >
+            android:allowBackup="true"
+            android:icon="@drawable/ic_launcher"
+            android:label="@string/app_name"
+            android:theme="@style/AppTheme" >
         <activity
-            android:name="se.chalmers.krogkollen.MainActivity"
-            android:label="@string/app_name" >
+                android:name="se.chalmers.krogkollen.MainActivity"
+                android:label="@string/app_name"
+                android:theme="@style/NoActionBar" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -57,14 +58,25 @@
         </activity>
 
         <meta-data
-            android:name="com.google.android.maps.v2.API_KEY"
-            android:value="AIzaSyCRucmz7vhihr7MDjtm125OGj7mwba_u70" />
+                android:name="com.google.android.maps.v2.API_KEY"
+                android:value="AIzaSyCRucmz7vhihr7MDjtm125OGj7mwba_u70" />
 
         <activity
-            android:name="se.chalmers.krogkollen.map.MapActivity"
-            android:label="@string/title_activity_map" >
+                android:name="se.chalmers.krogkollen.map.MapActivity"
+                android:label="@string/title_activity_map"
+                android:theme="@style/HideUpIcon" >
         </activity>
-        <activity android:name=".detailed.DetailedActivity"/>
+        <activity android:name="se.chalmers.krogkollen.detailed.DetailedActivity"
+                  android:label="@string/title_activity_detailed" >
+        </activity>
+        <activity android:name="se.chalmers.krogkollen.help.HelpActivity"
+                  android:label="@string/title_activity_help"
+                  android:parentActivityName="se.chalmers.krogkollen.map.MapActivity" >
+            <!-- Parent activity meta-data to support 4.0 and lower -->
+            <meta-data
+                    android:name="android.support.PARENT_ACTIVITY"
+                    android:value="se.chalmers.krogkollen.map.MapActivity" />
+        </activity>
     </application>
 
 </manifest>

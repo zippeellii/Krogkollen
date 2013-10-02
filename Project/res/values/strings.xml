@@ -22,7 +22,6 @@ This file is part of Krogkollen.
     <string name="app_name">Krogkollen</string>
     <string name="action_settings">Inställningar</string>
     <string name="hello_world">Startmeny</string>
-    
     <string name="alert_dialog_title">Förbättra platsnoggrannheten</string>
     <string name="alert_dialog_activate">Aktivera</string>
     <string name="alert_dialog_cancel">Aktivera inte</string>
@@ -31,8 +30,9 @@ This file is part of Krogkollen.
     <string name="alert_dialog_gps_disabled">Förbättra din position genom att aktivera följande:\nGPS</string>
     <string name="alert_dialog_dont_show_again">Visa inte igen</string>
     <string name="dont_show_again_key">dont_show_again</string>
-    
     <string name="title_activity_map">Krogkarta</string>
+    <string name="hello_world">Startmenu</string>
+    <string name="title_activity_map">Krogkartan</string>
     <string name="refresh">Uppdatera</string>
     <string name="open_list">Öppna lista</string>
     <string name="search">Sök</string>
@@ -44,5 +44,17 @@ This file is part of Krogkollen.
     <string name="queue_time">30 min</string>
     <string name="entrance_fee">100kr</string>
     <string name="yellow_color">yellow</string>
+    <string name="action_help">Hjälp</string>
+    <string name="help_main">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec suscipit sapien at urna
+        accumsan egestas eu quis sem. Vivamus et quam vitae felis tempor pretium. Vivamus vitae mollis leo. Morbi risus
+        erat, posuere sit amet arcu vel, mattis commodo urna. Donec ut luctus enim, id condimentum arcu.
+    </string>
+    <string name="help_title">Hjälp</string>
+    <string name="help_green">Lorem ipsum dolor sit amet, consectetur adipiscing elit.</string>
+    <string name="help_yellow">Lorem ipsum dolor sit amet, consectetur adipiscing elit. </string>
+    <string name="help_red">Lorem ipsum dolor sit amet, consectetur adipiscing elit.</string>
+    <string name="help_gray">Lorem ipsum dolor sit amet, consectetur adipiscing elit.</string>
+    <string name="title_activity_detailed"><![CDATA[<NAMN PÅ KROG>]]></string>
+    <string name="title_activity_help">Hjälp</string>
 
 </resources>

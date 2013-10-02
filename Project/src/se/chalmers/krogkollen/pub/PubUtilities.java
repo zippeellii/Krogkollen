@@ -1,11 +1,11 @@
 package se.chalmers.krogkollen.pub;
 
-import java.util.LinkedList;
-import java.util.List;
-
+import android.content.res.Resources;
 import se.chalmers.krogkollen.backend.Backend;
 import se.chalmers.krogkollen.backend.NoBackendAccessException;
-import android.content.res.Resources;
+
+import java.util.LinkedList;
+import java.util.List;
 
 /*
  * This file is part of Krogkollen.
@@ -78,6 +78,14 @@ public class PubUtilities {
 	public List<IPub> getPubList() {
 		return pubList;
 	}
+
+    /**
+     * Refreshes the list of pubs from the server.
+     */
+    public void refreshPubList() {
+        pubList.clear();
+        loadPubList();
+    }
 
     /**
      * Returns a the pub connected with the ID given.

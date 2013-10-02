@@ -10,32 +10,30 @@ import android.content.SharedPreferences;
 import android.graphics.Point;
 import android.os.Bundle;
 import android.os.Handler;
-import android.os.Message;
 import android.os.SystemClock;
+import android.view.LayoutInflater;
 import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.animation.LinearInterpolator;
-import android.view.MenuItem;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.CompoundButton.OnCheckedChangeListener;
-
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapFragment;
 import com.google.android.gms.maps.Projection;
 import com.google.android.gms.maps.model.*;
-
 import se.chalmers.krogkollen.R;
 import se.chalmers.krogkollen.backend.Backend;
 import se.chalmers.krogkollen.backend.NoBackendAccessException;
 import se.chalmers.krogkollen.backend.NotFoundInBackendException;
 import se.chalmers.krogkollen.detailed.DetailedActivity;
+import se.chalmers.krogkollen.help.HelpActivity;
 import se.chalmers.krogkollen.pub.IPub;
 import se.chalmers.krogkollen.pub.PubUtilities;
 import se.chalmers.krogkollen.utils.ActivityID;
 import se.chalmers.krogkollen.utils.IObserver;
-import se.chalmers.krogkollen.utils.LoadingThread;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -103,7 +101,6 @@ public class MapActivity extends Activity implements IMapView, IObserver {
             @Override
             public boolean onMarkerClick(Marker marker) {
 
-
                 // Move camera to the clicked marker.
                 mMap.animateCamera(CameraUpdateFactory.newCameraPosition(new CameraPosition(
                         new LatLng(marker.getPosition().latitude, marker.getPosition().longitude), 18, 0, 0)));
@@ -130,7 +127,6 @@ public class MapActivity extends Activity implements IMapView, IObserver {
 		this.dontShowAgain = sharedPref.getBoolean(getString(R.string.dont_show_again_key), defaultValue);
 
         ActionBar actionBar = getActionBar();
-        //actionBar.setDisplayShowTitleEnabled(false);
         actionBar.setIcon(R.drawable.list_icon);
         actionBar.setDisplayHomeAsUpEnabled(true);
 	}
@@ -187,18 +183,13 @@ public class MapActivity extends Activity implements IMapView, IObserver {
     public boolean onOptionsItemSelected(MenuItem menuItem) {
         switch (menuItem.getItemId()) {
             case R.id.refresh_info:
-                final Handler handler = new Handler() { // TODO check this warning, should it be fixed?
-                    @Override
-                    public void handleMessage(Message message) {
-                        int state = message.getData().getInt(LoadingThread.STATE);
-                        if (state == 1) {
-                            mainMenu.getItem(R.id.refresh_info).setIcon(R.drawable.refresh_icon);
-                        }
-                    }
-                };
-                LoadingThread loadingThread = new LoadingThread(handler);
-                loadingThread.start();
-                mainMenu.getItem(R.id.refresh_info).setIcon(R.layout.loading_indicator);
+                LayoutInflater layoutInflater = LayoutInflater.from(this);
+                View abprogress = layoutInflater.inflate(R.layout.loading_indicator, null);
+                menuItem.setActionView(abprogress);
+
+                PubUtilities.getInstance().refreshPubList();
+                refreshPubMarkers();
+                menuItem.setActionView(null);
                 return true;
             case R.id.search:
                 // Open search
@@ -206,8 +197,9 @@ public class MapActivity extends Activity implements IMapView, IObserver {
             case R.id.go_to_my_location:
                 moveCameraToUser(18);
                 return true;
-            case android.R.id.home:
-                // Open list view
+            case R.id.action_help:
+                Intent helpIntent = new Intent(this, HelpActivity.class);
+                startActivity(helpIntent);
                 return true;
             default:
                 return super.onOptionsItemSelected(menuItem);

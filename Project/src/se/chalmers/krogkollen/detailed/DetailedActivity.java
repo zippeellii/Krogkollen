@@ -7,9 +7,7 @@ import android.widget.TextView;
 import se.chalmers.krogkollen.R;
 import se.chalmers.krogkollen.map.MapActivity;
 import se.chalmers.krogkollen.pub.IPub;
-import se.chalmers.krogkollen.pub.Pub;
 import se.chalmers.krogkollen.pub.PubUtilities;
-import se.chalmers.krogkollen.utils.OpeningHours;
 
 /*
  * This file is part of Krogkollen.

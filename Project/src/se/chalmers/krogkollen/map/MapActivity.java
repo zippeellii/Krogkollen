@@ -19,6 +19,7 @@ import com.google.android.gms.maps.Projection;
 import com.google.android.gms.maps.model.*;
 import se.chalmers.krogkollen.R;
 import se.chalmers.krogkollen.detailed.DetailedActivity;
+import se.chalmers.krogkollen.help.HelpActivity;
 import se.chalmers.krogkollen.pub.IPub;
 import se.chalmers.krogkollen.pub.PubUtilities;
 import se.chalmers.krogkollen.utils.ActivityID;
@@ -102,7 +103,6 @@ public class MapActivity extends Activity implements IMapView, IObserver{
         moveCameraToUser(16);
 
         ActionBar actionBar = getActionBar();
-        //actionBar.setDisplayShowTitleEnabled(false);
         actionBar.setIcon(R.drawable.list_icon);
         actionBar.setDisplayHomeAsUpEnabled(true);
 	}
@@ -157,7 +157,6 @@ public class MapActivity extends Activity implements IMapView, IObserver{
                 PubUtilities.getInstance().refreshPubList();
                 refreshPubMarkers();
                 menuItem.setActionView(null);
-
                 return true;
             case R.id.search:
                 // Open search
@@ -165,8 +164,9 @@ public class MapActivity extends Activity implements IMapView, IObserver{
             case R.id.go_to_my_location:
                 moveCameraToUser(18);
                 return true;
-            case android.R.id.home:
-                // Open list view
+            case R.id.action_help:
+                Intent helpIntent = new Intent(this, HelpActivity.class);
+                startActivity(helpIntent);
                 return true;
             default:
                 return super.onOptionsItemSelected(menuItem);

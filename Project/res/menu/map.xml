@@ -1,3 +1,4 @@
+<?xml version="1.0" encoding="utf-8"?>
 <!--
         This file is part of Krogkollen.
 
@@ -43,5 +44,11 @@
             android:orderInCategory="100"
             android:showAsAction="never"
             android:title="@string/action_settings"/>
+
+    <item
+            android:id="@+id/action_help"
+            android:orderInCategory="100"
+            android:showAsAction="never"
+            android:title="@string/action_help"/>
 
 </menu>

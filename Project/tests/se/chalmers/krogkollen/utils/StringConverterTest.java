@@ -1,4 +1,4 @@
-package tests;
+package se.chalmers.krogkollen.utils;
 
 import se.chalmers.krogkollen.utils.StringConverter;
 
@@ -12,7 +12,7 @@ import se.chalmers.krogkollen.utils.StringConverter;
 public class StringConverterTest {
     public static void main(String[] args){
 
-        int x = StringConverter.convertCombinedStringto(":1111:2222:3333:4444:", 3);
+        int x = StringConverter.convertStringToFragmentedInt(":1111:2222:3333:4444:", 3);
         System.out.print("x should be: 3333. x is:" +x);
         if(x == 3333){
             System.out.println(" CORRECT");

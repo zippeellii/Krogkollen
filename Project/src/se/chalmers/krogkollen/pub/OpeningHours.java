@@ -1,27 +1,36 @@
-package se.chalmers.krogkollen.utils;
+package se.chalmers.krogkollen.pub;
 
-// TODO Kanske flytta till pub-paketet? diskuttera
 /**
- *
  * Class handling the opening and closing hours of a pub
+ * 
+ * @author Philip Carlen
  */
-public class OpeningHours {
+class OpeningHours {
 
     private int openingHour;
     private int closingHour;
 
-    // TODO javadoc
+    /**
+     * Creates a new OpeningHours object
+     * 
+     * @param openingHour the opening hour
+     * @param closingHour the closing hour
+     */
     public OpeningHours(int openingHour, int closingHour){
         this.openingHour = openingHour;
         this.closingHour = closingHour;
     }
 
-    // TODO javadoc
+    /**
+     * @return the opening hour
+     */
     public int getOpeningHour(){
         return this.openingHour;
     }
 
-    // TODO javadoc
+    /**
+     * @return the closing hour
+     */
     public int getClosingHour(){
         return this.closingHour;
     }

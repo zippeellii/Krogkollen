@@ -1,6 +1,4 @@
 package se.chalmers.krogkollen.pub;
-import se.chalmers.krogkollen.utils.OpeningHours;
-
 import com.google.android.gms.maps.model.LatLng;
 /*
  * This file is part of Krogkollen.

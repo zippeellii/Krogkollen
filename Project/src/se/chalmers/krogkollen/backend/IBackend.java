@@ -3,6 +3,12 @@ package se.chalmers.krogkollen.backend;
 import java.util.List;
 import se.chalmers.krogkollen.pub.IPub;
 
+/**
+ * Interface describing methods for a backend
+ * 
+ * @author Oskar Karrman
+ *
+ */
 public interface IBackend {
 
 	/**
@@ -46,4 +52,22 @@ public interface IBackend {
 	 * @throws NotFoundInBackendException
 	 */
 	public IPub getPubFromID(String id) throws NoBackendAccessException, NotFoundInBackendException;
+	
+	/**
+	 * Adds a rating vote to the backend
+	 * 
+	 * @param rating the rating vote to be added
+	 * @throws NoBackendAccessException
+	 * @throws NotFoundInBackendException
+	 */
+	public void addRatingVote(int rating) throws NoBackendAccessException, NotFoundInBackendException;
+	
+	/**
+	 * Removes a rating vote to the backend
+	 * 
+	 * @param rating the rating vote to be removed
+	 * @throws NoBackendAccessException
+	 * @throws NotFoundInBackendException
+	 */
+	public void removeRatingVote(int rating) throws NoBackendAccessException, NotFoundInBackendException;
 }

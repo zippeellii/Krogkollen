@@ -170,29 +170,50 @@ public class Backend implements IParseBackend{
 
 	@Override
 	public void addRatingVote(IPub pub, int rating) throws NoBackendAccessException, NotFoundInBackendException {
-		/* BELOW: Temporary code for incrementing a number without getting the number first
 		
-		// Create a pointer to an object of class Point with id dlkj83d
-		ParseObject point = ParseObject.createWithoutData("Pub", "Hx1PNnvDu3");
-
-		// Increment the current value of the quantity key by 1
-		point.increment("posRate");
-
+		// Create a pointer to an object of class Pub
+		ParseObject tempPub = ParseObject.createWithoutData("Pub", pub.getID());
+		
+		if (rating > 0) {
+			tempPub.increment("posRate");
+		} else {
+			tempPub.increment("negRate");
+		}
+		
 		// Save
-		point.saveInBackground(new SaveCallback() {
-		  public void done(ParseException e) {
-		    if (e == null) {
-		      // Saved successfully.
-		    } else {
-		      // The save failed.
-		    }
-		  }
-		}); */
+		tempPub.saveInBackground(new SaveCallback() {
+			public void done(ParseException e ) {
+				if (e == null) {
+					// TODO should we do something here?
+				} else {
+					// TODO notify user
+				}
+			}
+		});
 	}
 
 	@Override
 	public void removeRatingVote(IPub pub, int rating) throws NoBackendAccessException, NotFoundInBackendException {
-		// TODO Auto-generated method stub
 		
+		// Create a pointer to an object of class Pub
+		ParseObject tempPub = ParseObject.createWithoutData("Pub", pub.getID());
+		
+		// TODO This part can cause problems if a rating is updated after the pub was last refreshed
+		if (rating > 0) {
+			tempPub.put("posRate", pub.getPositiveRating() - 1);
+		} else {
+			tempPub.put("negRate", pub.getNegativeRating() - 1);
+		}
+		
+		// Save
+		tempPub.saveInBackground(new SaveCallback() {
+			public void done(ParseException e ) {
+				if (e == null) {
+					// TODO should we do something here?
+				} else {
+					// TODO notify user
+				}
+			}
+		});
 	}
 }

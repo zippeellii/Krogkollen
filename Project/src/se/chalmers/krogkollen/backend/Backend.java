@@ -24,9 +24,8 @@ public class Backend implements IParseBackend{
 	/**
 	 * Private constructor preventing accessibility 
 	 */
-	private Backend(){
-
-	}
+	private Backend(){}
+	
 	/**
 	 * Returns the instance for this singleton
 	 * @return the instance
@@ -37,15 +36,17 @@ public class Backend implements IParseBackend{
 		}
 		return instance;
 	}
+	
 	/**
 	 * Initializes the connection to the server
 	 * @param context the conext
-	 * @param applicationID of the appliaction
-	 * @param clientKey of the client
+	 * @param applicationID the application ID of the appliaction
+	 * @param clientKey the client key
 	 */
 	public static void init(Context context, String applicationID, String clientKey){
 		Parse.initialize(context, applicationID, clientKey);
 	}
+	
 	@Override
 	public List<IPub> getAllPubs() throws NoBackendAccessException {
 		//Instantiates the list to be returned

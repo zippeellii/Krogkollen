@@ -56,18 +56,20 @@ public interface IBackend {
 	/**
 	 * Adds a rating vote to the backend
 	 * 
-	 * @param rating the rating vote to be added
+	 * @param pub the pub for which the rating should be added
+	 * @param rating the rating
 	 * @throws NoBackendAccessException
 	 * @throws NotFoundInBackendException
 	 */
-	public void addRatingVote(int rating) throws NoBackendAccessException, NotFoundInBackendException;
+	public void addRatingVote(IPub pub, int rating) throws NoBackendAccessException, NotFoundInBackendException;
 	
 	/**
 	 * Removes a rating vote to the backend
 	 * 
+	 * @param pub the pub for which the rating should be removed
 	 * @param rating the rating vote to be removed
 	 * @throws NoBackendAccessException
 	 * @throws NotFoundInBackendException
 	 */
-	public void removeRatingVote(int rating) throws NoBackendAccessException, NotFoundInBackendException;
+	public void removeRatingVote(IPub pub, int rating) throws NoBackendAccessException, NotFoundInBackendException;
 }

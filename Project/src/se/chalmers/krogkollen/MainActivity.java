@@ -6,10 +6,12 @@ import android.content.Intent;
 import android.location.LocationManager;
 import android.os.Bundle;
 import android.view.Menu;
-
 import se.chalmers.krogkollen.backend.Backend;
+import se.chalmers.krogkollen.backend.NoBackendAccessException;
+import se.chalmers.krogkollen.backend.NotFoundInBackendException;
 import se.chalmers.krogkollen.map.MapActivity;
 import se.chalmers.krogkollen.map.UserLocation;
+import se.chalmers.krogkollen.pub.Pub;
 import se.chalmers.krogkollen.pub.PubUtilities;
 import se.chalmers.krogkollen.utils.ActivityID;
 

@@ -38,9 +38,12 @@ public class MainActivity extends Activity {
         // Initializing the connection with the server
         Parse.initialize(this, "WgLQnilANHpjM3xITq0nM0eW8dByIgDDmxJzf6se", "9ZK7yjE1NiD244ymDHb8ZpbbWNNv3RuQq7ceEvJc");
         ParseAnalytics.trackAppOpened(getIntent());
-
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        passwordField = (EditText) findViewById(R.id.txtPassword);
+        pubNameField = (EditText) findViewById(R.id.txtPubName);        //Not yet used
+        loginButton = (Button) findViewById(R.id.login_button);
+        pubNameField.requestFocus();
         ActionBar actionBar = getActionBar();
         actionBar.hide();
         addPubsToList();
@@ -92,10 +95,6 @@ public class MainActivity extends Activity {
     }
 
     private void addListeners() {
-        passwordField = (EditText) findViewById(R.id.txtPassword);
-        pubNameField = (EditText) findViewById(R.id.txtPubName);        //Not yet used
-        loginButton = (Button) findViewById(R.id.login_button);
-
         loginButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {

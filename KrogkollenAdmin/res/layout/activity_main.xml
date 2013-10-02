@@ -24,10 +24,14 @@
                 android:layout_height="wrap_content" />
 
     <EditText
+            android:focusable="true"
+            android:focusableInTouchMode="true"
             android:id="@+id/txtPubName"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:hint="@string/name_field_hint"
+            android:cursorVisible="true"
+            android:textCursorDrawable="@null"
             android:textColorHint="#cdcdcd"
             android:textColor="#000000"
             android:padding="10dip"
@@ -48,8 +52,10 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:hint="@string/password_field_hint"
+                android:cursorVisible="true"
                 android:textColorHint="#cdcdcd"
                 android:textColor="#000000"
+                android:textCursorDrawable="@null"
                 android:padding="10dip"
                 android:background="#ffffff"
                 android:layout_centerHorizontal="true"

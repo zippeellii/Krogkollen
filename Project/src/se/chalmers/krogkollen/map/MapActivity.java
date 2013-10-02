@@ -81,7 +81,7 @@ public class MapActivity extends Activity implements IMapView, IObserver {
 
     private Menu mainMenu;
     
-  //dialog stuff
+    // Dialogue stuff
   	private SharedPreferences sharedPref;
   	private boolean dontShowAgain;
   	private boolean haveShownDialog = false;
@@ -109,16 +109,16 @@ public class MapActivity extends Activity implements IMapView, IObserver {
                         new LatLng(marker.getPosition().latitude, marker.getPosition().longitude), 18, 0, 0)));
 
                 if (marker.getTitle().equalsIgnoreCase("user")) {
-                    // Open favorites.
+                	// TODO Open favorites.
                 } else {
-                    // Open detailed view.
+                	// Open detailed view.
                     openDetailedView(marker.getTitle());
                 }
                 return true; // Suppress default behavior; move camera and open info window.
             }
         });
 
-        // TODO detta h�r ej till view, logik ska ligga i presentern
+        // TODO move logic to presenter
         // Add services for auto update of the user's location.
         this.userLocation = UserLocation.getInstance();
         this.userLocation.addObserver(this);
@@ -140,7 +140,7 @@ public class MapActivity extends Activity implements IMapView, IObserver {
       *
       * @param id The ID of the pub to be opened in the detailed view.
       */
-	// TODO denna ska kalla p� navigate-metoden, det finns en med extras
+	// TODO should call the navigate method and navigate via that one
     private void openDetailedView(String id) {
         Intent detailedIntent = new Intent(this, DetailedActivity.class);
         detailedIntent.putExtra(MARKER_PUB_ID, id); // Sends the name of the pub with the intent
@@ -182,12 +182,12 @@ public class MapActivity extends Activity implements IMapView, IObserver {
                         .title("user"));
  	}
 
-	// TODO ej s�ker p� vad denna metod g�r, men om det finns logik s� ska den ligga i metoder i MapPresenter ist�llet
+	// TODO if there's logic in this method, move logic to presenter
     @Override
     public boolean onOptionsItemSelected(MenuItem menuItem) {
         switch (menuItem.getItemId()) {
             case R.id.refresh_info:
-                final Handler handler = new Handler() {
+                final Handler handler = new Handler() { // TODO check this warning, should it be fixed?
                     @Override
                     public void handleMessage(Message message) {
                         int state = message.getData().getInt(LoadingThread.STATE);
@@ -231,6 +231,7 @@ public class MapActivity extends Activity implements IMapView, IObserver {
 			pubMarker.remove();
 		}
 		this.pubMarkers.clear();
+		
 		//refresh pubUtilities
 		this.addPubMarkers();
 	}
@@ -376,11 +377,13 @@ public class MapActivity extends Activity implements IMapView, IObserver {
 
 	@Override
 	public void onBackPressed() {
+		
 		//Get what activity you came from originally.
 		int activity = this.getIntent().getIntExtra(ActivityID.ACTIVITY_ID, 0);
 		Intent intent;
 		switch(activity) {
 		case ActivityID.LIST:
+			// TODO do something here
 			//If you came from the list view, return there.
 			//Intent intent = new Intent(this, ListActivity.class);
 			//intent.putExtra(CallingActivity.MAP);
@@ -408,6 +411,7 @@ public class MapActivity extends Activity implements IMapView, IObserver {
 	@Override
 	public void addPubToMap(IPub pub) {
         int drawable = R.drawable.gray_marker_bg;
+        
         // Determine which marker color to add.
         try {
 			switch (Backend.getInstance().getQueueTime(pub)) {

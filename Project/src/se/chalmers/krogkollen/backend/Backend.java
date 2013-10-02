@@ -53,13 +53,17 @@ public class Backend implements IParseBackend{
 	
 	@Override
 	public List<IPub> getAllPubs() throws NoBackendAccessException {
+		
 		//Instantiates the list to be returned
 		List<IPub> tempPubList = new ArrayList<IPub>();
+		
 		//Fetches the requested query from the server
 		ParseQuery<ParseObject> query = ParseQuery.getQuery("Pub");
+		
 		//Declares a List to be able to handle the query 
 		List <ParseObject> tempList;
 		try {
+			
 			//Done to simplify the handling of the query
 			//Makes it possible to handle as a java.util.List
 			tempList = query.find();

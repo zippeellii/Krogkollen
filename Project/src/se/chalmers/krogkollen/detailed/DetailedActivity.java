@@ -77,7 +77,7 @@ public class DetailedActivity extends Activity implements IDetailedView {
 
 	@Override
 	public void navigate(Class<?> destination) {
-		// TODO I denna ska ni l�gga koden som skickar tillbaka anv�ndaren till MapActivity
+		// TODO Auto-generated method stub
 		
 	}
 

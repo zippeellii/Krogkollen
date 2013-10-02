@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              android:orientation="vertical"
+              android:layout_width="match_parent"
+              android:background="#333333"
+              android:layout_height="match_parent">
+
+        <ImageView
+                android:id="@+id/admin_logo"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="125dp"
+                android:src="@drawable/krogkollen_admin_logo" />
+
+        <Spinner
+                android:id="@+id/pub_spinner"
+                android:layout_width="fill_parent"
+                android:layout_centerHorizontal="true"
+                android:layout_below="@id/admin_logo"
+                android:layout_marginTop="75dp"
+                android:layout_marginLeft="40dp"
+                android:layout_marginRight="40dp"
+                android:layout_height="wrap_content" />
+
+    <EditText
+            android:focusable="true"
+            android:focusableInTouchMode="true"
+            android:id="@+id/txtPubName"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="@string/name_field_hint"
+            android:cursorVisible="true"
+            android:textCursorDrawable="@null"
+            android:textColorHint="#cdcdcd"
+            android:textColor="#000000"
+            android:padding="10dip"
+            android:background="#ffffff"
+            android:layout_centerHorizontal="true"
+            android:layout_below="@id/admin_logo"
+            android:singleLine="true"
+            android:imeOptions="actionNext"
+            android:layout_marginTop="75dp"
+            android:layout_marginLeft="40dp"
+            android:layout_marginRight="40dp" >
+
+        <requestFocus />
+    </EditText>
+
+        <EditText
+                android:id="@+id/txtPassword"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="@string/password_field_hint"
+                android:cursorVisible="true"
+                android:textColorHint="#cdcdcd"
+                android:textColor="#000000"
+                android:textCursorDrawable="@null"
+                android:padding="10dip"
+                android:background="#ffffff"
+                android:layout_centerHorizontal="true"
+                android:layout_below="@id/txtPubName"
+                android:layout_marginTop="10dp"
+                android:layout_marginLeft="40dp"
+                android:layout_marginRight="40dp"
+                android:inputType="textPassword"
+                android:singleLine="true"
+                android:fontFamily="sans-serif">
+
+            <requestFocus />
+        </EditText>
+
+        <Button
+                android:id="@+id/login_button"
+                android:layout_height="wrap_content"
+                android:layout_width="match_parent"
+                android:layout_centerHorizontal="true"
+                android:layout_below="@id/txtPassword"
+                android:layout_marginTop="30dp"
+                android:layout_marginLeft="40dp"
+                android:layout_marginRight="40dp"
+                android:textColor="#ffffff"
+                android:background="#33b5e5"
+                android:text="@string/login_button_text"
+                android:fontFamily="sans-serif-light"/>
+</RelativeLayout>

@@ -1,3 +1,20 @@
+<!--
+        This file is part of Krogkollen.
+
+         Krogkollen is free software: you can redistribute it and/or modify
+         it under the terms of the GNU General Public License as published by
+         the Free Software Foundation, either version 3 of the License, or
+         (at your option) any later version.
+
+         Krogkollen is distributed in the hope that it will be useful,
+         but WITHOUT ANY WARRANTY; without even the implied warranty of
+         MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+         GNU General Public License for more details.
+
+         You should have received a copy of the GNU General Public License
+         along with Foobar.  If not, see <http://www.gnu.org/licenses/>.
+-->
+
 <resources>
 
     <!--
@@ -15,6 +32,14 @@
     <!-- Application theme. -->
     <style name="AppTheme" parent="AppBaseTheme">
         <!-- All customizations that are NOT specific to a particular API-level can go here. -->
+        <item name="android:homeAsUpIndicator">@drawable/transparent_spacer</item>
+    </style>
+
+
+    <style name="ProgressIndicator" parent="@android:style/Widget.ProgressBar.Small">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:indeterminate">true</item>
     </style>
 
 </resources>

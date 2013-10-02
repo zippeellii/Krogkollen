@@ -2,15 +2,23 @@ package se.chalmers.krogkollen.map;
 
 import android.app.ActionBar;
 import android.app.Activity;
+import android.app.AlertDialog.Builder;
+import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Point;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.os.SystemClock;
 import android.view.Menu;
-import android.view.MenuItem;
+import android.view.View;
 import android.view.animation.LinearInterpolator;
+import android.view.MenuItem;
+import android.widget.CheckBox;
+import android.widget.CompoundButton;
+import android.widget.CompoundButton.OnCheckedChangeListener;
 
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -54,6 +62,7 @@ import java.util.List;
  *
  * This is a normal map with the user marked on the map, and with a list of pubs marked on the map.
  */
+
 public class MapActivity extends Activity implements IMapView, IObserver {
 	// TODO IObserver + all observer-logik ska flyttas till MapPresenter
 	
@@ -71,6 +80,11 @@ public class MapActivity extends Activity implements IMapView, IObserver {
     private List<Marker> pubMarkers = new ArrayList<Marker>();
 
     private Menu mainMenu;
+    
+  //dialog stuff
+  	private SharedPreferences sharedPref;
+  	private boolean dontShowAgain;
+  	private boolean haveShownDialog = false;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -109,12 +123,11 @@ public class MapActivity extends Activity implements IMapView, IObserver {
         this.userLocation = UserLocation.getInstance();
         this.userLocation.addObserver(this);
         this.userLocation.startTrackingUser();
-        addUserMarker(this.userLocation.getCurrentLatLng());
 
-        
-        
-        // Move to the current location of the user.
-        moveCameraToUser(16);
+        this.sharedPref = getPreferences(Context.MODE_PRIVATE);
+		//Get the boolean that describes if dialogs should be shown again.
+		boolean defaultValue = getResources().getBoolean(R.bool.dont_show_again_default);
+		this.dontShowAgain = sharedPref.getBoolean(getString(R.string.dont_show_again_key), defaultValue);
 
         ActionBar actionBar = getActionBar();
         //actionBar.setDisplayShowTitleEnabled(false);
@@ -137,7 +150,7 @@ public class MapActivity extends Activity implements IMapView, IObserver {
     // Start the activity in a local method to keep the right context.
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
-        super.onCreateOptionsMenu(menu);
+		super.onCreateOptionsMenu(menu);
 
 		// Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.map, menu);
@@ -152,7 +165,9 @@ public class MapActivity extends Activity implements IMapView, IObserver {
      * @param zoom how close to zoom in on the user.
      */
     private void moveCameraToUser(int zoom) {
-        mMap.animateCamera(CameraUpdateFactory.newCameraPosition(new CameraPosition(this.userLocation.getCurrentLatLng(), zoom, 0, 0)));
+        if(this.userLocation.getCurrentLatLng() != null) {
+        	mMap.animateCamera(CameraUpdateFactory.newCameraPosition(new CameraPosition(this.userLocation.getCurrentLatLng(), zoom, 0, 0)));
+        }
     }
 
 	/**
@@ -202,29 +217,117 @@ public class MapActivity extends Activity implements IMapView, IObserver {
 	/**
 	 * Adds markers to the map for all pubs in PubUtilities.
 	 */
-    public void addPubMarkers() {
-        for (int i = 0; i < PubUtilities.getInstance().getPubList().size(); i++) {
-            addPubToMap(PubUtilities.getInstance().getPubList().get(i));
-        }
-    }
-    
-    /**
-     * Removes all pub markers and adds them again with (new) information.
-     */
-    public void refreshPubMarkers() {
-    	for(Marker pubMarker: this.pubMarkers){
-    		pubMarker.remove();
-    	}
-    	this.pubMarkers.clear();
-    	this.addPubMarkers();
-    }
-    
-    @Override
-	public void update() {
-		this.animateMarker(this.userMarker, this.userLocation.getCurrentLatLng());
+	public void addPubMarkers() {
+		for (int i = 0; i < PubUtilities.getInstance().getPubList().size(); i++) {
+			addPubToMap(PubUtilities.getInstance().getPubList().get(i));
+		}
 	}
-    
-    /**
+
+	/**
+	 * Removes all pub markers and adds them again with (new) information.
+	 */
+	public void refreshPubMarkers() {
+		for(Marker pubMarker: this.pubMarkers){
+			pubMarker.remove();
+		}
+		this.pubMarkers.clear();
+		//refresh pubUtilities
+		this.addPubMarkers();
+	}
+
+	@Override
+	public void update(Status status) {
+
+		//Create most of the dialog that will be shown if either wifi or gps are disabled.
+		Builder builder = new Builder(this);
+
+		//Check box, making it possible to chose not to show this dialog again.
+		final ArrayList<Integer> selected = new ArrayList<Integer>();
+
+		View checkBoxView = View.inflate(this, R.layout.checkbox, null);
+		CheckBox checkBox = (CheckBox)checkBoxView.findViewById(R.id.checkbox);
+		checkBox.setOnCheckedChangeListener(new OnCheckedChangeListener() {
+
+			@Override
+			public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+				if (isChecked) {
+					selected.add(0);
+				} else if(selected.size() != 0){
+					selected.clear();
+				}
+			}
+		});
+		checkBox.setText(this.getString(R.string.alert_dialog_dont_show_again));
+		builder.setView(checkBoxView);
+		builder.setTitle(R.string.alert_dialog_title);
+		
+		//Set listeners to the buttons in the dialog and chose appropriate consequences for clicks.
+		builder.setPositiveButton(R.string.alert_dialog_activate, new DialogInterface.OnClickListener() {
+			public void onClick(DialogInterface dialog, int which) { 
+				//Save the don't show again option.
+				SharedPreferences.Editor editor = sharedPref.edit();
+				editor.putBoolean(getString(R.string.dont_show_again_key), !selected.isEmpty());
+				editor.commit();
+
+				//Send user to location settings on the phone.
+				Intent intent = new Intent(android.provider.Settings.ACTION_LOCATION_SOURCE_SETTINGS);
+				startActivity(intent);
+			}
+		});
+		builder.setNegativeButton(R.string.alert_dialog_cancel, new DialogInterface.OnClickListener() {
+			public void onClick(DialogInterface dialog, int which) { 
+				//Save the don't show again option.
+				SharedPreferences.Editor editor = sharedPref.edit();
+				editor.putBoolean(getString(R.string.dont_show_again_key), !selected.isEmpty());
+				editor.commit();
+			}
+		});
+
+		//Update accordingly to what has happened in user location.
+		switch(status) {
+		case FIRST_LOCATION:
+			//User location has received a first location so a user marker is added and 
+			//map is centered on user.
+			addUserMarker(this.userLocation.getCurrentLatLng());
+			this.moveCameraToUser(16);;
+			break;
+		case NORMAL_UPDATE:
+			//The location has been updated, move the marker accordingly.
+			this.animateMarker(this.userMarker, this.userLocation.getCurrentLatLng());
+			break;
+		case ALL_DISABLED:
+			//If we haven't shown a dialog and the user hasn't chosen don't show again,
+			//show a dialog and prompt the user to enable wifi and gps tracking.
+			if(!this.haveShownDialog && !this.dontShowAgain) {
+				builder.setMessage(R.string.alert_dialog_net_and_gps_disabled);
+				builder.show();
+				this.haveShownDialog = true;
+			}
+			break;
+		case NET_DISABLED:
+			//If we haven't shown a dialog and the user hasn't chosen don't show again,
+			//show a dialog and prompt the user to enable wifi tracking.
+			if(!this.haveShownDialog && !this.dontShowAgain) {
+				builder.setMessage(R.string.alert_dialog_net_disabled);
+				builder.show();
+				this.haveShownDialog = true;
+			}
+			break;
+		case GPS_DISABLED:
+			//If we haven't shown a dialog and the user hasn't chosen don't show again,
+			//show a dialog and prompt the user to enable gps tracking.
+			if(!this.haveShownDialog && !this.dontShowAgain) {
+				builder.setMessage(R.string.alert_dialog_gps_disabled);
+				builder.show();
+				this.haveShownDialog = true;
+			}
+			break;
+		default:
+			break;
+		}	
+	}
+
+	/**
 	 * ** Method written by Google, found on stackoverflow.com **
 	 * ** http://stackoverflow.com/questions/13728041/move-markers-in-google-map-v2-android **
 	 * Moves the user marker smoothly to a new position.
@@ -233,70 +336,68 @@ public class MapActivity extends Activity implements IMapView, IObserver {
 	 * @param toPosition	the position to where the marker will be moved
 	 */
 	private void animateMarker(final Marker marker, final LatLng toPosition) {
-        final Handler handler = new Handler();
-        final long start = SystemClock.uptimeMillis();
-        Projection proj = this.mMap.getProjection();
-        Point startPoint = proj.toScreenLocation(marker.getPosition());
-        final LatLng startLatLng = proj.fromScreenLocation(startPoint);
-        final long duration = 500;
+		final Handler handler = new Handler();
+		final long start = SystemClock.uptimeMillis();
+		Projection proj = this.mMap.getProjection();
+		Point startPoint = proj.toScreenLocation(marker.getPosition());
+		final LatLng startLatLng = proj.fromScreenLocation(startPoint);
+		final long duration = 500;
 
-        final LinearInterpolator interpolator = new LinearInterpolator();
+		final LinearInterpolator interpolator = new LinearInterpolator();
 
-        handler.post(new Runnable() {
-            @Override
-            public void run() {
-                long elapsed = SystemClock.uptimeMillis() - start;
-                float t = interpolator.getInterpolation((float) elapsed / duration);
-                double lng = t * toPosition.longitude + (1 - t) * startLatLng.longitude;
-                double lat = t * toPosition.latitude + (1 - t) * startLatLng.latitude;
-                marker.setPosition(new LatLng(lat, lng));
+		handler.post(new Runnable() {
+			@Override
+			public void run() {
+				long elapsed = SystemClock.uptimeMillis() - start;
+				float t = interpolator.getInterpolation((float) elapsed / duration);
+				double lng = t * toPosition.longitude + (1 - t) * startLatLng.longitude;
+				double lat = t * toPosition.latitude + (1 - t) * startLatLng.latitude;
+				marker.setPosition(new LatLng(lat, lng));
 
-                if (t < 1.0) {
-                    // Post again 16ms later.
-                    handler.postDelayed(this, 16);
-                }
-            }
-        });
-    }
-	
+				if (t < 1.0) {
+					// Post again 16ms later.
+					handler.postDelayed(this, 16);
+				}
+			}
+		});
+	}
+
 	@Override
 	public void onPause() {
 		super.onPause();
-		this.userLocation.stopTrackingUser();
+		this.userLocation.onPause();
 	}
-	
+
 	@Override
 	public void onResume() {
 		super.onResume();
-		this.userLocation.startTrackingUser();
+		this.userLocation.onResume();
 	}
-	
+
 	@Override
 	public void onBackPressed() {
+		//Get what activity you came from originally.
 		int activity = this.getIntent().getIntExtra(ActivityID.ACTIVITY_ID, 0);
 		Intent intent;
 		switch(activity) {
-		case ActivityID.MAIN:
-			intent = new Intent(Intent.ACTION_MAIN);
-			intent.addCategory(Intent.CATEGORY_HOME);
-			startActivity(intent);
-			break;
 		case ActivityID.LIST:
+			//If you came from the list view, return there.
 			//Intent intent = new Intent(this, ListActivity.class);
 			//intent.putExtra(CallingActivity.MAP);
 			//this.startActivity(intent);
 			break;
 		default:
+			//If you came from anything else, return to home screen.
 			intent = new Intent(Intent.ACTION_MAIN);
 			intent.addCategory(Intent.CATEGORY_HOME);
 			startActivity(intent);
 			break;
 		}
 	}
-    
+
 	@Override
 	public void navigate(Class<?> destination) {
-		// TODO Auto-generated method stub	
+		// TODO Auto-generated method stub
 	}
 
 	@Override
@@ -306,7 +407,6 @@ public class MapActivity extends Activity implements IMapView, IObserver {
 
 	@Override
 	public void addPubToMap(IPub pub) {
-
         int drawable = R.drawable.gray_marker_bg;
         // Determine which marker color to add.
         try {
@@ -336,6 +436,5 @@ public class MapActivity extends Activity implements IMapView, IObserver {
 	@Override
 	public void navigate(Class<?> destination, Bundle extras) {
 		// TODO Auto-generated method stub
-		
 	}
 }

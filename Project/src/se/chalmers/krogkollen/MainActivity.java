@@ -44,13 +44,13 @@ public class MainActivity extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-		//Tells the backend to initialize its server connection
-		Backend.init(this, "WgLQnilANHpjM3xITq0nM0eW8dByIgDDmxJzf6se", "9ZK7yjE1NiD244ymDHb8ZpbbWNNv3RuQq7ceEvJc");
-	
+        //Tells the backend to initialize its server connection
+        Backend.init(this, "WgLQnilANHpjM3xITq0nM0eW8dByIgDDmxJzf6se", "9ZK7yjE1NiD244ymDHb8ZpbbWNNv3RuQq7ceEvJc");
+
         PubUtilities.getInstance().loadPubList();
-		
-		//initiate the user location and start the map activity.
-		UserLocation.init((LocationManager) this.getSystemService(Context.LOCATION_SERVICE));
+
+        //initiate the user location and start the map activity.
+        UserLocation.init((LocationManager) this.getSystemService(Context.LOCATION_SERVICE));
 		Intent intent = new Intent(this, MapActivity.class);
 		intent.putExtra("previous_activity", ActivityID.MAIN);
 		startActivity(intent);

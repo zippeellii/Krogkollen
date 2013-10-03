@@ -1,9 +1,15 @@
 package se.chalmers.krogkollen.map;
 
-import java.util.List;
-
+import android.os.Bundle;
 import se.chalmers.krogkollen.IView;
+import se.chalmers.krogkollen.R;
+import se.chalmers.krogkollen.backend.NoBackendAccessException;
+import se.chalmers.krogkollen.backend.NotFoundInBackendException;
+import se.chalmers.krogkollen.detailed.DetailedActivity;
 import se.chalmers.krogkollen.pub.IPub;
+import se.chalmers.krogkollen.pub.PubUtilities;
+
+import java.util.List;
 
 /**
  * A Map presenter, doing the logic for the map view
@@ -13,16 +19,28 @@ import se.chalmers.krogkollen.pub.IPub;
  */
 public class MapPresenter implements IMapPresenter {
 
+    static final String MAP_PRESENTER_KEY = "se.chalmers.krogkollen.MAP_PRESENTER_KEY";
+
+    private IMapView mapView;
+    private UserLocation userLocation;
+
+    public MapPresenter() {
+        this.userLocation = UserLocation.getInstance();
+        this.userLocation.addObserver(this);
+        this.userLocation.startTrackingUser();
+    }
+
 	@Override
 	public void setView(IView view) {
-		// TODO Auto-generated method stub
-		
+		mapView = (IMapView) view;
+
 	}
 
 	@Override
-	public void pubSelected(IPub pub) {
-		// TODO Auto-generated method stub
-		
+	public void pubMarkerClicked(String pubId) {
+        Bundle bundle = new Bundle();
+        bundle.putString(MAP_PRESENTER_KEY, pubId);
+        mapView.navigate(DetailedActivity.class, bundle);
 	}
 
 	@Override
@@ -33,8 +51,28 @@ public class MapPresenter implements IMapPresenter {
 
 	@Override
 	public void refresh() {
-		// TODO Auto-generated method stub
-		
-	}
+        PubUtilities.getInstance().refreshPubList();
+        try {
+            MapWrapper.INSTANCE.refreshPubMarkers();
+        } catch (NoBackendAccessException e) {
+            mapView.showErrorMessage(mapView.getResources().getString(R.string.error_no_backend_access));
+        } catch (NotFoundInBackendException e) {
+            mapView.showErrorMessage(mapView.getResources().getString(R.string.error_no_backend_item));
+        }
+    }
 
+    @Override
+    public void onPause() {
+        this.userLocation.onPause();
+    }
+
+    @Override
+    public void onResume() {
+        this.userLocation.onResume();
+    }
+
+    @Override
+    public void update(Status status) {
+
+    }
 }

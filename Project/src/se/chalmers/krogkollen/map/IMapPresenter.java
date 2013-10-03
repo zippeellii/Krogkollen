@@ -1,9 +1,10 @@
 package se.chalmers.krogkollen.map;
 
-import java.util.List;
-
 import se.chalmers.krogkollen.IPresenter;
 import se.chalmers.krogkollen.pub.IPub;
+import se.chalmers.krogkollen.utils.IObserver;
+
+import java.util.List;
 
 /*
  * This file is part of Krogkollen.
@@ -29,14 +30,14 @@ import se.chalmers.krogkollen.pub.IPub;
  * @author Oskar Karrman
  *
  */
-public interface IMapPresenter extends IPresenter {
+public interface IMapPresenter extends IPresenter, IObserver {
 	
 	/**
 	 * Indicates that a pub has been selected on the map
 	 * 
-	 * @param pub the pub which was selected
+	 * @param pubId the pub which was selected
 	 */
-	public abstract void pubSelected(IPub pub);
+	public abstract void pubMarkerClicked(String pubId);
 	
 	/**
 	 * Start a search for an IPub object
@@ -50,4 +51,11 @@ public interface IMapPresenter extends IPresenter {
 	 * Refresh information for all IPub objects
 	 */
 	public abstract void refresh();
+
+
+
+
+     public void onPause();
+
+     public void onResume();
 }

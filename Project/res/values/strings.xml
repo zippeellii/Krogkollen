@@ -56,5 +56,7 @@ This file is part of Krogkollen.
     <string name="help_gray">Lorem ipsum dolor sit amet, consectetur adipiscing elit.</string>
     <string name="title_activity_detailed"><![CDATA[<NAMN PÅ KROG>]]></string>
     <string name="title_activity_help">Hjälp</string>
+    <string name="error_no_backend_access">Error cannot access server.</string>
+    <string name="error_no_backend_item">Cannot find item in server.</string>
 
 </resources>

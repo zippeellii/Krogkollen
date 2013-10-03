@@ -6,13 +6,19 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
+import android.view.LayoutInflater;
 import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.*;
 import se.chalmers.krogkollen.R;
+import se.chalmers.krogkollen.backend.NoBackendAccessException;
+import se.chalmers.krogkollen.backend.NotFoundInBackendException;
+import se.chalmers.krogkollen.help.HelpActivity;
 import se.chalmers.krogkollen.map.MapActivity;
 import se.chalmers.krogkollen.pub.IPub;
 import se.chalmers.krogkollen.pub.PubUtilities;
+import se.chalmers.krogkollen.utils.EQueueIndicator;
 
 /*
  * This file is part of Krogkollen.
@@ -39,7 +45,6 @@ import se.chalmers.krogkollen.pub.PubUtilities;
 public class DetailedActivity extends Activity implements IDetailedView {
 	
 	private IDetailedPresenter presenter;
-    private IPub pub;
     private TextView pubTextView, descriptionTextView,openingHoursTextView,
             ageRestrictionTextView, entranceFeeTextView;
     private ImageButton thumbsUpButton, thumbsDownButton;
@@ -49,20 +54,23 @@ public class DetailedActivity extends Activity implements IDetailedView {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_detailed);
-        String pubID = getIntent().getStringExtra(MapActivity.MARKER_PUB_ID);
-        pub = PubUtilities.getInstance().getPub(pubID);
-        updateText();
-
         presenter = new DetailedPresenter();
         presenter.setView(this);
+        presenter.setPub(getIntent().getStringExtra(MapActivity.MARKER_PUB_ID));
 
         addThumbsUpButtonListener();
         addThumbsDownButtonListener();
 
-        setThumbs(getSharedPreferences(pub.getID(), 0).getInt(pub.getID(), 0));
-
         ScrollView scroll = (ScrollView) findViewById(R.id.scrollView);
         scroll.setFadingEdgeLength(100);
+        pubTextView= (TextView) findViewById(R.id.pub_name);
+        descriptionTextView = (TextView) findViewById(R.id.description);
+        openingHoursTextView = (TextView) findViewById(R.id.opening_hours);
+        ageRestrictionTextView = (TextView) findViewById(R.id.age);
+        entranceFeeTextView = (TextView) findViewById(R.id.entrance_fee);
+        queueIndicator = (ImageView) findViewById(R.id.queueIndicator);
+
+        refresh();
     }
 
     @Override
@@ -93,20 +101,12 @@ public class DetailedActivity extends Activity implements IDetailedView {
      */
 
 	@Override
-	public void updateText() {
-        pubTextView= (TextView) findViewById(R.id.pub_name);
-        pubTextView.setText(pub.getName());
-        descriptionTextView = (TextView) findViewById(R.id.description);
-        descriptionTextView.setText(pub.getDescription());
-        openingHoursTextView = (TextView) findViewById(R.id.opening_hours);
-        openingHoursTextView.setText((convertOpeningHours(pub.getTodaysOpeningHour())+" - "+(convertOpeningHours(pub.getTodaysClosingHour()))));
-        ageRestrictionTextView = (TextView) findViewById(R.id.age);
-        ageRestrictionTextView.setText(""+pub.getAgeRestriction()+" år");
-        entranceFeeTextView = (TextView) findViewById(R.id.entrance_fee);
-        entranceFeeTextView.setText(""+pub.getEntranceFee()+":-");
-        queueIndicator = (ImageView) findViewById(R.id.queueIndicator);
-        setQueueIndicatorColor();
-		
+	public void updateText(String pubName, String description, String openingHours, String age, String price) {
+        pubTextView.setText(pubName);
+        descriptionTextView.setText(description);
+        openingHoursTextView.setText(openingHours);
+        ageRestrictionTextView.setText(age);
+        entranceFeeTextView.setText(price);
 	}
 
 	@Override
@@ -116,9 +116,21 @@ public class DetailedActivity extends Activity implements IDetailedView {
 	}
 
 	@Override
-	public void updateQueueIndicator() {
-		// TODO Auto-generated method stub
-		
+	public void updateQueueIndicator(EQueueIndicator queueTime) {
+        switch(queueTime) {
+            case GREEN:
+                queueIndicator.setBackgroundResource(R.drawable.detailed_queue_green);
+                break;
+            case YELLOW:
+                queueIndicator.setBackgroundResource(R.drawable.detailed_queue_yellow);
+                break;
+            case RED:
+                queueIndicator.setBackgroundResource(R.drawable.detailed_queue_red);
+                break;
+            default:
+                queueIndicator.setBackgroundResource(R.drawable.detailed_queue_gray);
+                break;
+        }
 	}
 
 	@Override
@@ -129,19 +141,24 @@ public class DetailedActivity extends Activity implements IDetailedView {
 
 	@Override
 	public void refresh() {
-		// TODO Auto-generated method stub
-		
+        presenter.getQueueTime();
+        presenter.getText();
+        presenter.getThumbs();
 	}
 
     public void addThumbsUpButtonListener(){
         thumbsUpButton = (ImageButton) findViewById(R.id.thumbsUpButton);
         thumbsUpButton.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View view) {
-                if (getSharedPreferences(pub.getID(), 0).getInt(pub.getID(), 0)==1){
-                    setThumbs(0);
-                }else{
-                    setThumbs(1);
+            public void onClick(View view){
+                try {
+
+                    presenter.ratingChanged(1);
+
+                } catch (NotFoundInBackendException e) {
+                    e.printStackTrace();
+                } catch (NoBackendAccessException e) {
+                    e.printStackTrace();
                 }
             }
         });
@@ -152,18 +169,21 @@ public class DetailedActivity extends Activity implements IDetailedView {
         thumbsDownButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                presenter.ratingChanged(pub, -1);
-                if (getSharedPreferences(pub.getID(), 0).getInt(pub.getID(), 0)==-1){
-                    setThumbs(0);
-                }else{
-                    setThumbs(-1);
+                try {
+
+                    presenter.ratingChanged(-1);
+
+                } catch (NotFoundInBackendException e) {
+                    e.printStackTrace();
+                } catch (NoBackendAccessException e) {
+                    e.printStackTrace();
                 }
+
             }
         });
     }
 
     public void setThumbs(int thumb){
-        saveThumbState(thumb);
         switch (thumb){
             case -1:
                 thumbsDownButton.setBackgroundResource(R.drawable.thumb_down_selected);
@@ -179,34 +199,5 @@ public class DetailedActivity extends Activity implements IDetailedView {
                 break;
         }
 
-    }
-    //TODO Uppdatera vyn med köikoner
-    public void setQueueIndicatorColor(){
-        switch(pub.getQueueTime()) {
-            case 1:
-                queueIndicator.setBackgroundResource(R.drawable.detailed_queue_green);
-                break;
-            case 2:
-                queueIndicator.setBackgroundResource(R.drawable.detailed_queue_yellow);
-                break;
-            case 3:
-                queueIndicator.setBackgroundResource(R.drawable.detailed_queue_red);
-                break;
-            default:
-                queueIndicator.setBackgroundResource(R.drawable.detailed_queue_gray);
-                break;
-        }
-    }
-    public void saveThumbState(int thumb){
-        SharedPreferences.Editor editor = getSharedPreferences(pub.getID(), 0).edit();
-        editor.putInt(pub.getID(), thumb);
-        editor.commit();
-    }
-
-    public String convertOpeningHours(int hour){
-        if(hour / 10 ==0){
-            return "0"+hour;
-        }
-        return ""+hour;
     }
 }

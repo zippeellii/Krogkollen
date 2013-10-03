@@ -1,7 +1,10 @@
 package se.chalmers.krogkollen.detailed;
 
 import se.chalmers.krogkollen.IPresenter;
+import se.chalmers.krogkollen.backend.NoBackendAccessException;
+import se.chalmers.krogkollen.backend.NotFoundInBackendException;
 import se.chalmers.krogkollen.pub.IPub;
+import se.chalmers.krogkollen.utils.EQueueIndicator;
 
 /**
  * Interface for a DetailedPresenter
@@ -13,9 +16,25 @@ public interface IDetailedPresenter extends IPresenter {
 
 	/**
 	 * Indicates that rating for a pub has changed
-	 * 
-	 * @param pub the pub which rating has changed
+	 *
 	 * @param rating the new rating of the pub
 	 */
-	public void ratingChanged(IPub pub, int rating);
+	public void ratingChanged(int rating) throws NotFoundInBackendException, NoBackendAccessException;
+
+    /**
+     * Sets pub that is related to the presenter
+     *
+     * @param pubID The pubs ID
+     */
+    public void setPub(String pubID);
+
+    /**
+     * Getter for queue time.
+     * @return queue time
+     */
+    public EQueueIndicator getQueueTime();
+
+    public void getText();
+
+    public void getThumbs();
 }

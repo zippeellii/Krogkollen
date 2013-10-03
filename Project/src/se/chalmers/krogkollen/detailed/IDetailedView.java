@@ -1,6 +1,7 @@
 package se.chalmers.krogkollen.detailed;
 
 import se.chalmers.krogkollen.IView;
+import se.chalmers.krogkollen.utils.EQueueIndicator;
 
 /**
  * Interface for a DetailedView
@@ -13,7 +14,7 @@ public interface IDetailedView extends IView {
 	/**
 	 * Updates all text fields on the detailed view
 	 */
-	public void updateText();
+	public void updateText(String pubName, String description, String openingHours, String age, String price);
 	
 	/**
 	 * Updates the rating on the detailed view
@@ -23,10 +24,11 @@ public interface IDetailedView extends IView {
 	/**
 	 * Updates the queue indicator on the detailed view
 	 */
-	public void updateQueueIndicator();
+	public void updateQueueIndicator(EQueueIndicator queueTime);
 	
 	/**
 	 * Called when a refresh button is clicked
 	 */
 	public void refresh();
+
 }

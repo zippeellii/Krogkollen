@@ -2,13 +2,13 @@ package se.chalmers.krogkollen.detailed;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.View;
-import android.widget.ImageButton;
-import android.widget.TextView;
-import android.widget.Toast;
+import android.widget.*;
 import se.chalmers.krogkollen.R;
 import se.chalmers.krogkollen.map.MapActivity;
 import se.chalmers.krogkollen.pub.IPub;
@@ -42,8 +42,8 @@ public class DetailedActivity extends Activity implements IDetailedView {
     private IPub pub;
     private TextView pubTextView, descriptionTextView,openingHoursTextView,
             ageRestrictionTextView, entranceFeeTextView;
-    private ImageButton thumbsUpButton;
-    private ImageButton thumbsDownButton;
+    private ImageButton thumbsUpButton, thumbsDownButton;
+    private ImageView queueIndicator;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -60,6 +60,9 @@ public class DetailedActivity extends Activity implements IDetailedView {
         addThumbsDownButtonListener();
 
         setThumbs(getSharedPreferences(pub.getID(), 0).getInt(pub.getID(), 0));
+
+        ScrollView scroll = (ScrollView) findViewById(R.id.scrollView);
+        scroll.setFadingEdgeLength(100);
     }
 
     @Override
@@ -74,8 +77,8 @@ public class DetailedActivity extends Activity implements IDetailedView {
 
 	@Override
 	public void navigate(Class<?> destination) {
-		// TODO I denna ska ni l�gga koden som skickar tillbaka anv�ndaren till MapActivity
-		
+        Intent navigateBack = new Intent(this, destination);
+        startActivity(navigateBack);
 	}
 
 	@Override
@@ -95,11 +98,13 @@ public class DetailedActivity extends Activity implements IDetailedView {
         descriptionTextView = (TextView) findViewById(R.id.description);
         descriptionTextView.setText(pub.getDescription());
         openingHoursTextView = (TextView) findViewById(R.id.opening_hours);
-        openingHoursTextView.setText((""+pub.getTodaysOpeningHour())+"-"+pub.getTodaysClosingHour());
+        openingHoursTextView.setText((convertOpeningHours(pub.getTodaysOpeningHour())+" - "+(convertOpeningHours(pub.getTodaysClosingHour()))));
         ageRestrictionTextView = (TextView) findViewById(R.id.age);
-        ageRestrictionTextView.setText(""+pub.getAgeRestriction());
+        ageRestrictionTextView.setText(""+pub.getAgeRestriction()+" år");
         entranceFeeTextView = (TextView) findViewById(R.id.entrance_fee);
-        entranceFeeTextView.setText(""+pub.getEntranceFee());
+        entranceFeeTextView.setText(""+pub.getEntranceFee()+":-");
+        queueIndicator = (ImageView) findViewById(R.id.queueIndicator);
+        setQueueIndicatorColor();
 		
 	}
 
@@ -175,11 +180,34 @@ public class DetailedActivity extends Activity implements IDetailedView {
 
     }
 
+    //TODO Uppdatera vyn med köikoner
+    public void setQueueIndicatorColor(){
+        switch(pub.getQueueTime()) {
+            case 1:
+                queueIndicator.setBackgroundResource(R.drawable.detailed_queue_green);
+                break;
+            case 2:
+                queueIndicator.setBackgroundResource(R.drawable.detailed_queue_yellow);
+                break;
+            case 3:
+                queueIndicator.setBackgroundResource(R.drawable.detailed_queue_red);
+                break;
+            default:
+                queueIndicator.setBackgroundResource(R.drawable.detailed_queue_gray);
+                break;
+        }
+    }
+
     public void saveThumbState(int thumb){
         SharedPreferences.Editor editor = getSharedPreferences(pub.getID(), 0).edit();
         editor.putInt(pub.getID(), thumb);
         editor.commit();
     }
 
-
+    public String convertOpeningHours(int hour){
+        if(hour / 10 ==0){
+            return "0"+hour;
+        }
+        return ""+hour;
+    }
 }

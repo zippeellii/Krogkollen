@@ -6,8 +6,7 @@ import android.content.Intent;
 import android.location.LocationManager;
 import android.os.Bundle;
 import android.view.Menu;
-import com.parse.Parse;
-import com.parse.ParseAnalytics;
+import se.chalmers.krogkollen.backend.Backend;
 import se.chalmers.krogkollen.map.MapActivity;
 import se.chalmers.krogkollen.map.UserLocation;
 import se.chalmers.krogkollen.pub.PubUtilities;
@@ -42,15 +41,13 @@ public class MainActivity extends Activity {
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
-		
-		// TODO move to another class
-		// Initializes the Parse.com connection
-		Parse.initialize(this, "WgLQnilANHpjM3xITq0nM0eW8dByIgDDmxJzf6se", "9ZK7yjE1NiD244ymDHb8ZpbbWNNv3RuQq7ceEvJc");
-		ParseAnalytics.trackAppOpened(getIntent());
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_main);
+
+		//Tells the backend to initialize its server connection
+		Backend.init(this, "WgLQnilANHpjM3xITq0nM0eW8dByIgDDmxJzf6se", "9ZK7yjE1NiD244ymDHb8ZpbbWNNv3RuQq7ceEvJc");
 	
         PubUtilities.getInstance().loadPubList();
-		super.onCreate(savedInstanceState);
-		setContentView(R.layout.activity_main);
 		
 		//initiate the user location and start the map activity.
 		UserLocation.init((LocationManager) this.getSystemService(Context.LOCATION_SERVICE));
@@ -64,6 +61,7 @@ public class MainActivity extends Activity {
 		// Inflate the menu; this adds items to the action bar if it is present.
 		getMenuInflater().inflate(R.menu.main, menu);
 		return true;
+		// TODO why does this always return true? why isn't it void?
 	}
 
 }

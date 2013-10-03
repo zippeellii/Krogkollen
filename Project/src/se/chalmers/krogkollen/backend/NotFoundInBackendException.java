@@ -9,6 +9,11 @@ package se.chalmers.krogkollen.backend;
 public class NotFoundInBackendException extends Exception {
 	
 	/**
+	 * Generated serial version UID
+	 */
+	private static final long serialVersionUID = 303498786882068841L;
+
+	/**
 	 * Create a new NotFoundInBackendException wthout additional information
 	 */
 	public NotFoundInBackendException() {}

@@ -12,7 +12,6 @@ import android.widget.*;
 import se.chalmers.krogkollen.R;
 import se.chalmers.krogkollen.map.MapActivity;
 import se.chalmers.krogkollen.pub.IPub;
-import se.chalmers.krogkollen.pub.Pub;
 import se.chalmers.krogkollen.pub.PubUtilities;
 
 /*
@@ -80,6 +79,7 @@ public class DetailedActivity extends Activity implements IDetailedView {
 	public void navigate(Class<?> destination) {
         Intent navigateBack = new Intent(this, destination);
         startActivity(navigateBack);
+
 	}
 
 	@Override

@@ -15,23 +15,6 @@ public interface IBackend {
 	 * @return a list of all pubs contained in the database
 	 */
 	public List<IPub> getAllPubs() throws NoBackendAccessException;
-
-	/**
-	 * Updates the queue time for a pub
-	 * @param pub the pub which should be updated
-	 * @param newQueueTime the new queue time for the pub
-	 * @throws NoBackendAccessException
-	 */
-	public void updateQueueTime(IPub pub, int newQueueTime) throws NoBackendAccessException, NotFoundInBackendException;
-	
-	/**
-	 * Updates the backend so all fields matches that of the specified IPub object
-	 * 
-	 * @param pub the IPub object
-	 * @throws NoBackendAccessException
-	 * @throws NotFoundInBackendException
-	 */
-	public void updateBackendPub(IPub pub) throws NoBackendAccessException, NotFoundInBackendException;
 	
 	/**
 	 * Returns the queue time for the specified IPub object
@@ -56,18 +39,20 @@ public interface IBackend {
 	/**
 	 * Adds a rating vote to the backend
 	 * 
-	 * @param rating the rating vote to be added
+	 * @param pub the pub for which the rating should be added
+	 * @param rating the rating
 	 * @throws NoBackendAccessException
 	 * @throws NotFoundInBackendException
 	 */
-	public void addRatingVote(int rating) throws NoBackendAccessException, NotFoundInBackendException;
+	public void addRatingVote(IPub pub, int rating) throws NoBackendAccessException, NotFoundInBackendException;
 	
 	/**
 	 * Removes a rating vote to the backend
 	 * 
+	 * @param pub the pub for which the rating should be removed
 	 * @param rating the rating vote to be removed
 	 * @throws NoBackendAccessException
 	 * @throws NotFoundInBackendException
 	 */
-	public void removeRatingVote(int rating) throws NoBackendAccessException, NotFoundInBackendException;
+	public void removeRatingVote(IPub pub, int rating) throws NoBackendAccessException, NotFoundInBackendException;
 }

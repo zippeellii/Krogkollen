@@ -6,9 +6,11 @@ import android.text.Html;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ProgressBar;
 import com.parse.ParseException;
 import com.parse.ParseObject;
 import com.parse.ParseQuery;
+import com.parse.ParseUser;
 
 import java.util.Timer;
 import java.util.TimerTask;
@@ -21,10 +23,11 @@ public class ButtonsActivity extends Activity {
     private Button greenButton;
     private Button yellowButton;
     private Button redButton;
-    private String pubId;
     private int queueTime;
     private Timer inputDisabledTimer;
     private final int DISABLE_TIME = 60000;
+    private ParseObject object;
+    private ProgressBar circle;
 
     /**
      * Called when the activity is first created.
@@ -33,8 +36,10 @@ public class ButtonsActivity extends Activity {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_buttons);
-        pubId = getIntent().getStringExtra(MainActivity.PUB_ID);
         getActionBar().setDisplayShowHomeEnabled(false);
+        circle = (ProgressBar) findViewById(R.id.marker_progress);
+        circle.setVisibility(View.INVISIBLE);
+        setupParseObject();
         addListenersOnButtons();
         setLocalQueueTime();
         activateButtons();
@@ -144,26 +149,26 @@ public class ButtonsActivity extends Activity {
         }
 
         if (!redButton.isEnabled()) {
-            setTitle("Input kan bara ges en gång i minuten.");
+            setTitle("Vänta en minut mellan klicken...");
+        }
+    }
+
+    private void setupParseObject() {
+        try {
+            ParseQuery<ParseObject> query = ParseQuery.getQuery("Pub");
+            query.whereEqualTo("owner", ParseUser.getCurrentUser());
+            object = query.getFirst();
+        } catch (ParseException pe) {
+            return;
         }
     }
 
     private void setLocalQueueTime() {
-        ParseObject object = new ParseObject("Pub");
-
-        try {
-            object = ParseQuery.getQuery("Pub").get(pubId);
-        } catch (ParseException pe) {
-            return;
-        }
         queueTime = object.getInt("queueTime");
     }
 
     private void setServerQueueTime(int newQueueTime) {
-        ParseObject object = new ParseObject("Pub");
-
         try {
-            object = ParseQuery.getQuery("Pub").get(pubId);
             object.put("queueTime", newQueueTime);
             object.save();
         } catch (ParseException pe) {
@@ -172,6 +177,7 @@ public class ButtonsActivity extends Activity {
     }
 
     private void buttonClicked(int newQueueTime) {
+        circle.setVisibility(View.VISIBLE);
         setServerQueueTime(newQueueTime);
         setLocalQueueTime();
         deactivateButtons();

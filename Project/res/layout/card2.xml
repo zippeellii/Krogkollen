@@ -62,13 +62,11 @@ This file is part of Krogkollen.
                 android:layout_width="1dp"
                 android:layout_height="match_parent"
                 android:background="#EDEDED" />
-        <TextView
-                android:id="@+id/yellow_color"
+        <ImageView
+                android:id="@+id/queueIndicator"
+                android:background="@drawable/detailed_queue_green"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:text="@string/yellow_color"
-                android:layout_weight="1"
-                android:gravity="center"
-                android:textColor="#777777"/>
+                android:layout_weight="1"/>
     </LinearLayout>
 </FrameLayout>

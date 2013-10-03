@@ -1,6 +1,9 @@
 package se.chalmers.krogkollen.map;
 
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.content.res.Resources;
+
 import com.google.android.gms.maps.model.LatLng;
 
 import se.chalmers.krogkollen.IView;
@@ -52,4 +55,10 @@ public interface IMapView extends IView {
     Resources getResources();
 
     void showAlertDialog(String msg);
+    
+    void moveCameraToPosition(LatLng pos, int zoom);
+    
+    void animateUserMarker(final LatLng toPosition);
+    
+    SharedPreferences getPreferences(int context);
  }

@@ -25,9 +25,9 @@ This file is part of Krogkollen.
     <string name="alert_dialog_title">Förbättra platsnoggrannheten</string>
     <string name="alert_dialog_activate">Aktivera</string>
     <string name="alert_dialog_cancel">Aktivera inte</string>
-    <string name="alert_dialog_net_and_gps_disabled">Förbättra din position genom att aktivera följande:\nGPS\nWi-Fi</string>
-    <string name="alert_dialog_net_disabled">Förbättra din position genom att aktivera följande:\nWi-Fi</string>
-    <string name="alert_dialog_gps_disabled">Förbättra din position genom att aktivera följande:\nGPS</string>
+    <string name="alert_dialog_base_message">Förbättra din position genom att aktivera följande:</string>
+    <string name="alert_dialog_net">\nWi-Fi</string>
+    <string name="alert_dialog_gps">\nGPS</string>
     <string name="alert_dialog_dont_show_again">Visa inte igen</string>
     <string name="dont_show_again_key">dont_show_again</string>
     <string name="title_activity_map">Krogkarta</string>

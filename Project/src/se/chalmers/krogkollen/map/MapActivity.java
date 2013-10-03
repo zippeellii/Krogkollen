@@ -70,11 +70,6 @@ public class MapActivity extends Activity implements IMapView, IObserver {
     private MapPresenter presenter;
     private Marker userMarker;
 
-    // Dialogue stuff
-    private SharedPreferences sharedPref;
-    private boolean dontShowAgain;
-    private boolean haveShownDialog = false;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -108,11 +103,6 @@ public class MapActivity extends Activity implements IMapView, IObserver {
             }
         });
 
-        this.sharedPref = getPreferences(Context.MODE_PRIVATE);
-        //Get the boolean that describes if dialogs should be shown again.
-        boolean defaultValue = getResources().getBoolean(R.bool.dont_show_again_default);
-        this.dontShowAgain = sharedPref.getBoolean(getString(R.string.dont_show_again_key), defaultValue);
-
         ActionBar actionBar = getActionBar();
         actionBar.setIcon(R.drawable.list_icon);
         actionBar.setDisplayHomeAsUpEnabled(true);
@@ -134,7 +124,7 @@ public class MapActivity extends Activity implements IMapView, IObserver {
      *
      * @param zoom how close to zoom in on the user.
      */
-    private void moveCameraToPosition(LatLng pos, int zoom) {
+    public void moveCameraToPosition(LatLng pos, int zoom) {
         MapWrapper.INSTANCE.getMap().animateCamera(CameraUpdateFactory.newCameraPosition(new CameraPosition(pos, zoom, 0, 0)));
     }
 
@@ -186,93 +176,7 @@ public class MapActivity extends Activity implements IMapView, IObserver {
     @Override
     public void update(Status status) {
 
-        //Create most of the dialog that will be shown if either wifi or gps are disabled.
-        Builder builder = new Builder(this);
-
-        //Check box, making it possible to chose not to show this dialog again.
-        final ArrayList<Integer> selected = new ArrayList<Integer>();
-
-        View checkBoxView = View.inflate(this, R.layout.checkbox, null);
-        CheckBox checkBox = (CheckBox)checkBoxView.findViewById(R.id.checkbox);
-        checkBox.setOnCheckedChangeListener(new OnCheckedChangeListener() {
-
-            @Override
-            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                if (isChecked) {
-                    selected.add(0);
-                } else if(selected.size() != 0){
-                    selected.clear();
-                }
-            }
-        });
-        checkBox.setText(this.getString(R.string.alert_dialog_dont_show_again));
-        builder.setView(checkBoxView);
-        builder.setTitle(R.string.alert_dialog_title);
-
-        //Set listeners to the buttons in the dialog and chose appropriate consequences for clicks.
-        builder.setPositiveButton(R.string.alert_dialog_activate, new DialogInterface.OnClickListener() {
-            public void onClick(DialogInterface dialog, int which) {
-                //Save the don't show again option.
-                SharedPreferences.Editor editor = sharedPref.edit();
-                editor.putBoolean(getString(R.string.dont_show_again_key), !selected.isEmpty());
-                editor.commit();
-
-                //Send user to location settings on the phone.
-                Intent intent = new Intent(android.provider.Settings.ACTION_LOCATION_SOURCE_SETTINGS);
-                startActivity(intent);
-            }
-        });
-        builder.setNegativeButton(R.string.alert_dialog_cancel, new DialogInterface.OnClickListener() {
-            public void onClick(DialogInterface dialog, int which) {
-                //Save the don't show again option.
-                SharedPreferences.Editor editor = sharedPref.edit();
-                editor.putBoolean(getString(R.string.dont_show_again_key), !selected.isEmpty());
-                editor.commit();
-            }
-        });
-
-        //Update accordingly to what has happened in user location.
-        switch(status) {
-            case FIRST_LOCATION:
-                //User location has received a first location so a user marker is added and
-                //map is centered on user.
-                addUserMarker(this.userLocation.getCurrentLatLng());
-                moveCameraToPosition(userLocation.getCurrentLatLng(), USER_ZOOM);
-                break;
-            case NORMAL_UPDATE:
-                //The location has been updated, move the marker accordingly.
-                this.animateMarker(this.userMarker, this.userLocation.getCurrentLatLng());
-                break;
-            case ALL_DISABLED:
-                //If we haven't shown a dialog and the user hasn't chosen don't show again,
-                //show a dialog and prompt the user to enable wifi and gps tracking.
-                if(!this.haveShownDialog && !this.dontShowAgain) {
-                    builder.setMessage(R.string.alert_dialog_net_and_gps_disabled);
-                    builder.show();
-                    this.haveShownDialog = true;
-                }
-                break;
-            case NET_DISABLED:
-                //If we haven't shown a dialog and the user hasn't chosen don't show again,
-                //show a dialog and prompt the user to enable wifi tracking.
-                if(!this.haveShownDialog && !this.dontShowAgain) {
-                    builder.setMessage(R.string.alert_dialog_net_disabled);
-                    builder.show();
-                    this.haveShownDialog = true;
-                }
-                break;
-            case GPS_DISABLED:
-                //If we haven't shown a dialog and the user hasn't chosen don't show again,
-                //show a dialog and prompt the user to enable gps tracking.
-                if(!this.haveShownDialog && !this.dontShowAgain) {
-                    builder.setMessage(R.string.alert_dialog_gps_disabled);
-                    builder.show();
-                    this.haveShownDialog = true;
-                }
-                break;
-            default:
-                break;
-        }
+        
     }
 
     /**
@@ -283,11 +187,11 @@ public class MapActivity extends Activity implements IMapView, IObserver {
      * @param marker	the marker that will be moved
      * @param toPosition	the position to where the marker will be moved
      */
-    private void animateMarker(final Marker marker, final LatLng toPosition) {
+    public void animateUserMarker(final LatLng toPosition) {
         final Handler handler = new Handler();
         final long start = SystemClock.uptimeMillis();
         Projection proj = MapWrapper.INSTANCE.getMap().getProjection();
-        Point startPoint = proj.toScreenLocation(marker.getPosition());
+        Point startPoint = proj.toScreenLocation(userMarker.getPosition());
         final LatLng startLatLng = proj.fromScreenLocation(startPoint);
         final long duration = 500;
 
@@ -300,7 +204,7 @@ public class MapActivity extends Activity implements IMapView, IObserver {
                 float t = interpolator.getInterpolation((float) elapsed / duration);
                 double lng = t * toPosition.longitude + (1 - t) * startLatLng.longitude;
                 double lat = t * toPosition.latitude + (1 - t) * startLatLng.latitude;
-                marker.setPosition(new LatLng(lat, lng));
+                userMarker.setPosition(new LatLng(lat, lng));
 
                 if (t < 1.0) {
                     // Post again 16ms later.
@@ -365,7 +269,47 @@ public class MapActivity extends Activity implements IMapView, IObserver {
 
     @Override
     public void showAlertDialog(String msg) {
-        // TODO add
+    	//Create most of the dialog that will be shown if either wifi or gps are disabled.
+        Builder builder = new Builder(this);
+
+        //Check box, making it possible to chose not to show this dialog again.
+        final ArrayList<Integer> selected = new ArrayList<Integer>();
+
+        View checkBoxView = View.inflate(this, R.layout.checkbox, null);
+        CheckBox checkBox = (CheckBox)checkBoxView.findViewById(R.id.checkbox);
+        checkBox.setOnCheckedChangeListener(new OnCheckedChangeListener() {
+
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                if (isChecked) {
+                    selected.add(0);
+                } else if(selected.size() != 0){
+                    selected.clear();
+                }
+            }
+        });
+        checkBox.setText(this.getString(R.string.alert_dialog_dont_show_again));
+        builder.setView(checkBoxView);
+        builder.setTitle(R.string.alert_dialog_title);
+        builder.setMessage(msg);
+
+        //Set listeners to the buttons in the dialog and chose appropriate consequences for clicks.
+        builder.setPositiveButton(R.string.alert_dialog_activate, new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int which) {
+                presenter.saveOption(!selected.isEmpty());
+
+                //Send user to location settings on the phone.
+                Intent intent = new Intent(android.provider.Settings.ACTION_LOCATION_SOURCE_SETTINGS);
+                startActivity(intent);
+            }
+        });
+        builder.setNegativeButton(R.string.alert_dialog_cancel, new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int which) {
+            	presenter.saveOption(!selected.isEmpty());
+            }
+        });
+        
+        builder.show();
     }
 
     @Override

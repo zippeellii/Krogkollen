@@ -15,23 +15,6 @@ public interface IBackend {
 	 * @return a list of all pubs contained in the database
 	 */
 	public List<IPub> getAllPubs() throws NoBackendAccessException;
-
-	/**
-	 * Updates the queue time for a pub
-	 * @param pub the pub which should be updated
-	 * @param newQueueTime the new queue time for the pub
-	 * @throws NoBackendAccessException
-	 */
-	public void updateQueueTime(IPub pub, int newQueueTime) throws NoBackendAccessException, NotFoundInBackendException;
-	
-	/**
-	 * Updates the backend so all fields matches that of the specified IPub object
-	 * 
-	 * @param pub the IPub object
-	 * @throws NoBackendAccessException
-	 * @throws NotFoundInBackendException
-	 */
-	public void updateBackendPub(IPub pub) throws NoBackendAccessException, NotFoundInBackendException;
 	
 	/**
 	 * Returns the queue time for the specified IPub object

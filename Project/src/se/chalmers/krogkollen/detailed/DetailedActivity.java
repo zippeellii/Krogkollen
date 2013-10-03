@@ -31,6 +31,7 @@ import se.chalmers.krogkollen.pub.PubUtilities;
  * You should have received a copy of the GNU General Public License
  * along with Krogkollen.  If not, see <http://www.gnu.org/licenses/>.
  *
+<<<<<<< Updated upstream
  */
 
 /**
@@ -179,7 +180,6 @@ public class DetailedActivity extends Activity implements IDetailedView {
         }
 
     }
-
     //TODO Uppdatera vyn med köikoner
     public void setQueueIndicatorColor(){
         switch(pub.getQueueTime()) {
@@ -197,7 +197,6 @@ public class DetailedActivity extends Activity implements IDetailedView {
                 break;
         }
     }
-
     public void saveThumbState(int thumb){
         SharedPreferences.Editor editor = getSharedPreferences(pub.getID(), 0).edit();
         editor.putInt(pub.getID(), thumb);

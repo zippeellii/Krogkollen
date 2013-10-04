@@ -5,7 +5,7 @@ package se.chalmers.krogkollen.pub;
  * 
  * @author Philip Carlen
  */
-class OpeningHours {
+public class OpeningHours {
 
     private int openingHour;
     private int closingHour;
@@ -37,6 +37,6 @@ class OpeningHours {
 
     @Override
     public String toString(){
-        return getOpeningHour()+" - "+getClosingHour();
+        return getOpeningHour() + ":00 - " + getClosingHour() + ":00";
     }
 }

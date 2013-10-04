@@ -90,9 +90,7 @@ public class Pub implements IPub{
 		this.ID = ID;
 	}
 	
-	/**
-	 * @return todays opening and closing hours
-	 */
+    @Override
 	public OpeningHours getTodaysOpeningHours() {
 		return new OpeningHours(this.todaysOpeningHour, this.todaysClosingHour);
 	}

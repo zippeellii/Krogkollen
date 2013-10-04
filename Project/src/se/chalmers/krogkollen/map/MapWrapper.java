@@ -58,15 +58,15 @@ public enum MapWrapper {
         googleMap = ((MapFragment) activity.getFragmentManager().findFragmentById(R.id.map)).getMap();
         this.resources = activity.getResources();
         this.context = activity;
-        this.addPubMarkers();
+        this.addPubMarkers(PubUtilities.getInstance().getPubList());
     }
 
     // Add markers for all pubs on the server to the map.
-    private void addPubMarkers() throws NoBackendAccessException, NotFoundInBackendException {
-        IPub[] pubArray = new IPub[PubUtilities.getInstance().getPubList().size()];
+    private void addPubMarkers(List<IPub> pubs) throws NoBackendAccessException, NotFoundInBackendException {
+        IPub[] pubArray = new IPub[pubs.size()];
 
-        for (int i = 0; i < PubUtilities.getInstance().getPubList().size(); i++) {
-            pubArray[i] = PubUtilities.getInstance().getPubList().get(i);
+        for (int i = 0; i < pubs.size(); i++) {
+            pubArray[i] = pubs.get(i);
         }
         
         new CreateMarkerTask().execute(pubArray);
@@ -75,12 +75,16 @@ public enum MapWrapper {
     /**
      * Removes all pub markers, loads and adds them again.
      */
-    public synchronized void refreshPubMarkers() throws NoBackendAccessException, NotFoundInBackendException {
-        for(Marker pubMarker: this.pubMarkers){
-            pubMarker.remove();
+    public synchronized void refreshPubMarkers(List<IPub> changedPubs) throws NoBackendAccessException, NotFoundInBackendException {
+        for (IPub pub : changedPubs) {
+            for (Marker marker : pubMarkers) {
+                if (pub.getID().equalsIgnoreCase(marker.getId())) {
+                    marker.remove();
+                    pubMarkers.remove(marker);
+                }
+            }
         }
-        this.pubMarkers.clear();
-        this.addPubMarkers();
+        this.addPubMarkers(changedPubs);
     }
 
     /**
@@ -134,9 +138,8 @@ public enum MapWrapper {
                 } catch (NotFoundInBackendException e) {
 
                 }
-                listMarkerOptions.add(MarkerOptionsFactory.createMarkerOptions(resources, drawable, pub.getName(), pub.getTodaysOpeningHour(),
+                listMarkerOptions.add(MarkerOptionsFactory.createMarkerOptions(resources, drawable, pub.getName(), pub.getTodaysOpeningHours().toString(),
                         new LatLng(pub.getLatitude(), pub.getLongitude()), pub.getID()));
-
             }
             return listMarkerOptions;
         }

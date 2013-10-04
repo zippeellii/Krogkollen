@@ -18,6 +18,7 @@ import se.chalmers.krogkollen.pub.IPub;
 import se.chalmers.krogkollen.pub.PubUtilities;
 import se.chalmers.krogkollen.settings.SettingsActivity;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -69,18 +70,6 @@ public class MapPresenter implements IMapPresenter {
     public List<IPub> search(String search) {
         // TODO Auto-generated method stub
         return null;
-    }
-
-    @Override
-    public void refresh() {
-        PubUtilities.getInstance().refreshPubList();
-        try {
-            MapWrapper.INSTANCE.refreshPubMarkers();
-        } catch (NoBackendAccessException e) {
-            mapView.showErrorMessage(mapView.getResources().getString(R.string.error_no_backend_access));
-        } catch (NotFoundInBackendException e) {
-            mapView.showErrorMessage(mapView.getResources().getString(R.string.error_no_backend_item));
-        }
     }
 
     @Override
@@ -183,7 +172,34 @@ public class MapPresenter implements IMapPresenter {
                 @Override
                 public void run() {
                     try {
-                        MapWrapper.INSTANCE.refreshPubMarkers();
+                        List<IPub> oldPubs = new ArrayList<IPub>();
+                        for (IPub pub : PubUtilities.getInstance().getPubList()) {
+                            oldPubs.add(pub);
+                        }
+                        PubUtilities.getInstance().refreshPubList();
+
+                        List<IPub> changedPubs = new ArrayList<IPub>();
+
+                        for (IPub oldPub : oldPubs) {
+                            boolean removed = true;
+                            for (IPub newPub : PubUtilities.getInstance().getPubList()) {
+                                if (oldPub.getID().equals(newPub.getID())) {
+                                    removed = false;
+                                    if (oldPub.getQueueTime() != newPub.getQueueTime() ||
+                                            oldPub.getLatitude() != newPub.getLatitude() ||
+                                            oldPub.getLongitude() != newPub.getLongitude() ||
+                                            !oldPub.getTodaysOpeningHours().toString().equals(newPub.getTodaysOpeningHours().toString()) ||
+                                            !oldPub.getName().equals(newPub.getName())) {
+                                        changedPubs.add(newPub);
+                                    }
+                                }
+                            }
+                            if (removed) {
+                                changedPubs.add(oldPub);
+                            }
+                        } // TODO: Improve algorithm
+
+                        MapWrapper.INSTANCE.refreshPubMarkers(changedPubs);
                     } catch (NoBackendAccessException e) {
                         mapView.showErrorMessage(resources.getString(R.string.error_no_backend_access));
                     } catch (NotFoundInBackendException e) {

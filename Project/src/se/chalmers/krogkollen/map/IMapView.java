@@ -48,7 +48,7 @@ public interface IMapView extends IView {
      * @param showCheckbox show a checkbox or not? :P
      */
     void showAlertDialog(final String msg, final boolean showCheckbox);
-
+    
     /**
      * Move the camera to the given position and zoom the given amount.
      *

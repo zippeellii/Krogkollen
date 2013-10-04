@@ -77,6 +77,8 @@
                     android:name="android.support.PARENT_ACTIVITY"
                     android:value="se.chalmers.krogkollen.map.MapActivity" />
         </activity>
+        <activity android:name=".settings.SettingsFragment"/>
+        <activity android:name=".settings.SettingsActivity"/>
     </application>
 
 </manifest>

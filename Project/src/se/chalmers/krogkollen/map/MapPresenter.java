@@ -12,6 +12,7 @@ import se.chalmers.krogkollen.detailed.DetailedActivity;
 import se.chalmers.krogkollen.help.HelpActivity;
 import se.chalmers.krogkollen.pub.IPub;
 import se.chalmers.krogkollen.pub.PubUtilities;
+import se.chalmers.krogkollen.settings.SettingsActivity;
 
 import java.util.List;
 
@@ -98,6 +99,9 @@ public class MapPresenter implements IMapPresenter {
                 break;
             case R.id.action_help:
                 mapView.navigate(HelpActivity.class);
+                break;
+            case R.id.action_settings:
+                mapView.navigate(SettingsActivity.class);
                 break;
             default:
                 break;

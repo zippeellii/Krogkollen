@@ -56,5 +56,11 @@ This file is part of Krogkollen.
     <string name="title_activity_help">Hjälp</string>
     <string name="error_no_backend_access">Error cannot access server.</string>
     <string name="error_no_backend_item">Cannot find item in server.</string>
+    <string name="pref_storage_title">Lagring</string>
+    <string name="pref_remove_favorites_desc">Ta bort sparade favoriter.</string>
+    <string name="pref_remove_favorites_title">Rensa favoriter</string>
+    <string name="pref_remove_cache_desc">Ta bort all cachadelagrad data.</string>
+    <string name="pref_remove_cache_title">Rensa cache</string>
+    <string name="settings_title">Inställningar</string>
 
 </resources>

@@ -83,9 +83,21 @@ public interface IPub {
     public int getPositiveRating();
     
     /**
+     * sets the number of positive ratings
+     * @param rating
+     */
+    public void setPositiveRating(int rating);
+  
+    /**
      * @return the negative rating of the pub
      */
     public int getNegativeRating();
+    
+    /**
+     * sets the number of negative ratings
+     * @param rating
+     */
+    public void setNegativeRating(int rating);
     
 	/**
 	 * @return the unique ID for the pub

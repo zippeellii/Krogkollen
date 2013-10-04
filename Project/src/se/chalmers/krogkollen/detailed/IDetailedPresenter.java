@@ -26,7 +26,7 @@ public interface IDetailedPresenter extends IPresenter {
      *
      * @param pubID The pubs ID
      */
-    public void setPub(String pubID);
+    public void setPub(String pubID) throws NotFoundInBackendException, NoBackendAccessException;
 
     /**
      * Getter for queue time.
@@ -42,6 +42,8 @@ public interface IDetailedPresenter extends IPresenter {
 
     public void getFavoriteStar();
 
-    public void saveFavoriteState(boolean isStarFilled);
+    public void saveFavoriteState();
+
+    public void updateInfo() throws NoBackendAccessException, NotFoundInBackendException;
 
 }

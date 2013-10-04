@@ -57,7 +57,15 @@ public class DetailedActivity extends Activity implements IDetailedView {
         setContentView(R.layout.activity_detailed);
         presenter = new DetailedPresenter();
         presenter.setView(this);
-        presenter.setPub(getIntent().getStringExtra(MapActivity.MARKER_PUB_ID));
+        try {
+			presenter.setPub(getIntent().getStringExtra(MapActivity.MARKER_PUB_ID));
+		} catch (NotFoundInBackendException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (NoBackendAccessException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 
         addThumbsUpButtonListener();
         addThumbsDownButtonListener();
@@ -76,10 +84,6 @@ public class DetailedActivity extends Activity implements IDetailedView {
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-
-
-        System.out.println("----------------------------------------------------------");
-        System.out.println("----------------------------------------------------------");
 
         System.out.println("FUCKEEEEER" + R.id.favorite_star);
         super.onCreateOptionsMenu(menu);
@@ -231,9 +235,18 @@ public class DetailedActivity extends Activity implements IDetailedView {
         switch(menuItem.getItemId()){
 
             case R.id.favorite_star:
+                presenter.saveFavoriteState();
                 presenter.getFavoriteStar();
 
             case R.id.refresh_info:
+                try {
+                    presenter.updateInfo();
+                } catch (NoBackendAccessException e) {
+                    e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
+                } catch (NotFoundInBackendException e) {
+                    e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
+                }
+                refresh();
 
             case R.id.action_settings:
         }
@@ -244,11 +257,9 @@ public class DetailedActivity extends Activity implements IDetailedView {
 
         if(isStarFilled){
             favoriteStar.setIcon(R.drawable.star_not_filled);
-            presenter.saveFavoriteState(false);
         }
         else{
             favoriteStar.setIcon(R.drawable.star_filled);
-            presenter.saveFavoriteState(true);
         }
 
     }

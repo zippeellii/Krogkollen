@@ -21,133 +21,153 @@ import se.chalmers.krogkollen.utils.EQueueIndicator;
  */
 public class DetailedPresenter implements IDetailedPresenter {
 
-    private DetailedActivity view;
-    private IPub pub;
+	private DetailedActivity view;
+	private IPub pub;
 
 	@Override
 	public void setView(IView view) {
 
-        this.view= (DetailedActivity)view;
+		this.view= (DetailedActivity)view;
 
 	}
 
-    public void setPub(String pubID){
-        pub = PubUtilities.getInstance().getPub(pubID);
-    }
+	public void setPub(String pubID) throws NoBackendAccessException, NotFoundInBackendException{
+		pub = PubUtilities.getInstance().getPub(pubID);
+		Backend.getInstance().updatePubLocally(pub);
+	}
 
 	@Override
 	public void ratingChanged(int rating) throws NotFoundInBackendException, NoBackendAccessException{
 
-        if(rating==1){
-            if (view.getSharedPreferences(pub.getID(), 0).getInt(pub.getID(), 0)==1){
-                view.setThumbs(0);
+		if(rating==1){
+			if (view.getSharedPreferences(pub.getID(), 0).getInt("thumb", 0)==1){
+				view.setThumbs(0);
 
-                Backend.getInstance().removeRatingVote(pub, 1);
+				Backend.getInstance().removeRatingVote(pub, 1);
+				pub.setPositiveRating(pub.getPositiveRating() - 1);
 
-                saveThumbState(0);
+				saveThumbState(0);
 
-            }else if(view.getSharedPreferences(pub.getID(), 0).getInt(pub.getID(),0)==-1){
-                view.setThumbs(1);
+			}else if(view.getSharedPreferences(pub.getID(), 0).getInt("thumb",0)==-1){
+				view.setThumbs(1);
 
-                Backend.getInstance().removeRatingVote(pub, -1);
+				Backend.getInstance().removeRatingVote(pub, -1);
+				pub.setNegativeRating(pub.getNegativeRating() - 1);
 
-                Backend.getInstance().addRatingVote(pub, 1);
+				Backend.getInstance().addRatingVote(pub, 1);
+				pub.setPositiveRating(pub.getPositiveRating() + 1);
 
-                saveThumbState(1);
-            }else{
-                view.setThumbs(1);
+				saveThumbState(1);
+			}else{
+				view.setThumbs(1);
 
-                Backend.getInstance().addRatingVote(pub, 1);
+				Backend.getInstance().addRatingVote(pub, 1);
+				pub.setPositiveRating(pub.getPositiveRating() + 1);
 
-                saveThumbState(1);
-            }
-        }
+				saveThumbState(1);
+			}
+		}
 
-        else if(rating==-1){
-            if (view.getSharedPreferences(pub.getID(), 0).getInt(pub.getID(), 0)==-1){
-                view.setThumbs(0);
+		else if(rating==-1){
+			if (view.getSharedPreferences(pub.getID(), 0).getInt("thumb", 0)==-1){
+				view.setThumbs(0);
 
-                Backend.getInstance().removeRatingVote(pub, -1);
+				Backend.getInstance().removeRatingVote(pub, -1);
+				pub.setNegativeRating(pub.getNegativeRating() - 1);
 
-                saveThumbState(0);
+				saveThumbState(0);
 
-            }else if(view.getSharedPreferences(pub.getID(), 0).getInt(pub.getID(), 0)==1){
-                view.setThumbs(-1);
+			}else if(view.getSharedPreferences(pub.getID(), 0).getInt("thumb", 0)==1){
+				view.setThumbs(-1);
 
-                Backend.getInstance().removeRatingVote(pub, 1);
-                Backend.getInstance().addRatingVote(pub, -1);
+				Backend.getInstance().removeRatingVote(pub, 1);
+				pub.setPositiveRating(pub.getPositiveRating() - 1);
+				Backend.getInstance().addRatingVote(pub, -1);
+				pub.setNegativeRating(pub.getNegativeRating() + 1);
 
-                saveThumbState(-1);
-            }
-            else{
-                view.setThumbs(-1);
+				saveThumbState(-1);
+			}
+			else{
+				view.setThumbs(-1);
 
-                Backend.getInstance().addRatingVote(pub, -1);
+				Backend.getInstance().addRatingVote(pub, -1);
+				pub.setNegativeRating(pub.getNegativeRating() + 1);
 
-                saveThumbState(-1);
-            }
-        }else{
-            view.setThumbs(rating);
+				saveThumbState(-1);
+			}
+		}else{
+			view.setThumbs(rating);
 
-            Backend.getInstance().addRatingVote(pub, rating);
+			Backend.getInstance().addRatingVote(pub, rating);
+			if(rating > 0){
+				pub.setPositiveRating(pub.getPositiveRating() + 1);
+			}
+			else{
+				pub.setNegativeRating(pub.getNegativeRating() + 1);
+			}
 
-            saveThumbState(rating);
-        }
+
+			saveThumbState(rating);
+		}
 
 
-    }
+	}
 
-    public void saveThumbState(int thumb){
+    public void saveFavoriteState(){
         SharedPreferences.Editor editor = view.getSharedPreferences(pub.getID(), 0).edit();
-        editor.putInt(pub.getID(), thumb);
+        editor.putBoolean("star", !(view.getSharedPreferences(pub.getID(), 0).getBoolean("star", true)));
         editor.commit();
     }
 
-    public void saveFavoriteState(boolean isStarFilled){
-        SharedPreferences.Editor editor = view.getSharedPreferences(pub.getID(), 0).edit();
-        editor.putBoolean(pub.getID(), isStarFilled);
-        editor.commit();
-    }
+	public void saveThumbState(int thumb){
+		SharedPreferences.Editor editor = view.getSharedPreferences(pub.getID(), 0).edit();
+		editor.putInt("thumb", thumb);
+		editor.commit();
+	}
 
-    public String convertOpeningHours(int hour){
-        if(hour / 10 ==0){
-            return "0"+hour;
-        }
-        return ""+hour;
-    }
+	public String convertOpeningHours(int hour){
+		if(hour / 10 ==0){
+			return "0"+hour;
+		}
+		return ""+hour;
+	}
 
-    public void getQueueTime(){
-        switch(pub.getQueueTime()) {
-            case 1:
-                view.updateQueueIndicator(EQueueIndicator.GREEN);
-                break;
-            case 2:
-                view.updateQueueIndicator(EQueueIndicator.YELLOW);
-                break;
-            case 3:
-                view.updateQueueIndicator(EQueueIndicator.RED);
-                break;
-            default:
-                view.updateQueueIndicator(EQueueIndicator.GREY);
-                break;
-        }
-    }
+	public void getQueueTime(){
+		switch(pub.getQueueTime()) {
+		case 1:
+			view.updateQueueIndicator(EQueueIndicator.GREEN);
+			break;
+		case 2:
+			view.updateQueueIndicator(EQueueIndicator.YELLOW);
+			break;
+		case 3:
+			view.updateQueueIndicator(EQueueIndicator.RED);
+			break;
+		default:
+			view.updateQueueIndicator(EQueueIndicator.GREY);
+			break;
+		}
+	}
 
-    public void getText(){
-        view.updateText(pub.getName(), pub.getDescription(), convertOpeningHours(pub.getTodaysOpeningHour()) + " - " +
-                (convertOpeningHours(pub.getTodaysClosingHour())), ""+pub.getAgeRestriction() + " År", ""+pub.getEntranceFee()
-                + " :-");
-    }
+	public void getText(){
+		view.updateText(pub.getName(), pub.getDescription(), convertOpeningHours(pub.getTodaysOpeningHour()) + " - " +
+				(convertOpeningHours(pub.getTodaysClosingHour())), ""+pub.getAgeRestriction() + " År", ""+pub.getEntranceFee()
+				+ " :-");
+	}
 
-    public void getThumbs(){
-        view.setThumbs(view.getSharedPreferences(pub.getID(), 0).getInt(pub.getID(), 0));
-    }
-
-    public void getVotes() throws NoBackendAccessException, NotFoundInBackendException{
-        view.updateVotes(""+Backend.getInstance().getPositiveRating(pub), ""+Backend.getInstance().getNegativeRating(pub));
-    }
+	public void getThumbs(){
+		view.setThumbs(view.getSharedPreferences(pub.getID(), 0).getInt("thumb", 0));
+	}
 
     public void getFavoriteStar(){
-        view.updateStar(view.getSharedPreferences(pub.getID(), 0).getBoolean(pub.getID(), true));
+        view.updateStar(view.getSharedPreferences(pub.getID(), 0).getBoolean("star", true));
+    }
+
+	public void getVotes() throws NoBackendAccessException, NotFoundInBackendException{
+		view.updateVotes(""+ pub.getPositiveRating(), ""+ pub.getNegativeRating());
+	}
+
+    public void updateInfo() throws NoBackendAccessException, NotFoundInBackendException{
+        Backend.getInstance().updatePubLocally(pub);
     }
 }

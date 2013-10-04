@@ -9,6 +9,9 @@ import se.chalmers.krogkollen.IView;
  *         Created 2013-09-22
  */
 public interface IListView extends IView{
-
-	void showErrorMessage(String message);
+	
+	/**
+	 * Called when the refresh button is clicked
+	 */
+	public void refreshButtonClicked();
 }

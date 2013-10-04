@@ -32,4 +32,10 @@ public class ListActivity extends Activity implements IListView {
 		// TODO Auto-generated method stub
 		
 	}
+
+	@Override
+	public void refreshButtonClicked() {
+		// TODO Auto-generated method stub
+		
+	}
 }

@@ -1,9 +1,11 @@
 package se.chalmers.krogkollen.map;
 
-import java.util.List;
-
+import android.view.MenuItem;
 import se.chalmers.krogkollen.IPresenter;
 import se.chalmers.krogkollen.pub.IPub;
+import se.chalmers.krogkollen.utils.IObserver;
+
+import java.util.List;
 
 /*
  * This file is part of Krogkollen.
@@ -22,32 +24,49 @@ import se.chalmers.krogkollen.pub.IPub;
  * along with Krogkollen.  If not, see <http://www.gnu.org/licenses/>.
  */
 
- /**
+/**
  *
  * Interface for a MapPresenter
- * 
+ *
  * @author Oskar Karrman
  *
  */
-public interface IMapPresenter extends IPresenter {
-	
-	/**
-	 * Indicates that a pub has been selected on the map
-	 * 
-	 * @param pub the pub which was selected
-	 */
-	public abstract void pubSelected(IPub pub);
-	
-	/**
-	 * Start a search for an IPub object
-	 * 
-	 * @param search the string that the user searched for
-	 * @return a list containing zero or more IPub objects that matched the search
-	 */
-	public abstract List<IPub> search(String search);
-	
-	/**
-	 * Refresh information for all IPub objects
-	 */
-	public abstract void refresh();
+public interface IMapPresenter extends IPresenter, IObserver {
+
+    /**
+     * Indicates that a pub has been selected on the map
+     *
+     * @param pubId the pub which was selected
+     */
+    public abstract void pubMarkerClicked(String pubId);
+
+    /**
+     * Start a search for an IPub object
+     *
+     * @param search the string that the user searched for
+     * @return a list containing zero or more IPub objects that matched the search
+     */
+    public abstract List<IPub> search(String search);
+
+    /**
+     * Refresh information for all IPub objects
+     */
+    public abstract void refresh();
+
+    /**
+     * Determine what will happen when an action bar item is clicked.
+     *
+     * @param item the menuitem that was clicked.
+     */
+    public void onActionBarClicked(MenuItem item);
+
+    /**
+     * When the corresponding activity is paused this method gets called.
+     */
+    public void onPause();
+
+    /**
+     * When the corresponding activity is resumed this method gets called.
+     */
+    public void onResume();
 }

@@ -18,17 +18,7 @@
                 android:layout_marginTop="125dp"
                 android:src="@drawable/krogkollen_admin_logo" />
 
-        <Spinner
-                android:id="@+id/pub_spinner"
-                android:layout_width="fill_parent"
-                android:layout_centerHorizontal="true"
-                android:layout_below="@id/admin_logo"
-                android:layout_marginTop="75dp"
-                android:layout_marginLeft="40dp"
-                android:layout_marginRight="40dp"
-                android:layout_height="wrap_content" />
-
-    <EditText
+    <AutoCompleteTextView
             android:focusable="true"
             android:focusableInTouchMode="true"
             android:id="@+id/txtPubName"
@@ -48,9 +38,8 @@
             android:layout_marginTop="75dp"
             android:layout_marginLeft="40dp"
             android:layout_marginRight="40dp" >
-
         <requestFocus />
-    </EditText>
+    </AutoCompleteTextView>
 
         <EditText
                 android:id="@+id/txtPassword"

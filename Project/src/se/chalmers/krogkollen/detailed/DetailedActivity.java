@@ -49,6 +49,7 @@ public class DetailedActivity extends Activity implements IDetailedView {
             ageRestrictionTextView, entranceFeeTextView, votesUpTextView, votesDownTextView;
     private ImageButton thumbsUpButton, thumbsDownButton;
     private ImageView queueIndicator;
+    private MenuItem favoriteStar;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -71,18 +72,25 @@ public class DetailedActivity extends Activity implements IDetailedView {
         queueIndicator = (ImageView) findViewById(R.id.queueIndicator);
         votesUpTextView = (TextView) findViewById(R.id.thumbsUpTextView);
         votesDownTextView = (TextView) findViewById(R.id.thumbsDownTextView);
-
-        refresh();
     }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
+
+
+        System.out.println("----------------------------------------------------------");
+        System.out.println("----------------------------------------------------------");
+
+        System.out.println("FUCKEEEEER" + R.id.favorite_star);
         super.onCreateOptionsMenu(menu);
 
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.detailed, menu);
+        favoriteStar = menu.findItem(R.id.favorite_star);
 
+        refresh();
         return true;
+
     }
 
 	@Override
@@ -146,6 +154,7 @@ public class DetailedActivity extends Activity implements IDetailedView {
         presenter.getQueueTime();
         presenter.getText();
         presenter.getThumbs();
+        presenter.getFavoriteStar();
         try {
             presenter.getVotes();
         } catch (NoBackendAccessException e) {
@@ -215,5 +224,32 @@ public class DetailedActivity extends Activity implements IDetailedView {
     public void updateVotes(String upVotes, String downVotes){
         votesUpTextView.setText(upVotes);
         votesDownTextView.setText(downVotes);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem menuItem){
+        switch(menuItem.getItemId()){
+
+            case R.id.favorite_star:
+                presenter.getFavoriteStar();
+
+            case R.id.refresh_info:
+
+            case R.id.action_settings:
+        }
+        return true;
+    }
+
+    public void updateStar(boolean isStarFilled){
+
+        if(isStarFilled){
+            favoriteStar.setIcon(R.drawable.star_not_filled);
+            presenter.saveFavoriteState(false);
+        }
+        else{
+            favoriteStar.setIcon(R.drawable.star_filled);
+            presenter.saveFavoriteState(true);
+        }
+
     }
 }

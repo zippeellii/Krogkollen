@@ -103,6 +103,12 @@ public class DetailedPresenter implements IDetailedPresenter {
         editor.commit();
     }
 
+    public void saveFavoriteState(boolean isStarFilled){
+        SharedPreferences.Editor editor = view.getSharedPreferences(pub.getID(), 0).edit();
+        editor.putBoolean(pub.getID(), isStarFilled);
+        editor.commit();
+    }
+
     public String convertOpeningHours(int hour){
         if(hour / 10 ==0){
             return "0"+hour;
@@ -139,5 +145,9 @@ public class DetailedPresenter implements IDetailedPresenter {
 
     public void getVotes() throws NoBackendAccessException, NotFoundInBackendException{
         view.updateVotes(""+Backend.getInstance().getPositiveRating(pub), ""+Backend.getInstance().getNegativeRating(pub));
+    }
+
+    public void getFavoriteStar(){
+        view.updateStar(view.getSharedPreferences(pub.getID(), 0).getBoolean(pub.getID(), true));
     }
 }

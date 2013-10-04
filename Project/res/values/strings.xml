@@ -58,5 +58,6 @@ This file is part of Krogkollen.
     <string name="help_gray">Lorem ipsum dolor sit amet, consectetur adipiscing elit.</string>
     <string name="title_activity_detailed"><![CDATA[<NAMN PÅ KROG>]]></string>
     <string name="title_activity_help">Hjälp</string>
+    <string name="favorite_star_string">favorisera</string>
 
 </resources>

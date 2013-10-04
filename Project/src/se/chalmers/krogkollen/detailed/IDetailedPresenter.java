@@ -39,4 +39,9 @@ public interface IDetailedPresenter extends IPresenter {
     public void getThumbs();
 
     public void getVotes() throws NoBackendAccessException, NotFoundInBackendException;
+
+    public void getFavoriteStar();
+
+    public void saveFavoriteState(boolean isStarFilled);
+
 }

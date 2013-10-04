@@ -1,7 +1,6 @@
 package se.chalmers.krogkollen.detailed;
 
 import se.chalmers.krogkollen.IView;
-import se.chalmers.krogkollen.utils.EQueueIndicator;
 
 /**
  * Interface for a DetailedView
@@ -24,13 +23,20 @@ public interface IDetailedView extends IView {
 	/**
 	 * Updates the queue indicator on the detailed view
 	 */
-	public void updateQueueIndicator(EQueueIndicator queueTime);
+	public void updateQueueIndicator(int queueTime);
 	
 	/**
 	 * Called when a refresh button is clicked
 	 */
 	public void refresh();
 
+    /**
+     *
+     * Updates the vote text.
+     *
+     * @param upVotes
+     * @param downVotes
+     */
     public void updateVotes(String upVotes, String downVotes);
 
 }

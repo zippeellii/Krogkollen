@@ -3,8 +3,6 @@ package se.chalmers.krogkollen.detailed;
 import se.chalmers.krogkollen.IPresenter;
 import se.chalmers.krogkollen.backend.NoBackendAccessException;
 import se.chalmers.krogkollen.backend.NotFoundInBackendException;
-import se.chalmers.krogkollen.pub.IPub;
-import se.chalmers.krogkollen.utils.EQueueIndicator;
 
 /**
  * Interface for a DetailedPresenter

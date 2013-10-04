@@ -1,12 +1,8 @@
 package se.chalmers.krogkollen.detailed;
 
 import android.app.Activity;
-import android.content.Context;
 import android.content.Intent;
-import android.content.SharedPreferences;
-import android.graphics.drawable.Drawable;
 import android.os.Bundle;
-import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -14,11 +10,7 @@ import android.widget.*;
 import se.chalmers.krogkollen.R;
 import se.chalmers.krogkollen.backend.NoBackendAccessException;
 import se.chalmers.krogkollen.backend.NotFoundInBackendException;
-import se.chalmers.krogkollen.help.HelpActivity;
 import se.chalmers.krogkollen.map.MapActivity;
-import se.chalmers.krogkollen.pub.IPub;
-import se.chalmers.krogkollen.pub.PubUtilities;
-import se.chalmers.krogkollen.utils.EQueueIndicator;
 
 /*
  * This file is part of Krogkollen.
@@ -33,6 +25,7 @@ import se.chalmers.krogkollen.utils.EQueueIndicator;
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
  *
+ *
  * You should have received a copy of the GNU General Public License
  * along with Krogkollen.  If not, see <http://www.gnu.org/licenses/>.
  *
@@ -40,11 +33,16 @@ import se.chalmers.krogkollen.utils.EQueueIndicator;
  */
 
 /**
- * An activity for the detailed view.
+ * This class represent the activity for the detailed view
  */
+
 public class DetailedActivity extends Activity implements IDetailedView {
-	
+
+
+    /** The presenter connected to the detailed view */
 	private IDetailedPresenter presenter;
+
+    /** A bunch of view elements*/
     private TextView pubTextView, descriptionTextView,openingHoursTextView,
             ageRestrictionTextView, entranceFeeTextView, votesUpTextView, votesDownTextView;
     private ImageButton thumbsUpButton, thumbsDownButton;
@@ -130,15 +128,15 @@ public class DetailedActivity extends Activity implements IDetailedView {
 	}
 
 	@Override
-	public void updateQueueIndicator(EQueueIndicator queueTime) {
+	public void updateQueueIndicator(int queueTime) {
         switch(queueTime) {
-            case GREEN:
+            case 1:
                 queueIndicator.setBackgroundResource(R.drawable.detailed_queue_green);
                 break;
-            case YELLOW:
+            case 2:
                 queueIndicator.setBackgroundResource(R.drawable.detailed_queue_yellow);
                 break;
-            case RED:
+            case 3:
                 queueIndicator.setBackgroundResource(R.drawable.detailed_queue_red);
                 break;
             default:
@@ -159,12 +157,13 @@ public class DetailedActivity extends Activity implements IDetailedView {
         presenter.getText();
         presenter.getThumbs();
         presenter.getFavoriteStar();
+
         try {
             presenter.getVotes();
         } catch (NoBackendAccessException e) {
-            e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
+            this.showErrorMessage(e.getMessage());
         } catch (NotFoundInBackendException e) {
-            e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
+            this.showErrorMessage(e.getMessage());
         }
     }
 
@@ -242,9 +241,9 @@ public class DetailedActivity extends Activity implements IDetailedView {
                 try {
                     presenter.updateInfo();
                 } catch (NoBackendAccessException e) {
-                    e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
+                    this.showErrorMessage(e.getMessage());
                 } catch (NotFoundInBackendException e) {
-                    e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
+                    this.showErrorMessage(e.getMessage());
                 }
                 refresh();
 

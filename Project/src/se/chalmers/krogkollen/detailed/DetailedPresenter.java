@@ -1,17 +1,12 @@
 package se.chalmers.krogkollen.detailed;
 
-import android.content.Context;
 import android.content.SharedPreferences;
 import se.chalmers.krogkollen.IView;
-import se.chalmers.krogkollen.R;
 import se.chalmers.krogkollen.backend.Backend;
-import se.chalmers.krogkollen.backend.IBackend;
 import se.chalmers.krogkollen.backend.NoBackendAccessException;
 import se.chalmers.krogkollen.backend.NotFoundInBackendException;
-import se.chalmers.krogkollen.map.MapActivity;
 import se.chalmers.krogkollen.pub.IPub;
 import se.chalmers.krogkollen.pub.PubUtilities;
-import se.chalmers.krogkollen.utils.EQueueIndicator;
 
 /**
  * A presenter class for the detailed view of a pub
@@ -133,20 +128,7 @@ public class DetailedPresenter implements IDetailedPresenter {
 	}
 
 	public void getQueueTime(){
-		switch(pub.getQueueTime()) {
-		case 1:
-			view.updateQueueIndicator(EQueueIndicator.GREEN);
-			break;
-		case 2:
-			view.updateQueueIndicator(EQueueIndicator.YELLOW);
-			break;
-		case 3:
-			view.updateQueueIndicator(EQueueIndicator.RED);
-			break;
-		default:
-			view.updateQueueIndicator(EQueueIndicator.GREY);
-			break;
-		}
+		view.updateQueueIndicator(pub.getQueueTime());
 	}
 
 	public void getText(){

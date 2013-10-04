@@ -46,7 +46,7 @@ public class DetailedActivity extends Activity implements IDetailedView {
 	
 	private IDetailedPresenter presenter;
     private TextView pubTextView, descriptionTextView,openingHoursTextView,
-            ageRestrictionTextView, entranceFeeTextView;
+            ageRestrictionTextView, entranceFeeTextView, votesUpTextView, votesDownTextView;
     private ImageButton thumbsUpButton, thumbsDownButton;
     private ImageView queueIndicator;
 
@@ -69,6 +69,8 @@ public class DetailedActivity extends Activity implements IDetailedView {
         ageRestrictionTextView = (TextView) findViewById(R.id.age);
         entranceFeeTextView = (TextView) findViewById(R.id.entrance_fee);
         queueIndicator = (ImageView) findViewById(R.id.queueIndicator);
+        votesUpTextView = (TextView) findViewById(R.id.thumbsUpTextView);
+        votesDownTextView = (TextView) findViewById(R.id.thumbsDownTextView);
 
         refresh();
     }
@@ -144,7 +146,14 @@ public class DetailedActivity extends Activity implements IDetailedView {
         presenter.getQueueTime();
         presenter.getText();
         presenter.getThumbs();
-	}
+        try {
+            presenter.getVotes();
+        } catch (NoBackendAccessException e) {
+            e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
+        } catch (NotFoundInBackendException e) {
+            e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
+        }
+    }
 
     public void addThumbsUpButtonListener(){
         thumbsUpButton = (ImageButton) findViewById(R.id.thumbsUpButton);
@@ -154,6 +163,7 @@ public class DetailedActivity extends Activity implements IDetailedView {
                 try {
 
                     presenter.ratingChanged(1);
+                    presenter.getVotes();
 
                 } catch (NotFoundInBackendException e) {
                     e.printStackTrace();
@@ -172,6 +182,7 @@ public class DetailedActivity extends Activity implements IDetailedView {
                 try {
 
                     presenter.ratingChanged(-1);
+                    presenter.getVotes();
 
                 } catch (NotFoundInBackendException e) {
                     e.printStackTrace();
@@ -199,5 +210,10 @@ public class DetailedActivity extends Activity implements IDetailedView {
                 break;
         }
 
+    }
+
+    public void updateVotes(String upVotes, String downVotes){
+        votesUpTextView.setText(upVotes);
+        votesDownTextView.setText(downVotes);
     }
 }

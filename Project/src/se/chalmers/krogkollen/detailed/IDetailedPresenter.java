@@ -32,9 +32,11 @@ public interface IDetailedPresenter extends IPresenter {
      * Getter for queue time.
      * @return queue time
      */
-    public EQueueIndicator getQueueTime();
+    public void getQueueTime();
 
     public void getText();
 
     public void getThumbs();
+
+    public void getVotes() throws NoBackendAccessException, NotFoundInBackendException;
 }

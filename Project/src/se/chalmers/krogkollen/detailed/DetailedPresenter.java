@@ -46,13 +46,20 @@ public class DetailedPresenter implements IDetailedPresenter {
 
                 saveThumbState(0);
 
+            }else if(view.getSharedPreferences(pub.getID(), 0).getInt(pub.getID(),0)==-1){
+                view.setThumbs(1);
+
+                Backend.getInstance().removeRatingVote(pub, -1);
+
+                Backend.getInstance().addRatingVote(pub, 1);
+
+                saveThumbState(1);
             }else{
                 view.setThumbs(1);
 
                 Backend.getInstance().addRatingVote(pub, 1);
 
                 saveThumbState(1);
-
             }
         }
 
@@ -64,7 +71,15 @@ public class DetailedPresenter implements IDetailedPresenter {
 
                 saveThumbState(0);
 
-            }else{
+            }else if(view.getSharedPreferences(pub.getID(), 0).getInt(pub.getID(), 0)==1){
+                view.setThumbs(-1);
+
+                Backend.getInstance().removeRatingVote(pub, 1);
+                Backend.getInstance().addRatingVote(pub, -1);
+
+                saveThumbState(-1);
+            }
+            else{
                 view.setThumbs(-1);
 
                 Backend.getInstance().addRatingVote(pub, -1);
@@ -95,16 +110,20 @@ public class DetailedPresenter implements IDetailedPresenter {
         return ""+hour;
     }
 
-    public EQueueIndicator getQueueTime(){
+    public void getQueueTime(){
         switch(pub.getQueueTime()) {
             case 1:
-                return EQueueIndicator.GREEN;
+                view.updateQueueIndicator(EQueueIndicator.GREEN);
+                break;
             case 2:
-                return EQueueIndicator.YELLOW;
+                view.updateQueueIndicator(EQueueIndicator.YELLOW);
+                break;
             case 3:
-                return EQueueIndicator.RED;
+                view.updateQueueIndicator(EQueueIndicator.RED);
+                break;
             default:
-                return EQueueIndicator.GREY;
+                view.updateQueueIndicator(EQueueIndicator.GREY);
+                break;
         }
     }
 
@@ -118,4 +137,7 @@ public class DetailedPresenter implements IDetailedPresenter {
         view.setThumbs(view.getSharedPreferences(pub.getID(), 0).getInt(pub.getID(), 0));
     }
 
+    public void getVotes() throws NoBackendAccessException, NotFoundInBackendException{
+        view.updateVotes(""+Backend.getInstance().getPositiveRating(pub), ""+Backend.getInstance().getNegativeRating(pub));
+    }
 }

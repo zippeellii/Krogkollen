@@ -31,4 +31,6 @@ public interface IDetailedView extends IView {
 	 */
 	public void refresh();
 
+    public void updateVotes(String upVotes, String downVotes);
+
 }

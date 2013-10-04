@@ -6,6 +6,34 @@ Legend:
 * changes
 --------------------
 
+0.3.0 - Backend, refactoring, small features and fixes, threading
+
+	MAIN APP
++ Created interfaces and exceptions for backend connection
++ Implemented all needed backend functionality
++ Added and implemented buttons for thumbs up and thumbs down on detailed view
++ Added separators, queue images and scroll to the detailed view
++ Added functionality for refresh button
++ Added a dialog to notify user that position-determing functions is turned off
++ Added functionality to favorite a pub in the detailed view
++ Added a help view
++ Added a basic settings view
++ Created interfaces for the list view
+* Startup loading is now done in a different thread to improve responsitivity
+* Fixed a bug which made the app crash upon subsequent startups
+* Fixed a bug where description disappeared in detailed view when in landscape
+* Refactored Activity classes to fit the MVP design
+* Refactored classes to fit the new backend interfaces
+* Changed layout for detailed view to be relative against screen size
+* Moved test files to proper directory
+
+	ADMIN APP
++ Added proper login
++ Added functionality to change queue time
++ Refactored
+
+--------------------
+
 0.2.0 - Admin app, detailed view, backend
 + Created an admin app
 + Added queue indicators on the map markers
@@ -15,6 +43,8 @@ Legend:
 + Added tests
 * Refactored the Pub class and everything dependant on it
 * Fixed where the back button directs the user
+
+--------------------
 
 0.1.0 - Maps
 + Created basic interfaces

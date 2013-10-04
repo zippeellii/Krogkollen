@@ -105,7 +105,6 @@ public class DetailedActivity extends Activity implements IDetailedView {
 	@Override
 	public void showErrorMessage(String message) {
 		// TODO Auto-generated method stub
-		
 	}
 
     /**
@@ -119,12 +118,6 @@ public class DetailedActivity extends Activity implements IDetailedView {
         openingHoursTextView.setText(openingHours);
         ageRestrictionTextView.setText(age);
         entranceFeeTextView.setText(price);
-	}
-
-	@Override
-	public void updateRating() {
-		// TODO Auto-generated method stub
-		
 	}
 
 	@Override
@@ -167,6 +160,9 @@ public class DetailedActivity extends Activity implements IDetailedView {
         }
     }
 
+    /**
+     * Adds listener to thumb up button.
+     */
     public void addThumbsUpButtonListener(){
         thumbsUpButton = (ImageButton) findViewById(R.id.thumbsUpButton);
         thumbsUpButton.setOnClickListener(new View.OnClickListener() {
@@ -186,6 +182,9 @@ public class DetailedActivity extends Activity implements IDetailedView {
         });
     }
 
+    /**
+     * Adds listener to thumb down button.
+     */
     public void addThumbsDownButtonListener(){
         thumbsDownButton = (ImageButton) findViewById(R.id.thumbsDownButton);
         thumbsDownButton.setOnClickListener(new View.OnClickListener() {
@@ -206,6 +205,11 @@ public class DetailedActivity extends Activity implements IDetailedView {
         });
     }
 
+    /**
+     * Updates the thumb button pictures.
+     *
+     * @param thumb Represents thumb up, thumb down or neither with 1, -1 or 0.
+     */
     public void setThumbs(int thumb){
         switch (thumb){
             case -1:
@@ -224,6 +228,12 @@ public class DetailedActivity extends Activity implements IDetailedView {
 
     }
 
+    /**
+     * Updates the text showing number of votes.
+     *
+     * @param upVotes Number of up votes.
+     * @param downVotes Number of down votes.
+     */
     public void updateVotes(String upVotes, String downVotes){
         votesUpTextView.setText(upVotes);
         votesDownTextView.setText(downVotes);
@@ -252,6 +262,10 @@ public class DetailedActivity extends Activity implements IDetailedView {
         return true;
     }
 
+    /**
+     * Updates the star.
+     * @param isStarFilled Represents if the star is filled or not.
+     */
     public void updateStar(boolean isStarFilled){
 
         if(isStarFilled){

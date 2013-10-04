@@ -1,14 +1,15 @@
 package se.chalmers.krogkollen.map;
 
-import android.content.Context;
 import android.content.SharedPreferences;
 import android.content.res.Resources;
 import android.os.Bundle;
+import android.view.MenuItem;
 import se.chalmers.krogkollen.IView;
 import se.chalmers.krogkollen.R;
 import se.chalmers.krogkollen.backend.NoBackendAccessException;
 import se.chalmers.krogkollen.backend.NotFoundInBackendException;
 import se.chalmers.krogkollen.detailed.DetailedActivity;
+import se.chalmers.krogkollen.help.HelpActivity;
 import se.chalmers.krogkollen.pub.IPub;
 import se.chalmers.krogkollen.pub.PubUtilities;
 
@@ -22,6 +23,9 @@ import java.util.List;
  */
 public class MapPresenter implements IMapPresenter {
 
+    /**
+     * Key value used when sending intents from this class.
+     */
     static final String MAP_PRESENTER_KEY = "se.chalmers.krogkollen.MAP_PRESENTER_KEY";
 
     private IMapView mapView;
@@ -32,19 +36,16 @@ public class MapPresenter implements IMapPresenter {
     private boolean haveShownDialog = false;
     private boolean dontShowDialogAgain;
 
-    public MapPresenter() {
-        this.userLocation = UserLocation.getInstance();
-        this.userLocation.addObserver(this);
-        this.userLocation.startTrackingUser();
-    }
-
 	@Override
 	public void setView(IView view) {
 		mapView = (IMapView) view;
 		this.resources = this.mapView.getResources();
-		this.sharedPref = mapView.getPreferences(Context.MODE_PRIVATE);
+		this.sharedPref = mapView.getPreferences();
 		this.dontShowDialogAgain = sharedPref.getBoolean(resources.getString(R.string.dont_show_again_key), 
 				resources.getBoolean(R.bool.dont_show_again_default));
+        this.userLocation = UserLocation.getInstance();
+        this.userLocation.addObserver(this);
+        this.userLocation.startTrackingUser();
 	}
 
 	@Override
@@ -73,6 +74,37 @@ public class MapPresenter implements IMapPresenter {
     }
 
     @Override
+    public void onActionBarClicked(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.refresh_info:
+                PubUtilities.getInstance().refreshPubList();
+                try {
+                    MapWrapper.INSTANCE.refreshPubMarkers();
+                } catch (NoBackendAccessException e) {
+                    mapView.showErrorMessage(resources.getString(R.string.error_no_backend_access));
+                } catch (NotFoundInBackendException e) {
+                    mapView.showErrorMessage(resources.getString(R.string.error_no_backend_item));
+                }
+                break;
+            case R.id.search:
+                // Open search
+                break;
+            case R.id.go_to_my_location:
+                if (userLocation.getCurrentLatLng() == null) {
+                    showDialog(userLocation.getProviderStatus(), false);
+                } else {
+                    mapView.moveCameraToPosition(userLocation.getCurrentLatLng(), MapActivity.USER_ZOOM);
+                }
+                break;
+            case R.id.action_help:
+                mapView.navigate(HelpActivity.class);
+                break;
+            default:
+                break;
+        }
+    }
+
+    @Override
     public void onPause() {
         this.userLocation.onPause();
     }
@@ -95,14 +127,28 @@ public class MapPresenter implements IMapPresenter {
         	this.mapView.animateUserMarker(this.userLocation.getCurrentLatLng());
         } else if ((status == Status.GPS_DISABLED || status == Status.NET_DISABLED || status == Status.ALL_DISABLED) && 
         			!(this.haveShownDialog || this.dontShowDialogAgain)) {
-        	String baseMessage = resources.getString(R.string.alert_dialog_base_message);
-        	String additionalMessage = status == Status.NET_DISABLED || status == Status.ALL_DISABLED ? resources.getString(R.string.alert_dialog_net): "";
-        	additionalMessage += status == Status.GPS_DISABLED || status == Status.ALL_DISABLED ? resources.getString(R.string.alert_dialog_gps): "";
-        	this.mapView.showAlertDialog(baseMessage + additionalMessage);
-        	this.haveShownDialog = true;
+            showDialog(status, true);
         }
     }
-    
+
+    // Showing the correct dialog for GPS and NET status.
+    private void showDialog(Status status, boolean showCheckbox) {
+        String baseMessage = resources.getString(R.string.alert_dialog_base_message);
+        String additionalMessage = status == Status.NET_DISABLED || status == Status.ALL_DISABLED ?
+                resources.getString(R.string.alert_dialog_net): "";
+
+        additionalMessage += status == Status.GPS_DISABLED || status == Status.ALL_DISABLED ?
+                resources.getString(R.string.alert_dialog_gps): "";
+
+        this.mapView.showAlertDialog(baseMessage + additionalMessage, showCheckbox);
+        this.haveShownDialog = true;
+    }
+
+    /**
+     * Save information in the key values of Android.
+     *
+     * @param dontShowAgain true, don't show dialogs again; false, show dialogs again.
+     */
     public void saveOption(boolean dontShowAgain) {
     	//Save the don't show again option.
         SharedPreferences.Editor editor = sharedPref.edit();

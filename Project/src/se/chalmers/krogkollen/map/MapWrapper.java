@@ -18,13 +18,21 @@ import java.util.List;
 
 /**
  * MapWrapper (UTF-8)
- * <p/>
+ *
+ * Singleton that wraps around a Google Maps v2 map, which makes
+ * it possible to retrieve the same map system wide and instantiate from
+ * loading screen.
+ *
  * Author: Johan Backman
+ * Author: Linnea Otterlind
  * Date: 2013-10-03
  */
 
 public enum MapWrapper {
 
+    /**
+     * Enum singleton instance variable.
+     */
     INSTANCE;
 
     private GoogleMap googleMap;
@@ -34,7 +42,7 @@ public enum MapWrapper {
     private MapWrapper() {} // Suppress instantiation
 
     /**
-     * Initiate Google map.
+     * Initiate Google map resources and markers.
      *
      * @param fragmentManager from an activity.
      */
@@ -45,6 +53,13 @@ public enum MapWrapper {
         this.addPubMarkers();
     }
 
+    /**
+     * Add a pub to the map.
+     *
+     * @param pub the pub to be added.
+     * @throws NoBackendAccessException if no access to the server is available.
+     * @throws NotFoundInBackendException if the item is not found on the server.
+     */
     public void addPubToMap(IPub pub) throws NoBackendAccessException, NotFoundInBackendException {
         int drawable;
 
@@ -67,6 +82,7 @@ public enum MapWrapper {
                 new LatLng(pub.getLatitude(), pub.getLongitude()), pub.getID())));
     }
 
+    // Add markers for all pubs on the server to the map.
     private void addPubMarkers() throws NoBackendAccessException, NotFoundInBackendException {
         for (int i = 0; i < PubUtilities.getInstance().getPubList().size(); i++) {
             addPubToMap(PubUtilities.getInstance().getPubList().get(i));
@@ -74,7 +90,7 @@ public enum MapWrapper {
     }
 
     /**
-     * Removes all pub markers and adds them again with new information.
+     * Removes all pub markers, loads and adds them again.
      */
     public void refreshPubMarkers() throws NoBackendAccessException, NotFoundInBackendException {
         for(Marker pubMarker: this.pubMarkers){
@@ -85,18 +101,9 @@ public enum MapWrapper {
     }
 
     /**
-     *
-     * @return
+     * @return the map in the wrapper.
      */
     public GoogleMap getMap() {
         return this.googleMap;
-    }
-
-    /**
-     *
-     * @return
-     */
-    public List<Marker> getPubMarkers() {
-        return this.pubMarkers;
     }
 }

@@ -12,7 +12,6 @@ import android.graphics.Point;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.SystemClock;
-import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -20,6 +19,7 @@ import android.view.animation.LinearInterpolator;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.CompoundButton.OnCheckedChangeListener;
+import android.widget.Toast;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.Projection;
@@ -27,10 +27,7 @@ import com.google.android.gms.maps.model.*;
 import se.chalmers.krogkollen.R;
 import se.chalmers.krogkollen.backend.NoBackendAccessException;
 import se.chalmers.krogkollen.backend.NotFoundInBackendException;
-import se.chalmers.krogkollen.help.HelpActivity;
-import se.chalmers.krogkollen.pub.PubUtilities;
 import se.chalmers.krogkollen.utils.ActivityID;
-import se.chalmers.krogkollen.utils.IObserver;
 
 import java.util.ArrayList;
 
@@ -57,8 +54,7 @@ import java.util.ArrayList;
  * This is a normal map with the user marked on the map, and with a list of pubs marked on the map.
  */
 
-public class MapActivity extends Activity implements IMapView, IObserver {
-    // TODO IObserver + all observer-logik ska flyttas till MapPresenter
+public class MapActivity extends Activity implements IMapView {
 
     /**
      * Identifier for the intent used to start the activity for detailed view.
@@ -75,16 +71,16 @@ public class MapActivity extends Activity implements IMapView, IObserver {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_map);
 
-        presenter = new MapPresenter();
-        presenter.setView(this);
-
         try {
-            MapWrapper.INSTANCE.init(MapActivity.this.getFragmentManager(), MapActivity.this.getResources());
+            MapWrapper.INSTANCE.init(this.getFragmentManager(), this.getResources());
         } catch (NoBackendAccessException e) {
             showErrorMessage(getResources().getString(R.string.error_no_backend_access));
         } catch (NotFoundInBackendException e) {
             showErrorMessage(getResources().getString(R.string.error_no_backend_item));
         }
+
+        presenter = new MapPresenter();
+        presenter.setView(this);
 
         MapWrapper.INSTANCE.getMap().setOnMarkerClickListener(new GoogleMap.OnMarkerClickListener() {
             @Override
@@ -140,43 +136,10 @@ public class MapActivity extends Activity implements IMapView, IObserver {
                 .title("user"));
     }
 
-    // TODO if there's logic in this method, move logic to presenter
     @Override
     public boolean onOptionsItemSelected(MenuItem menuItem) {
-        switch (menuItem.getItemId()) {
-            case R.id.refresh_info:
-                LayoutInflater layoutInflater = LayoutInflater.from(this);
-                View abprogress = layoutInflater.inflate(R.layout.loading_indicator, null);
-                menuItem.setActionView(abprogress);
-
-                PubUtilities.getInstance().refreshPubList();
-                try {
-                    MapWrapper.INSTANCE.refreshPubMarkers();
-                } catch (NoBackendAccessException e) {
-                    this.showErrorMessage(getResources().getString(R.string.error_no_backend_access));
-                } catch (NotFoundInBackendException e) {
-                    this.showErrorMessage(getResources().getString(R.string.error_no_backend_item));
-                }
-                menuItem.setActionView(null);
-                return true;
-            case R.id.search:
-                // Open search
-                return true;
-            case R.id.go_to_my_location:
-                moveCameraToPosition(userLocation.getCurrentLatLng(), USER_ZOOM);
-                return true;
-            case R.id.action_help:
-                this.navigate(HelpActivity.class);
-                return true;
-            default:
-                return super.onOptionsItemSelected(menuItem);
-        }
-    }
-
-    @Override
-    public void update(Status status) {
-
-        
+        presenter.onActionBarClicked(menuItem);
+        return true;
     }
 
     /**
@@ -212,6 +175,11 @@ public class MapActivity extends Activity implements IMapView, IObserver {
                 }
             }
         });
+    }
+
+    @Override
+    public SharedPreferences getPreferences() {
+        return this.getPreferences(Context.MODE_PRIVATE);
     }
 
     @Override
@@ -264,40 +232,46 @@ public class MapActivity extends Activity implements IMapView, IObserver {
 
     @Override
     public void showErrorMessage(String message) {
-        // TODO Auto-generated method stub
+        CharSequence text = message;
+        int duration = Toast.LENGTH_SHORT;
+
+        Toast toast = Toast.makeText(this, text, duration);
+        toast.show();
     }
 
     @Override
-    public void showAlertDialog(String msg) {
-    	//Create most of the dialog that will be shown if either wifi or gps are disabled.
+    public void showAlertDialog(final String msg, final boolean showCheckbox) {
+        //Create most of the dialog that will be shown if either wifi or gps are disabled.
         Builder builder = new Builder(this);
-
-        //Check box, making it possible to chose not to show this dialog again.
         final ArrayList<Integer> selected = new ArrayList<Integer>();
 
-        View checkBoxView = View.inflate(this, R.layout.checkbox, null);
-        CheckBox checkBox = (CheckBox)checkBoxView.findViewById(R.id.checkbox);
-        checkBox.setOnCheckedChangeListener(new OnCheckedChangeListener() {
+        if (showCheckbox) {
+            //Check box, making it possible to chose not to show this dialog again.
+            View checkBoxView = View.inflate(this, R.layout.checkbox, null);
+            CheckBox checkBox = (CheckBox)checkBoxView.findViewById(R.id.checkbox);
+            checkBox.setOnCheckedChangeListener(new OnCheckedChangeListener() {
 
-            @Override
-            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                if (isChecked) {
-                    selected.add(0);
-                } else if(selected.size() != 0){
-                    selected.clear();
+                @Override
+                public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                    if (isChecked) {
+                        selected.add(0);
+                    } else if(selected.size() != 0){
+                        selected.clear();
+                    }
                 }
-            }
-        });
-        checkBox.setText(this.getString(R.string.alert_dialog_dont_show_again));
-        builder.setView(checkBoxView);
+            });
+            checkBox.setText(this.getString(R.string.alert_dialog_dont_show_again));
+            builder.setView(checkBoxView);
+        }
         builder.setTitle(R.string.alert_dialog_title);
         builder.setMessage(msg);
 
         //Set listeners to the buttons in the dialog and chose appropriate consequences for clicks.
         builder.setPositiveButton(R.string.alert_dialog_activate, new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int which) {
-                presenter.saveOption(!selected.isEmpty());
-
+                if (showCheckbox) {
+                    presenter.saveOption(!selected.isEmpty());
+                }
                 //Send user to location settings on the phone.
                 Intent intent = new Intent(android.provider.Settings.ACTION_LOCATION_SOURCE_SETTINGS);
                 startActivity(intent);
@@ -305,10 +279,12 @@ public class MapActivity extends Activity implements IMapView, IObserver {
         });
         builder.setNegativeButton(R.string.alert_dialog_cancel, new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int which) {
-            	presenter.saveOption(!selected.isEmpty());
+                if (showCheckbox) {
+                    presenter.saveOption(!selected.isEmpty());
+                }
             }
         });
-        
+
         builder.show();
     }
 

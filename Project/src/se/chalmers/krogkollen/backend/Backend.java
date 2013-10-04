@@ -3,15 +3,12 @@ package se.chalmers.krogkollen.backend;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
-
 import android.content.Context;
-
 import com.parse.Parse;
 import com.parse.ParseException;
 import com.parse.ParseObject;
 import com.parse.ParseQuery;
 import com.parse.SaveCallback;
-
 import se.chalmers.krogkollen.pub.IPub;
 import se.chalmers.krogkollen.pub.Pub;
 import se.chalmers.krogkollen.utils.StringConverter;
@@ -77,18 +74,6 @@ public class Backend implements IParseBackend{
 	}
 
 	@Override
-	public void updateQueueTime(IPub pub, int newQueueTime) throws NoBackendAccessException, NotFoundInBackendException {
-		// TODO Auto-generated method stub
-
-	}
-
-	@Override
-	public void updateBackendPub(IPub pub) throws NoBackendAccessException, NotFoundInBackendException {
-		// TODO Auto-generated method stub
-
-	}
-
-	@Override
 	public int getQueueTime(IPub pub) throws NoBackendAccessException, NotFoundInBackendException {
 		ParseObject object = new ParseObject("Pub");
 		
@@ -126,15 +111,41 @@ public class Backend implements IParseBackend{
 	}
 
 	@Override
-	public int getPositiveRating(IPub pub) {
+	public int getPositiveRating(IPub pub) throws NotFoundInBackendException, NoBackendAccessException {
+		ParseObject object = new ParseObject("Pub");
+		
+		try{
+			object = ParseQuery.getQuery("Pub").get(pub.getID());
+		} catch(ParseException e) {
+			if(e.getCode() == ParseException.INVALID_KEY_NAME ||
+			   e.getCode() == ParseException.OBJECT_NOT_FOUND) {
+				throw new NotFoundInBackendException(e.getMessage());
+			}
+			else{
+				throw new NoBackendAccessException(e.getMessage());
+			}
+		}
 		// TODO Auto-generated method stub
-		return 0;
+		return object.getInt("posRate");
 	}
 
 	@Override
-	public int getNegativeRating(IPub pub) {
+	public int getNegativeRating(IPub pub) throws NotFoundInBackendException, NoBackendAccessException {
+		ParseObject object = new ParseObject("Pub");
+		
+		try{
+			object = ParseQuery.getQuery("Pub").get(pub.getID());
+		} catch(ParseException e) {
+			if(e.getCode() == ParseException.INVALID_KEY_NAME ||
+			   e.getCode() == ParseException.OBJECT_NOT_FOUND) {
+				throw new NotFoundInBackendException(e.getMessage());
+			}
+			else{
+				throw new NoBackendAccessException(e.getMessage());
+			}
+		}
 		// TODO Auto-generated method stub
-		return 0;
+		return object.getInt("negRate");
 	}
 
 	@Override

@@ -56,7 +56,15 @@ public class DetailedActivity extends Activity implements IDetailedView {
         setContentView(R.layout.activity_detailed);
         presenter = new DetailedPresenter();
         presenter.setView(this);
-        presenter.setPub(getIntent().getStringExtra(MapActivity.MARKER_PUB_ID));
+        try {
+			presenter.setPub(getIntent().getStringExtra(MapActivity.MARKER_PUB_ID));
+		} catch (NotFoundInBackendException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (NoBackendAccessException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 
         addThumbsUpButtonListener();
         addThumbsDownButtonListener();

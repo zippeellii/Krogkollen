@@ -31,8 +31,9 @@ public class DetailedPresenter implements IDetailedPresenter {
 
 	}
 
-	public void setPub(String pubID){
+	public void setPub(String pubID) throws NoBackendAccessException, NotFoundInBackendException{
 		pub = PubUtilities.getInstance().getPub(pubID);
+		Backend.getInstance().updatePubLocally(pub);
 	}
 
 	@Override

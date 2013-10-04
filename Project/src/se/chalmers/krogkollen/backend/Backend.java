@@ -196,7 +196,13 @@ public class Backend implements IParseBackend{
 		}
 		
 		// Save
-		tempPub.saveInBackground(new SaveCallback() {
+		try {
+			tempPub.save();
+		} catch (ParseException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		/*tempPub.saveInBackground(new SaveCallback() {
 			public void done(ParseException e ) {
 				if (e == null) {
 					// TODO should we do something here?
@@ -204,7 +210,7 @@ public class Backend implements IParseBackend{
 					// TODO notify user
 				}
 			}
-		});
+		});*/
 	}
 
 	@Override
@@ -215,13 +221,19 @@ public class Backend implements IParseBackend{
 		
 		// TODO This part can cause problems if a rating is updated after the pub was last refreshed
 		if (rating > 0) {
-			tempPub.put("posRate", pub.getPositiveRating() - 1);
+			tempPub.put("posRate", pub.getPositiveRating());
 		} else {
-			tempPub.put("negRate", pub.getNegativeRating() - 1);
+			tempPub.put("negRate", pub.getNegativeRating());
 		}
 		
 		// Save
-		tempPub.saveInBackground(new SaveCallback() {
+		try {
+			tempPub.save();
+		} catch (ParseException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		/*tempPub.saveInBackground(new SaveCallback() {
 			public void done(ParseException e ) {
 				if (e == null) {
 					// TODO should we do something here?
@@ -229,6 +241,6 @@ public class Backend implements IParseBackend{
 					// TODO notify user
 				}
 			}
-		});
+		});*/
 	}
 }

@@ -1,5 +1,7 @@
 package se.chalmers.krogkollen.list;
 
+import se.chalmers.krogkollen.IView;
+
 /**
  * Holds and handles the data for the ListActivity class.
  *
@@ -7,6 +9,12 @@ package se.chalmers.krogkollen.list;
  *         Created 2013-09-22
  */
 public class ListPresenter implements IListPresenter {
+
+	@Override
+	public void setView(IView view) {
+		// TODO Auto-generated method stub
+		
+	}
     /*
     This class should hold
         A list of all the pubs.

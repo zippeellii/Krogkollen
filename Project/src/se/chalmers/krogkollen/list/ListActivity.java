@@ -10,8 +10,26 @@ import android.os.Bundle;
  * @author Albin Garpetun
  *         Created 2013-09-22
  */
-public class ListActivity extends Activity implements IListActivity {
+public class ListActivity extends Activity implements IListView {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
     }
+
+	@Override
+	public void navigate(Class<?> destination) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void navigate(Class<?> destination, Bundle extras) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void showErrorMessage(String message) {
+		// TODO Auto-generated method stub
+		
+	}
 }

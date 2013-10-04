@@ -16,6 +16,9 @@ import java.util.Timer;
 import java.util.TimerTask;
 
 /**
+ * Primary activity for the admin application.
+ * Shows three buttons which you can click to send up different queuetimes to the server.
+ *
  * @author Albin Garpetun
  *         Created 2013-09-22
  */
@@ -55,12 +58,18 @@ public class ButtonsActivity extends Activity {
         }, 0, DISABLE_TIME);
     }
 
+    /**
+     * Disables the buttons, making them do nothing on a click.
+     */
     private void deactivateButtons() {
         redButton.setEnabled(false);
         yellowButton.setEnabled(false);
         greenButton.setEnabled(false);
     }
 
+    /**
+     * This method is called by the timer everytime it reaches the DISABLE_TIME.
+     */
     private void timerFinished() {
         //This method is called directly by the timer
         //and runs in the same thread as the timer.
@@ -71,12 +80,19 @@ public class ButtonsActivity extends Activity {
         this.runOnUiThread(Timer_Tick);
     }
 
+    /**
+     * Activates the buttons, making them work on clicks again.
+     */
     private void activateButtons() {
         redButton.setEnabled(true);
         yellowButton.setEnabled(true);
         greenButton.setEnabled(true);
     }
 
+    /**
+     * This method runs in the same thread as the UI.
+     * It activates the buttons and updates the GUI.
+     */
     private Runnable Timer_Tick = new Runnable() {
         public void run() {
 
@@ -92,6 +108,9 @@ public class ButtonsActivity extends Activity {
         }
     };
 
+    /**
+     * Adds listeners to all the buttons as well as sets up the XML-connection to the buttons.
+     */
     private void addListenersOnButtons() {
 
         greenButton = (Button) findViewById(R.id.green_button);
@@ -123,6 +142,9 @@ public class ButtonsActivity extends Activity {
         });
     }
 
+    /**
+     * Updates the GUI. Changes which button is selected and sets the text on the top of the screen.
+     */
     private void updateGUI() {
         String color;
 
@@ -153,6 +175,10 @@ public class ButtonsActivity extends Activity {
         }
     }
 
+    /**
+     * Sets up the connection to Parse.com.
+     * Gets the object that corresponds to the logged in user.
+     */
     private void setupParseObject() {
         try {
             ParseQuery<ParseObject> query = ParseQuery.getQuery("Pub");
@@ -163,10 +189,17 @@ public class ButtonsActivity extends Activity {
         }
     }
 
+    /**
+     * Gets the queueTime from the server and syncs locally.
+     */
     private void setLocalQueueTime() {
         queueTime = object.getInt("queueTime");
     }
 
+    /**
+     * Takes the local queueTime and sends it to the sever.
+     * @param newQueueTime The queueTime to be sent to the server.
+     */
     private void setServerQueueTime(int newQueueTime) {
         try {
             object.put("queueTime", newQueueTime);
@@ -176,6 +209,11 @@ public class ButtonsActivity extends Activity {
         }
     }
 
+    /**
+     * Calls some methods when a button is clicked.
+     *
+     * @param newQueueTime An int corresponding to the button clicked.
+     */
     private void buttonClicked(int newQueueTime) {
         circle.setVisibility(View.VISIBLE);
         setServerQueueTime(newQueueTime);

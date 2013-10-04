@@ -26,7 +26,7 @@ public class Backend implements IParseBackend{
 	 * Private constructor preventing accessibility 
 	 */
 	private Backend(){}
-	
+
 	/**
 	 * Returns the instance for this singleton
 	 * @return the instance
@@ -37,7 +37,7 @@ public class Backend implements IParseBackend{
 		}
 		return instance;
 	}
-	
+
 	/**
 	 * Initializes the connection to the server
 	 * @param context the conext
@@ -47,20 +47,20 @@ public class Backend implements IParseBackend{
 	public static void init(Context context, String applicationID, String clientKey){
 		Parse.initialize(context, applicationID, clientKey);
 	}
-	
+
 	@Override
 	public List<IPub> getAllPubs() throws NoBackendAccessException {
-		
+
 		//Instantiates the list to be returned
 		List<IPub> tempPubList = new ArrayList<IPub>();
-		
+
 		//Fetches the requested query from the server
 		ParseQuery<ParseObject> query = ParseQuery.getQuery("Pub");
-		
+
 		//Declares a List to be able to handle the query 
 		List <ParseObject> tempList;
 		try {
-			
+
 			//Done to simplify the handling of the query
 			//Makes it possible to handle as a java.util.List
 			tempList = query.find();
@@ -76,7 +76,7 @@ public class Backend implements IParseBackend{
 	@Override
 	public int getQueueTime(IPub pub) throws NoBackendAccessException, NotFoundInBackendException {
 		ParseObject object = new ParseObject("Pub");
-		
+
 		try{
 			object = ParseQuery.getQuery("Pub").get(pub.getID());
 		} catch(ParseException e) {
@@ -87,9 +87,9 @@ public class Backend implements IParseBackend{
 				throw new NoBackendAccessException(e.getMessage());
 			}
 		}
-		
+
 		return object.getInt("queueTime");
-		
+
 		// TODO is this method done?
 	}
 
@@ -113,12 +113,12 @@ public class Backend implements IParseBackend{
 	@Override
 	public int getPositiveRating(IPub pub) throws NotFoundInBackendException, NoBackendAccessException {
 		ParseObject object = new ParseObject("Pub");
-		
+
 		try{
 			object = ParseQuery.getQuery("Pub").get(pub.getID());
 		} catch(ParseException e) {
 			if(e.getCode() == ParseException.INVALID_KEY_NAME ||
-			   e.getCode() == ParseException.OBJECT_NOT_FOUND) {
+					e.getCode() == ParseException.OBJECT_NOT_FOUND) {
 				throw new NotFoundInBackendException(e.getMessage());
 			}
 			else{
@@ -132,12 +132,12 @@ public class Backend implements IParseBackend{
 	@Override
 	public int getNegativeRating(IPub pub) throws NotFoundInBackendException, NoBackendAccessException {
 		ParseObject object = new ParseObject("Pub");
-		
+
 		try{
 			object = ParseQuery.getQuery("Pub").get(pub.getID());
 		} catch(ParseException e) {
 			if(e.getCode() == ParseException.INVALID_KEY_NAME ||
-			   e.getCode() == ParseException.OBJECT_NOT_FOUND) {
+					e.getCode() == ParseException.OBJECT_NOT_FOUND) {
 				throw new NotFoundInBackendException(e.getMessage());
 			}
 			else{
@@ -151,7 +151,7 @@ public class Backend implements IParseBackend{
 	@Override
 	public Date getLatestUpdatedTimestamp(IPub pub) throws NoBackendAccessException, NotFoundInBackendException {
 		ParseObject object = new ParseObject("Pub");
-		
+
 		try{
 			object = ParseQuery.getQuery("Pub").get(pub.getID());
 		} catch(ParseException e) {
@@ -185,16 +185,16 @@ public class Backend implements IParseBackend{
 
 	@Override
 	public void addRatingVote(IPub pub, int rating) throws NoBackendAccessException, NotFoundInBackendException {
-		
+
 		// Create a pointer to an object of class Pub
 		ParseObject tempPub = ParseObject.createWithoutData("Pub", pub.getID());
-		
+
 		if (rating > 0) {
 			tempPub.increment("posRate");
 		} else {
 			tempPub.increment("negRate");
 		}
-		
+
 		// Save
 		tempPub.saveInBackground(new SaveCallback() {
 			public void done(ParseException e ) {
@@ -209,17 +209,19 @@ public class Backend implements IParseBackend{
 
 	@Override
 	public void removeRatingVote(IPub pub, int rating) throws NoBackendAccessException, NotFoundInBackendException {
-		
+
 		// Create a pointer to an object of class Pub
 		ParseObject tempPub = ParseObject.createWithoutData("Pub", pub.getID());
-		
+
 		// TODO This part can cause problems if a rating is updated after the pub was last refreshed
 		if (rating > 0) {
-			tempPub.put("posRate", pub.getPositiveRating());
+			tempPub.increment("posRate", -1);
+			//tempPub.put("posRate", pub.getPositiveRating());
 		} else {
-			tempPub.put("negRate", pub.getNegativeRating());
+			tempPub.increment("negRate", -1);
+			//tempPub.put("negRate", pub.getNegativeRating());
 		}
-		
+
 		// Save
 		tempPub.saveInBackground(new SaveCallback() {
 			public void done(ParseException e ) {
@@ -230,5 +232,23 @@ public class Backend implements IParseBackend{
 				}
 			}
 		});
+	}
+	public void updatePubLocally(IPub pub) throws NoBackendAccessException, NotFoundInBackendException {
+		ParseObject object = new ParseObject("Pub");
+
+		try{
+			object = ParseQuery.getQuery("Pub").get(pub.getID());
+		} catch(ParseException e) {
+			if(e.getCode() == ParseException.INVALID_KEY_NAME ||
+					e.getCode() == ParseException.OBJECT_NOT_FOUND) {
+				throw new NotFoundInBackendException(e.getMessage());
+			}
+			else{
+				throw new NoBackendAccessException(e.getMessage());
+			}
+		}
+		pub.setQueueTime(object.getInt("queueTime"));
+		pub.setPositiveRating(object.getInt("posRate"));
+		pub.setNegativeRating(object.getInt("negRate"));
 	}
 }

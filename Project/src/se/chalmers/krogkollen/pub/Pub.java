@@ -150,10 +150,20 @@ public class Pub implements IPub{
 	public int getPositiveRating() {
 		return this.positiveRating;
 	}
+	
+	@Override
+	public void setPositiveRating(int rating) {
+		this.positiveRating = rating;
+	}
 
 	@Override
 	public int getNegativeRating() {
 		return this.negativeRating;
+	}
+	
+	@Override
+	public void setNegativeRating(int rating) {
+		this.negativeRating = rating;
 	}
 
 	@Override

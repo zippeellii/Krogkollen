@@ -21,11 +21,11 @@ import java.util.List;
  */
 public class MainActivity extends Activity {
 
-    private List<ParseObject> pubParseObject;
     private Button loginButton;
-    private EditText userNameField;
+    private AutoCompleteTextView userNameField;
     private EditText passwordField;
     private ProgressBar circle;
+    private String[] pubUsers;
 
     /**
      * Called when the activity is first created.
@@ -40,13 +40,45 @@ public class MainActivity extends Activity {
         setContentView(R.layout.activity_main);
         circle = (ProgressBar) findViewById(R.id.marker_progress);
         circle.setVisibility(View.VISIBLE);
+
+        initializePubUsers();
+
         passwordField = (EditText) findViewById(R.id.txtPassword);
-        userNameField = (EditText) findViewById(R.id.txtPubName);        //Not yet used
         loginButton = (Button) findViewById(R.id.login_button);
-        userNameField.requestFocus();
         ActionBar actionBar = getActionBar();
         actionBar.hide();
         addListeners();
+    }
+
+    private final void initializePubUsers() {
+        ParseQuery<ParseUser> query = ParseUser.getQuery();
+        query.findInBackground(new FindCallback<ParseUser>() {
+            public void done(List<ParseUser> users, ParseException e) {
+                if (e == null) {
+                    usersWereRetrievedSuccessfully(users);
+                } else {
+                    userRetrievalFailed();
+                }
+            }
+        });
+    }
+
+    private void userRetrievalFailed() {
+        // Well shit
+    }
+
+    private void usersWereRetrievedSuccessfully(List<ParseUser> users) {
+        pubUsers = new String[users.size()];
+        for (int i = 0; i < pubUsers.length; i++) {
+            pubUsers[i] = users.get(i).getString("username");
+        }
+
+        ArrayAdapter<String> adapter = new ArrayAdapter<String>(this,
+                android.R.layout.simple_dropdown_item_1line, pubUsers);
+        userNameField = (AutoCompleteTextView)
+                findViewById(R.id.txtPubName);
+        userNameField.setAdapter(adapter);
+        userNameField.requestFocus();
     }
 
     private void loginButtonClicked() {

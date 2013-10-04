@@ -1,12 +1,12 @@
 package se.chalmers.krogkollen.help;
 
+import se.chalmers.krogkollen.R;
 import android.app.ActionBar;
 import android.app.Activity;
 import android.os.Bundle;
 import android.support.v4.app.NavUtils;
 import android.view.Menu;
 import android.view.MenuItem;
-import se.chalmers.krogkollen.R;
 
 /**
  * Activity for the help screen

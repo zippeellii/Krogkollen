@@ -31,8 +31,6 @@ This file is part of Krogkollen.
     <string name="alert_dialog_dont_show_again">Visa inte igen</string>
     <string name="dont_show_again_key">dont_show_again</string>
     <string name="title_activity_map">Krogkarta</string>
-    <string name="hello_world">Startmenu</string>
-    <string name="title_activity_map">Krogkartan</string>
     <string name="refresh">Uppdatera</string>
     <string name="open_list">Öppna lista</string>
     <string name="search">Sök</string>

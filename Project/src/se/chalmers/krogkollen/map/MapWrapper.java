@@ -2,10 +2,12 @@ package se.chalmers.krogkollen.map;
 
 import android.app.FragmentManager;
 import android.content.res.Resources;
+
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapFragment;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
+
 import se.chalmers.krogkollen.R;
 import se.chalmers.krogkollen.backend.Backend;
 import se.chalmers.krogkollen.backend.NoBackendAccessException;

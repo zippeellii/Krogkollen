@@ -3,6 +3,7 @@ package se.chalmers.krogkollen.map;
 import android.app.ActionBar;
 import android.app.Activity;
 import android.app.AlertDialog.Builder;
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -62,11 +63,14 @@ public class MapActivity extends Activity implements IMapView {
      * Identifier for the intent used to start the activity for detailed view.
      */
     public static final String MARKER_PUB_ID = "se.chalmers.krogkollen.MARKER_PUB_ID";
+
     public static final int USER_ZOOM = 16;
     public static final int MARKER_ZOOM = 18;
+    public static final int DEFAULT_ZOOM = 12;
 
     private MapPresenter presenter;
     private Marker userMarker;
+    private ProgressDialog progressDialog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -74,7 +78,7 @@ public class MapActivity extends Activity implements IMapView {
         setContentView(R.layout.activity_map);
 
         try {
-            MapWrapper.INSTANCE.init(this.getFragmentManager(), this.getResources());
+            MapWrapper.INSTANCE.init(this);
         } catch (NoBackendAccessException e) {
             showErrorMessage(getResources().getString(R.string.error_no_backend_access));
         } catch (NotFoundInBackendException e) {
@@ -149,7 +153,6 @@ public class MapActivity extends Activity implements IMapView {
      * ** http://stackoverflow.com/questions/13728041/move-markers-in-google-map-v2-android **
      * Moves the user marker smoothly to a new position.
      *
-     * @param marker	the marker that will be moved
      * @param toPosition	the position to where the marker will be moved
      */
     public void animateUserMarker(final LatLng toPosition) {
@@ -182,6 +185,16 @@ public class MapActivity extends Activity implements IMapView {
     @Override
     public SharedPreferences getPreferences() {
         return this.getPreferences(Context.MODE_PRIVATE);
+    }
+
+    @Override
+    public void showProgressDialog() {
+        progressDialog = ProgressDialog.show(MapActivity.this,"", "Uppdaterar...", false, false);
+    }
+
+    @Override
+    public void hideProgressDialog() {
+        progressDialog.hide();
     }
 
     @Override

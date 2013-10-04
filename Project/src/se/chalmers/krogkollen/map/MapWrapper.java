@@ -1,13 +1,15 @@
 package se.chalmers.krogkollen.map;
 
-import android.app.FragmentManager;
+import android.app.Activity;
+import android.app.ProgressDialog;
+import android.content.Context;
 import android.content.res.Resources;
-
+import android.os.AsyncTask;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapFragment;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
-
+import com.google.android.gms.maps.model.MarkerOptions;
 import se.chalmers.krogkollen.R;
 import se.chalmers.krogkollen.backend.Backend;
 import se.chalmers.krogkollen.backend.NoBackendAccessException;
@@ -40,61 +42,40 @@ public enum MapWrapper {
     private GoogleMap googleMap;
     private List<Marker> pubMarkers;
     private Resources resources;
+    private Context context;
+
+    private ProgressDialog progressDialog;
 
     private MapWrapper() {} // Suppress instantiation
 
     /**
      * Initiate Google map resources and markers.
      *
-     * @param fragmentManager from an activity.
+     * @param activity from an activity.
      */
-    public void init(FragmentManager fragmentManager, Resources resources) throws NoBackendAccessException, NotFoundInBackendException {
+    public void init(Activity activity) throws NoBackendAccessException, NotFoundInBackendException {
         pubMarkers = new ArrayList<Marker>();
-        googleMap = ((MapFragment) fragmentManager.findFragmentById(R.id.map)).getMap();
-        this.resources = resources;
+        googleMap = ((MapFragment) activity.getFragmentManager().findFragmentById(R.id.map)).getMap();
+        this.resources = activity.getResources();
+        this.context = activity;
         this.addPubMarkers();
-    }
-
-    /**
-     * Add a pub to the map.
-     *
-     * @param pub the pub to be added.
-     * @throws NoBackendAccessException if no access to the server is available.
-     * @throws NotFoundInBackendException if the item is not found on the server.
-     */
-    public void addPubToMap(IPub pub) throws NoBackendAccessException, NotFoundInBackendException {
-        int drawable;
-
-        // Determine which marker color to add.
-        switch (Backend.getInstance().getQueueTime(pub)) {
-            case 1:
-                drawable = R.drawable.green_marker_bg;
-                break;
-            case 2:
-                drawable = R.drawable.yellow_marker_bg;
-                break;
-            case 3:
-                drawable = R.drawable.red_marker_bg;
-                break;
-            default:
-                drawable = R.drawable.gray_marker_bg;
-                break;
-        }
-        pubMarkers.add(googleMap.addMarker(MarkerOptionsFactory.createMarkerOptions(resources, drawable, pub.getName(), pub.getTodaysOpeningHour(),
-                new LatLng(pub.getLatitude(), pub.getLongitude()), pub.getID())));
     }
 
     // Add markers for all pubs on the server to the map.
     private void addPubMarkers() throws NoBackendAccessException, NotFoundInBackendException {
+        IPub[] pubArray = new IPub[PubUtilities.getInstance().getPubList().size()];
+
         for (int i = 0; i < PubUtilities.getInstance().getPubList().size(); i++) {
-            addPubToMap(PubUtilities.getInstance().getPubList().get(i));
+            pubArray[i] = PubUtilities.getInstance().getPubList().get(i);
         }
+        
+        new CreateMarkerTask().execute(pubArray);
     }
 
     /**
      * Removes all pub markers, loads and adds them again.
      */
-    public void refreshPubMarkers() throws NoBackendAccessException, NotFoundInBackendException {
+    public synchronized void refreshPubMarkers() throws NoBackendAccessException, NotFoundInBackendException {
         for(Marker pubMarker: this.pubMarkers){
             pubMarker.remove();
         }
@@ -107,5 +88,65 @@ public enum MapWrapper {
      */
     public GoogleMap getMap() {
         return this.googleMap;
+    }
+
+
+    public void setContext(Context context) {
+        this.context = context;
+    }
+
+    private class CreateMarkerTask extends AsyncTask<IPub, Void, List<MarkerOptions>> {
+
+        @Override
+        protected void onPreExecute()
+        {
+            progressDialog = ProgressDialog.show(context, "", "Laddar pubbar...", false, false);
+        }
+
+        @Override
+        protected List<MarkerOptions> doInBackground(IPub... pubs) {
+
+            List<MarkerOptions> listMarkerOptions = new ArrayList<MarkerOptions>();
+
+            for (int i = 0; i < pubs.length; i++) {
+                IPub pub = pubs[i];
+
+                int drawable = 0;
+
+                // Determine which marker color to add.
+                try {
+                    switch (Backend.getInstance().getQueueTime(pub)) {
+                        case 1:
+                            drawable = R.drawable.green_marker_bg;
+                            break;
+                        case 2:
+                            drawable = R.drawable.yellow_marker_bg;
+                            break;
+                        case 3:
+                            drawable = R.drawable.red_marker_bg;
+                            break;
+                        default:
+                            drawable = R.drawable.gray_marker_bg;
+                            break;
+                    }
+                } catch (NoBackendAccessException e) {
+
+                } catch (NotFoundInBackendException e) {
+
+                }
+                listMarkerOptions.add(MarkerOptionsFactory.createMarkerOptions(resources, drawable, pub.getName(), pub.getTodaysOpeningHour(),
+                        new LatLng(pub.getLatitude(), pub.getLongitude()), pub.getID()));
+
+            }
+            return listMarkerOptions;
+        }
+
+        @Override
+        protected void onPostExecute(List<MarkerOptions> markerOptions) {
+            for (MarkerOptions markerOption : markerOptions) {
+                pubMarkers.add(googleMap.addMarker(markerOption));
+            }
+            progressDialog.hide();
+        }
     }
 }

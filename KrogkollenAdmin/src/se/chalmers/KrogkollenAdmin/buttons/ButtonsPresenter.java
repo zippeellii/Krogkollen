@@ -18,10 +18,21 @@ public class ButtonsPresenter {
     private ParseObject object;
     private ButtonsActivity activity;
     private Timer inputDisabledTimer;
-    private final int DISABLE_TIME = 60000;
+    private final int DISABLE_TIME = 20000;
 
     public ButtonsPresenter(ButtonsActivity butt) {
         activity = butt;
+
+        runTimer();
+    }
+
+    /**
+     * Returns the disabling time
+     *
+     * @return the disabling time
+     */
+    public int getDisableTime() {
+        return DISABLE_TIME;
     }
 
     public void runTimer() {
@@ -115,6 +126,11 @@ public class ButtonsPresenter {
         }
     }
 
+    /**
+     * Returns the queue time.
+     *
+     * @return the queue time
+     */
     public int getQueueTime() {
         return queueTime;
     }

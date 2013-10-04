@@ -114,32 +114,42 @@ public class ButtonsActivity extends Activity {
      * Updates the GUI. Changes which button is selected and sets the text on the top of the screen.
      */
     public void updateGUI() {
-        String color;
+        String msg;
+
+        if (!redButton.isEnabled()) {
+            msg = getResources().getString(R.string.wait_part_one) + " " + (presenter.getDisableTime()/1000) + " " + getResources().getString(R.string.wait_part_two);
+        } else {
+            msg = getResources().getString(R.string.ready);
+        }
 
         switch (presenter.getQueueTime()) {
-            case 1: color = "Nuvarande: <font color='#70c656'>Grön</font>";
-                setTitle(Html.fromHtml(color));
+            case 1: msg = msg + " " + getResources().getString(R.string.queue_now) +
+                    " <font color='#70c656'>" + getResources().getString(R.string.green) + "</font>";
+                setTitle(Html.fromHtml(msg));
                 redButton.setSelected(false);
                 yellowButton.setSelected(false);
                 greenButton.setSelected(true);
                 break;
-            case 2: color = "Nuvarande: <font color='#f3ae1b'>Gul</font>";
-                setTitle(Html.fromHtml(color));
+            case 2: msg = msg + " " + getResources().getString(R.string.queue_now) +
+                    " <font color='#f3ae1b'>" + getResources().getString(R.string.yellow) + "</font>";
+                setTitle(Html.fromHtml(msg));
                 redButton.setSelected(false);
                 yellowButton.setSelected(true);
                 greenButton.setSelected(false);
                 break;
-            case 3: color = "Nuvarande: <font color='#ef4444'>Röd</font>";
-                setTitle(Html.fromHtml(color));
+            case 3: msg = msg + " " + getResources().getString(R.string.queue_now) +
+                    " <font color='#ef4444'>" + getResources().getString(R.string.red) + "</font>";
+                setTitle(Html.fromHtml(msg));
                 redButton.setSelected(true);
                 yellowButton.setSelected(false);
                 greenButton.setSelected(false);
                 break;
-            default: setTitle("Nuvarande: Ingen information");
-        }
-
-        if (!redButton.isEnabled()) {
-            setTitle("Vänta en minut mellan klicken...");
+            default: msg = msg + " " + getResources().getString(R.string.buttons_activity);
+                setTitle(msg);
+                redButton.setSelected(false);
+                yellowButton.setSelected(false);
+                greenButton.setSelected(false);
+                break;
         }
     }
 }

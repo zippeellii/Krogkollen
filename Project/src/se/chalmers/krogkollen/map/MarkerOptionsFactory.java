@@ -84,5 +84,4 @@ class MarkerOptionsFactory {
 
         return options;
     }
-
 }

@@ -9,8 +9,8 @@ import android.view.MenuItem;
 import se.chalmers.krogkollen.R;
 
 /**
- * ${TITLE} (UTF-8)
- * <p/>
+ * Activity for the help screen
+ * 
  * Author: Johan Backman
  * Date: 2013-10-02
  */
@@ -47,6 +47,4 @@ public class HelpActivity extends Activity {
                 return super.onOptionsItemSelected(item);
         }
     }
-
-
 }

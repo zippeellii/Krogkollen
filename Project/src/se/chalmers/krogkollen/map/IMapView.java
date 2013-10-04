@@ -1,9 +1,9 @@
 package se.chalmers.krogkollen.map;
 
+import android.content.SharedPreferences;
+import android.content.res.Resources;
 import com.google.android.gms.maps.model.LatLng;
-
 import se.chalmers.krogkollen.IView;
-import se.chalmers.krogkollen.pub.IPub;
 
 /*
  * This file is part of Krogkollen.
@@ -22,29 +22,50 @@ import se.chalmers.krogkollen.pub.IPub;
  * along with Krogkollen.  If not, see <http://www.gnu.org/licenses/>.
  */
 
- /**
+/**
  * Interface for a MapView object
- * 
+ *
  * @author Oskar Karrman
  *
  */
 public interface IMapView extends IView {
-	
-	/**
-	 * Adds a pub to the map
-	 * 
-	 * @param pub the pub to be added
-	 */
-	public void addPubToMap(IPub pub);
-
-    /**
-     * Adds all the pubs as markers in the map view. Uses the method addPubToMap.
-     */
-    void addPubMarkers();
 
     /**
      * Adds the GPS-location of the phone as a marker in the map view.
-     * @param location The location to be added.
+     * @param latLng The location to be added.
      */
     void addUserMarker(LatLng latLng);
+
+    /**
+     * @return resources.
+     */
+    Resources getResources();
+
+    /**
+     * Shows an alert dialog with the given message and the option of adding a checkbox.
+     *
+     * @param msg message to be shown.
+     * @param showCheckbox show a checkbox or not? :P
+     */
+    void showAlertDialog(final String msg, final boolean showCheckbox);
+
+    /**
+     * Move the camera to the given position and zoom the given amount.
+     *
+     * @param pos the position to move to.
+     * @param zoom zoom level.
+     */
+    void moveCameraToPosition(LatLng pos, int zoom);
+
+    /**
+     * Animate the user marker from the current position to the new one.
+     *
+     * @param toPosition position to animate to.
+     */
+    void animateUserMarker(final LatLng toPosition);
+
+    /**
+     * @return shared preferences of the activity.
+     */
+    SharedPreferences getPreferences();
 }

@@ -89,8 +89,6 @@ public class Backend implements IParseBackend{
 		}
 		
 		return object.getInt("queueTime");
-		
-		// TODO is this method done?
 	}
 
 	@Override
@@ -125,7 +123,6 @@ public class Backend implements IParseBackend{
 				throw new NoBackendAccessException(e.getMessage());
 			}
 		}
-		// TODO Auto-generated method stub
 		return object.getInt("posRate");
 	}
 
@@ -144,7 +141,6 @@ public class Backend implements IParseBackend{
 				throw new NoBackendAccessException(e.getMessage());
 			}
 		}
-		// TODO Auto-generated method stub
 		return object.getInt("negRate");
 	}
 
@@ -157,7 +153,6 @@ public class Backend implements IParseBackend{
 		} catch(ParseException e) {
 			throw new NotFoundInBackendException(e.getMessage());
 		}
-		// TODO Is this method done?
 		return object.getUpdatedAt();
 	}
 

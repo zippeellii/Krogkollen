@@ -23,13 +23,14 @@ import com.google.android.gms.maps.model.MarkerOptions;
  * along with Krogkollen.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+
  /**
  * Builds settings for markers in Google Maps V2 for Android.
  *
  * Author: Johan Backman
  * Date: 2013-09-22
  */
-public class MarkerOptionsFactory {
+class MarkerOptionsFactory {
 
     private final static int bigTextRatio = 22;
     private final static int smallTextRatio = 30;
@@ -84,5 +85,4 @@ public class MarkerOptionsFactory {
 
         return options;
     }
-
 }

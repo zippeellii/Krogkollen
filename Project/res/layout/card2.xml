@@ -1,74 +1,77 @@
 <?xml version="1.0" encoding="utf-8"?>
-
 <!--
 This file is part of Krogkollen.
-
  Krogkollen is free software: you can redistribute it and/or modify
  it under the terms of the GNU General Public License as published by
  the Free Software Foundation, either version 3 of the License, or
  (at your option) any later version.
-
  Krogkollen is distributed in the hope that it will be useful,
  but WITHOUT ANY WARRANTY; without even the implied warranty of
  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  GNU General Public License for more details.
-
  You should have received a copy of the GNU General Public License
  along with Foobar.  If not, see <http://www.gnu.org/licenses/>.
 -->
-
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
              android:layout_width="match_parent"
-             android:layout_height="70dp">
-
+             android:layout_height="match_parent">
     <LinearLayout
             android:orientation="horizontal"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_marginLeft="10dp"
-            android:layout_marginRight="10dp"
-            android:layout_marginTop="6dp"
-            android:layout_marginBottom="6dp"
+            android:layout_marginLeft="15dp"
+            android:layout_marginRight="15dp"
+            android:layout_marginTop="5dp"
+            android:layout_marginBottom="5dp"
             android:gravity="center"
             android:background="@drawable/bg_card">
 
         <TextView
                 android:id="@+id/opening_hours"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
                 android:text="@string/opening_hours"
                 android:layout_weight="1"
                 android:gravity="center"
                 android:textColor="#777777"/>
-
+        <View
+                android:layout_width="1dp"
+                android:layout_height="match_parent"
+                android:background="#EDEDED" />
         <TextView
                 android:id="@+id/age"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
                 android:text="@string/age"
                 android:layout_weight="1"
                 android:gravity="center"
                 android:textColor="#777777"/>
-
+        <View
+                android:layout_width="1dp"
+                android:layout_height="match_parent"
+                android:background="#EDEDED" />
         <TextView
                 android:id="@+id/entrance_fee"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
                 android:text="@string/entrance_fee"
                 android:layout_weight="1"
                 android:gravity="center"
                 android:textColor="#777777"/>
-
-        <TextView
-                android:id="@+id/yellow_color"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/yellow_color"
+        <View
+                android:layout_width="1dp"
+                android:layout_height="match_parent"
+                android:background="#EDEDED" />
+        <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
                 android:layout_weight="1"
-                android:gravity="center"
-                android:textColor="#777777"/>
-
+                android:gravity="center">
+            <ImageView
+                    android:id="@+id/queueIndicator"
+                    android:background="@drawable/detailed_queue_green"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"/>
+        </LinearLayout>
     </LinearLayout>
-
-
 </FrameLayout>

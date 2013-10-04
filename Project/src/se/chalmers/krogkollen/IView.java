@@ -1,5 +1,7 @@
 package se.chalmers.krogkollen;
 
+import android.os.Bundle;
+
 /*
  * This file is part of Krogkollen.
  *
@@ -19,24 +21,32 @@ package se.chalmers.krogkollen;
  * Interface for a View class in the MVP design pattern.
  */
 
- /** 
- * 
- * @author Oskar Karrman
+/**
+ * The basic view functionality.
  *
+ * @author Oskar Karrman
  */
 public interface IView {
-	
-	/**
-	 * Navigates to another view
-	 * 
-	 * @param destination
-	 */
-	public abstract void navigate(Class<?> destination);
-	
-	/**
-	 * Shows an error message
-	 * 
-	 * @param message the message to show
-	 */
-	public abstract void showErrorMessage(String message);
+
+    /**
+     * Navigates to another view
+     *
+     * @param destination
+     */
+    public abstract void navigate(Class<?> destination);
+
+    /**
+     * Navigates no another view
+     *
+     * @param destination
+     * @param extras
+     */
+    public abstract void navigate(Class<?> destination, Bundle extras);
+
+    /**
+     * Shows an error message
+     *
+     * @param message the message to show
+     */
+    public abstract void showErrorMessage(String message);
 }

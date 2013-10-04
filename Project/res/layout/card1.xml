@@ -1,51 +1,118 @@
 <?xml version="1.0" encoding="utf-8"?>
-
 <!--
 This file is part of Krogkollen.
-
  Krogkollen is free software: you can redistribute it and/or modify
  it under the terms of the GNU General Public License as published by
  the Free Software Foundation, either version 3 of the License, or
  (at your option) any later version.
-
  Krogkollen is distributed in the hope that it will be useful,
  but WITHOUT ANY WARRANTY; without even the implied warranty of
  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  GNU General Public License for more details.
-
  You should have received a copy of the GNU General Public License
  along with Foobar.  If not, see <http://www.gnu.org/licenses/>.
 -->
-
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
              android:layout_width="match_parent"
-             android:layout_height="240dp">
-
+             android:layout_height="match_parent">
     <LinearLayout
             android:orientation="vertical"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_marginLeft="10dp"
-            android:layout_marginRight="10dp"
-            android:layout_marginTop="12dp"
-            android:layout_marginBottom="10dp"
+            android:layout_marginLeft="15dp"
+            android:layout_marginRight="15dp"
+            android:layout_marginTop="15dp"
+            android:layout_marginBottom="5dp"
+            android:paddingTop="15dp"
+            android:paddingLeft="15dp"
+            android:paddingRight="15dp"
+            android:paddingBottom="15dp"
             android:background="@drawable/bg_card">
 
-        <TextView
-                android:layout_marginTop="0dp"
-                android:id="@+id/pub_name"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/pub_name"
-                android:textAppearance="?android:attr/textAppearanceLarge"
-                android:textColor="#333333"/>
-        <TextView
-                android:layout_marginTop="10dp"
+        <LinearLayout
+                android:orientation="horizontal"
+                android:layout_height="match_parent"
+                android:layout_width="match_parent"
+                android:layout_weight="3">
+
+            <LinearLayout
+                    android:orientation="horizontal"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1">
+                <TextView
+
+                        android:layout_marginTop="0dp"
+                        android:id="@+id/pub_name"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/pub_name"
+                        android:textAppearance="?android:attr/textAppearanceLarge"
+                        android:textColor="#333333"/>
+            </LinearLayout>
+
+            <LinearLayout
+                    android:layout_gravity="right"
+                    android:orientation="horizontal"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:gravity="right">
+                <ImageButton
+                        android:id="@+id/thumbsUpButton"
+                        android:background="@drawable/thumb_up"
+                        android:layout_height="25dp"
+                        android:layout_width="25dp"
+                        android:layout_marginRight="5dp"></ImageButton>
+                <TextView
+                        android:layout_marginRight="10dp"
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:id="@+id/thumbsUpTextView"
+                        android:text="@string/thumbs_up"
+                        android:textColor="#777777"/>
+                <ImageButton
+                        android:id="@+id/thumbsDownButton"
+                        android:background="@drawable/thumb_down"
+                        android:layout_height="25dp"
+                        android:layout_width="25dp"
+                        android:layout_marginRight="5dp">
+                        </ImageButton>
+                <TextView
+                        android:layout_marginRight="5dp"
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:id="@+id/thumbsDownTextView"
+                        android:text="@string/thumbs_down"
+                        android:textColor="#777777"/>
+            </LinearLayout>
+
+
+
+        </LinearLayout>
+
+        <ScrollView
+            android:id="@+id/scrollView"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:requiresFadingEdge="vertical"
+            android:overScrollMode="never">
+
+            <LinearLayout
+                android:layout_weight="1"
+                android:layout_height="match_parent"
+                android:layout_width="match_parent">
+
+
+            <TextView
+                android:layout_marginTop="5dp"
                 android:id="@+id/description"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
                 android:text="@string/description"
                 android:textColor="#777777"/>
-
+            </LinearLayout>
+        </ScrollView>
     </LinearLayout>
 </FrameLayout>

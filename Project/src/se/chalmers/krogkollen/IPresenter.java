@@ -31,5 +31,5 @@ public interface IPresenter {
 	 * 
 	 * @param view the view to set as active
 	 */
-	public abstract void setView(Object view);
+	public abstract void setView(IView view);
 }

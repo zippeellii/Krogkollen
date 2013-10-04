@@ -1,17 +1,20 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="app_name">KrogkollenAdmin</string>
-    <string name="buttons_activity">Nuvarande: Ingen information</string>
-    <string name="green_button_text">Green</string>
-    <string name="yellow_button_text">Yellow</string>
-    <string name="red_button_text">Red</string>
     <string name="login_button_text">Sign in</string>
-    <string name="lblPassword">Password: </string>
-    <string name="lblSpinner">Pub: </string>
-    <string name="red_title">Röd</string>
-    <string name="yellow_title">Gul</string>
-    <string name="green_title">Grön</string>
-    <string name="wrong_password_message">Wrong username or passwor</string>
+    <string name="wrong_password_message">Fel lösenord eller användarnamn</string>
     <string name="name_field_hint">Skriv din pubs namn</string>
     <string name="password_field_hint">Skriv din pubs lösenord</string>
+
+    <string name="buttons_activity">Ingen information finns för tillfället.</string>
+    <string name="green_button_text">0 - 15 minuter</string>
+    <string name="yellow_button_text">15 - 45 minuter</string>
+    <string name="red_button_text">Mer än 45 minuter</string>
+    <string name="wait_part_one">Vänta</string>
+    <string name="wait_part_two"> sekunder.</string>
+    <string name="queue_now">Nuvarande:</string>
+    <string name="ready">Redo för input!</string>
+    <string name="green">Grön</string>
+    <string name="yellow">Gul</string>
+    <string name="red">Röd</string>
 </resources>

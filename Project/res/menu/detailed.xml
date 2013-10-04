@@ -2,6 +2,15 @@
 
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
 
+
+    <item
+            android:id="@+id/favorite_star"
+            android:orderInCategory="100"
+            android:icon="@drawable/star_not_filled"
+            android:title="@string/favorite_star_string"
+            android:showAsAction="always"/>
+
+
     <item
             android:id="@+id/refresh_info"
             android:orderInCategory="100"

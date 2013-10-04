@@ -4,6 +4,7 @@ import se.chalmers.krogkollen.pub.*;
 import java.util.ArrayList;
 import java.util.List;
 
+// TODO flytta denna till ett eget paket, sokning raknas som en feature
 // TODO javadoc
 public class Search {
 

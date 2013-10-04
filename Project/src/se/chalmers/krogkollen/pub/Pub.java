@@ -1,6 +1,4 @@
 package se.chalmers.krogkollen.pub;
-import se.chalmers.krogkollen.utils.OpeningHours;
-
 import com.google.android.gms.maps.model.LatLng;
 /*
  * This file is part of Krogkollen.
@@ -44,14 +42,14 @@ public class Pub implements IPub{
 	private final String ID;
 	
 	/**
-	 * Created a new Pub object with default values
+	 * Create a new Pub object with default values
 	 */
 	public Pub() {
 		this("Name", "Description", 0.0, 0.0, 0, 0, 0, 0, 0, 0, 0, "ID");
 	}
 	
 	/**
-	 * Creates a new Pub object
+	 * Create a new Pub object
 	 * 
 	 * @param name 				the name
 	 * @param description 		the description
@@ -152,10 +150,20 @@ public class Pub implements IPub{
 	public int getPositiveRating() {
 		return this.positiveRating;
 	}
+	
+	@Override
+	public void setPositiveRating(int rating) {
+		this.positiveRating = rating;
+	}
 
 	@Override
 	public int getNegativeRating() {
 		return this.negativeRating;
+	}
+	
+	@Override
+	public void setNegativeRating(int rating) {
+		this.negativeRating = rating;
 	}
 
 	@Override

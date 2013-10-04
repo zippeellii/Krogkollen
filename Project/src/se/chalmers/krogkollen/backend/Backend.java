@@ -196,13 +196,7 @@ public class Backend implements IParseBackend{
 		}
 		
 		// Save
-		try {
-			tempPub.save();
-		} catch (ParseException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		/*tempPub.saveInBackground(new SaveCallback() {
+		tempPub.saveInBackground(new SaveCallback() {
 			public void done(ParseException e ) {
 				if (e == null) {
 					// TODO should we do something here?
@@ -210,7 +204,7 @@ public class Backend implements IParseBackend{
 					// TODO notify user
 				}
 			}
-		});*/
+		});
 	}
 
 	@Override
@@ -227,13 +221,7 @@ public class Backend implements IParseBackend{
 		}
 		
 		// Save
-		try {
-			tempPub.save();
-		} catch (ParseException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		/*tempPub.saveInBackground(new SaveCallback() {
+		tempPub.saveInBackground(new SaveCallback() {
 			public void done(ParseException e ) {
 				if (e == null) {
 					// TODO should we do something here?
@@ -241,6 +229,6 @@ public class Backend implements IParseBackend{
 					// TODO notify user
 				}
 			}
-		});*/
+		});
 	}
 }

@@ -13,8 +13,8 @@ public interface IParseBackend extends IBackend {
 	/**
 	 * Returns the number of positive ratings for a requested pub
 	 * 
-	 * @param pub the source
-	 * @return the requested source
+	 * @param pub the pub
+	 * @return the number of positive ratings for the pub
 	 * @throws NotFoundInBackendException
 	 * @throws NoBackendAccessException
 	 */
@@ -23,8 +23,8 @@ public interface IParseBackend extends IBackend {
 	/**
 	 * Returns the number of negative ratings for a requested pub
 	 * 
-	 * @param pub the source 
-	 * @return the requested value
+	 * @param pub the pub
+	 * @return the number of positive ratings for the pub
 	 * @throws NotFoundInBackendException
 	 * @throws NoBackendAccessException 
 	 */

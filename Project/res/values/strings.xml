@@ -25,14 +25,12 @@ This file is part of Krogkollen.
     <string name="alert_dialog_title">Förbättra platsnoggrannheten</string>
     <string name="alert_dialog_activate">Aktivera</string>
     <string name="alert_dialog_cancel">Aktivera inte</string>
-    <string name="alert_dialog_net_and_gps_disabled">Förbättra din position genom att aktivera följande:\nGPS\nWi-Fi</string>
-    <string name="alert_dialog_net_disabled">Förbättra din position genom att aktivera följande:\nWi-Fi</string>
-    <string name="alert_dialog_gps_disabled">Förbättra din position genom att aktivera följande:\nGPS</string>
+    <string name="alert_dialog_base_message">Förbättra din position genom att aktivera följande:</string>
+    <string name="alert_dialog_net">\nWi-Fi</string>
+    <string name="alert_dialog_gps">\nGPS</string>
     <string name="alert_dialog_dont_show_again">Visa inte igen</string>
     <string name="dont_show_again_key">dont_show_again</string>
     <string name="title_activity_map">Krogkarta</string>
-    <string name="hello_world">Startmenu</string>
-    <string name="title_activity_map">Krogkartan</string>
     <string name="refresh">Uppdatera</string>
     <string name="open_list">Öppna lista</string>
     <string name="search">Sök</string>
@@ -59,5 +57,14 @@ This file is part of Krogkollen.
     <string name="title_activity_detailed">Info</string>
     <string name="title_activity_help">Hjälp</string>
     <string name="favorite_star_string">favorisera</string>
+    <string name="error_no_backend_access">Error cannot access server.</string>
+    <string name="error_no_backend_item">Cannot find item in server.</string>
+    <string name="pref_storage_title">Lagring</string>
+    <string name="pref_remove_favorites_desc">Ta bort sparade favoriter.</string>
+    <string name="pref_remove_favorites_title">Rensa favoriter</string>
+    <string name="pref_remove_cache_desc">Ta bort all cachadelagrad data.</string>
+    <string name="pref_remove_cache_title">Rensa cache</string>
+    <string name="settings_title">Inställningar</string>
+    <string name="title_activity_list">Listvy</string>
 
 </resources>

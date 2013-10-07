@@ -20,7 +20,7 @@ import se.chalmers.krogkollen.utils.StringConverter;
  * @author Oskar Karrman
  *
  */
-public class Backend implements IParseBackend{
+public class Backend implements IBackend{
 	
 	private static Backend instance = null;
 	/**
@@ -41,8 +41,9 @@ public class Backend implements IParseBackend{
 
 	/**
 	 * Initializes the connection to the server
-	 * @param context the conext
-	 * @param applicationID the application ID of the appliaction
+	 * 
+	 * @param context the context
+	 * @param applicationID the application ID of the application
 	 * @param clientKey the client key
 	 */
 	public static void init(Context context, String applicationID, String clientKey){

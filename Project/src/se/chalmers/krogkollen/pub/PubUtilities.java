@@ -3,7 +3,6 @@ package se.chalmers.krogkollen.pub;
 import android.content.res.Resources;
 import se.chalmers.krogkollen.backend.BackendHandler;
 import se.chalmers.krogkollen.backend.BackendNotInitializedException;
-import se.chalmers.krogkollen.backend.ParseBackend;
 import se.chalmers.krogkollen.backend.NoBackendAccessException;
 
 import java.util.LinkedList;

@@ -8,6 +8,7 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.view.Menu;
 import se.chalmers.krogkollen.backend.BackendHandler;
+import se.chalmers.krogkollen.backend.BackendMockup;
 import se.chalmers.krogkollen.backend.BackendNotInitializedException;
 import se.chalmers.krogkollen.backend.NoBackendAccessException;
 import se.chalmers.krogkollen.backend.ParseBackend;
@@ -71,6 +72,9 @@ public class MainActivity extends Activity {
 
             //Tells the backend handler to initialize its server connection with a backend to Parse.com
         	BackendHandler.getInstance().setBackend(new ParseBackend(MainActivity.this, "WgLQnilANHpjM3xITq0nM0eW8dByIgDDmxJzf6se", "9ZK7yjE1NiD244ymDHb8ZpbbWNNv3RuQq7ceEvJc"));
+        	
+        	// If you want to use the mockup backend, comment the above line and uncomment the line below
+        	//BackendHandler.getInstance().setBackend(new BackendMockup(0));
 
             try {
 				PubUtilities.getInstance().loadPubList();

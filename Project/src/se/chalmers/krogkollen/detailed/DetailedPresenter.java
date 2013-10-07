@@ -4,7 +4,6 @@ import android.content.SharedPreferences;
 import se.chalmers.krogkollen.IView;
 import se.chalmers.krogkollen.backend.BackendHandler;
 import se.chalmers.krogkollen.backend.BackendNotInitializedException;
-import se.chalmers.krogkollen.backend.ParseBackend;
 import se.chalmers.krogkollen.backend.NoBackendAccessException;
 import se.chalmers.krogkollen.backend.NotFoundInBackendException;
 import se.chalmers.krogkollen.pub.IPub;

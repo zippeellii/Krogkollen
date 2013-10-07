@@ -22,7 +22,6 @@ public class DetailedPresenter implements IDetailedPresenter {
 	@Override
 	public void setView(IView view) {
 		this.view= (DetailedActivity)view;
-
 	}
 
     /**
@@ -48,7 +47,7 @@ public class DetailedPresenter implements IDetailedPresenter {
 
 				saveThumbState(0);
 
-			}else if(view.getSharedPreferences(pub.getID(), 0).getInt("thumb",0)==-1){
+			} else if(view.getSharedPreferences(pub.getID(), 0).getInt("thumb", 0)==-1){
 				view.setThumbs(1);
 
 				Backend.getInstance().removeRatingVote(pub, -1);
@@ -58,7 +57,7 @@ public class DetailedPresenter implements IDetailedPresenter {
 				pub.setPositiveRating(pub.getPositiveRating() + 1);
 
 				saveThumbState(1);
-			}else{
+			} else {
 				view.setThumbs(1);
 
 				Backend.getInstance().addRatingVote(pub, 1);
@@ -105,12 +104,8 @@ public class DetailedPresenter implements IDetailedPresenter {
 			else{
 				pub.setNegativeRating(pub.getNegativeRating() + 1);
 			}
-
-
 			saveThumbState(rating);
 		}
-
-
 	}
 
     /**
@@ -123,7 +118,6 @@ public class DetailedPresenter implements IDetailedPresenter {
     }
 
     /**
-     *
      * Saves the state of the thumb because a user is only allowed to vote 1 time.
      * @param thumb
      */

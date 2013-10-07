@@ -55,6 +55,7 @@ public class MainActivity extends Activity {
     }
 
 
+    // TODO javadoc
     private class InitResourcesTask extends AsyncTask<Void, Void, Void> {
 
         @Override

@@ -27,11 +27,10 @@ import java.util.List;
  * it possible to retrieve the same map system wide and instantiate from
  * loading screen.
  *
- * Author: Johan Backman
- * Author: Linnea Otterlind
+ * @author Johan Backman
+ * @author Linnea Otterlind
  * Date: 2013-10-03
  */
-
 public enum MapWrapper {
 
     /**
@@ -61,14 +60,18 @@ public enum MapWrapper {
         this.addPubMarkers();
     }
 
-    // Add markers for all pubs on the server to the map.
+    /**
+     * Add markers for all pubs on the server to the map
+     * 
+     * @throws NoBackendAccessException
+     * @throws NotFoundInBackendException
+     */
     private void addPubMarkers() throws NoBackendAccessException, NotFoundInBackendException {
         IPub[] pubArray = new IPub[PubUtilities.getInstance().getPubList().size()];
 
         for (int i = 0; i < PubUtilities.getInstance().getPubList().size(); i++) {
             pubArray[i] = PubUtilities.getInstance().getPubList().get(i);
         }
-        
         new CreateMarkerTask().execute(pubArray);
     }
 
@@ -90,7 +93,11 @@ public enum MapWrapper {
         return this.googleMap;
     }
 
-
+    /**
+     * Sets the context of this wrapper
+     * 
+     * @param context the context
+     */
     public void setContext(Context context) {
         this.context = context;
     }
@@ -100,7 +107,7 @@ public enum MapWrapper {
         @Override
         protected void onPreExecute()
         {
-            progressDialog = ProgressDialog.show(context, "", "Laddar pubbar...", false, false);
+            progressDialog = ProgressDialog.show(context, "", "Laddar pubbar...", false, false); // TODO "laddar"-message should be placed in strings.xml
         }
 
         @Override
@@ -130,13 +137,12 @@ public enum MapWrapper {
                             break;
                     }
                 } catch (NoBackendAccessException e) {
-
+                	// TODO this is a model, this should not be catched here, it must be shown in the view
                 } catch (NotFoundInBackendException e) {
-
+                	// TODO same as above
                 }
                 listMarkerOptions.add(MarkerOptionsFactory.createMarkerOptions(resources, drawable, pub.getName(), pub.getTodaysOpeningHour(),
                         new LatLng(pub.getLatitude(), pub.getLongitude()), pub.getID()));
-
             }
             return listMarkerOptions;
         }

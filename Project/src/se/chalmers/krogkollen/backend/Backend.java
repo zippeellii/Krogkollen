@@ -21,6 +21,7 @@ import se.chalmers.krogkollen.utils.StringConverter;
  *
  */
 public class Backend implements IParseBackend{
+	
 	private static Backend instance = null;
 	/**
 	 * Private constructor preventing accessibility 
@@ -87,9 +88,7 @@ public class Backend implements IParseBackend{
 				throw new NoBackendAccessException(e.getMessage());
 			}
 		}
-
 		return object.getInt("queueTime");
-
 	}
 
 	@Override

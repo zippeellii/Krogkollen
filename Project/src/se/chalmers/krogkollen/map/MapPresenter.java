@@ -162,7 +162,6 @@ public class MapPresenter implements IMapPresenter {
         editor.commit();
     }
 
-
     private class RefreshTask extends AsyncTask<Void, Void, Void>
     {
         //Before running code in separate thread
@@ -191,8 +190,6 @@ public class MapPresenter implements IMapPresenter {
                     }
                 }
             });
-
-
             return null;
         }
 

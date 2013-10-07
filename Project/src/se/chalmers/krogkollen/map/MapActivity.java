@@ -80,7 +80,7 @@ public class MapActivity extends Activity implements IMapView {
         try {
             MapWrapper.INSTANCE.init(this);
         } catch (NoBackendAccessException e) {
-            showErrorMessage(getResources().getString(R.string.error_no_backend_access));
+            showErrorMessage(getResources().getString(R.string.error_no_backend_access)); // TODO standard? if so, update other occurances
         } catch (NotFoundInBackendException e) {
             showErrorMessage(getResources().getString(R.string.error_no_backend_item));
         }
@@ -225,7 +225,7 @@ public class MapActivity extends Activity implements IMapView {
                 break;
             default:
                 //If you came from anything else, return to home screen.
-                intent = new Intent(Intent.ACTION_MAIN);
+                intent = new Intent(Intent.ACTION_MAIN); // TODO use navigate method
                 intent.addCategory(Intent.CATEGORY_HOME);
                 startActivity(intent);
                 break;
@@ -307,5 +307,4 @@ public class MapActivity extends Activity implements IMapView {
     public Resources getResources() {
         return super.getResources();
     }
-
 }

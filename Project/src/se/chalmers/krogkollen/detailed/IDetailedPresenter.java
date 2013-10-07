@@ -8,7 +8,6 @@ import se.chalmers.krogkollen.backend.NotFoundInBackendException;
  * Interface for a DetailedPresenter
  * 
  * @author Oskar Karrman
- *
  */
 public interface IDetailedPresenter extends IPresenter {
 
@@ -16,6 +15,7 @@ public interface IDetailedPresenter extends IPresenter {
 	 * Indicates that rating for a pub has changed
 	 *
 	 * @param rating the new rating of the pub
+	 * @author Oskar Karrman
 	 */
 	public void ratingChanged(int rating) throws NotFoundInBackendException, NoBackendAccessException;
 
@@ -23,13 +23,10 @@ public interface IDetailedPresenter extends IPresenter {
      * Sets pub that is related to the presenter
      *
      * @param pubID The pubs ID
+     * @author Oskar Karrman
      */
     public void setPub(String pubID) throws NotFoundInBackendException, NoBackendAccessException;
 
-    /**
-     * Getter for queue time.
-     * @return queue time
-     */
     public void getQueueTime();
 
     public void getText();

@@ -35,9 +35,7 @@ import se.chalmers.krogkollen.map.MapActivity;
 /**
  * This class represent the activity for the detailed view
  */
-
 public class DetailedActivity extends Activity implements IDetailedView {
-
 
     /** The presenter connected to the detailed view */
 	private IDetailedPresenter presenter;
@@ -58,11 +56,9 @@ public class DetailedActivity extends Activity implements IDetailedView {
         try {
 			presenter.setPub(getIntent().getStringExtra(MapActivity.MARKER_PUB_ID));
 		} catch (NotFoundInBackendException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			this.showErrorMessage(e.getMessage());
 		} catch (NoBackendAccessException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			this.showErrorMessage(e.getMessage());
 		}
 
         addThumbsUpButtonListener();
@@ -92,7 +88,6 @@ public class DetailedActivity extends Activity implements IDetailedView {
 
         refresh();
         return true;
-
     }
 
 	@Override
@@ -104,12 +99,8 @@ public class DetailedActivity extends Activity implements IDetailedView {
 
 	@Override
 	public void showErrorMessage(String message) {
-		// TODO Auto-generated method stub
+		// TODO This method should create a toast or some kind of window showing the error message
 	}
-
-    /**
-     * Sets the pubs information into the detailed view
-     */
 
 	@Override
 	public void updateText(String pubName, String description, String openingHours, String age, String price) {
@@ -174,9 +165,9 @@ public class DetailedActivity extends Activity implements IDetailedView {
                     presenter.getVotes();
 
                 } catch (NotFoundInBackendException e) {
-                    e.printStackTrace();
+                    showErrorMessage(e.getMessage());
                 } catch (NoBackendAccessException e) {
-                    e.printStackTrace();
+                    showErrorMessage(e.getMessage());
                 }
             }
         });
@@ -191,16 +182,13 @@ public class DetailedActivity extends Activity implements IDetailedView {
             @Override
             public void onClick(View view) {
                 try {
-
                     presenter.ratingChanged(-1);
                     presenter.getVotes();
-
                 } catch (NotFoundInBackendException e) {
-                    e.printStackTrace();
+                    showErrorMessage(e.getMessage());
                 } catch (NoBackendAccessException e) {
-                    e.printStackTrace();
+                	showErrorMessage(e.getMessage());
                 }
-
             }
         });
     }
@@ -225,7 +213,6 @@ public class DetailedActivity extends Activity implements IDetailedView {
                 thumbsUpButton.setBackgroundResource(R.drawable.thumb_up);
                 break;
         }
-
     }
 
     /**
@@ -274,6 +261,5 @@ public class DetailedActivity extends Activity implements IDetailedView {
         else{
             favoriteStar.setIcon(R.drawable.star_filled);
         }
-
     }
 }

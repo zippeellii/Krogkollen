@@ -1,7 +1,9 @@
 package se.chalmers.krogkollen.pub;
 
 import android.content.res.Resources;
-import se.chalmers.krogkollen.backend.Backend;
+import se.chalmers.krogkollen.backend.BackendHandler;
+import se.chalmers.krogkollen.backend.BackendNotInitializedException;
+import se.chalmers.krogkollen.backend.ParseBackend;
 import se.chalmers.krogkollen.backend.NoBackendAccessException;
 
 import java.util.LinkedList;
@@ -59,15 +61,11 @@ public class PubUtilities {
 	 * Loads the pubs from the server and puts them in the list of pubs.
 	 *
 	 * For now this method only adds hardcoded pubs into the list.
+	 * @throws BackendNotInitializedException 
+	 * @throws NoBackendAccessException 
 	 */
-	public void loadPubList() {
-		
-		try {
-			pubList = Backend.getInstance().getAllPubs();
-		} catch (NoBackendAccessException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+	public void loadPubList() throws NoBackendAccessException, BackendNotInitializedException {
+		pubList = BackendHandler.getInstance().getAllPubs();
 	}
 
 	/**
@@ -81,8 +79,10 @@ public class PubUtilities {
 
     /**
      * Refreshes the list of pubs from the server.
+     * @throws BackendNotInitializedException 
+     * @throws NoBackendAccessException 
      */
-    public void refreshPubList() {
+    public void refreshPubList() throws NoBackendAccessException, BackendNotInitializedException {
         pubList.clear();
         loadPubList();
     }

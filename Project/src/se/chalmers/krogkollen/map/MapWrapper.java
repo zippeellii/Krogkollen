@@ -5,13 +5,17 @@ import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.res.Resources;
 import android.os.AsyncTask;
+
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapFragment;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
+
 import se.chalmers.krogkollen.R;
-import se.chalmers.krogkollen.backend.Backend;
+import se.chalmers.krogkollen.backend.BackendHandler;
+import se.chalmers.krogkollen.backend.BackendNotInitializedException;
+import se.chalmers.krogkollen.backend.ParseBackend;
 import se.chalmers.krogkollen.backend.NoBackendAccessException;
 import se.chalmers.krogkollen.backend.NotFoundInBackendException;
 import se.chalmers.krogkollen.pub.IPub;
@@ -122,7 +126,7 @@ public enum MapWrapper {
 
                 // Determine which marker color to add.
                 try {
-                    switch (Backend.getInstance().getQueueTime(pub)) {
+                    switch (BackendHandler.getInstance().getQueueTime(pub)) {
                         case 1:
                             drawable = R.drawable.green_marker_bg;
                             break;
@@ -140,7 +144,10 @@ public enum MapWrapper {
                 	// TODO this is a model, this should not be catched here, it must be shown in the view
                 } catch (NotFoundInBackendException e) {
                 	// TODO same as above
-                }
+                } catch (BackendNotInitializedException e) {
+					// TODO another
+					e.printStackTrace();
+				}
                 listMarkerOptions.add(MarkerOptionsFactory.createMarkerOptions(resources, drawable, pub.getName(), pub.getTodaysOpeningHour(),
                         new LatLng(pub.getLatitude(), pub.getLongitude()), pub.getID()));
             }

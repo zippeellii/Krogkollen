@@ -10,7 +10,6 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import se.chalmers.krogkollen.R;
 import se.chalmers.krogkollen.pub.IPub;
-import se.chalmers.krogkollen.utils.Constants;
 
 /**
  * @author Albin Garpetun

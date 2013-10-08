@@ -18,7 +18,9 @@ import se.chalmers.krogkollen.pub.IPub;
 import se.chalmers.krogkollen.pub.PubUtilities;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * MapWrapper (UTF-8)
@@ -75,8 +77,21 @@ public enum MapWrapper {
     /**
      * Removes all pub markers, loads and adds them again.
      */
-    public synchronized void refreshPubMarkers(List<IPub> changedPubs) throws NoBackendAccessException, NotFoundInBackendException {
-        for (IPub pub : changedPubs) {
+    public synchronized void refreshPubMarkers(HashMap<IPub, Integer> changedPubsHash) throws NoBackendAccessException, NotFoundInBackendException {
+
+        List<IPub> changedPubs = new ArrayList<IPub>();
+
+        for (Map.Entry<IPub, Integer> entry: changedPubsHash.entrySet()) {
+
+            IPub pub = entry.getKey();
+            Integer integer = entry.getValue();
+
+            // Find added and changed pubs
+            if (integer == MapPresenter.PUB_CHANGED || integer == MapPresenter.PUB_ADDED) {
+                changedPubs.add(pub);
+            }
+
+            // Just remove pub markers for pubs that currently got a marker on the map.
             for (Marker marker : pubMarkers) {
                 if (pub.getID().equalsIgnoreCase(marker.getId())) {
                     marker.remove();

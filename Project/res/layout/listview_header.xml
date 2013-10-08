@@ -2,20 +2,29 @@
 <LinearLayout
         xmlns:android="http://schemas.android.com/apk/res/android"
         android:orientation="horizontal"
-        android:layout_width="fill_parent"
-        android:layout_height="fill_parent">
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        >
 
-    <TextView android:id="@+id/listview_header"
-              android:layout_width="fill_parent"
-              android:layout_height="fill_parent"
-              android:gravity="center_vertical"
-              android:layout_alignParentTop="true"
-              android:layout_alignParentBottom="true"
-              android:textStyle="bold"
-              android:textSize="22dp"
-              android:textColor="#FFFFFF"
-              android:padding="10dp"
-              android:text="Weather Photos"
-              android:background="#336699" />
+    <Button
+        android:id="@+id/distanceButton"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:text="Avstånd" />
+    
+    <Button
+        android:id="@+id/queueButton"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:text="Kötid"/>
+    <Button
+        android:id="@+id/favoritesButton"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:text="Favoriter"/>
+
 
 </LinearLayout>

@@ -100,6 +100,12 @@ public class MapPresenter implements IMapPresenter {
             case R.id.action_settings:
                 mapView.navigate(SettingsActivity.class);
                 break;
+            case android.R.id.home:
+
+                // OPEN LIST VIEW HERE
+                // USE NAVIGATE IN MAP VIEW / MAP ACTIVITY.
+
+                break;
             default:
                 break;
         }

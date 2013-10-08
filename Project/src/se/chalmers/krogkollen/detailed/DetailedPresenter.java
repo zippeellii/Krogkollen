@@ -8,6 +8,7 @@ import se.chalmers.krogkollen.backend.NoBackendAccessException;
 import se.chalmers.krogkollen.backend.NotFoundInBackendException;
 import se.chalmers.krogkollen.pub.IPub;
 import se.chalmers.krogkollen.pub.PubUtilities;
+import se.chalmers.krogkollen.utils.StringConverter;
 
 /**
  * A presenter class for the detailed view of a pub
@@ -122,19 +123,6 @@ public class DetailedPresenter implements IDetailedPresenter {
 		editor.commit();
 	}
 
-	// TODO move to StringConverter class
-    /**
-     * Converts the hour to string, if the hour is only one digit, add 0 in front, e.g. 3 becomes 03
-     * @param hour
-     * @return the hour as a String
-     */
-	public String convertOpeningHours(int hour){
-		if(hour / 10 ==0){
-			return "0"+hour;
-		}
-		return ""+hour;
-	}
-
     @Override
 	public void getQueueTime(){
 		view.updateQueueIndicator(pub.getQueueTime());
@@ -142,8 +130,8 @@ public class DetailedPresenter implements IDetailedPresenter {
 
     @Override
 	public void getText(){
-		view.updateText(pub.getName(), pub.getDescription(), convertOpeningHours(pub.getTodaysOpeningHour()) + " - " +
-				(convertOpeningHours(pub.getTodaysClosingHour())), ""+pub.getAgeRestriction() + " År", ""+pub.getEntranceFee()
+		view.updateText(pub.getName(), pub.getDescription(), StringConverter.convertOpeningHours(pub.getTodaysOpeningHour()) + " - " +
+				(StringConverter.convertOpeningHours(pub.getTodaysClosingHour())), ""+pub.getAgeRestriction() + " År", ""+pub.getEntranceFee()
 				+ " :-");
 	}
 

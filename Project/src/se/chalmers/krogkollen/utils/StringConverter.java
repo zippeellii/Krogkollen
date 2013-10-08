@@ -30,4 +30,16 @@ public class StringConverter {
 			throw new IllegalArgumentException(e);
 		}
 	}
+	
+    /**
+     * Converts the hour to string, if the hour is only one digit, add 0 in front, e.g. 3 becomes 03
+     * @param hour
+     * @return the hour as a String
+     */
+	public static String convertOpeningHours(int hour){
+		if(hour / 10 ==0){
+			return "0"+hour;
+		}
+		return ""+hour;
+	}
 }

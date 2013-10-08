@@ -105,7 +105,7 @@ public interface IPub {
     public String getID();
 
     /**
-     * @return todays opening and closing hours
+     * @return today's opening and closing hours
      */
     public OpeningHours getTodaysOpeningHours();
 }

@@ -4,12 +4,11 @@ import se.chalmers.krogkollen.IView;
 
 /**
  * Interface for the ListActivity.
- *
- * @author Albin Garpetun
- *         Created 2013-09-22
+ * 
+ * @author Albin Garpetun Created 2013-09-22
  */
-public interface IListView extends IView{
-	
+public interface IListView extends IView {
+
 	/**
 	 * Called when the refresh button is clicked
 	 */

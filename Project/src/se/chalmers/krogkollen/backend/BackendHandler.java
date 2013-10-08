@@ -9,22 +9,23 @@ import se.chalmers.krogkollen.pub.IPub;
  * A singleton class that handles the current active backend.
  * 
  * @author Oskar Karrman
- *
+ * 
  */
 public class BackendHandler {
-	private static BackendHandler instance = null;
-	private static IBackend backendInstance = null;
-	
+	private static BackendHandler	instance		= null;
+	private static IBackend			backendInstance	= null;
+
 	// Private constructor to prevent accessibility
-	private BackendHandler() {}
-	
+	private BackendHandler() {
+	}
+
 	/**
 	 * Returns the instance for this singleton
 	 * 
 	 * @return the instance
 	 */
-	public static BackendHandler getInstance(){
-		if(instance == null){
+	public static BackendHandler getInstance() {
+		if (instance == null) {
 			instance = new BackendHandler();
 		}
 		return instance;
@@ -35,7 +36,7 @@ public class BackendHandler {
 	 * 
 	 * @param backend
 	 */
-	public void setBackend(IBackend backend){
+	public void setBackend(IBackend backend) {
 		backendInstance = backend;
 	}
 
@@ -56,20 +57,22 @@ public class BackendHandler {
 	 * @throws NotFoundInBackendException
 	 * @throws BackendNotInitializedException
 	 */
-	public int getQueueTime(IPub pub) throws NoBackendAccessException, NotFoundInBackendException, BackendNotInitializedException {
+	public int getQueueTime(IPub pub) throws NoBackendAccessException, NotFoundInBackendException,
+			BackendNotInitializedException {
 		this.checkBackendInstance();
 		return backendInstance.getQueueTime(pub);
 	}
 
 	/**
-
+	 * 
 	 * @param id
 	 * @return the IPub object for the specified ID
 	 * @throws NoBackendAccessException
 	 * @throws NotFoundInBackendException
 	 * @throws BackendNotInitializedException
 	 */
-	public IPub getPubFromID(String id) throws NoBackendAccessException, NotFoundInBackendException, BackendNotInitializedException {
+	public IPub getPubFromID(String id) throws NoBackendAccessException,
+			NotFoundInBackendException, BackendNotInitializedException {
 		this.checkBackendInstance();
 		return backendInstance.getPubFromID(id);
 	}
@@ -81,7 +84,8 @@ public class BackendHandler {
 	 * @throws NoBackendAccessException
 	 * @throws BackendNotInitializedException
 	 */
-	public int getPositiveRating(IPub pub) throws NotFoundInBackendException, NoBackendAccessException, BackendNotInitializedException {
+	public int getPositiveRating(IPub pub) throws NotFoundInBackendException,
+			NoBackendAccessException, BackendNotInitializedException {
 		this.checkBackendInstance();
 		return backendInstance.getPositiveRating(pub);
 	}
@@ -94,7 +98,8 @@ public class BackendHandler {
 	 * @throws NoBackendAccessException
 	 * @throws BackendNotInitializedException
 	 */
-	public int getNegativeRating(IPub pub) throws NotFoundInBackendException, NoBackendAccessException, BackendNotInitializedException {
+	public int getNegativeRating(IPub pub) throws NotFoundInBackendException,
+			NoBackendAccessException, BackendNotInitializedException {
 		this.checkBackendInstance();
 		return backendInstance.getNegativeRating(pub);
 	}
@@ -107,7 +112,8 @@ public class BackendHandler {
 	 * @throws NotFoundInBackendException
 	 * @throws BackendNotInitializedException
 	 */
-	public Date getLatestUpdatedTimestamp(IPub pub) throws NoBackendAccessException, NotFoundInBackendException, BackendNotInitializedException {
+	public Date getLatestUpdatedTimestamp(IPub pub) throws NoBackendAccessException,
+			NotFoundInBackendException, BackendNotInitializedException {
 		this.checkBackendInstance();
 		return backendInstance.getLatestUpdatedTimestamp(pub);
 	}
@@ -121,7 +127,8 @@ public class BackendHandler {
 	 * @throws NotFoundInBackendException
 	 * @throws BackendNotInitializedException
 	 */
-	public void addRatingVote(IPub pub, int rating) throws NoBackendAccessException, NotFoundInBackendException, BackendNotInitializedException {
+	public void addRatingVote(IPub pub, int rating) throws NoBackendAccessException,
+			NotFoundInBackendException, BackendNotInitializedException {
 		this.checkBackendInstance();
 		backendInstance.addRatingVote(pub, rating);
 	}
@@ -135,24 +142,27 @@ public class BackendHandler {
 	 * @throws NotFoundInBackendException
 	 * @throws BackendNotInitializedException
 	 */
-	public void removeRatingVote(IPub pub, int rating) throws NoBackendAccessException, NotFoundInBackendException, BackendNotInitializedException {
+	public void removeRatingVote(IPub pub, int rating) throws NoBackendAccessException,
+			NotFoundInBackendException, BackendNotInitializedException {
 		this.checkBackendInstance();
 		backendInstance.removeRatingVote(pub, rating);
 	}
 
 	/**
-	 * Updates queue time and ratings in the specified IPub object to match the fields in the current backend
+	 * Updates queue time and ratings in the specified IPub object to match the fields in the
+	 * current backend
 	 * 
 	 * @param pub
 	 * @throws NoBackendAccessException
 	 * @throws NotFoundInBackendException
 	 * @throws BackendNotInitializedException
 	 */
-	public void updatePubLocally(IPub pub) throws NoBackendAccessException, NotFoundInBackendException, BackendNotInitializedException {
+	public void updatePubLocally(IPub pub) throws NoBackendAccessException,
+			NotFoundInBackendException, BackendNotInitializedException {
 		this.checkBackendInstance();
 		backendInstance.updatePubLocally(pub);
 	}
-	
+
 	// Check if there is a backend
 	private void checkBackendInstance() throws BackendNotInitializedException {
 		if (backendInstance == null) {

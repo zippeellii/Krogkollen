@@ -13,4 +13,5 @@ Tested phones:
 	Google Nexus 4
 	Google Galaxy Nexus
 	Samsung Galaxy S4
+	Samsung Galaxy S4 Mini
 	Samsung Galaxy S3

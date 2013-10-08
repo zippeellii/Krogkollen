@@ -11,7 +11,7 @@ import android.view.MenuItem;
 /**
  * Activity for the help screen
  * 
- * Author: Johan Backman
+ * @author Johan Backman
  * Date: 2013-10-02
  */
 public class HelpActivity extends Activity {

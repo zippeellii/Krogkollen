@@ -166,6 +166,7 @@ public class MapPresenter implements IMapPresenter {
         editor.commit();
     }
 
+    // TODO describe what this does
     private class RefreshTask extends AsyncTask<Void, Void, Void>
     {
         //Before running code in separate thread

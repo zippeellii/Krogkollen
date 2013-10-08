@@ -6,6 +6,7 @@ package se.chalmers.krogkollen.utils;
  * @author Jonathan Nilsfors
  */
 public class StringConverter {
+	
 	/**
 	 * Converts a String to an int.
 	 * The String should be in form :[NUMBER1]:[NUMBER2]:..., where it the returns the fragment in the argument.

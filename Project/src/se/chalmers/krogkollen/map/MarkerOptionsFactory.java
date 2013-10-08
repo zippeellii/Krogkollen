@@ -84,6 +84,7 @@ class MarkerOptionsFactory {
         return options;
     }
 
+    // Find the right background to use.
     private static Bitmap getBackgroundPicture(int queueTime, Resources resources) {
         switch (queueTime) {
             case 1:

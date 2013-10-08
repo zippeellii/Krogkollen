@@ -21,7 +21,9 @@ import se.chalmers.krogkollen.pub.IPub;
 import se.chalmers.krogkollen.pub.PubUtilities;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * MapWrapper (UTF-8)
@@ -61,20 +63,21 @@ public enum MapWrapper {
         googleMap = ((MapFragment) activity.getFragmentManager().findFragmentById(R.id.map)).getMap();
         this.resources = activity.getResources();
         this.context = activity;
-        this.addPubMarkers();
+        this.addPubMarkers(PubUtilities.getInstance().getPubList());
     }
 
     /**
      * Add markers for all pubs on the server to the map
-     * 
+     *
      * @throws NoBackendAccessException
      * @throws NotFoundInBackendException
      */
-    private void addPubMarkers() throws NoBackendAccessException, NotFoundInBackendException {
-        IPub[] pubArray = new IPub[PubUtilities.getInstance().getPubList().size()];
+    // Add markers for all pubs on the server to the map.
+    private void addPubMarkers(List<IPub> pubs) throws NoBackendAccessException, NotFoundInBackendException {
+        IPub[] pubArray = new IPub[pubs.size()];
 
-        for (int i = 0; i < PubUtilities.getInstance().getPubList().size(); i++) {
-            pubArray[i] = PubUtilities.getInstance().getPubList().get(i);
+        for (int i = 0; i < pubs.size(); i++) {
+            pubArray[i] = pubs.get(i);
         }
         new CreateMarkerTask().execute(pubArray);
     }
@@ -82,12 +85,29 @@ public enum MapWrapper {
     /**
      * Removes all pub markers, loads and adds them again.
      */
-    public synchronized void refreshPubMarkers() throws NoBackendAccessException, NotFoundInBackendException {
-        for(Marker pubMarker: this.pubMarkers){
-            pubMarker.remove();
+    public synchronized void refreshPubMarkers(HashMap<IPub, Integer> changedPubsHash) throws NoBackendAccessException, NotFoundInBackendException {
+
+        List<IPub> changedPubs = new ArrayList<IPub>();
+
+        for (Map.Entry<IPub, Integer> entry: changedPubsHash.entrySet()) {
+
+            IPub pub = entry.getKey();
+            Integer integer = entry.getValue();
+
+            // Find added and changed pubs
+            if (integer == MapPresenter.PUB_CHANGED || integer == MapPresenter.PUB_ADDED) {
+                changedPubs.add(pub);
+            }
+
+            // Just remove pub markers for pubs that currently got a marker on the map.
+            for (Marker marker : pubMarkers) {
+                if (pub.getID().equalsIgnoreCase(marker.getId())) {
+                    marker.remove();
+                    pubMarkers.remove(marker);
+                }
+            }
         }
-        this.pubMarkers.clear();
-        this.addPubMarkers();
+        this.addPubMarkers(changedPubs);
     }
 
     /**
@@ -111,7 +131,7 @@ public enum MapWrapper {
         @Override
         protected void onPreExecute()
         {
-            progressDialog = ProgressDialog.show(context, "", "Laddar pubbar...", false, false); // TODO "laddar"-message should be placed in strings.xml
+            progressDialog = ProgressDialog.show(context, "", resources.getString(R.string.loading_pubs), false, false);
         }
 
         @Override
@@ -145,11 +165,10 @@ public enum MapWrapper {
                 } catch (NotFoundInBackendException e) {
                 	// TODO same as above
                 } catch (BackendNotInitializedException e) {
-					// TODO another
-					e.printStackTrace();
+
 				}
-                listMarkerOptions.add(MarkerOptionsFactory.createMarkerOptions(resources, drawable, pub.getName(), pub.getTodaysOpeningHour(),
-                        new LatLng(pub.getLatitude(), pub.getLongitude()), pub.getID()));
+                listMarkerOptions.add(MarkerOptionsFactory.createMarkerOptions(resources, drawable, pub.getName(),
+                        pub.getTodaysOpeningHours().toString(),new LatLng(pub.getLatitude(), pub.getLongitude()), pub.getID()));
             }
             return listMarkerOptions;
         }

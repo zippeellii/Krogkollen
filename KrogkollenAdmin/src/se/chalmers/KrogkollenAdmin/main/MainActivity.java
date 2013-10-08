@@ -1,11 +1,13 @@
 package se.chalmers.KrogkollenAdmin.main;
 
 import android.app.Activity;
+import android.app.ProgressDialog;
 import android.os.Bundle;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.*;
+import se.chalmers.KrogkollenAdmin.R;
 
 /**
  * First activity for the admin application.
@@ -19,7 +21,7 @@ public class MainActivity extends Activity {
     private Button loginButton;
     private AutoCompleteTextView userNameField;
     private EditText passwordField;
-//    private ProgressBar circle;           Not yet used
+    private ProgressDialog progressDialog;
     private MainPresenter presenter;
 
     /**
@@ -45,10 +47,6 @@ public class MainActivity extends Activity {
      * Sets up the fields and the login button.
      */
     private void setupUiElements() {
-        // Sets up the progressindicator        Not yet used
-//        circle = (ProgressBar) findViewById(se.chalmers.KrogkollenAdmin.R.id.marker_progress);
-//        circle.setVisibility(View.INVISIBLE);
-
         // Sets up the username with auto completion
         userNameField = (AutoCompleteTextView)
                 findViewById(se.chalmers.KrogkollenAdmin.R.id.txtPubName);
@@ -60,11 +58,28 @@ public class MainActivity extends Activity {
         getActionBar().hide();
     }
 
+    /**
+     * Associates the userNameField with a list of strings so that auto completion is available.
+     */
     public void setupAutocompletion() {
         ArrayAdapter<String> adapter = new ArrayAdapter<String>(this,
                 android.R.layout.simple_dropdown_item_1line, presenter.getPubUsers());
         userNameField.setAdapter(adapter);
 
+    }
+
+    /**
+     * Shows that the application is loading something from or up to the server.
+     */
+    public void showProgressDialog() {
+        progressDialog = ProgressDialog.show(this, "", getResources().getString(R.string.logging_in), false, false);
+    }
+
+    /**
+     * Hides the loading-indicator.
+     */
+    public void hideProgressDialog() {
+        progressDialog.hide();
     }
 
     /**
@@ -87,6 +102,7 @@ public class MainActivity extends Activity {
             }
         });
 
+        // This listener makes sure to hide the on-screen keyboard if they click 'next' in the password-field.
         passwordField.setOnKeyListener(new View.OnKeyListener()
         {
             public boolean onKey(View v, int keyCode, KeyEvent event)

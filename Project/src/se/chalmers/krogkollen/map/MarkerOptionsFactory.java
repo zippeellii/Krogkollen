@@ -48,7 +48,7 @@ public class MarkerOptionsFactory {
      * @return a new google maps marker.
      */
     public static MarkerOptions createMarkerOptions(Resources resources, int resourceId, String mainText,
-                                                    int denotedText, LatLng position, String pubId) {
+                                                    String denotedText, LatLng position, String pubId) {
 
         // Make the bitmap mutable, since an object retrieved from resources is set to immutable by default.
         Bitmap bitmap = BitmapFactory.decodeResource(resources, resourceId);
@@ -74,7 +74,7 @@ public class MarkerOptionsFactory {
         canvas.drawText(mainText, 7 + (minWidthHeight/marginRatio), 31 + (minWidthHeight/marginRatio), paint);
         paint.setColor(Color.rgb(141,141,141));
         paint.setTextSize(minWidthHeight / smallTextRatio);
-        canvas.drawText((denotedText + ""), 7 + (minWidthHeight/marginRatio), 62 + (minWidthHeight/marginRatio), paint);
+        canvas.drawText((denotedText), 7 + (minWidthHeight/marginRatio), 62 + (minWidthHeight/marginRatio), paint);
 
         // Finalize the markerOptions.
         MarkerOptions options = new MarkerOptions()

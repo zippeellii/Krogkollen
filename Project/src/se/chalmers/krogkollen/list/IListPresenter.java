@@ -2,6 +2,8 @@ package se.chalmers.krogkollen.list;
 
 import java.util.List;
 
+import android.view.View.OnClickListener;
+
 import se.chalmers.krogkollen.IPresenter;
 import se.chalmers.krogkollen.pub.IPub;
 
@@ -11,7 +13,7 @@ import se.chalmers.krogkollen.pub.IPub;
  * @author Albin Garpetun
  *         Created 2013-09-22
  */
-public interface IListPresenter extends IPresenter{
+public interface IListPresenter extends IPresenter, OnClickListener{
 	
 	/**
 	 * Sorts a list of IPub objects according to specified SortMode

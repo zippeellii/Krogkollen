@@ -156,11 +156,10 @@ public class DetailedActivity extends Activity implements IDetailedView {
      */
     public void addThumbsUpButtonListener(){
         thumbsUpButton = (ImageButton) findViewById(R.id.thumbsUpButton);
-        thumbsUpButton.setOnClickListener(new View.OnClickListener() {
+        thumbsUpButton.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View view){
                 try {
-
                     presenter.ratingChanged(1);
                     presenter.getVotes();
 

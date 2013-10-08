@@ -32,7 +32,7 @@ import java.util.List;
  * Date: 2013-10-03
  */
 
-public enum MapWrapper {
+enum MapWrapper {
 
     /**
      * Enum singleton instance variable.

@@ -1,6 +1,7 @@
 package se.chalmers.krogkollen.detailed;
 
 import android.content.SharedPreferences;
+import android.os.AsyncTask;
 import se.chalmers.krogkollen.IView;
 import se.chalmers.krogkollen.backend.Backend;
 import se.chalmers.krogkollen.backend.NoBackendAccessException;
@@ -33,7 +34,6 @@ public class DetailedPresenter implements IDetailedPresenter {
      */
 	public void setPub(String pubID) throws NoBackendAccessException, NotFoundInBackendException{
 		pub = PubUtilities.getInstance().getPub(pubID);
-		Backend.getInstance().updatePubLocally(pub);
 	}
 
 	@Override
@@ -190,6 +190,30 @@ public class DetailedPresenter implements IDetailedPresenter {
      * @throws NotFoundInBackendException
      */
     public void updateInfo() throws NoBackendAccessException, NotFoundInBackendException{
-        Backend.getInstance().updatePubLocally(pub);
+        new UpdateTask().execute();
     }
+
+    private class UpdateTask extends AsyncTask<Void, Void, Void>{
+        protected void onPreExecute(){
+            view.showProgressDialog();
+        }
+
+        protected Void doInBackground(Void... voids){
+
+            try {
+                Backend.getInstance().updatePubLocally(pub);
+            } catch (NoBackendAccessException e) {
+                e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
+            } catch (NotFoundInBackendException e) {
+                e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
+            }
+            return null;
+        }
+
+        protected void onPostExecute(Void result){
+            view.hideProgressDialog();
+            view.refresh();
+        }
+    }
+
 }

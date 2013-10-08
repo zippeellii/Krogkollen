@@ -30,7 +30,7 @@ import com.google.android.gms.maps.model.MarkerOptions;
  * Author: Johan Backman
  * Date: 2013-09-22
  */
-class MarkerOptionsFactory {
+public class MarkerOptionsFactory {
 
     private final static int bigTextRatio = 22;
     private final static int smallTextRatio = 30;

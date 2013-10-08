@@ -1,6 +1,8 @@
 package se.chalmers.krogkollen.detailed;
 
+import com.google.android.gms.maps.model.LatLng;
 import se.chalmers.krogkollen.IView;
+import se.chalmers.krogkollen.pub.IPub;
 
 /**
  * Interface for a DetailedView
@@ -35,4 +37,9 @@ public interface IDetailedView extends IView {
      */
     public void updateVotes(String upVotes, String downVotes);
 
+
+    public void addMarker(LatLng position, IPub pub);
+
+
+    public void navigateToLocation(LatLng latLng, int zoom);
 }

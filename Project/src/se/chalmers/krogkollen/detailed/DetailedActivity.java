@@ -1,16 +1,25 @@
 package se.chalmers.krogkollen.detailed;
 
 import android.app.Activity;
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.*;
+import com.google.android.gms.maps.CameraUpdate;
+import com.google.android.gms.maps.CameraUpdateFactory;
+import com.google.android.gms.maps.GoogleMap;
+import com.google.android.gms.maps.MapFragment;
+import com.google.android.gms.maps.model.CameraPosition;
+import com.google.android.gms.maps.model.LatLng;
 import se.chalmers.krogkollen.R;
 import se.chalmers.krogkollen.backend.NoBackendAccessException;
 import se.chalmers.krogkollen.backend.NotFoundInBackendException;
 import se.chalmers.krogkollen.map.MapActivity;
+import se.chalmers.krogkollen.map.MarkerOptionsFactory;
+import se.chalmers.krogkollen.pub.IPub;
 
 /*
  * This file is part of Krogkollen.
@@ -48,6 +57,9 @@ public class DetailedActivity extends Activity implements IDetailedView {
     private ImageView thumbsUpImage, thumbsDownImage, queueIndicator;
     private MenuItem favoriteStar;
     private LinearLayout thumbsUpLayout, thumbsDownLayout;
+    private ProgressDialog progressDialog;
+
+    private GoogleMap map;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -79,6 +91,9 @@ public class DetailedActivity extends Activity implements IDetailedView {
         thumbsDownImage = (ImageView) findViewById(R.id.thumbsDownButton);
         thumbsUpLayout = (LinearLayout) findViewById(R.id.thumbsUpLayout);
         thumbsDownLayout = (LinearLayout) findViewById(R.id.thumbsDownLayout);
+
+        map = ((MapFragment) getFragmentManager().findFragmentById(R.id.map)).getMap();
+
         addThumbsUpLayoutListener();
         addThumbsDownLayoutListener();
     }
@@ -153,7 +168,7 @@ public class DetailedActivity extends Activity implements IDetailedView {
         presenter.getText();
         presenter.getThumbs();
         presenter.getFavoriteStar();
-
+        
         try {
             presenter.getVotes();
         } catch (NoBackendAccessException e) {
@@ -241,6 +256,17 @@ public class DetailedActivity extends Activity implements IDetailedView {
     }
 
     @Override
+    public void addMarker(LatLng position, IPub pub) {
+        map.addMarker(MarkerOptionsFactory.createMarkerOptions(getResources(), R.drawable.yellow_marker_bg, pub.getName(),
+                pub.getTodaysOpeningHours().toString(), position, pub.getID()));
+    }
+
+    @Override
+    public void navigateToLocation(LatLng latLng, int zoom) {
+        map.animateCamera(CameraUpdateFactory.newCameraPosition(new CameraPosition(latLng, zoom, 0, 45)));
+    }
+
+    @Override
     public boolean onOptionsItemSelected(MenuItem menuItem){
         switch(menuItem.getItemId()){
 
@@ -279,5 +305,13 @@ public class DetailedActivity extends Activity implements IDetailedView {
             favoriteStar.setIcon(R.drawable.star_filled);
         }
 
+    }
+
+    public void showProgressDialog(){
+        progressDialog = ProgressDialog.show(this, "","Uppdaterar", false, false);
+    }
+
+    public void hideProgressDialog(){
+        progressDialog.hide();
     }
 }

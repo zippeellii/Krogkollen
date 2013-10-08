@@ -10,6 +10,8 @@ import java.util.Timer;
 import java.util.TimerTask;
 
 /**
+ * The presenter class for the ButtonsActivity. It holds all the data and logic for the view.
+ *
  * @author Albin Garpetun
  *         Created 2013-09-22
  */
@@ -17,17 +19,25 @@ public class ButtonsPresenter {
 
     private int queueTime;
     private ParseObject object;
-    private ButtonsActivity activity;
+    private ButtonsActivity view;
     private Timer inputDisabledTimer;
     public final int DISABLE_TIME = 20000;
     private boolean buttonOnCooldown;
 
+    /**
+     * Constructor. Gets called when the ButtonsActivity is started, so they know each other.
+     *
+     * @param butt The activity that should know about this presenter.
+     */
     public ButtonsPresenter(ButtonsActivity butt) {
-        activity = butt;
+        view = butt;
 
         runTimer();
     }
 
+    /**
+     * Runs a timer that handles disabling of the buttons. Makes sure that the user doesn't spam the server by disabling more than one click every 20 second.
+     */
     public void runTimer() {
         inputDisabledTimer = new Timer();
         inputDisabledTimer.schedule(new TimerTask() {
@@ -40,16 +50,11 @@ public class ButtonsPresenter {
     }
 
     /**
-     * This method is called by the timer everytime it reaches the DISABLE_TIME.
+     * This method is called by the timer every time it reaches the DISABLE_TIME.
      */
     private void timerFinished() {
-        //This method is called directly by the timer
-        //and runs in the same thread as the timer.
-
-        //We call the method that will work with the UI
-        //through the runOnUiThread method.
-
-        activity.runOnUiThread(Timer_Tick);
+        //This method runs in the same thread as the timer.
+        view.runOnUiThread(Timer_Tick);
     }
 
     /**
@@ -58,16 +63,10 @@ public class ButtonsPresenter {
      */
     private Runnable Timer_Tick = new Runnable() {
         public void run() {
-
+            //Changes the UI to let the user know that input isn't allowed for a while.
+            //This method runs in the same thread as the GUI.
             buttonOnCooldown = false;
-            activity.updateGUI();
-
-            //Change the UI to give a hint that no input will be taken for the amount of time set.
-
-            //This method runs in the same thread as the UI.
-
-            //Do something to the UI thread here
-
+            view.updateGUI();
         }
     };
 
@@ -123,35 +122,49 @@ public class ButtonsPresenter {
         return queueTime;
     }
 
+    /**
+     * Setter for the variable that decides if input is allowed or not.
+     *
+     * @param buttonOnCooldown Set to true if you want to disable input.
+     */
     public void setButtonOnCooldown(boolean buttonOnCooldown) {
         this.buttonOnCooldown = buttonOnCooldown;
     }
 
+    /**
+     * Getter for the variable that decides if input is allowed or not.
+     *
+     * @return True if the input is disabled.
+     */
     public boolean getButtonOnCooldown() {
         return buttonOnCooldown;
     }
 
 
+    /**
+     * A task to be be run on another thread, making sure that it shows a loading indicator when the task is executing.
+     */
     private class ServerUpdateTask extends AsyncTask<Integer, Void, Void> {
 
         @Override
-        protected void onPreExecute()
-        {
-            activity.showProgressDialog();
+        protected void onPreExecute() {
+            // This is what we want to do before the possibly time-consuming task is started.
+            view.showProgressDialog();
         }
 
         @Override
         protected Void doInBackground(Integer... integers) {
+            // This is what we want to do, that might take some time.
             setServerQueueTime(integers[0]);
             setLocalQueueTime();
             return null;
         }
 
         @Override
-        protected void onPostExecute(Void result)
-        {
-            activity.updateGUI();
-            activity.hideProgressDialog();
+        protected void onPostExecute(Void result) {
+            // This is what we want to do when the task is done.
+            view.updateGUI();
+            view.hideProgressDialog();
         }
     }
 }

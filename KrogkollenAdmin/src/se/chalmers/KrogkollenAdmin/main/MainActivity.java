@@ -22,7 +22,6 @@ public class MainActivity extends Activity {
     private AutoCompleteTextView userNameField;
     private EditText passwordField;
     private ProgressDialog progressDialog;
-
     private MainPresenter presenter;
 
     /**
@@ -59,6 +58,9 @@ public class MainActivity extends Activity {
         getActionBar().hide();
     }
 
+    /**
+     * Associates the userNameField with a list of strings so that auto completion is available.
+     */
     public void setupAutocompletion() {
         ArrayAdapter<String> adapter = new ArrayAdapter<String>(this,
                 android.R.layout.simple_dropdown_item_1line, presenter.getPubUsers());
@@ -66,10 +68,16 @@ public class MainActivity extends Activity {
 
     }
 
+    /**
+     * Shows that the application is loading something from or up to the server.
+     */
     public void showProgressDialog() {
         progressDialog = ProgressDialog.show(this, "", getResources().getString(R.string.logging_in), false, false);
     }
 
+    /**
+     * Hides the loading-indicator.
+     */
     public void hideProgressDialog() {
         progressDialog.hide();
     }
@@ -94,6 +102,7 @@ public class MainActivity extends Activity {
             }
         });
 
+        // This listener makes sure to hide the on-screen keyboard if they click 'next' in the password-field.
         passwordField.setOnKeyListener(new View.OnKeyListener()
         {
             public boolean onKey(View v, int keyCode, KeyEvent event)

@@ -60,12 +60,6 @@ public enum MapWrapper {
         this.addPubMarkers(PubUtilities.getInstance().getPubList());
     }
 
-    /**
-     * Add markers for all pubs on the server to the map
-     *
-     * @throws NoBackendAccessException
-     * @throws NotFoundInBackendException
-     */
     // Add markers for all pubs on the server to the map.
     private void addPubMarkers(List<IPub> pubs) throws NoBackendAccessException, NotFoundInBackendException {
         IPub[] pubArray = new IPub[pubs.size()];
@@ -120,6 +114,7 @@ public enum MapWrapper {
         this.context = context;
     }
 
+    // TODO describe what this does
     private class CreateMarkerTask extends AsyncTask<IPub, Void, List<MarkerOptions>> {
 
         @Override

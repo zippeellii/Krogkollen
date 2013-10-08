@@ -9,7 +9,7 @@ import se.chalmers.krogkollen.IView;
  *
  */
 public interface IDetailedView extends IView {
-
+	
 	/**
 	 * Updates all text fields on the detailed view
 	 */

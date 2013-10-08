@@ -29,7 +29,7 @@ import se.chalmers.krogkollen.pub.IPub;
 /**
  * Builds settings for markers in Google Maps V2 for Android.
  *
- * Author: Johan Backman
+ * @author Johan Backman
  * Date: 2013-09-22
  */
 class MarkerOptionsFactory {

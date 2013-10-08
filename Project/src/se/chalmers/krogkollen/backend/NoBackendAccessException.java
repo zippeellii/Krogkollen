@@ -2,7 +2,7 @@ package se.chalmers.krogkollen.backend;
 
 /**
  * An exception indicating that an action to the backend failed.
- * Causes could be, but not limited to, not logged in, backend is offline, no permission to edit selected Pub
+ * Causes could be, but not limited to, not logged in, backend is offline, no permission to edit selected pub
  * 
  * @author Oskar Karrman
  *

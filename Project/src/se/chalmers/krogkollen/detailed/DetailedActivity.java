@@ -81,8 +81,6 @@ public class DetailedActivity extends Activity implements IDetailedView {
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-
-        System.out.println("FUCKEEEEER" + R.id.favorite_star);
         super.onCreateOptionsMenu(menu);
 
         // Inflate the menu; this adds items to the action bar if it is present.
@@ -97,7 +95,6 @@ public class DetailedActivity extends Activity implements IDetailedView {
 	public void navigate(Class<?> destination) {
         Intent navigateBack = new Intent(this, destination);
         startActivity(navigateBack);
-
 	}
 
 	@Override
@@ -135,7 +132,6 @@ public class DetailedActivity extends Activity implements IDetailedView {
 	@Override
 	public void navigate(Class<?> destination, Bundle extras) {
 		// TODO Auto-generated method stub
-		
 	}
 
 	@Override

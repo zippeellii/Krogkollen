@@ -3,12 +3,15 @@ package se.chalmers.krogkollen.backend;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+
 import android.content.Context;
+
 import com.parse.Parse;
 import com.parse.ParseException;
 import com.parse.ParseObject;
 import com.parse.ParseQuery;
 import com.parse.SaveCallback;
+
 import se.chalmers.krogkollen.pub.IPub;
 import se.chalmers.krogkollen.pub.Pub;
 import se.chalmers.krogkollen.utils.StringConverter;
@@ -23,10 +26,22 @@ import se.chalmers.krogkollen.utils.StringConverter;
  */
 public class ParseBackend implements IBackend {
 
+	// This exists to prevent the empty constructor to be called, since all information in the other constructor is required
+	@SuppressWarnings("unused")
+	private ParseBackend(){}
+	
+	/**
+	 * Initializes the backend to Parse.com, all information is required
+	 * 
+	 * @param context
+	 * @param applicationID
+	 * @param clientKey
+	 */
 	public ParseBackend(Context context, String applicationID, String clientKey) {
 		Parse.initialize(context, applicationID, clientKey);
 	}
 
+	@Override
 	public List<IPub> getAllPubs() throws NoBackendAccessException {
 
 		//Instantiates the list to be returned
@@ -51,6 +66,7 @@ public class ParseBackend implements IBackend {
 		return tempPubList;
 	}
 
+	@Override
 	public int getQueueTime(IPub pub) throws NoBackendAccessException, NotFoundInBackendException {
 		ParseObject object = new ParseObject("Pub");
 
@@ -67,6 +83,7 @@ public class ParseBackend implements IBackend {
 		return object.getInt("queueTime");
 	}
 
+	@Override
 	public IPub getPubFromID(String id) throws NoBackendAccessException, NotFoundInBackendException {
 		ParseObject object = new ParseObject("Pub");
 
@@ -83,6 +100,7 @@ public class ParseBackend implements IBackend {
 		return this.convertParseObjecttoIPub(object);
 	}
 
+	@Override
 	public int getPositiveRating(IPub pub) throws NotFoundInBackendException, NoBackendAccessException {
 		ParseObject object = new ParseObject("Pub");
 
@@ -100,6 +118,7 @@ public class ParseBackend implements IBackend {
 		return object.getInt("posRate");
 	}
 
+	@Override
 	public int getNegativeRating(IPub pub) throws NotFoundInBackendException, NoBackendAccessException {
 		ParseObject object = new ParseObject("Pub");
 
@@ -117,6 +136,7 @@ public class ParseBackend implements IBackend {
 		return object.getInt("negRate");
 	}
 
+	@Override
 	public Date getLatestUpdatedTimestamp(IPub pub) throws NoBackendAccessException, NotFoundInBackendException {
 		ParseObject object = new ParseObject("Pub");
 
@@ -150,6 +170,7 @@ public class ParseBackend implements IBackend {
 				object.getObjectId());
 	}
 
+	@Override
 	public void addRatingVote(IPub pub, int rating) throws NoBackendAccessException, NotFoundInBackendException {
 
 		// Create a pointer to an object of class Pub
@@ -173,6 +194,7 @@ public class ParseBackend implements IBackend {
 		});
 	}
 
+	@Override
 	public void removeRatingVote(IPub pub, int rating) throws NoBackendAccessException, NotFoundInBackendException {
 
 		// Create a pointer to an object of class Pub
@@ -199,6 +221,7 @@ public class ParseBackend implements IBackend {
 		});
 	}
 	
+	@Override
 	public void updatePubLocally(IPub pub) throws NoBackendAccessException, NotFoundInBackendException {
 		ParseObject object = new ParseObject("Pub");
 

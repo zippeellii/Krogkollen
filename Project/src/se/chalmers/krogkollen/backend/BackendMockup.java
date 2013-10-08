@@ -8,7 +8,7 @@ import se.chalmers.krogkollen.pub.IPub;
 import se.chalmers.krogkollen.pub.Pub;
 
 /**
- * A mockup backend that can be used for testing purposes
+ * A mockup backend that can be used for testing purposes and faster response times
  * 
  * @author Oskar Karrman
  *
@@ -40,11 +40,11 @@ public class BackendMockup implements IBackend {
 	}
 	
 	private void throwNoBackend() throws NoBackendAccessException {
-		if (throwNoBackend) throw new NoBackendAccessException("No backend access, from mockup", 1337);
+		if (throwNoBackend) throw new NoBackendAccessException("No backend access exception, thrown from mockup backend", 1337);
 	}
 	
 	private void throwNotFound() throws NotFoundInBackendException {
-		if (throwNotFound) throw new NotFoundInBackendException("Not found in backend, from mockup");
+		if (throwNotFound) throw new NotFoundInBackendException("Not found in backend exception, thrown from mockup backend");
 	}
 	
 	@Override
@@ -114,7 +114,6 @@ public class BackendMockup implements IBackend {
 		return pubs.get(0).getNegativeRating();
 	}
 
-	@SuppressWarnings("deprecation")
 	@Override
 	public Date getLatestUpdatedTimestamp(IPub pub)
 			throws NotFoundInBackendException, NoBackendAccessException {
@@ -134,5 +133,4 @@ public class BackendMockup implements IBackend {
 		pub.setPositiveRating(pubs.get(0).getPositiveRating());
 		pub.setQueueTime(pubs.get(0).getQueueTime());
 	}
-
 }

@@ -49,11 +49,6 @@ public interface IMapPresenter extends IPresenter, IObserver {
     public abstract List<IPub> search(String search);
 
     /**
-     * Refresh information for all IPub objects
-     */
-    public abstract void refresh();
-
-    /**
      * Determine what will happen when an action bar item is clicked.
      *
      * @param item the menuitem that was clicked.

@@ -10,6 +10,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import se.chalmers.krogkollen.R;
 import se.chalmers.krogkollen.pub.IPub;
+import se.chalmers.krogkollen.utils.Constants;
 
 /**
  * @author Albin Garpetun
@@ -50,9 +51,21 @@ public class PubListAdapter extends ArrayAdapter<IPub> {
         }
 
         IPub pub = data[position];
-        holder.txtTitle.setText(GET TITLE OF PUB HERE);
-        holder.imgIcon.setImageResource(GET ICON OF PUB HERE);
-
+        holder.txtTitle.setText(pub.getName());
+        switch(pub.getQueueTime()){
+        case 1:
+        	holder.imgIcon.setImageResource(Constants.SHORT_QUEUE);
+        	break;
+        case 2:
+        	holder.imgIcon.setImageResource(Constants.MEDIUM_QUEUE);
+        	break;
+        case 3:
+        	holder.imgIcon.setImageResource(Constants.LONG_QUEUE);
+        	break;
+        default :
+        	holder.imgIcon.setImageResource(Constants.NO_INFO_QUEUE);
+        	break;
+        }
         return row;
     }
 

@@ -74,7 +74,6 @@
         </activity>
         <activity android:name="se.chalmers.krogkollen.help.HelpActivity"
                   android:label="@string/title_activity_help"
-                  android:parentActivityName="se.chalmers.krogkollen.map.MapActivity"
                   android:configChanges="orientation|keyboardHidden">
             <!-- Parent activity meta-data to support 4.0 and lower -->
             <meta-data

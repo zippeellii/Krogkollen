@@ -18,9 +18,12 @@ public class ListActivity extends Activity implements IListView {
 
     private ListView listView;
     private IPub[] pub_data;
+    private IListPresenter presenter;
 
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        presenter = new ListPresenter();
+        presenter.setView(this);
 
         pub_data = (IPub[]) PubUtilities.getInstance().getPubList().toArray();
 
@@ -34,6 +37,15 @@ public class ListActivity extends Activity implements IListView {
         listView.addHeaderView(header);
 
         listView.setAdapter(adapter);
+        this.addListeners();
+    }
+    /**
+     * Add the presenter as listener to the buttons
+     */
+    private void addListeners(){
+    	findViewById(R.id.distanceButton).setOnClickListener(presenter);
+    	findViewById(R.id.queueButton).setOnClickListener(presenter);
+    	findViewById(R.id.favoritesButton).setOnClickListener(presenter);
     }
 
 

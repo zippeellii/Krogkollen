@@ -45,9 +45,9 @@ public class DetailedActivity extends Activity implements IDetailedView {
     /** A bunch of view elements*/
     private TextView pubTextView, descriptionTextView,openingHoursTextView,
             ageRestrictionTextView, entranceFeeTextView, votesUpTextView, votesDownTextView;
-    private ImageButton thumbsUpButton, thumbsDownButton;
-    private ImageView queueIndicator;
+    private ImageView thumbsUpImage, thumbsDownImage, queueIndicator;
     private MenuItem favoriteStar;
+    private LinearLayout thumbsUpLayout, thumbsDownLayout;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -65,9 +65,6 @@ public class DetailedActivity extends Activity implements IDetailedView {
 			e.printStackTrace();
 		}
 
-        addThumbsUpButtonListener();
-        addThumbsDownButtonListener();
-
         ScrollView scroll = (ScrollView) findViewById(R.id.scrollView);
         scroll.setFadingEdgeLength(100);
         pubTextView= (TextView) findViewById(R.id.pub_name);
@@ -78,6 +75,12 @@ public class DetailedActivity extends Activity implements IDetailedView {
         queueIndicator = (ImageView) findViewById(R.id.queueIndicator);
         votesUpTextView = (TextView) findViewById(R.id.thumbsUpTextView);
         votesDownTextView = (TextView) findViewById(R.id.thumbsDownTextView);
+        thumbsUpImage = (ImageView) findViewById(R.id.thumbsUpButton);
+        thumbsDownImage = (ImageView) findViewById(R.id.thumbsDownButton);
+        thumbsUpLayout = (LinearLayout) findViewById(R.id.thumbsUpLayout);
+        thumbsDownLayout = (LinearLayout) findViewById(R.id.thumbsDownLayout);
+        addThumbsUpLayoutListener();
+        addThumbsDownLayoutListener();
     }
 
     @Override
@@ -163,9 +166,8 @@ public class DetailedActivity extends Activity implements IDetailedView {
     /**
      * Adds listener to thumb up button.
      */
-    public void addThumbsUpButtonListener(){
-        thumbsUpButton = (ImageButton) findViewById(R.id.thumbsUpButton);
-        thumbsUpButton.setOnClickListener(new View.OnClickListener() {
+    public void addThumbsUpLayoutListener(){
+        thumbsUpLayout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view){
                 try {
@@ -185,9 +187,8 @@ public class DetailedActivity extends Activity implements IDetailedView {
     /**
      * Adds listener to thumb down button.
      */
-    public void addThumbsDownButtonListener(){
-        thumbsDownButton = (ImageButton) findViewById(R.id.thumbsDownButton);
-        thumbsDownButton.setOnClickListener(new View.OnClickListener() {
+    public void addThumbsDownLayoutListener(){
+        thumbsDownLayout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 try {
@@ -213,16 +214,16 @@ public class DetailedActivity extends Activity implements IDetailedView {
     public void setThumbs(int thumb){
         switch (thumb){
             case -1:
-                thumbsDownButton.setBackgroundResource(R.drawable.thumb_down_selected);
-                thumbsUpButton.setBackgroundResource(R.drawable.thumb_up);
+                thumbsDownImage.setBackgroundResource(R.drawable.thumb_down_selected);
+                thumbsUpImage.setBackgroundResource(R.drawable.thumb_up);
                 break;
             case 1:
-                thumbsUpButton.setBackgroundResource(R.drawable.thumb_up_selected);
-                thumbsDownButton.setBackgroundResource(R.drawable.thumb_down);
+                thumbsUpImage.setBackgroundResource(R.drawable.thumb_up_selected);
+                thumbsDownImage.setBackgroundResource(R.drawable.thumb_down);
                 break;
             default:
-                thumbsDownButton.setBackgroundResource(R.drawable.thumb_down);
-                thumbsUpButton.setBackgroundResource(R.drawable.thumb_up);
+                thumbsDownImage.setBackgroundResource(R.drawable.thumb_down);
+                thumbsUpImage.setBackgroundResource(R.drawable.thumb_up);
                 break;
         }
 
@@ -246,6 +247,7 @@ public class DetailedActivity extends Activity implements IDetailedView {
             case R.id.favorite_star:
                 presenter.saveFavoriteState();
                 presenter.getFavoriteStar();
+                break;
 
             case R.id.refresh_info:
                 try {
@@ -256,8 +258,10 @@ public class DetailedActivity extends Activity implements IDetailedView {
                     this.showErrorMessage(e.getMessage());
                 }
                 refresh();
+                break;
 
             case R.id.action_settings:
+                break;
         }
         return true;
     }

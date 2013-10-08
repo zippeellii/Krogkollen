@@ -13,12 +13,18 @@ public class BackendNotInitializedException extends Exception {
 	 */
 	private static final long serialVersionUID = -5054620912828459605L;
 	
-	// TODO javadoc
+	/**
+	 * Create the exception without additional information
+	 */
 	public BackendNotInitializedException() {
 		super();
 	}
 	
-	// TODO javadoc
+	/**
+	 * Create the exception with the specified message
+	 * 
+	 * @param message
+	 */
 	public BackendNotInitializedException(String message) {
 		super(message);
 	}

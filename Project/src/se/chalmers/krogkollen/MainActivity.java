@@ -59,7 +59,7 @@ public class MainActivity extends Activity {
     }
 
 
-    // TODO javadoc
+    // TODO comment what this does
     private class InitResourcesTask extends AsyncTask<Void, Void, Void> {
 
         @Override

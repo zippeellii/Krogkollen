@@ -28,20 +28,20 @@
                       android:layout_width="match_parent"
                       android:layout_height="match_parent"
                       android:gravity="center_vertical"
-                      android:layout_alignParentTop="true"
-                      android:layout_alignParentBottom="true"
                       android:textStyle="bold"
                       android:textSize="22dp"
-                      android:textColor="#000000" />
+                      android:textColor="#000000"
+                      android:text="pub"/>
 
             <TextView
                      android:id="@+id/listview_distance"
                      android:layout_width="match_parent"
                      android:layout_height="match_parent"
                      android:gravity="center_vertical"
-                     android:layout_alignParentTop="true"
-                     andrig:
-                    />
+                     android:textStyle="bold"
+                     android:textSize="10dp"
+                     android:textColor="#000000"
+                     android:text="3 km"/>
 
 
     </LinearLayout>

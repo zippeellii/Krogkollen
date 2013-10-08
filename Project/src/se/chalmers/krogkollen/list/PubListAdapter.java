@@ -42,6 +42,7 @@ public class PubListAdapter extends ArrayAdapter<IPub> {
             holder = new PubHolder();
             holder.imgIcon = (ImageView)row.findViewById(R.id.listview_image);
             holder.txtTitle = (TextView)row.findViewById(R.id.listview_title);
+            holder.distanceText = (TextView)row.findViewById(R.id.listview_distance);
 
             row.setTag(holder);
         }
@@ -52,6 +53,7 @@ public class PubListAdapter extends ArrayAdapter<IPub> {
 
         IPub pub = data[position];
         holder.txtTitle.setText(pub.getName());
+        holder.distanceText.setText("distance");
         switch(pub.getQueueTime()){
         case 1:
         	holder.imgIcon.setImageResource(Constants.SHORT_QUEUE);
@@ -73,5 +75,6 @@ public class PubListAdapter extends ArrayAdapter<IPub> {
     {
         ImageView imgIcon;
         TextView txtTitle;
+        TextView distanceText;
     }
 }

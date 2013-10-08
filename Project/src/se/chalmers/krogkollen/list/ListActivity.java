@@ -30,7 +30,7 @@ public class ListActivity extends Activity implements IListView {
 
         listView = (ListView)findViewById(R.id.list_view);
 
-        View header = (View)getLayoutInflater().inflate(R.layout.listview_header, null);
+        View header = getLayoutInflater().inflate(R.layout.listview_header, null);
         listView.addHeaderView(header);
 
         listView.setAdapter(adapter);

@@ -8,8 +8,10 @@ import android.os.Handler;
 import android.os.Looper;
 import android.view.MenuItem;
 
+import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.model.LatLng;
 
+import com.google.android.gms.maps.model.Marker;
 import se.chalmers.krogkollen.IView;
 import se.chalmers.krogkollen.R;
 import se.chalmers.krogkollen.backend.BackendNotInitializedException;
@@ -31,14 +33,26 @@ import java.util.List;
  * @author Oskar Karrman
  *
  */
-public class MapPresenter implements IMapPresenter {
+public class MapPresenter implements IMapPresenter, GoogleMap.OnMarkerClickListener {
 
     /**
      * Key value used when sending intents from this class.
      */
     public static final String MAP_PRESENTER_KEY = "se.chalmers.krogkollen.MAP_PRESENTER_KEY";
+
+    /**
+     * Indicator for the hashmap in refresh.
+     */
     public static final int PUB_REMOVED = -1;
+
+    /**
+     * Indicator for the hashmap in refresh.
+     */
     public static final int PUB_CHANGED = 0;
+
+    /**
+     * Indicator for the hashmap in refresh.
+     */
     public static final int PUB_ADDED = 1;
 
     private IMapView mapView;
@@ -64,13 +78,6 @@ public class MapPresenter implements IMapPresenter {
         if (userLocation.getCurrentLatLng() == null) {
             mapView.moveCameraToPosition(new LatLng(57.70887, 11.974613), MapActivity.DEFAULT_ZOOM);
         }
-    }
-
-    @Override
-    public void pubMarkerClicked(String pubId) {
-        Bundle bundle = new Bundle();
-        bundle.putString(MAP_PRESENTER_KEY, pubId);
-        mapView.navigate(DetailedActivity.class, bundle);
     }
 
     @Override
@@ -166,7 +173,25 @@ public class MapPresenter implements IMapPresenter {
         editor.commit();
     }
 
-    // TODO describe what this does
+    @Override
+    public boolean onMarkerClick(Marker marker) {
+
+        // Move camera to the clicked marker.
+        mapView.moveCameraToPosition(marker.getPosition(), MapActivity.MARKER_ZOOM);
+
+        if (marker.getTitle().equalsIgnoreCase(resources.getString(R.string.map_user_name))) {
+            // TODO Open favorites.
+        } else {
+            // Open detailed view.
+            Bundle bundle = new Bundle();
+            bundle.putString(MAP_PRESENTER_KEY, marker.getId());
+            mapView.navigate(DetailedActivity.class, bundle);
+        }
+        return true; // Suppress default behavior; move camera and open info window.
+    }
+
+    // Send the heavy work of recreating the markers to another thread.
+    // Only changed pubs/markers will be altered.
     private class RefreshTask extends AsyncTask<Void, Void, Void>
     {
         //Before running code in separate thread

@@ -34,13 +34,6 @@ import java.util.List;
 public interface IMapPresenter extends IPresenter, IObserver {
 
     /**
-     * Indicates that a pub has been selected on the map
-     *
-     * @param pubId the pub which was selected
-     */
-    public abstract void pubMarkerClicked(String pubId);
-
-    /**
      * Start a search for an IPub object
      *
      * @param search the string that the user searched for

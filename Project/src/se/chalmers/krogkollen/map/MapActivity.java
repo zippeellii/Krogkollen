@@ -21,12 +21,9 @@ import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.CompoundButton.OnCheckedChangeListener;
 import android.widget.Toast;
-
 import com.google.android.gms.maps.CameraUpdateFactory;
-import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.Projection;
 import com.google.android.gms.maps.model.*;
-
 import se.chalmers.krogkollen.R;
 import se.chalmers.krogkollen.backend.NoBackendAccessException;
 import se.chalmers.krogkollen.backend.NotFoundInBackendException;
@@ -64,8 +61,19 @@ public class MapActivity extends Activity implements IMapView {
      */
     public static final String MARKER_PUB_ID = "se.chalmers.krogkollen.MARKER_PUB_ID";
 
+    /**
+     * Zoom level for the user indicator.
+     */
     public static final int USER_ZOOM = 16;
+
+    /**
+     * Zoom level for markers.
+     */
     public static final int MARKER_ZOOM = 18;
+
+    /**
+     * Default zoom level, used when no position is found.
+     */
     public static final int DEFAULT_ZOOM = 12;
 
     private MapPresenter presenter;
@@ -77,34 +85,23 @@ public class MapActivity extends Activity implements IMapView {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_map);
 
+        // Get the map from backend.
         try {
             MapWrapper.INSTANCE.init(this);
         } catch (NoBackendAccessException e) {
-            showErrorMessage(getResources().getString(R.string.error_no_backend_access)); // TODO standard? if so, update other occurances
+            showErrorMessage(getResources().getString(R.string.error_no_backend_access));
         } catch (NotFoundInBackendException e) {
             showErrorMessage(getResources().getString(R.string.error_no_backend_item));
         }
 
+        // Create a presenter for this view.
         presenter = new MapPresenter();
         presenter.setView(this);
 
-        MapWrapper.INSTANCE.getMap().setOnMarkerClickListener(new GoogleMap.OnMarkerClickListener() {
-            @Override
-            public boolean onMarkerClick(Marker marker) {
+        // Set the presenter as listener for markers and user indicator.
+        MapWrapper.INSTANCE.getMap().setOnMarkerClickListener(presenter);
 
-                // Move camera to the clicked marker.
-                moveCameraToPosition(marker.getPosition(), MARKER_ZOOM);
-
-                if (marker.getTitle().equalsIgnoreCase(getString(R.string.map_user_name))) {
-                    // TODO Open favorites.
-                } else {
-                    // Open detailed view.
-                    presenter.pubMarkerClicked(marker.getTitle());
-                }
-                return true; // Suppress default behavior; move camera and open info window.
-            }
-        });
-
+        // Remove the default logo icon and add our list icon.
         ActionBar actionBar = getActionBar();
         actionBar.setIcon(R.drawable.list_icon);
         actionBar.setDisplayHomeAsUpEnabled(true);

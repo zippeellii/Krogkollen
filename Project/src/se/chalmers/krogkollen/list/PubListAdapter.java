@@ -54,16 +54,16 @@ public class PubListAdapter extends ArrayAdapter<IPub> {
         holder.txtTitle.setText(pub.getName());
         switch(pub.getQueueTime()){
         case 1:
-        	holder.imgIcon.setImageResource(Constants.SHORT_QUEUE);
+        	holder.imgIcon.setImageResource(R.drawable.detailed_queue_green);
         	break;
         case 2:
-        	holder.imgIcon.setImageResource(Constants.MEDIUM_QUEUE);
+        	holder.imgIcon.setImageResource(R.drawable.detailed_queue_yellow);
         	break;
         case 3:
-        	holder.imgIcon.setImageResource(Constants.LONG_QUEUE);
+        	holder.imgIcon.setImageResource(R.drawable.detailed_queue_red);
         	break;
         default :
-        	holder.imgIcon.setImageResource(Constants.NO_INFO_QUEUE);
+        	holder.imgIcon.setImageResource(R.drawable.detailed_queue_gray);
         	break;
         }
         return row;

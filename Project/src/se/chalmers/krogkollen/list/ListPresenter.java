@@ -15,7 +15,10 @@ import se.chalmers.krogkollen.pub.IPub;
  *         Created 2013-09-22
  */
 public class ListPresenter implements IListPresenter, OnClickListener {
-    /*
+    
+	IListView activity;
+	
+	/*
     This class should hold
         A list of all the pubs.
         Different search-states
@@ -24,7 +27,7 @@ public class ListPresenter implements IListPresenter, OnClickListener {
 
 	@Override
 	public void setView(IView view) {
-		// TODO Auto-generated method stub
+		this.activity = (IListView)view;
 		
 	}
 

@@ -1,7 +1,9 @@
 package se.chalmers.krogkollen.detailed;
 
 import android.content.SharedPreferences;
+import android.view.View;
 import se.chalmers.krogkollen.IView;
+import se.chalmers.krogkollen.R;
 import se.chalmers.krogkollen.backend.Backend;
 import se.chalmers.krogkollen.backend.NoBackendAccessException;
 import se.chalmers.krogkollen.backend.NotFoundInBackendException;
@@ -191,5 +193,30 @@ public class DetailedPresenter implements IDetailedPresenter {
      */
     public void updateInfo() throws NoBackendAccessException, NotFoundInBackendException{
         Backend.getInstance().updatePubLocally(pub);
+    }
+
+    @Override
+    public void onClick(View view) {
+        if(view.getId() == R.id.thumbsDownLayout){
+            try {
+                ratingChanged(-1);
+                getVotes();
+            } catch (NotFoundInBackendException e) {
+                System.out.println("error");
+            } catch (NoBackendAccessException e) {
+                System.out.println("error");
+            }
+        }
+        else if(view.getId() == R.id.thumbsUpLayout){
+            try {
+                ratingChanged(1);
+                getVotes();
+
+            } catch (NotFoundInBackendException e) {
+                System.out.println("error");
+            } catch (NoBackendAccessException e) {
+                System.out.println("error");
+            }
+        }
     }
 }

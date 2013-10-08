@@ -1,5 +1,7 @@
 package se.chalmers.krogkollen.detailed;
 
+import android.content.DialogInterface;
+import android.view.View.OnClickListener;
 import se.chalmers.krogkollen.IPresenter;
 import se.chalmers.krogkollen.backend.NoBackendAccessException;
 import se.chalmers.krogkollen.backend.NotFoundInBackendException;
@@ -10,7 +12,7 @@ import se.chalmers.krogkollen.backend.NotFoundInBackendException;
  * @author Oskar Karrman
  *
  */
-public interface IDetailedPresenter extends IPresenter {
+public interface IDetailedPresenter extends IPresenter, OnClickListener {
 
 	/**
 	 * Indicates that rating for a pub has changed

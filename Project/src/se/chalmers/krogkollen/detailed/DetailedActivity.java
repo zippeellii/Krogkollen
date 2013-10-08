@@ -5,7 +5,6 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
 import android.widget.*;
 import se.chalmers.krogkollen.R;
 import se.chalmers.krogkollen.backend.NoBackendAccessException;
@@ -65,6 +64,8 @@ public class DetailedActivity extends Activity implements IDetailedView {
 			e.printStackTrace();
 		}
 
+        addListeners();
+
         ScrollView scroll = (ScrollView) findViewById(R.id.scrollView);
         scroll.setFadingEdgeLength(100);
         pubTextView= (TextView) findViewById(R.id.pub_name);
@@ -79,8 +80,6 @@ public class DetailedActivity extends Activity implements IDetailedView {
         thumbsDownImage = (ImageView) findViewById(R.id.thumbsDownButton);
         thumbsUpLayout = (LinearLayout) findViewById(R.id.thumbsUpLayout);
         thumbsDownLayout = (LinearLayout) findViewById(R.id.thumbsDownLayout);
-        addThumbsUpLayoutListener();
-        addThumbsDownLayoutListener();
     }
 
     @Override
@@ -163,47 +162,10 @@ public class DetailedActivity extends Activity implements IDetailedView {
         }
     }
 
-    /**
-     * Adds listener to thumb up button.
-     */
-    public void addThumbsUpLayoutListener(){
-        thumbsUpLayout.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view){
-                try {
 
-                    presenter.ratingChanged(1);
-                    presenter.getVotes();
-
-                } catch (NotFoundInBackendException e) {
-                    e.printStackTrace();
-                } catch (NoBackendAccessException e) {
-                    e.printStackTrace();
-                }
-            }
-        });
-    }
-
-    /**
-     * Adds listener to thumb down button.
-     */
-    public void addThumbsDownLayoutListener(){
-        thumbsDownLayout.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                try {
-
-                    presenter.ratingChanged(-1);
-                    presenter.getVotes();
-
-                } catch (NotFoundInBackendException e) {
-                    e.printStackTrace();
-                } catch (NoBackendAccessException e) {
-                    e.printStackTrace();
-                }
-
-            }
-        });
+    private void addListeners(){
+        findViewById(R.id.thumbsUpLayout).setOnClickListener(presenter);
+        findViewById(R.id.thumbsDownLayout).setOnClickListener(presenter);
     }
 
     /**

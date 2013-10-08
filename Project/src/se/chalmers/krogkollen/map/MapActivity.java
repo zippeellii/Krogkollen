@@ -95,7 +95,7 @@ public class MapActivity extends Activity implements IMapView {
                 // Move camera to the clicked marker.
                 moveCameraToPosition(marker.getPosition(), MARKER_ZOOM);
 
-                if (marker.getTitle().equalsIgnoreCase("user")) {
+                if (marker.getTitle().equalsIgnoreCase(getString(R.string.map_user_name))) {
                     // TODO Open favorites.
                 } else {
                     // Open detailed view.
@@ -139,7 +139,7 @@ public class MapActivity extends Activity implements IMapView {
         userMarker = MapWrapper.INSTANCE.getMap().addMarker(new MarkerOptions()
                 .position(latLng)
                 .icon(BitmapDescriptorFactory.fromResource(R.drawable.user_marker))
-                .title("user"));
+                .title(getString(R.string.map_user_name)));
     }
 
     @Override
@@ -189,7 +189,7 @@ public class MapActivity extends Activity implements IMapView {
 
     @Override
     public void showProgressDialog() {
-        progressDialog = ProgressDialog.show(MapActivity.this,"", "Uppdaterar...", false, false);
+        progressDialog = ProgressDialog.show(MapActivity.this, "", getString(R.string.map_updating), false, false);
     }
 
     @Override

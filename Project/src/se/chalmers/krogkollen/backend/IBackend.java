@@ -87,4 +87,13 @@ public interface IBackend {
 	 * @throws NoBackendAccessException 
 	 */
 	public Date getLatestUpdatedTimestamp(IPub pub) throws NotFoundInBackendException, NoBackendAccessException;
+	
+	/**
+	 * Updates the pub object with the current info about the queue time, positive and negative rating
+	 * 
+	 * @param pub the pub which values should be updated
+	 * @throws NoBackendAccessException
+	 * @throws NotFoundInBackendException
+	 */
+	public void updatePubLocally(IPub pub) throws NoBackendAccessException, NotFoundInBackendException;
 }

@@ -8,6 +8,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.*;
 import se.chalmers.krogkollen.R;
+import se.chalmers.krogkollen.backend.BackendNotInitializedException;
 import se.chalmers.krogkollen.backend.NoBackendAccessException;
 import se.chalmers.krogkollen.backend.NotFoundInBackendException;
 import se.chalmers.krogkollen.map.MapActivity;
@@ -58,6 +59,8 @@ public class DetailedActivity extends Activity implements IDetailedView {
 		} catch (NotFoundInBackendException e) {
 			this.showErrorMessage(e.getMessage());
 		} catch (NoBackendAccessException e) {
+			this.showErrorMessage(e.getMessage());
+		} catch (BackendNotInitializedException e) {
 			this.showErrorMessage(e.getMessage());
 		}
 
@@ -165,7 +168,9 @@ public class DetailedActivity extends Activity implements IDetailedView {
                     showErrorMessage(e.getMessage());
                 } catch (NoBackendAccessException e) {
                     showErrorMessage(e.getMessage());
-                }
+                } catch (BackendNotInitializedException e) {
+					showErrorMessage(e.getMessage());
+				}
             }
         });
     }
@@ -185,7 +190,9 @@ public class DetailedActivity extends Activity implements IDetailedView {
                     showErrorMessage(e.getMessage());
                 } catch (NoBackendAccessException e) {
                 	showErrorMessage(e.getMessage());
-                }
+                } catch (BackendNotInitializedException e) {
+					showErrorMessage(e.getMessage());
+				}
             }
         });
     }
@@ -238,7 +245,9 @@ public class DetailedActivity extends Activity implements IDetailedView {
                     this.showErrorMessage(e.getMessage());
                 } catch (NotFoundInBackendException e) {
                     this.showErrorMessage(e.getMessage());
-                }
+                } catch (BackendNotInitializedException e) {
+					this.showErrorMessage(e.getMessage());
+				}
                 refresh();
 
             case R.id.action_settings:

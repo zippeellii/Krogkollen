@@ -66,5 +66,8 @@ This file is part of Krogkollen.
     <string name="pref_remove_cache_title">Rensa cache</string>
     <string name="settings_title">Inställningar</string>
     <string name="title_activity_list">Listvy</string>
+    <string name="map_updating">Uppdaterar krogar...</string>
+    <string name="map_user_name">user</string>
+    <string name="loading_pubs">Laddar krogar...</string>
 
 </resources>

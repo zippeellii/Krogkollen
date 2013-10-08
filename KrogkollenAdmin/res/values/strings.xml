@@ -17,4 +17,6 @@
     <string name="green">Grön</string>
     <string name="yellow">Gul</string>
     <string name="red">Röd</string>
+    <string name="updating">Uppdaterar...</string>
+    <string name="logging_in">Loggar in...</string>
 </resources>

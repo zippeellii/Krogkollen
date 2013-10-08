@@ -1,6 +1,7 @@
 package se.chalmers.KrogkollenAdmin.buttons;
 
 import android.app.Activity;
+import android.app.ProgressDialog;
 import android.os.Bundle;
 import android.text.Html;
 import android.view.MotionEvent;
@@ -16,10 +17,11 @@ import se.chalmers.KrogkollenAdmin.R;
  *         Created 2013-09-22
  */
 public class ButtonsActivity extends Activity {
+
     private Button greenButton;
     private Button yellowButton;
     private Button redButton;
-//    private ProgressBar circle;       Not yet used
+    private ProgressDialog progressDialog;
     private ButtonsPresenter presenter;
 
     /**
@@ -31,13 +33,10 @@ public class ButtonsActivity extends Activity {
         setContentView(R.layout.activity_buttons);
         getActionBar().setDisplayShowHomeEnabled(false);
         presenter = new ButtonsPresenter(this);
-
-
         presenter.setupParseObject();
         presenter.setLocalQueueTime();
         setupUiElements();
         addListenersOnButtons();
-        activateButtons();
         updateGUI();
     }
 
@@ -48,28 +47,6 @@ public class ButtonsActivity extends Activity {
         greenButton = (Button) findViewById(R.id.green_button);
         yellowButton = (Button) findViewById(R.id.yellow_button);
         redButton = (Button) findViewById(R.id.red_button);
-
-        // Sets up the loading indicator        Not yet used
-//        circle = (ProgressBar) findViewById(R.id.marker_progress);
-//        circle.setVisibility(View.INVISIBLE);
-    }
-
-    /**
-     * Disables the buttons, making them do nothing on a click.
-     */
-    public void deactivateButtons() {
-        redButton.setEnabled(false);
-        yellowButton.setEnabled(false);
-        greenButton.setEnabled(false);
-    }
-
-    /**
-     * Activates the buttons, making them work on clicks again.
-     */
-    public void activateButtons() {
-        redButton.setEnabled(true);
-        yellowButton.setEnabled(true);
-        greenButton.setEnabled(true);
     }
 
     /**
@@ -79,24 +56,21 @@ public class ButtonsActivity extends Activity {
         greenButton.setOnTouchListener(new View.OnTouchListener() {
             @Override
             public boolean onTouch(View v, MotionEvent event) {
-                buttonClicked(1);
-                return true;
+                return buttonClicked(1);
             }
         });
 
         yellowButton.setOnTouchListener(new View.OnTouchListener() {
             @Override
             public boolean onTouch(View v, MotionEvent event) {
-                buttonClicked(2);
-                return true;
+                return buttonClicked(2);
             }
         });
 
         redButton.setOnTouchListener(new View.OnTouchListener() {
             @Override
             public boolean onTouch(View v, MotionEvent event) {
-                buttonClicked(3);
-                return true;
+                return buttonClicked(3);
             }
         });
     }
@@ -105,9 +79,21 @@ public class ButtonsActivity extends Activity {
      * Sets the buttons visibility and then tells the presenter which button got clicked.
      * @param i the button clicked.
      */
-    private void buttonClicked(int i) {
-//        circle.setVisibility(View.VISIBLE);       Not yet used
+    private boolean buttonClicked(int i) {
+        if (presenter.getButtonOnCooldown()) {
+            return false;
+        }
+        presenter.setButtonOnCooldown(true);
         presenter.buttonClicked(i);
+        return true;
+    }
+
+    public void showProgressDialog() {
+        progressDialog = ProgressDialog.show(this, "", getResources().getString(R.string.updating), false, false);
+    }
+
+    public void hideProgressDialog() {
+        progressDialog.hide();
     }
 
     /**
@@ -116,8 +102,8 @@ public class ButtonsActivity extends Activity {
     public void updateGUI() {
         String msg;
 
-        if (!redButton.isEnabled()) {
-            msg = getResources().getString(R.string.wait_part_one) + " " + (presenter.getDisableTime()/1000) + " " + getResources().getString(R.string.wait_part_two);
+        if (presenter.getButtonOnCooldown()) {
+            msg = getResources().getString(R.string.wait_part_one) + " " + (presenter.DISABLE_TIME/1000) + " " + getResources().getString(R.string.wait_part_two);
         } else {
             msg = getResources().getString(R.string.ready);
         }

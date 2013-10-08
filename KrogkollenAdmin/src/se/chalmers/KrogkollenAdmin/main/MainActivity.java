@@ -1,11 +1,13 @@
 package se.chalmers.KrogkollenAdmin.main;
 
 import android.app.Activity;
+import android.app.ProgressDialog;
 import android.os.Bundle;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.*;
+import se.chalmers.KrogkollenAdmin.R;
 
 /**
  * First activity for the admin application.
@@ -19,7 +21,8 @@ public class MainActivity extends Activity {
     private Button loginButton;
     private AutoCompleteTextView userNameField;
     private EditText passwordField;
-//    private ProgressBar circle;           Not yet used
+    private ProgressDialog progressDialog;
+
     private MainPresenter presenter;
 
     /**
@@ -45,10 +48,6 @@ public class MainActivity extends Activity {
      * Sets up the fields and the login button.
      */
     private void setupUiElements() {
-        // Sets up the progressindicator        Not yet used
-//        circle = (ProgressBar) findViewById(se.chalmers.KrogkollenAdmin.R.id.marker_progress);
-//        circle.setVisibility(View.INVISIBLE);
-
         // Sets up the username with auto completion
         userNameField = (AutoCompleteTextView)
                 findViewById(se.chalmers.KrogkollenAdmin.R.id.txtPubName);
@@ -65,6 +64,14 @@ public class MainActivity extends Activity {
                 android.R.layout.simple_dropdown_item_1line, presenter.getPubUsers());
         userNameField.setAdapter(adapter);
 
+    }
+
+    public void showProgressDialog() {
+        progressDialog = ProgressDialog.show(this, "", getResources().getString(R.string.logging_in), false, false);
+    }
+
+    public void hideProgressDialog() {
+        progressDialog.hide();
     }
 
     /**

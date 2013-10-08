@@ -1,6 +1,7 @@
 package se.chalmers.KrogkollenAdmin.main;
 
 import android.content.Intent;
+import android.os.AsyncTask;
 import android.widget.Toast;
 import com.parse.*;
 import se.chalmers.KrogkollenAdmin.buttons.ButtonsActivity;
@@ -38,25 +39,47 @@ public class MainPresenter {
      * If it succeeds it sends an intent to start ButtonsActivity, otherwise it gives a toast with an errormessage.
      */
     public void tryLogin(String username, String password) {
-        boolean loginSuccess = false;
+        new LoginTask().execute(username, password);
+    }
 
-        try {
-            ParseUser.logIn(username, password);
-            loginSuccess = true;
-        } catch (ParseException e) {
-            e.printStackTrace();
+    private class LoginTask extends AsyncTask<String, Void, Void> {
+
+        @Override
+        protected void onPreExecute()
+        {
+            activity.showProgressDialog();
         }
 
-        if (loginSuccess) {
-            Intent intent = new Intent(activity, ButtonsActivity.class);
-            activity.startActivity(intent);
-        } else {
-            Toast toast = Toast.makeText(activity, se.chalmers.KrogkollenAdmin.R.string.wrong_password_message,
-                    Toast.LENGTH_SHORT);
-            toast.setDuration(2);
-            toast.show();
+        @Override
+        protected Void doInBackground(String... strings) {
+            boolean loginSuccess = false;
+
+            try {
+                ParseUser.logIn(strings[0], strings[1]);
+                loginSuccess = true;
+            } catch (ParseException e) {
+                e.printStackTrace();
+            }
+
+            if (loginSuccess) {
+                Intent intent = new Intent(activity, ButtonsActivity.class);
+                activity.startActivity(intent);
+            } else {
+                Toast toast = Toast.makeText(activity, se.chalmers.KrogkollenAdmin.R.string.wrong_password_message,
+                        Toast.LENGTH_SHORT);
+                toast.setDuration(2);
+                toast.show();
+            }
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(Void result)
+        {
+            activity.hideProgressDialog();
         }
     }
+
 
     /**
      * Grabs all the users from Parse.com and puts them in an array.

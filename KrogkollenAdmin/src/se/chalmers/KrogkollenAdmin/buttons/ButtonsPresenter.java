@@ -1,5 +1,6 @@
 package se.chalmers.KrogkollenAdmin.buttons;
 
+import android.os.AsyncTask;
 import com.parse.ParseException;
 import com.parse.ParseObject;
 import com.parse.ParseQuery;
@@ -18,21 +19,13 @@ public class ButtonsPresenter {
     private ParseObject object;
     private ButtonsActivity activity;
     private Timer inputDisabledTimer;
-    private final int DISABLE_TIME = 20000;
+    public final int DISABLE_TIME = 20000;
+    private boolean buttonOnCooldown;
 
     public ButtonsPresenter(ButtonsActivity butt) {
         activity = butt;
 
         runTimer();
-    }
-
-    /**
-     * Returns the disabling time
-     *
-     * @return the disabling time
-     */
-    public int getDisableTime() {
-        return DISABLE_TIME;
     }
 
     public void runTimer() {
@@ -46,7 +39,6 @@ public class ButtonsPresenter {
         }, 0, DISABLE_TIME);
     }
 
-    // TODO Refactor
     /**
      * This method is called by the timer everytime it reaches the DISABLE_TIME.
      */
@@ -60,7 +52,6 @@ public class ButtonsPresenter {
         activity.runOnUiThread(Timer_Tick);
     }
 
-    // TODO Refactor
     /**
      * This method runs in the same thread as the UI.
      * It activates the buttons and updates the GUI.
@@ -68,7 +59,7 @@ public class ButtonsPresenter {
     private Runnable Timer_Tick = new Runnable() {
         public void run() {
 
-            activity.activateButtons();
+            buttonOnCooldown = false;
             activity.updateGUI();
 
             //Change the UI to give a hint that no input will be taken for the amount of time set.
@@ -86,10 +77,7 @@ public class ButtonsPresenter {
      * @param newQueueTime An int corresponding to the button clicked.
      */
     public void buttonClicked(int newQueueTime) {
-        setServerQueueTime(newQueueTime);
-        setLocalQueueTime();
-        activity.deactivateButtons();
-        activity.updateGUI();
+        new ServerUpdateTask().execute(newQueueTime);
     }
 
     /**
@@ -109,7 +97,7 @@ public class ButtonsPresenter {
     /**
      * Gets the queueTime from the server and syncs locally.
      */
-    public void setLocalQueueTime() {
+    synchronized void setLocalQueueTime() {
         queueTime = object.getInt("queueTime");
     }
 
@@ -117,7 +105,7 @@ public class ButtonsPresenter {
      * Takes the local queueTime and sends it to the sever.
      * @param newQueueTime The queueTime to be sent to the server.
      */
-    public void setServerQueueTime(int newQueueTime) {
+    synchronized void setServerQueueTime(int newQueueTime) {
         try {
             object.put("queueTime", newQueueTime);
             object.save();
@@ -133,5 +121,37 @@ public class ButtonsPresenter {
      */
     public int getQueueTime() {
         return queueTime;
+    }
+
+    public void setButtonOnCooldown(boolean buttonOnCooldown) {
+        this.buttonOnCooldown = buttonOnCooldown;
+    }
+
+    public boolean getButtonOnCooldown() {
+        return buttonOnCooldown;
+    }
+
+
+    private class ServerUpdateTask extends AsyncTask<Integer, Void, Void> {
+
+        @Override
+        protected void onPreExecute()
+        {
+            activity.showProgressDialog();
+        }
+
+        @Override
+        protected Void doInBackground(Integer... integers) {
+            setServerQueueTime(integers[0]);
+            setLocalQueueTime();
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(Void result)
+        {
+            activity.updateGUI();
+            activity.hideProgressDialog();
+        }
     }
 }

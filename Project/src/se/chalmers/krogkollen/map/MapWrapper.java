@@ -116,7 +116,7 @@ public enum MapWrapper {
 		this.context = context;
 	}
 
-	// TODO describe what this does
+	// Used to direct workload when creating markers to another thread.
 	private class CreateMarkerTask extends AsyncTask<IPub, Void, List<MarkerOptions>> {
 
 		@Override
@@ -131,6 +131,7 @@ public enum MapWrapper {
 
 			List<MarkerOptions> listMarkerOptions = new ArrayList<MarkerOptions>();
 
+			// Create options for all the markers
 			for (int i = 0; i < pubs.length; i++) {
 				IPub pub = pubs[i];
 				listMarkerOptions.add(MarkerOptionsFactory.createMarkerOptions(resources, pub));
@@ -140,6 +141,9 @@ public enum MapWrapper {
 
 		@Override
 		protected void onPostExecute(List<MarkerOptions> markerOptions) {
+
+			// When settings are finished add all the markers to the map
+			// This is a GUI process and needs to be run here on the GUI thread.
 			for (MarkerOptions markerOption : markerOptions) {
 				pubMarkers.add(googleMap.addMarker(markerOption));
 			}

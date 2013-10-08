@@ -5,16 +5,11 @@ import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.res.Resources;
 import android.os.AsyncTask;
-
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapFragment;
-import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
-
 import se.chalmers.krogkollen.R;
-import se.chalmers.krogkollen.backend.BackendHandler;
-import se.chalmers.krogkollen.backend.BackendNotInitializedException;
 import se.chalmers.krogkollen.backend.NoBackendAccessException;
 import se.chalmers.krogkollen.backend.NotFoundInBackendException;
 import se.chalmers.krogkollen.pub.IPub;
@@ -32,7 +27,7 @@ import java.util.Map;
  * map system wide and instantiate from loading screen.
  * 
  * @author Johan Backman
- * @author Linnea Otterlind Date: 2013-10-03
+ * @author Linnea Otterlind
  */
 public enum MapWrapper {
 
@@ -138,37 +133,7 @@ public enum MapWrapper {
 
 			for (int i = 0; i < pubs.length; i++) {
 				IPub pub = pubs[i];
-
-				int drawable = 0;
-
-				// Determine which marker color to add.
-				try {
-					switch (BackendHandler.getInstance().getQueueTime(pub)) {
-						case 1:
-							drawable = R.drawable.green_marker_bg;
-							break;
-						case 2:
-							drawable = R.drawable.yellow_marker_bg;
-							break;
-						case 3:
-							drawable = R.drawable.red_marker_bg;
-							break;
-						default:
-							drawable = R.drawable.gray_marker_bg;
-							break;
-					}
-				} catch (NoBackendAccessException e) {
-					// TODO this is a model, this should not be catched here, it must be shown in
-					// the view
-				} catch (NotFoundInBackendException e) {
-					// TODO same as above
-				} catch (BackendNotInitializedException e) {
-
-				}
-				listMarkerOptions.add(MarkerOptionsFactory.createMarkerOptions(resources, drawable,
-						pub.getName(),
-						pub.getTodaysOpeningHours().toString(),
-						new LatLng(pub.getLatitude(), pub.getLongitude()), pub.getID()));
+				listMarkerOptions.add(MarkerOptionsFactory.createMarkerOptions(resources, pub));
 			}
 			return listMarkerOptions;
 		}

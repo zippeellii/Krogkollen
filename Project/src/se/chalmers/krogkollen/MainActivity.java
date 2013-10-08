@@ -7,7 +7,11 @@ import android.location.LocationManager;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.view.Menu;
-import se.chalmers.krogkollen.backend.Backend;
+import se.chalmers.krogkollen.backend.BackendHandler;
+import se.chalmers.krogkollen.backend.BackendMockup;
+import se.chalmers.krogkollen.backend.BackendNotInitializedException;
+import se.chalmers.krogkollen.backend.NoBackendAccessException;
+import se.chalmers.krogkollen.backend.ParseBackend;
 import se.chalmers.krogkollen.map.MapActivity;
 import se.chalmers.krogkollen.map.UserLocation;
 import se.chalmers.krogkollen.pub.PubUtilities;
@@ -55,6 +59,7 @@ public class MainActivity extends Activity {
     }
 
 
+    // TODO javadoc
     private class InitResourcesTask extends AsyncTask<Void, Void, Void> {
 
         @Override
@@ -65,10 +70,19 @@ public class MainActivity extends Activity {
         @Override
         protected Void doInBackground(Void... voids) {
 
-            //Tells the backend to initialize its server connection
-            Backend.init(MainActivity.this, "WgLQnilANHpjM3xITq0nM0eW8dByIgDDmxJzf6se", "9ZK7yjE1NiD244ymDHb8ZpbbWNNv3RuQq7ceEvJc");
+            //Tells the backend handler to initialize its server connection with a backend to Parse.com
+        	BackendHandler.getInstance().setBackend(new ParseBackend(MainActivity.this, "WgLQnilANHpjM3xITq0nM0eW8dByIgDDmxJzf6se", "9ZK7yjE1NiD244ymDHb8ZpbbWNNv3RuQq7ceEvJc"));
+        	
+        	// If you want to use the mockup backend, comment the above line and uncomment the line below
+        	//BackendHandler.getInstance().setBackend(new BackendMockup(0));
 
-            PubUtilities.getInstance().loadPubList();
+            try {
+				PubUtilities.getInstance().loadPubList();
+			} catch (NoBackendAccessException e) {
+				// TODO Auto-generated catch block
+			} catch (BackendNotInitializedException e) {
+				// TODO Auto-generated catch block
+			}
 
             //initiate the user location and start the map activity.
             UserLocation.init((LocationManager) MainActivity.this.getSystemService(Context.LOCATION_SERVICE));

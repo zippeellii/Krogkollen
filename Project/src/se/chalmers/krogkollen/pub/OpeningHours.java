@@ -37,6 +37,6 @@ class OpeningHours {
 
     @Override
     public String toString(){
-        return getOpeningHour()+" - "+getClosingHour();
+        return getOpeningHour()+" - "+getClosingHour(); // TODO fix this so it is written properly
     }
 }

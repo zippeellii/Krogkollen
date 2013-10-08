@@ -122,33 +122,27 @@ public class ButtonsActivity extends Activity {
             msg = getResources().getString(R.string.ready);
         }
 
+        redButton.setSelected(false);
+        yellowButton.setSelected(false);
+        greenButton.setSelected(false);
         switch (presenter.getQueueTime()) {
             case 1: msg = msg + " " + getResources().getString(R.string.queue_now) +
                     " <font color='#70c656'>" + getResources().getString(R.string.green) + "</font>";
                 setTitle(Html.fromHtml(msg));
-                redButton.setSelected(false);
-                yellowButton.setSelected(false);
                 greenButton.setSelected(true);
                 break;
             case 2: msg = msg + " " + getResources().getString(R.string.queue_now) +
                     " <font color='#f3ae1b'>" + getResources().getString(R.string.yellow) + "</font>";
                 setTitle(Html.fromHtml(msg));
-                redButton.setSelected(false);
                 yellowButton.setSelected(true);
-                greenButton.setSelected(false);
                 break;
             case 3: msg = msg + " " + getResources().getString(R.string.queue_now) +
                     " <font color='#ef4444'>" + getResources().getString(R.string.red) + "</font>";
                 setTitle(Html.fromHtml(msg));
                 redButton.setSelected(true);
-                yellowButton.setSelected(false);
-                greenButton.setSelected(false);
                 break;
             default: msg = msg + " " + getResources().getString(R.string.buttons_activity);
                 setTitle(msg);
-                redButton.setSelected(false);
-                yellowButton.setSelected(false);
-                greenButton.setSelected(false);
                 break;
         }
     }

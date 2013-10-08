@@ -14,7 +14,7 @@ public class NotFoundInBackendException extends Exception {
 	private static final long serialVersionUID = 303498786882068841L;
 
 	/**
-	 * Create a new NotFoundInBackendException wthout additional information
+	 * Create a new NotFoundInBackendException without additional information
 	 */
 	public NotFoundInBackendException() {}
 	

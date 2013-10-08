@@ -1,6 +1,8 @@
 package se.chalmers.krogkollen.backend;
 
+import java.util.Date;
 import java.util.List;
+
 import se.chalmers.krogkollen.pub.IPub;
 
 /**
@@ -55,4 +57,43 @@ public interface IBackend {
 	 * @throws NotFoundInBackendException
 	 */
 	public void removeRatingVote(IPub pub, int rating) throws NoBackendAccessException, NotFoundInBackendException;
+	
+	/**
+	 * Returns the number of positive ratings for a requested pub
+	 * 
+	 * @param pub the pub
+	 * @return the number of positive ratings for the pub
+	 * @throws NotFoundInBackendException
+	 * @throws NoBackendAccessException
+	 */
+	public int getPositiveRating(IPub pub) throws NotFoundInBackendException, NoBackendAccessException;
+
+	/**
+	 * Returns the number of negative ratings for a requested pub
+	 * 
+	 * @param pub the pub
+	 * @return the number of positive ratings for the pub
+	 * @throws NotFoundInBackendException
+	 * @throws NoBackendAccessException 
+	 */
+	public int getNegativeRating(IPub pub) throws NotFoundInBackendException, NoBackendAccessException;
+	
+	/**
+	 * Returns the date of which the pub was latest updated
+	 * 
+	 * @param pub the requested pub
+	 * @return latest update date
+	 * @throws NotFoundInBackendException
+	 * @throws NoBackendAccessException 
+	 */
+	public Date getLatestUpdatedTimestamp(IPub pub) throws NotFoundInBackendException, NoBackendAccessException;
+	
+	/**
+	 * Updates the pub object with the current info about the queue time, positive and negative rating
+	 * 
+	 * @param pub the pub which values should be updated
+	 * @throws NoBackendAccessException
+	 * @throws NotFoundInBackendException
+	 */
+	public void updatePubLocally(IPub pub) throws NoBackendAccessException, NotFoundInBackendException;
 }

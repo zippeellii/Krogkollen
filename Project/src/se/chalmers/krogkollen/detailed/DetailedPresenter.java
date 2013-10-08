@@ -5,9 +5,7 @@ import android.os.AsyncTask;
 import android.view.View;
 import se.chalmers.krogkollen.IView;
 import se.chalmers.krogkollen.R;
-import se.chalmers.krogkollen.backend.Backend;
-import se.chalmers.krogkollen.backend.NoBackendAccessException;
-import se.chalmers.krogkollen.backend.NotFoundInBackendException;
+import se.chalmers.krogkollen.backend.*;
 import se.chalmers.krogkollen.pub.IPub;
 import se.chalmers.krogkollen.pub.PubUtilities;
 
@@ -25,7 +23,6 @@ public class DetailedPresenter implements IDetailedPresenter {
 	@Override
 	public void setView(IView view) {
 		this.view= (DetailedActivity)view;
-
 	}
 
     /**
@@ -33,37 +30,39 @@ public class DetailedPresenter implements IDetailedPresenter {
      * @param pubID The pubs ID
      * @throws NoBackendAccessException
      * @throws NotFoundInBackendException
+     * @throws BackendNotInitializedException 
      */
-	public void setPub(String pubID) throws NoBackendAccessException, NotFoundInBackendException{
+	public void setPub(String pubID) throws NoBackendAccessException, NotFoundInBackendException, BackendNotInitializedException{
 		pub = PubUtilities.getInstance().getPub(pubID);
+		BackendHandler.getInstance().updatePubLocally(pub);
 	}
 
 	@Override
-	public void ratingChanged(int rating) throws NotFoundInBackendException, NoBackendAccessException{
+	public void ratingChanged(int rating) throws NotFoundInBackendException, NoBackendAccessException, BackendNotInitializedException{
 
 		if(rating==1){
 			if (view.getSharedPreferences(pub.getID(), 0).getInt("thumb", 0)==1){
 				view.setThumbs(0);
 
-				Backend.getInstance().removeRatingVote(pub, 1);
+				BackendHandler.getInstance().removeRatingVote(pub, 1);
 				pub.setPositiveRating(pub.getPositiveRating() - 1);
 
 				saveThumbState(0);
 
-			}else if(view.getSharedPreferences(pub.getID(), 0).getInt("thumb",0)==-1){
+			} else if(view.getSharedPreferences(pub.getID(), 0).getInt("thumb", 0)==-1){
 				view.setThumbs(1);
 
-				Backend.getInstance().removeRatingVote(pub, -1);
+				BackendHandler.getInstance().removeRatingVote(pub, -1);
 				pub.setNegativeRating(pub.getNegativeRating() - 1);
 
-				Backend.getInstance().addRatingVote(pub, 1);
+				BackendHandler.getInstance().addRatingVote(pub, 1);
 				pub.setPositiveRating(pub.getPositiveRating() + 1);
 
 				saveThumbState(1);
-			}else{
+			} else {
 				view.setThumbs(1);
 
-				Backend.getInstance().addRatingVote(pub, 1);
+				BackendHandler.getInstance().addRatingVote(pub, 1);
 				pub.setPositiveRating(pub.getPositiveRating() + 1);
 
 				saveThumbState(1);
@@ -74,7 +73,7 @@ public class DetailedPresenter implements IDetailedPresenter {
 			if (view.getSharedPreferences(pub.getID(), 0).getInt("thumb", 0)==-1){
 				view.setThumbs(0);
 
-				Backend.getInstance().removeRatingVote(pub, -1);
+				BackendHandler.getInstance().removeRatingVote(pub, -1);
 				pub.setNegativeRating(pub.getNegativeRating() - 1);
 
 				saveThumbState(0);
@@ -82,9 +81,9 @@ public class DetailedPresenter implements IDetailedPresenter {
 			}else if(view.getSharedPreferences(pub.getID(), 0).getInt("thumb", 0)==1){
 				view.setThumbs(-1);
 
-				Backend.getInstance().removeRatingVote(pub, 1);
+				BackendHandler.getInstance().removeRatingVote(pub, 1);
 				pub.setPositiveRating(pub.getPositiveRating() - 1);
-				Backend.getInstance().addRatingVote(pub, -1);
+				BackendHandler.getInstance().addRatingVote(pub, -1);
 				pub.setNegativeRating(pub.getNegativeRating() + 1);
 
 				saveThumbState(-1);
@@ -92,7 +91,7 @@ public class DetailedPresenter implements IDetailedPresenter {
 			else{
 				view.setThumbs(-1);
 
-				Backend.getInstance().addRatingVote(pub, -1);
+				BackendHandler.getInstance().addRatingVote(pub, -1);
 				pub.setNegativeRating(pub.getNegativeRating() + 1);
 
 				saveThumbState(-1);
@@ -100,19 +99,15 @@ public class DetailedPresenter implements IDetailedPresenter {
 		}else{
 			view.setThumbs(rating);
 
-			Backend.getInstance().addRatingVote(pub, rating);
+			BackendHandler.getInstance().addRatingVote(pub, rating);
 			if(rating > 0){
 				pub.setPositiveRating(pub.getPositiveRating() + 1);
 			}
 			else{
 				pub.setNegativeRating(pub.getNegativeRating() + 1);
 			}
-
-
 			saveThumbState(rating);
 		}
-
-
 	}
 
     /**
@@ -125,7 +120,6 @@ public class DetailedPresenter implements IDetailedPresenter {
     }
 
     /**
-     *
      * Saves the state of the thumb because a user is only allowed to vote 1 time.
      * @param thumb
      */
@@ -190,6 +184,7 @@ public class DetailedPresenter implements IDetailedPresenter {
      * Updates the info of a pub
      * @throws NoBackendAccessException
      * @throws NotFoundInBackendException
+     * @throws BackendNotInitializedException 
      */
     public void updateInfo() throws NoBackendAccessException, NotFoundInBackendException{
         new UpdateTask().execute();
@@ -203,11 +198,13 @@ public class DetailedPresenter implements IDetailedPresenter {
         protected Void doInBackground(Void... voids){
 
             try {
-                Backend.getInstance().updatePubLocally(pub);
+                BackendHandler.getInstance().updatePubLocally(pub);
             } catch (NoBackendAccessException e) {
                 e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
             } catch (NotFoundInBackendException e) {
                 e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
+            } catch (BackendNotInitializedException e){
+                e.printStackTrace();
             }
             return null;
         }
@@ -228,6 +225,8 @@ public class DetailedPresenter implements IDetailedPresenter {
                 System.out.println("error");
             } catch (NoBackendAccessException e) {
                 System.out.println("error");
+            } catch (BackendNotInitializedException e){
+                System.out.println("error");
             }
         }
         else if(view.getId() == R.id.thumbsUpLayout){
@@ -238,6 +237,8 @@ public class DetailedPresenter implements IDetailedPresenter {
             } catch (NotFoundInBackendException e) {
                 System.out.println("error");
             } catch (NoBackendAccessException e) {
+                System.out.println("error");
+            } catch (BackendNotInitializedException e){
                 System.out.println("error");
             }
         }

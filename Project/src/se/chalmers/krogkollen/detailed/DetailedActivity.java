@@ -14,6 +14,7 @@ import com.google.android.gms.maps.MapFragment;
 import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLng;
 import se.chalmers.krogkollen.R;
+import se.chalmers.krogkollen.backend.BackendNotInitializedException;
 import se.chalmers.krogkollen.backend.NoBackendAccessException;
 import se.chalmers.krogkollen.backend.NotFoundInBackendException;
 import se.chalmers.krogkollen.map.MapActivity;
@@ -43,9 +44,7 @@ import se.chalmers.krogkollen.pub.IPub;
 /**
  * This class represent the activity for the detailed view
  */
-
 public class DetailedActivity extends Activity implements IDetailedView {
-
 
     /** The presenter connected to the detailed view */
 	private IDetailedPresenter presenter;
@@ -69,11 +68,11 @@ public class DetailedActivity extends Activity implements IDetailedView {
         try {
 			presenter.setPub(getIntent().getStringExtra(MapActivity.MARKER_PUB_ID));
 		} catch (NotFoundInBackendException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			this.showErrorMessage(e.getMessage());
 		} catch (NoBackendAccessException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			this.showErrorMessage(e.getMessage());
+		} catch (BackendNotInitializedException e) {
+			this.showErrorMessage(e.getMessage());
 		}
 
         addListeners();
@@ -108,7 +107,6 @@ public class DetailedActivity extends Activity implements IDetailedView {
 
         refresh();
         return true;
-
     }
 
 	@Override
@@ -120,12 +118,8 @@ public class DetailedActivity extends Activity implements IDetailedView {
 
 	@Override
 	public void showErrorMessage(String message) {
-		// TODO Auto-generated method stub
+		// TODO This method should create a toast or some kind of window showing the error message
 	}
-
-    /**
-     * Sets the pubs information into the detailed view
-     */
 
 	@Override
 	public void updateText(String pubName, String description, String openingHours, String age, String price) {
@@ -176,7 +170,6 @@ public class DetailedActivity extends Activity implements IDetailedView {
         }
     }
 
-
     private void addListeners(){
         findViewById(R.id.thumbsUpLayout).setOnClickListener(presenter);
         findViewById(R.id.thumbsDownLayout).setOnClickListener(presenter);
@@ -202,7 +195,6 @@ public class DetailedActivity extends Activity implements IDetailedView {
                 thumbsUpImage.setBackgroundResource(R.drawable.thumb_up);
                 break;
         }
-
     }
 
     /**
@@ -219,7 +211,7 @@ public class DetailedActivity extends Activity implements IDetailedView {
     @Override
     public void addMarker(LatLng position, IPub pub) {
         map.addMarker(MarkerOptionsFactory.createMarkerOptions(getResources(), R.drawable.yellow_marker_bg, pub.getName(),
-                pub.getTodaysOpeningHours().toString(), position, pub.getID()));
+                pub.getTodaysOpeningHour(), position, pub.getID()));
     }
 
     @Override
@@ -243,7 +235,9 @@ public class DetailedActivity extends Activity implements IDetailedView {
                     this.showErrorMessage(e.getMessage());
                 } catch (NotFoundInBackendException e) {
                     this.showErrorMessage(e.getMessage());
-                }
+                } catch (BackendNotInitializedException e) {
+					this.showErrorMessage(e.getMessage());
+				}
                 refresh();
                 break;
 
@@ -265,7 +259,6 @@ public class DetailedActivity extends Activity implements IDetailedView {
         else{
             favoriteStar.setIcon(R.drawable.star_filled);
         }
-
     }
 
     public void showProgressDialog(){

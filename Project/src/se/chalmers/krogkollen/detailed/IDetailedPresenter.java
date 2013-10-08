@@ -3,6 +3,7 @@ package se.chalmers.krogkollen.detailed;
 import android.content.DialogInterface;
 import android.view.View.OnClickListener;
 import se.chalmers.krogkollen.IPresenter;
+import se.chalmers.krogkollen.backend.BackendNotInitializedException;
 import se.chalmers.krogkollen.backend.NoBackendAccessException;
 import se.chalmers.krogkollen.backend.NotFoundInBackendException;
 
@@ -14,24 +15,10 @@ import se.chalmers.krogkollen.backend.NotFoundInBackendException;
  */
 public interface IDetailedPresenter extends IPresenter, OnClickListener {
 
-	/**
-	 * Indicates that rating for a pub has changed
-	 *
-	 * @param rating the new rating of the pub
-	 */
-	public void ratingChanged(int rating) throws NotFoundInBackendException, NoBackendAccessException;
+	public void ratingChanged(int rating) throws NotFoundInBackendException, NoBackendAccessException, BackendNotInitializedException;
 
-    /**
-     * Sets pub that is related to the presenter
-     *
-     * @param pubID The pubs ID
-     */
-    public void setPub(String pubID) throws NotFoundInBackendException, NoBackendAccessException;
+    public void setPub(String pubID) throws NotFoundInBackendException, NoBackendAccessException, BackendNotInitializedException;
 
-    /**
-     * Getter for queue time.
-     * @return queue time
-     */
     public void getQueueTime();
 
     public void getText();
@@ -44,6 +31,6 @@ public interface IDetailedPresenter extends IPresenter, OnClickListener {
 
     public void saveFavoriteState();
 
-    public void updateInfo() throws NoBackendAccessException, NotFoundInBackendException;
+    public void updateInfo() throws NoBackendAccessException, NotFoundInBackendException, BackendNotInitializedException;
 
 }

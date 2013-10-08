@@ -1,21 +1,16 @@
-package se.chalmers.krogkollen.utils;
+package se.chalmers.krogkollen.search;
 
 import se.chalmers.krogkollen.pub.*;
 import java.util.ArrayList;
 import java.util.List;
 
-// TODO flytta denna till ett eget paket, sokning raknas som en feature
 // TODO javadoc
 public class Search {
 
 	private static Search instance = null;
 	
-	// TODO javadoc, nothing inside method?
-	private Search() {
-		
-	}
+	private Search() {}
 	
-	// TODO javadoec
 	public Search getInstance() {
 		if(instance == null) {
 			instance = new Search();
@@ -40,5 +35,4 @@ public class Search {
 		}
 		return matches;
 	}
-	
 }

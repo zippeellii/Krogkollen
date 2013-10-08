@@ -7,9 +7,12 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
 import android.view.MenuItem;
+
 import com.google.android.gms.maps.model.LatLng;
+
 import se.chalmers.krogkollen.IView;
 import se.chalmers.krogkollen.R;
+import se.chalmers.krogkollen.backend.BackendNotInitializedException;
 import se.chalmers.krogkollen.backend.NoBackendAccessException;
 import se.chalmers.krogkollen.backend.NotFoundInBackendException;
 import se.chalmers.krogkollen.detailed.DetailedActivity;
@@ -73,7 +76,14 @@ public class MapPresenter implements IMapPresenter {
 
     @Override
     public void refresh() {
-        PubUtilities.getInstance().refreshPubList();
+        try {
+			PubUtilities.getInstance().refreshPubList();
+		} catch (NoBackendAccessException e1) {
+			// TODO Auto-generated catch block
+		} catch (BackendNotInitializedException e1) {
+			// TODO Auto-generated catch block
+		}
+        
         try {
             MapWrapper.INSTANCE.refreshPubMarkers();
         } catch (NoBackendAccessException e) {
@@ -162,7 +172,6 @@ public class MapPresenter implements IMapPresenter {
         editor.commit();
     }
 
-
     private class RefreshTask extends AsyncTask<Void, Void, Void>
     {
         //Before running code in separate thread
@@ -176,7 +185,13 @@ public class MapPresenter implements IMapPresenter {
         @Override
         protected Void doInBackground(Void... params) {
 
-            PubUtilities.getInstance().refreshPubList();
+            try {
+				PubUtilities.getInstance().refreshPubList();
+			} catch (NoBackendAccessException e) {
+				mapView.showErrorMessage(e.getMessage());
+			} catch (BackendNotInitializedException e) {
+				mapView.showErrorMessage(e.getMessage());
+			}
 
             Handler handler = new Handler(Looper.getMainLooper());
             handler.post(new Runnable() {
@@ -191,8 +206,6 @@ public class MapPresenter implements IMapPresenter {
                     }
                 }
             });
-
-
             return null;
         }
 

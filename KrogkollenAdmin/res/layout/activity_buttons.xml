@@ -34,20 +34,20 @@
                 android:text="@string/green_button_text"
                 android:background="@drawable/btn_green"
                 style="@style/ButtonText"
-                android:layout_weight="1"></Button>
+                android:layout_weight="1"/>
 
         <Button
                 android:id="@+id/yellow_button"
                 android:text="@string/yellow_button_text"
                 android:background="@drawable/btn_yellow"
                 style="@style/ButtonText"
-                android:layout_weight="1"></Button>
+                android:layout_weight="1"/>
 
         <Button android:id="@+id/red_button"
                 android:text="@string/red_button_text"
                 android:background="@drawable/btn_red"
                 style="@style/ButtonText"
-                android:layout_weight="1"></Button>
+                android:layout_weight="1"/>
 
     </LinearLayout>
 

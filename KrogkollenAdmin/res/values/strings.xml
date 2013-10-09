@@ -28,8 +28,8 @@ This file is part of Krogkollen.
 
     <!-- Strings used in the ButtonsActivity -->
     <string name="buttons_activity">Ingen information finns för tillfället.</string>
-    <string name="green_button_text">0 - 15 minuter</string>
-    <string name="yellow_button_text">15 - 45 minuter</string>
+    <string name="green_button_text">0 – 15 minuter</string>
+    <string name="yellow_button_text">15 – 45 minuter</string>
     <string name="red_button_text">Mer än 45 minuter</string>
     <string name="wait_part_one">Vänta</string>
     <string name="wait_part_two"> sekunder mellan klicken.</string>
@@ -38,7 +38,8 @@ This file is part of Krogkollen.
     <string name="green">Grön</string>
     <string name="yellow">Gul</string>
     <string name="red">Röd</string>
-    <string name="updating">Uppdaterar...</string>
-    <string name="logging_in">Loggar in...</string>
+    <string name="updating">Uppdaterar…</string>
+    <string name="logging_in">Loggar in…</string>
     <string name="log_out">Logga ut</string>
+    <string name="logo">The logo</string>
 </resources>

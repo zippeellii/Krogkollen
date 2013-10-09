@@ -1,10 +1,15 @@
 package se.chalmers.KrogkollenAdmin.buttons;
 
+import android.content.Intent;
 import android.os.AsyncTask;
+import android.view.View;
+import android.widget.Toast;
 import com.parse.ParseException;
 import com.parse.ParseObject;
 import com.parse.ParseQuery;
 import com.parse.ParseUser;
+import se.chalmers.KrogkollenAdmin.R;
+import se.chalmers.KrogkollenAdmin.main.MainActivity;
 
 import java.util.Timer;
 import java.util.TimerTask;
@@ -21,8 +26,9 @@ public class ButtonsPresenter {
     private ParseObject object;
     private ButtonsActivity view;
     private Timer inputDisabledTimer;
-    public final int DISABLE_TIME = 20000;
+    public static final int DISABLE_TIME = 20000;
     private boolean buttonOnCooldown;
+    private Toast toast;
 
     /**
      * Constructor. Gets called when the ButtonsActivity is started, so they know each other.
@@ -76,7 +82,18 @@ public class ButtonsPresenter {
      * @param newQueueTime An int corresponding to the button clicked.
      */
     public void buttonClicked(int newQueueTime) {
-        new ServerUpdateTask().execute(newQueueTime);
+        if (buttonOnCooldown) {
+            // Makes so that toasts doesn't stack.
+            if (toast != null) {
+                toast.cancel();
+            }
+            toast = Toast.makeText(view, view.getResources().getString(R.string.wait_part_one) + " " + ButtonsPresenter.DISABLE_TIME / 1000 + " " + view.getResources().getString(R.string.wait_part_two), Toast.LENGTH_SHORT);
+            toast.setDuration(1);
+            toast.show();
+        } else {
+            buttonOnCooldown = true;        // So that no input is accepted in a while
+            new ServerUpdateTask().execute(newQueueTime);
+        }
     }
 
     /**
@@ -138,6 +155,12 @@ public class ButtonsPresenter {
      */
     public boolean getButtonOnCooldown() {
         return buttonOnCooldown;
+    }
+
+    public void logOut() {
+        ParseUser.logOut();
+        Intent intent = new Intent(view, MainActivity.class);
+        view.startActivity(intent);
     }
 
 

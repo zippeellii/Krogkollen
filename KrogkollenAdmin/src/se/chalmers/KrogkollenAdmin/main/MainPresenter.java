@@ -1,10 +1,16 @@
 package se.chalmers.KrogkollenAdmin.main;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.AsyncTask;
+import android.preference.PreferenceManager;
+import android.view.View;
 import android.widget.Toast;
 import com.parse.*;
+import com.parse.R;
+import se.chalmers.KrogkollenAdmin.*;
 import se.chalmers.KrogkollenAdmin.buttons.ButtonsActivity;
+import se.chalmers.KrogkollenAdmin.buttons.ButtonsPresenter;
 
 import java.util.List;
 
@@ -18,6 +24,7 @@ public class MainPresenter {
 
     private String[] pubUsers;
     private MainActivity view;
+    private Toast toast;
 
     /**
      * Constructor. Gets called when the MainActivity is started, so they know each other.
@@ -49,6 +56,13 @@ public class MainPresenter {
         new LoginTask().execute(username, password);
     }
 
+    public void checkIfLoggedIn() {
+        if(ParseUser.getCurrentUser() != null) {
+            Intent intent = new Intent(view, ButtonsActivity.class);
+            view.startActivity(intent);
+        }
+    }
+
     /**
      * A task to be be run on another thread, making sure that it shows a loading indicator when the task is executing.
      */
@@ -75,13 +89,29 @@ public class MainPresenter {
             }
 
             if (loginSuccess) {
+
+                SharedPreferences settings = view.getPreferences();
+                SharedPreferences.Editor editor = settings.edit();
+                editor.putString("username", strings[0]);
+                editor.commit();
+
                 Intent intent = new Intent(view, ButtonsActivity.class);
                 view.startActivity(intent);
             } else {
-                Toast toast = Toast.makeText(view, se.chalmers.KrogkollenAdmin.R.string.wrong_password_message,
-                        Toast.LENGTH_SHORT);
-                toast.setDuration(2);
-                toast.show();
+
+                view.runOnUiThread(new Runnable() {
+                    public void run() {
+                        // Makes so that toasts doesn't stack.
+                        if (toast != null) {
+                            toast.cancel();
+                        }
+                            toast = Toast.makeText(view, se.chalmers.KrogkollenAdmin.R.string.wrong_password_message,
+                                    Toast.LENGTH_SHORT);
+                            toast.setDuration(2);
+                            toast.show();
+                    }
+
+                });
             }
             return null;
         }

@@ -51,4 +51,16 @@
 
 
         </LinearLayout>
+
+    <ImageButton
+                android:id="@+id/favorite_star_list"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_gravity="left|center"
+                android:layout_alignParentTop="true"
+                android:layout_alignParentBottom="true"
+                android:layout_marginRight="15dp"
+                android:layout_marginTop="5dp"
+                android:layout_marginBottom="5dp"/>
+
 </LinearLayout>

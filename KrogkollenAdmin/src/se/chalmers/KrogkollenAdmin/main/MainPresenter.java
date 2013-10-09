@@ -63,9 +63,7 @@ public class MainPresenter {
         }
     }
 
-    /**
-     * A task to be be run on another thread, making sure that it shows a loading indicator when the task is executing.
-     */
+    // A task to be be run on another thread, making sure that it shows a loading indicator when the task is executing.
     private class LoginTask extends AsyncTask<String, Void, Void> {
 
         @Override
@@ -140,9 +138,7 @@ public class MainPresenter {
         });
     }
 
-    /**
-     * If the connection to Parse.com failed this method is called.
-     */
+    // If the connection to Parse.com failed this method is called.
     private void userRetrievalFailed() {
         Toast toast = Toast.makeText(view, se.chalmers.KrogkollenAdmin.R.string.database_failure,
                 Toast.LENGTH_SHORT);
@@ -150,12 +146,8 @@ public class MainPresenter {
         toast.show();
     }
 
-    /**
-     * If the connection to Parse.com was successful this method is called.
-     * It puts the users in the array pubUsers.
-     *
-     * @param users The users to be put into the array.
-     */
+    // If the connection to Parse.com was successful this method is called.
+    // It puts the users in the array pubUsers.
     private void usersWereRetrievedSuccessfully(List<ParseUser> users) {
         pubUsers = new String[users.size()];
         for (int i = 0; i < pubUsers.length; i++) {

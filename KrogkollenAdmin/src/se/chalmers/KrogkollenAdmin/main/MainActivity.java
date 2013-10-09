@@ -90,18 +90,14 @@ public class MainActivity extends Activity {
         progressDialog.hide();
     }
 
-    /**
-     * Tries to use the information in the login- and passwordfields to log in. Calls the logIn-method from Parse.com
-     * If it succeeds it sends an intent to start ButtonsActivity, otherwise it gives a toast with an errormessage.
-     */
+    // Tries to use the information in the login- and passwordfields to log in. Calls the logIn-method from Parse.com
+    // If it succeeds it sends an intent to start ButtonsActivity, otherwise it gives a toast with an errormessage.
     private void loginButtonClicked() {
         presenter.tryLogin(userNameField.getText().toString(), passwordField.getText().toString());
     }
 
-    /**
-     * Adds listener to the loginButton.
-     * Also adds listeners to the other fields so that they proceed naturally after each other.(Hop to the next field on enter-click)
-     */
+    // Adds listener to the loginButton.
+    // Also adds listeners to the other fields so that they proceed naturally after each other.(Hop to the next field on enter-click)
     private void addListeners() {
         loginButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -133,6 +129,12 @@ public class MainActivity extends Activity {
         });
     }
 
+    /**
+     * Returns the shared preferences of this application.
+     * From this you can tell if you are already logged in or not.
+     *
+     * @return The shared preferences.
+     */
     public SharedPreferences getPreferences() {
         return this.getPreferences(Context.MODE_PRIVATE);
     }

@@ -35,15 +35,14 @@ This file is part of Krogkollen.
     <string name="open_list">Öppna lista</string>
     <string name="search">Sök</string>
     <string name="go_to_my_location">Min position</string>
-    <string name="pub_name">Pubnamn</string>
-    <string name="description">Beskrivning</string>
-    <string name="opening_hours">17.00-01.00</string>
-    <string name="age">18</string>
-    <string name="queue_time">30 min</string>
-    <string name="entrance_fee">100kr</string>
-    <string name="yellow_color">yellow</string>
-    <string name="thumbs_up">0000</string>
-    <string name="thumbs_down">0000</string>
+    <string name="pub_name"> </string>
+    <string name="description"> </string>
+    <string name="opening_hours"> </string>
+    <string name="age"> </string>
+    <string name="queue_time"> </string>
+    <string name="entrance_fee"> </string>
+    <string name="thumbs_up"> </string>
+    <string name="thumbs_down"> </string>
     <string name="action_help">Hjälp</string>
     <string name="help_main">Färgerna listade nedan hittar du lite överallt i applikationen och med lite olika former, men de
         har alltid samma betydelse.

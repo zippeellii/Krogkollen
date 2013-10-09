@@ -1,11 +1,12 @@
 package se.chalmers.krogkollen.detailed;
 
 import android.content.SharedPreferences;
+import android.os.AsyncTask;
+import android.view.View;
+import com.google.android.gms.maps.model.LatLng;
 import se.chalmers.krogkollen.IView;
-import se.chalmers.krogkollen.backend.BackendHandler;
-import se.chalmers.krogkollen.backend.BackendNotInitializedException;
-import se.chalmers.krogkollen.backend.NoBackendAccessException;
-import se.chalmers.krogkollen.backend.NotFoundInBackendException;
+import se.chalmers.krogkollen.R;
+import se.chalmers.krogkollen.backend.*;
 import se.chalmers.krogkollen.pub.IPub;
 import se.chalmers.krogkollen.pub.PubUtilities;
 import se.chalmers.krogkollen.utils.StringConverter;
@@ -40,7 +41,7 @@ public class DetailedPresenter implements IDetailedPresenter {
 
 		if (rating == 1) {
 			if (view.getSharedPreferences(pub.getID(), 0).getInt("thumb", 0) == 1) {
-				view.setThumbs(0);
+                view.setThumbs(0);
 
 				BackendHandler.getInstance().removeRatingVote(pub, 1);
 				pub.setPositiveRating(pub.getPositiveRating() - 1);
@@ -48,7 +49,7 @@ public class DetailedPresenter implements IDetailedPresenter {
 				saveThumbState(0);
 
 			} else if (view.getSharedPreferences(pub.getID(), 0).getInt("thumb", 0) == -1) {
-				view.setThumbs(1);
+                view.setThumbs(1);
 
 				BackendHandler.getInstance().removeRatingVote(pub, -1);
 				pub.setNegativeRating(pub.getNegativeRating() - 1);
@@ -58,7 +59,7 @@ public class DetailedPresenter implements IDetailedPresenter {
 
 				saveThumbState(1);
 			} else {
-				view.setThumbs(1);
+                view.setThumbs(1);
 
 				BackendHandler.getInstance().addRatingVote(pub, 1);
 				pub.setPositiveRating(pub.getPositiveRating() + 1);
@@ -104,58 +105,124 @@ public class DetailedPresenter implements IDetailedPresenter {
 			}
 			saveThumbState(rating);
 		}
+
+        updateVotes();
 	}
 
-	@Override
-	public void saveFavoriteState() {
-		SharedPreferences.Editor editor = view.getSharedPreferences(pub.getID(), 0).edit();
-		editor.putBoolean("star",
-				!(view.getSharedPreferences(pub.getID(), 0).getBoolean("star", true)));
-		editor.commit();
-	}
+    /**
+     * Saves the state of the favorite locally
+     */
+    public void saveFavoriteState(){
+        SharedPreferences.Editor editor = view.getSharedPreferences(pub.getID(), 0).edit();
+        editor.putBoolean("star", (!view.getSharedPreferences(pub.getID(), 0).getBoolean("star", true)));
+        editor.commit();
+    }
 
-	/**
-	 * Saves the state of the thumb because a user is only allowed to vote 1 time.
-	 * 
-	 * @param thumb
-	 */
-	private void saveThumbState(int thumb) {
+    /**
+     * Saves the state of the thumb because a user is only allowed to vote 1 time.
+     * @param thumb
+     */
+	private void saveThumbState(int thumb){
 		SharedPreferences.Editor editor = view.getSharedPreferences(pub.getID(), 0).edit();
 		editor.putInt("thumb", thumb);
 		editor.commit();
 	}
 
-	@Override
-	public void getQueueTime() {
-		view.updateQueueIndicator(pub.getQueueTime());
+    /**
+     * Converts the hour string
+     * @param hour
+     * @return
+     */
+	private String convertOpeningHours(int hour){
+		if(hour / 10 ==0){
+			return "0"+hour;
+		}
+		return ""+hour;
 	}
 
-	@Override
-	public void getText() {
-		view.updateText(pub.getName(), pub.getDescription(),
-				StringConverter.convertOpeningHours(pub.getTodaysOpeningHour()) + " - "
-						+ (StringConverter.convertOpeningHours(pub.getTodaysClosingHour())), ""
-						+ pub.getAgeRestriction() + " År", "" + pub.getEntranceFee() + " :-");
-	}
+    /**
+     * Updates the info of a pub
+     * @throws NoBackendAccessException
+     * @throws NotFoundInBackendException
+     * @throws BackendNotInitializedException 
+     */
+    public void updateInfo() throws NoBackendAccessException, NotFoundInBackendException{
+        new UpdateTask().execute();
+    }
 
-	@Override
-	public void getThumbs() {
-		view.setThumbs(view.getSharedPreferences(pub.getID(), 0).getInt("thumb", 0));
-	}
+    private class UpdateTask extends AsyncTask<Void, Void, Void>{
+        protected void onPreExecute(){
+            view.showProgressDialog();
+        }
 
-	@Override
-	public void getFavoriteStar() {
-		view.updateStar(view.getSharedPreferences(pub.getID(), 0).getBoolean("star", true));
-	}
+        protected Void doInBackground(Void... voids){
 
-	@Override
-	public void getVotes() throws NoBackendAccessException, NotFoundInBackendException {
-		view.updateVotes("" + pub.getPositiveRating(), "" + pub.getNegativeRating());
-	}
+            try {
+                BackendHandler.getInstance().updatePubLocally(pub);
+            } catch (NoBackendAccessException e) {
+                System.out.println("error");
+            } catch (NotFoundInBackendException e) {
+                System.out.println("error");
+            } catch (BackendNotInitializedException e){
+                System.out.println("error");
+            }
+            return null;
+        }
 
-	@Override
-	public void updateInfo() throws NoBackendAccessException, NotFoundInBackendException,
-			BackendNotInitializedException {
-		BackendHandler.getInstance().updatePubLocally(pub);
-	}
+        protected void onPostExecute(Void result){
+            view.hideProgressDialog();
+            updateMain();
+        }
+    }
+
+
+    @Override
+    public void onClick(View view) {
+        if(view.getId() == R.id.thumbsDownLayout){
+            try {
+                ratingChanged(-1);
+                //updateThumbs();
+            } catch (NotFoundInBackendException e) {
+                System.out.println("error");
+            } catch (NoBackendAccessException e) {
+                System.out.println("error");
+            } catch (BackendNotInitializedException e){
+                System.out.println("error");
+            }
+        }
+        else if(view.getId() == R.id.thumbsUpLayout){
+            try {
+                ratingChanged(1);
+                //updateThumbs();
+            } catch (NotFoundInBackendException e) {
+                System.out.println("error");
+            } catch (NoBackendAccessException e) {
+                System.out.println("error");
+            } catch (BackendNotInitializedException e){
+                System.out.println("error");
+            }
+        }
+    }
+
+    //Sends the new information to the view for displaying.
+    private void updateMain(){
+        view.updateQueueIndicator(pub.getQueueTime());
+        view.updateText(pub.getName(), pub.getDescription(), convertOpeningHours(pub.getTodaysOpeningHour()) + " - " +
+                (convertOpeningHours(pub.getTodaysClosingHour())), ""+pub.getAgeRestriction() + " år", ""+pub.getEntranceFee()
+                + ":-");
+        view.addMarker(pub);
+        view.navigateToLocation(new LatLng(pub.getLatitude(), pub.getLongitude()), 14);
+        view.showStar(view.getSharedPreferences(pub.getID(), 0).getBoolean("star", true));
+        view.setThumbs(view.getSharedPreferences(pub.getID(), 0).getInt("thumb", 0));
+        updateVotes();
+    }
+
+    public void updateStar(){
+        saveFavoriteState();
+        view.showStar(view.getSharedPreferences(pub.getID(), 0).getBoolean("star", true));
+    }
+
+    private void updateVotes(){
+        view.showVotes("" + pub.getPositiveRating(), "" + pub.getNegativeRating());
+    }
 }

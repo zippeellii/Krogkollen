@@ -1,41 +1,56 @@
 package se.chalmers.krogkollen.detailed;
 
+import android.content.DialogInterface;
+import android.view.View.OnClickListener;
 import se.chalmers.krogkollen.IPresenter;
 import se.chalmers.krogkollen.backend.BackendNotInitializedException;
 import se.chalmers.krogkollen.backend.NoBackendAccessException;
 import se.chalmers.krogkollen.backend.NotFoundInBackendException;
 
-// TODO javadoc
-public interface IDetailedPresenter extends IPresenter {
+/**
+ * Interface for a DetailedPresenter
+ * 
+ * @author Oskar Karrman
+ *
+ */
+public interface IDetailedPresenter extends IPresenter, OnClickListener {
 
-	// TODO javadoc
-	public void ratingChanged(int rating) throws NotFoundInBackendException,
-			NoBackendAccessException, BackendNotInitializedException;
+    /**
+     * Updates the thumb state.
+     *
+     * @param rating represents thumb up, down or neutral.
+     * @throws NotFoundInBackendException
+     * @throws NoBackendAccessException
+     * @throws BackendNotInitializedException
+     */
+	public void ratingChanged(int rating) throws NotFoundInBackendException, NoBackendAccessException, BackendNotInitializedException;
 
-	// TODO javadoc
-	public void setPub(String pubID) throws NotFoundInBackendException, NoBackendAccessException,
-			BackendNotInitializedException;
+    /**
+     * Sets the pub which the presenter is connected to.
+     *
+     * @param pubID the pub
+     * @throws NotFoundInBackendException
+     * @throws NoBackendAccessException
+     * @throws BackendNotInitializedException
+     */
+    public void setPub(String pubID) throws NotFoundInBackendException, NoBackendAccessException, BackendNotInitializedException;
 
-	// TODO javadoc
-	public void getQueueTime();
+    /**
+     * Saves the favorite state locally.
+     */
+    public void saveFavoriteState();
 
-	// TODO javadoc
-	public void getText();
+    /**
+     * Gets the information from the server
+     * @throws NoBackendAccessException
+     * @throws NotFoundInBackendException
+     * @throws BackendNotInitializedException
+     */
+    public void updateInfo() throws NoBackendAccessException, NotFoundInBackendException, BackendNotInitializedException;
 
-	// TODO javadoc
-	public void getThumbs();
-
-	// TODO javadoc
-	public void getVotes() throws NoBackendAccessException, NotFoundInBackendException;
-
-	// TODO javadoc
-	public void getFavoriteStar();
-
-	// TODO javadoc
-	public void saveFavoriteState();
-
-	// TODO javadoc
-	public void updateInfo() throws NoBackendAccessException, NotFoundInBackendException,
-			BackendNotInitializedException;
+    /**
+     * Updates the star
+     */
+    public void updateStar();
 
 }

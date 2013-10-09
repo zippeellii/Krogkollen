@@ -1,6 +1,8 @@
 package se.chalmers.krogkollen.detailed;
 
+import com.google.android.gms.maps.model.LatLng;
 import se.chalmers.krogkollen.IView;
+import se.chalmers.krogkollen.pub.IPub;
 
 /**
  * Interface for a DetailedView
@@ -21,16 +23,24 @@ public interface IDetailedView extends IView {
 	 */
 	public void updateQueueIndicator(int queueTime);
 
-	/**
-	 * Called when a refresh button is clicked
-	 */
-	public void refresh();
+    /**
+     * Updates the vote text.
+     *
+     * @param upVotes
+     * @param downVotes
+     */
+    public void showVotes(String upVotes, String downVotes);
 
-	/**
-	 * Updates the vote text.
-	 * 
-	 * @param upVotes
-	 * @param downVotes
-	 */
-	public void updateVotes(String upVotes, String downVotes);
+    /**
+     * Adds a marker to the map.
+     * @param pub the pub to add a marker for.
+     */
+    public void addMarker(IPub pub);
+
+    /**
+     * Shows the location of the coordinates on the map.
+     * @param latLng The location to show.
+     * @param zoom The speed which the map zooms to location.
+     */
+    public void navigateToLocation(LatLng latLng, int zoom);
 }

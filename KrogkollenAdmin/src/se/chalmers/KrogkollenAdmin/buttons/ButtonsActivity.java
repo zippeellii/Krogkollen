@@ -2,12 +2,14 @@ package se.chalmers.KrogkollenAdmin.buttons;
 
 import android.app.Activity;
 import android.app.ProgressDialog;
+import android.content.Intent;
 import android.os.Bundle;
 import android.text.Html;
-import android.view.MotionEvent;
-import android.view.View;
+import android.view.*;
 import android.widget.*;
+import com.parse.ParseUser;
 import se.chalmers.KrogkollenAdmin.R;
+import se.chalmers.KrogkollenAdmin.main.MainActivity;
 
 /**
  * Primary activity for the admin application.
@@ -40,6 +42,26 @@ public class ButtonsActivity extends Activity {
         updateGUI();
     }
 
+    public boolean onOptionsItemSelected(MenuItem menuItem) {
+        if (menuItem.getItemId() == R.id.logout_item) {
+            logOut();
+
+            return true;
+        }
+        return false;
+    }
+
+    private void logOut() {
+        presenter.logOut();
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.buttons, menu);
+        return true;
+    }
+
     /**
      * Sets up all the buttons and the loading indicator which is a circle.
      */
@@ -58,21 +80,24 @@ public class ButtonsActivity extends Activity {
         greenButton.setOnTouchListener(new View.OnTouchListener() {
             @Override
             public boolean onTouch(View v, MotionEvent event) {
-                return buttonClicked(1);
+                buttonClicked(1);
+                return true;
             }
         });
 
         yellowButton.setOnTouchListener(new View.OnTouchListener() {
             @Override
             public boolean onTouch(View v, MotionEvent event) {
-                return buttonClicked(2);
+                buttonClicked(2);
+                return true;
             }
         });
 
         redButton.setOnTouchListener(new View.OnTouchListener() {
             @Override
             public boolean onTouch(View v, MotionEvent event) {
-                return buttonClicked(3);
+                buttonClicked(3);
+                return true;
             }
         });
     }
@@ -81,13 +106,8 @@ public class ButtonsActivity extends Activity {
      * Sets the buttons visibility and then tells the presenter which button got clicked.
      * @param i the button clicked.
      */
-    private boolean buttonClicked(int i) {
-        if (presenter.getButtonOnCooldown()) {
-            return false;
-        }
-        presenter.setButtonOnCooldown(true);        // So that no input is accepted in a while
+    private void buttonClicked(int i) {
         presenter.buttonClicked(i);
-        return true;
     }
 
     /**
@@ -109,7 +129,7 @@ public class ButtonsActivity extends Activity {
      */
     public void updateGUI() {
         String msg;
-
+/*
         if (presenter.getButtonOnCooldown()) {
             // Sets the first part of the string to tell the user to wait.
             msg = getResources().getString(R.string.wait_part_one) + " " + (presenter.DISABLE_TIME/1000) + " " + getResources().getString(R.string.wait_part_two);
@@ -117,7 +137,7 @@ public class ButtonsActivity extends Activity {
             // Sets the first part of the string to tell the user it is ready.
             msg = getResources().getString(R.string.ready);
         }
-
+*/
         redButton.setSelected(false);
         yellowButton.setSelected(false);
         greenButton.setSelected(false);
@@ -125,22 +145,22 @@ public class ButtonsActivity extends Activity {
         // These cases adds the current button active to the string. If there is one.
         // They also set that button to be selected.
         switch (presenter.getQueueTime()) {
-            case 1: msg = msg + " " + getResources().getString(R.string.queue_now) +
+            case 1: msg = getResources().getString(R.string.queue_now) +
                     " <font color='#70c656'>" + getResources().getString(R.string.green) + "</font>";
                 setTitle(Html.fromHtml(msg));
                 greenButton.setSelected(true);
                 break;
-            case 2: msg = msg + " " + getResources().getString(R.string.queue_now) +
+            case 2: msg = getResources().getString(R.string.queue_now) +
                     " <font color='#f3ae1b'>" + getResources().getString(R.string.yellow) + "</font>";
                 setTitle(Html.fromHtml(msg));
                 yellowButton.setSelected(true);
                 break;
-            case 3: msg = msg + " " + getResources().getString(R.string.queue_now) +
+            case 3: msg = getResources().getString(R.string.queue_now) +
                     " <font color='#ef4444'>" + getResources().getString(R.string.red) + "</font>";
                 setTitle(Html.fromHtml(msg));
                 redButton.setSelected(true);
                 break;
-            default: msg = msg + " " + getResources().getString(R.string.buttons_activity);
+            default: msg = getResources().getString(R.string.buttons_activity);
                 setTitle(msg);
                 break;
         }

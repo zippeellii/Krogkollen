@@ -2,12 +2,18 @@ package se.chalmers.KrogkollenAdmin.main;
 
 import android.app.Activity;
 import android.app.ProgressDialog;
+import android.content.Context;
+import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.KeyEvent;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.*;
+import com.parse.ParseUser;
 import se.chalmers.KrogkollenAdmin.R;
+import se.chalmers.KrogkollenAdmin.buttons.ButtonsActivity;
 
 /**
  * First activity for the admin application.
@@ -40,6 +46,8 @@ public class MainActivity extends Activity {
 
         setupUiElements();
         addListeners();
+
+        presenter.checkIfLoggedIn();
     }
 
     /**
@@ -123,5 +131,9 @@ public class MainActivity extends Activity {
                 return false;
             }
         });
+    }
+
+    public SharedPreferences getPreferences() {
+        return this.getPreferences(Context.MODE_PRIVATE);
     }
 }

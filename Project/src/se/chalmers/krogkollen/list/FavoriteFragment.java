@@ -7,6 +7,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import se.chalmers.krogkollen.search.SortByDistance;
+import se.chalmers.krogkollen.search.SortByQueueTime;
 
 public class FavoriteFragment extends ListFragment {
 
@@ -18,7 +19,7 @@ public class FavoriteFragment extends ListFragment {
                ListModel model = new ListModel();
                View rootView = inflater.inflate(R.layout.fragment_favorites_list, container, false);
 
-               PubListAdapter adapter = new PubListAdapter(getActivity(), R.layout.listview_item, model.getSortedArray(new SortByDistance()));
+               PubListAdapter adapter = new PubListAdapter(getActivity(), R.layout.listview_item, model.getSortedArray(new SortByQueueTime()));
 
                setListAdapter(adapter);
 

@@ -4,6 +4,7 @@ import java.util.List;
 
 import android.util.Log;
 import se.chalmers.krogkollen.pub.IPub;
+import se.chalmers.krogkollen.pub.Pub;
 import se.chalmers.krogkollen.pub.PubUtilities;
 import se.chalmers.krogkollen.search.ISort;
 /**
@@ -28,9 +29,9 @@ public class ListModel {
 	}
 	//Converts the java.util.list to Array
 	private IPub[] convertListToArray(List <IPub> list){
-		IPub[] pubArray = new IPub[list.size()];
+		Pub[] pubArray = new Pub[list.size()];
 		for(int i = 0; i < list.size(); i++){
-			pubArray[i] = list.get(i);
+			pubArray[i] = (Pub)list.get(i);
 		}
 		return pubArray;
 	}

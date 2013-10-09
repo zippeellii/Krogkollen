@@ -18,23 +18,19 @@ public class SearchActivity extends ListActivity {
 		handleIntent(getIntent());
 	}
 	
+	@Override
 	public void onNewIntent(Intent intent) {
 		setIntent(intent);
 		handleIntent(intent);
 	}
 
-	/*	public boolean onCreateOptionsMenu(Menu menu) {
-		// Inflate the menu; this adds items to the action bar if it is present.
-		getMenuInflater().inflate(R.menu.search, menu);
-		
-		return true;
-	}*/
-	
+	@Override
 	public void onListItemClick(ListView l, View v, int position, long id) {
-		// BLA
+		// TODO BLA
 		// Call detail activity for clicked entry
 	}
 
+	// Checks if the intent passed is a search intent
 	private void handleIntent(Intent intent) {
 		if (Intent.ACTION_SEARCH.equals(intent.getAction())) {
 			String query = intent.getStringExtra(SearchManager.QUERY);
@@ -43,7 +39,8 @@ public class SearchActivity extends ListActivity {
 		}
 	}
 	
+	// Searches
 	private void doSearch(String query) {
-		Log.d("OVWEHU", "DET VAR EN GÅNG EN LITEN FÅGELLLLLLL");
+		Log.d("OVWEHU", query); // TODO do this
 	}
 }

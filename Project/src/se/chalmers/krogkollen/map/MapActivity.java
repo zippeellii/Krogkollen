@@ -318,4 +318,9 @@ public class MapActivity extends Activity implements IMapView {
     public Resources getResources() {
         return super.getResources();
     }
+
+	@Override
+	public void onSearch() {
+		this.onSearchRequested();
+	}
 }

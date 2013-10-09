@@ -207,7 +207,7 @@ public class DetailedActivity extends Activity implements IDetailedView {
 
     @Override
     public void addMarker(IPub pub) {
-        map.addMarker(MarkerOptionsFactory.createMarkerOptions(getResources().getDisplayMetrics() ,getResources(), pub);
+        map.addMarker(MarkerOptionsFactory.createMarkerOptions(getResources().getDisplayMetrics() ,getResources(), pub));
     }
 
     @Override

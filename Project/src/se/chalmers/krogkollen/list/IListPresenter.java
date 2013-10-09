@@ -7,12 +7,11 @@ import se.chalmers.krogkollen.pub.IPub;
 
 /**
  * Interface for the ListPresenter.
- *
- * @author Albin Garpetun
- *         Created 2013-09-22
+ * 
+ * @author Albin Garpetun Created 2013-09-22
  */
-public interface IListPresenter extends IPresenter{
-	
+public interface IListPresenter extends IPresenter {
+
 	/**
 	 * Sorts a list of IPub objects according to specified SortMode
 	 * 

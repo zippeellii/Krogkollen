@@ -27,18 +27,15 @@ import java.util.List;
  */
 
 /**
- *
+ * 
  * A singleton holding a list of all the pubs, and is used to load data from the server.
- *
- * For now this class only contains hard coded values, since we don't have support for a server.
- *
- * @author Albin Garpetun
- * Created 2013-09-22
+ * 
+ * @author Albin Garpetun Created 2013-09-22
  */
 public class PubUtilities {
 
-	private List<IPub> pubList = new LinkedList<IPub>();
-	private static PubUtilities instance = null;
+	private List<IPub>			pubList		= new LinkedList<IPub>();
+	private static PubUtilities	instance	= null;
 
 	private PubUtilities() {
 		// Exists only to defeat instantiation.
@@ -46,11 +43,11 @@ public class PubUtilities {
 
 	/**
 	 * Creates an instance of this object if there is none, otherwise it simply returns the old one.
-	 *
+	 * 
 	 * @return The instance of the object.
 	 */
 	public static PubUtilities getInstance() {
-		if(instance == null) {
+		if (instance == null) {
 			instance = new PubUtilities();
 		}
 		return instance;
@@ -58,10 +55,11 @@ public class PubUtilities {
 
 	/**
 	 * Loads the pubs from the server and puts them in the list of pubs.
-	 *
+	 * 
 	 * For now this method only adds hardcoded pubs into the list.
-	 * @throws BackendNotInitializedException 
-	 * @throws NoBackendAccessException 
+	 * 
+	 * @throws BackendNotInitializedException
+	 * @throws NoBackendAccessException
 	 */
 	public void loadPubList() throws NoBackendAccessException, BackendNotInitializedException {
 		pubList = BackendHandler.getInstance().getAllPubs();
@@ -69,35 +67,40 @@ public class PubUtilities {
 
 	/**
 	 * Returns the list of pubs.
-	 *
+	 * 
 	 * @return The list of pubs.
 	 */
 	public List<IPub> getPubList() {
 		return pubList;
 	}
 
-    /**
-     * Refreshes the list of pubs from the server.
-     * @throws BackendNotInitializedException 
-     * @throws NoBackendAccessException 
-     */
-    public void refreshPubList() throws NoBackendAccessException, BackendNotInitializedException {
-        pubList.clear();
-        loadPubList();
-    }
+	/**
+	 * Refreshes the list of pubs from the server.
+	 * 
+	 * @throws BackendNotInitializedException
+	 * @throws NoBackendAccessException
+	 */
+	public void refreshPubList() throws NoBackendAccessException, BackendNotInitializedException {
+		pubList.clear();
+		loadPubList();
+	}
 
-    /**
-     * Returns a the pub connected with the ID given.
-     *
-     * @param id The ID of the pub to return
-     * @return The pub according to the ID given
-     */
-    public IPub getPub(String id){
-       for(IPub pub: pubList) {
-            if(pub.getID().equals(id)){
-                return pub;
-            }
-        }
-        throw  new Resources.NotFoundException("The ID does not match with any pub");
-    }
+	/**
+	 * Returns a the pub connected with the ID given.
+	 * 
+	 * @param id The ID of the pub to return
+	 * @return The pub according to the ID given
+	 */
+	public IPub getPub(String id) {
+		for (IPub pub : pubList) {
+			if (pub.getID().equals(id)) {
+				return pub;
+			}
+		}
+		throw new Resources.NotFoundException("The ID does not match with any pub");// TODO get this
+																					// from
+																					// strings.xml,
+																					// no static
+																					// text
+	}
 }

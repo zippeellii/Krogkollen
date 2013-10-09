@@ -7,15 +7,14 @@ import se.chalmers.krogkollen.R;
 /**
  * ${TITLE} (UTF-8)
  * <p/>
- * Author: Johan Backman
- * Date: 2013-10-04
+ * 
+ * @author Johan Backman
  */
 public class SettingsFragment extends PreferenceFragment {
 
+	public void onCreate(Bundle savedInstanceState) {
+		super.onCreate(savedInstanceState);
 
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-
-        addPreferencesFromResource(R.xml.preferences);
-    }
+		addPreferencesFromResource(R.xml.preferences);
+	}
 }

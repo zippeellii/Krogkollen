@@ -93,7 +93,7 @@ public class PubUtilities {
 	 */
 	public IPub getPub(String id) {
 		for (IPub pub : pubList) {
-			if (pub.getID().equals(id)) {
+			if (pub.getID().equalsIgnoreCase(id)) {
 				return pub;
 			}
 		}

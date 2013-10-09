@@ -22,6 +22,7 @@ import android.widget.CompoundButton;
 import android.widget.CompoundButton.OnCheckedChangeListener;
 import android.widget.Toast;
 import com.google.android.gms.maps.CameraUpdateFactory;
+import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.Projection;
 import com.google.android.gms.maps.model.*;
 import se.chalmers.krogkollen.R;
@@ -87,8 +88,25 @@ public class MapActivity extends Activity implements IMapView {
         presenter = new MapPresenter();
         presenter.setView(this);
 
+        MapWrapper.INSTANCE.getMap().setOnMarkerClickListener(new GoogleMap.OnMarkerClickListener() {
+            @Override
+            public boolean onMarkerClick(Marker marker) {
+
+                // Move camera to the clicked marker.
+                moveCameraToPosition(marker.getPosition(), MARKER_ZOOM);
+
+                if (marker.getTitle().equalsIgnoreCase(getString(R.string.map_user_name))) {
+                    // TODO Open favorites.
+                } else {
+                    // Open detailed view.
+                    presenter.pubMarkerClicked(marker.getTitle());
+                }
+                return true; // Suppress default behavior; move camera and open info window.
+            }
+        });
+
         // Set the presenter as listener for markers and user indicator.
-        MapWrapper.INSTANCE.getMap().setOnMarkerClickListener(presenter);
+        //MapWrapper.INSTANCE.getMap().setOnMarkerClickListener(presenter); // TODO: FIX SO IT WORKS LIKE THIS
 
         // Remove the default logo icon and add our list icon.
         ActionBar actionBar = getActionBar();

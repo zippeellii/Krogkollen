@@ -14,7 +14,7 @@ This file is part of Krogkollen.
  GNU General Public License for more details.
 
  You should have received a copy of the GNU General Public License
- along with Foobar.  If not, see <http://www.gnu.org/licenses/>.
+ along with Krogkollen.  If not, see <http://www.gnu.org/licenses/>.
 -->
 
 <resources>
@@ -46,7 +46,8 @@ This file is part of Krogkollen.
     <string name="thumbs_down">0000</string>
     <string name="action_help">Hjälp</string>
     <string name="help_main">Färgerna listade nedan hittar du lite överallt i applikationen och med lite olika former, men de
-        har alltid samma betydelse.</string>
+        har alltid samma betydelse.
+    </string>
     <string name="help_title">Hjälp</string>
     <string name="help_green">Grön färg betyder att det inte är någon kö eller väldigt kort kö. Ca 0–15 minuter.</string>
     <string name="help_yellow">Gul färg betyder att det är medellång kö. Ca 15–45 minuter.</string>
@@ -67,8 +68,8 @@ This file is part of Krogkollen.
     <string name="map_updating">Uppdaterar krogar...</string>
     <string name="map_user_name">user</string>
     <string name="loading_pubs">Laddar krogar...</string>
-
-    <!-- Search strings -->
+    
+	<!-- Search strings -->
     <string name="search_hint">Sök efter en krog</string>
     <string name="title_activity_search">SearchActivity</string>
 

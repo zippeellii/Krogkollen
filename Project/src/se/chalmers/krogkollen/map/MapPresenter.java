@@ -70,13 +70,6 @@ public class MapPresenter implements IMapPresenter, GoogleMap.OnMarkerClickListe
     }
 
     @Override
-    public void pubMarkerClicked(String pubId) {
-        Bundle bundle = new Bundle();
-        bundle.putString(MAP_PRESENTER_KEY, pubId);
-        mapView.navigate(DetailedActivity.class, bundle);
-    }
-
-    @Override
     public List<IPub> search(String search) {
         // TODO Auto-generated method stub
         return null;
@@ -126,6 +119,13 @@ public class MapPresenter implements IMapPresenter, GoogleMap.OnMarkerClickListe
     @Override
     public void onResume() {
         this.userLocation.onResume();
+    }
+
+    @Override
+    public void pubMarkerClicked(String title) {
+        Bundle bundle = new Bundle();
+        bundle.putString(MAP_PRESENTER_KEY, title);
+        mapView.navigate(DetailedActivity.class, bundle);
     }
 
     @Override

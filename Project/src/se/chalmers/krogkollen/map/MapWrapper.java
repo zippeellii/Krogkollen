@@ -5,6 +5,7 @@ import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.res.Resources;
 import android.os.AsyncTask;
+import android.util.DisplayMetrics;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapFragment;
 import com.google.android.gms.maps.model.Marker;
@@ -41,6 +42,7 @@ public enum MapWrapper {
 	private List<Marker>	pubMarkers;
 	private Resources		resources;
 	private Context			context;
+    private DisplayMetrics  displayMetrics;
 
 	private ProgressDialog	progressDialog;
 
@@ -58,6 +60,7 @@ public enum MapWrapper {
 				.getMap();
 		this.resources = activity.getResources();
 		this.context = activity;
+        displayMetrics = resources.getDisplayMetrics();
 		this.addPubMarkers(PubUtilities.getInstance().getPubList());
 	}
 
@@ -135,7 +138,7 @@ public enum MapWrapper {
 			// Create options for all the markers
 			for (int i = 0; i < pubs.length; i++) {
 				IPub pub = pubs[i];
-				listMarkerOptions.add(MarkerOptionsFactory.createMarkerOptions(resources, pub));
+				listMarkerOptions.add(MarkerOptionsFactory.createMarkerOptions(displayMetrics, resources, pub));
 			}
 			return listMarkerOptions;
 		}

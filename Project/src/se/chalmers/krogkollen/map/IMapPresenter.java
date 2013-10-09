@@ -25,20 +25,13 @@ import java.util.List;
  */
 
 /**
- *
+ * 
  * Interface for a MapPresenter
- *
+ * 
  * @author Oskar Karrman
- *
+ * 
  */
 public interface IMapPresenter extends IPresenter, IObserver {
-
-    /**
-     * Indicates that a pub has been selected on the map
-     *
-     * @param pubId the pub which was selected
-     */
-    public abstract void pubMarkerClicked(String pubId);
 
     /**
      * Start a search for an IPub object
@@ -48,20 +41,22 @@ public interface IMapPresenter extends IPresenter, IObserver {
      */
     public abstract List<IPub> search(String search);
 
-    /**
-     * Determine what will happen when an action bar item is clicked.
-     *
-     * @param item the menuitem that was clicked.
-     */
-    public void onActionBarClicked(MenuItem item);
+	/**
+	 * Determine what will happen when an action bar item is clicked.
+	 * 
+	 * @param item the menuitem that was clicked.
+	 */
+	public void onActionBarClicked(MenuItem item);
 
-    /**
-     * When the corresponding activity is paused this method gets called.
-     */
-    public void onPause();
+	/**
+	 * When the corresponding activity is paused this method gets called.
+	 */
+	public void onPause();
 
-    /**
-     * When the corresponding activity is resumed this method gets called.
-     */
-    public void onResume();
+	/**
+	 * When the corresponding activity is resumed this method gets called.
+	 */
+	public void onResume();
+
+    void pubMarkerClicked(String title);
 }

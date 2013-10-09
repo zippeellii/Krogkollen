@@ -8,15 +8,16 @@ import se.chalmers.krogkollen.pub.IPub;
  * Interface for a DetailedView
  * 
  * @author Oskar Karrman
- *
+ * 
  */
 public interface IDetailedView extends IView {
 
 	/**
 	 * Updates all text fields on the detailed view
 	 */
-	public void updateText(String pubName, String description, String openingHours, String age, String price);
-	
+	public void updateText(String pubName, String description, String openingHours, String age,
+			String price);
+
 	/**
 	 * Updates the queue indicator on the detailed view
 	 */

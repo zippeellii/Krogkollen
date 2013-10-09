@@ -1,13 +1,35 @@
 package se.chalmers.KrogkollenAdmin.buttons;
 
+import android.content.Intent;
 import android.os.AsyncTask;
+import android.view.View;
+import android.widget.Toast;
 import com.parse.ParseException;
 import com.parse.ParseObject;
 import com.parse.ParseQuery;
 import com.parse.ParseUser;
+import se.chalmers.KrogkollenAdmin.R;
+import se.chalmers.KrogkollenAdmin.main.MainActivity;
 
 import java.util.Timer;
 import java.util.TimerTask;
+
+/*
+ * This file is part of Krogkollen.
+ *
+ * Krogkollen is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * Krogkollen is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with Krogkollen.  If not, see <http://www.gnu.org/licenses/>.
+ */
 
 /**
  * The presenter class for the ButtonsActivity. It holds all the data and logic for the view.
@@ -21,8 +43,9 @@ public class ButtonsPresenter {
     private ParseObject object;
     private ButtonsActivity view;
     private Timer inputDisabledTimer;
-    public final int DISABLE_TIME = 20000;
+    public static final int DISABLE_TIME = 20000;
     private boolean buttonOnCooldown;
+    private Toast toast;
 
     /**
      * Constructor. Gets called when the ButtonsActivity is started, so they know each other.
@@ -49,18 +72,14 @@ public class ButtonsPresenter {
         }, 0, DISABLE_TIME);
     }
 
-    /**
-     * This method is called by the timer every time it reaches the DISABLE_TIME.
-     */
+    // This method is called by the timer every time it reaches the DISABLE_TIME.
     private void timerFinished() {
         //This method runs in the same thread as the timer.
         view.runOnUiThread(Timer_Tick);
     }
 
-    /**
-     * This method runs in the same thread as the UI.
-     * It activates the buttons and updates the GUI.
-     */
+    // This method runs in the same thread as the UI.
+    // It activates the buttons and updates the GUI.
     private Runnable Timer_Tick = new Runnable() {
         public void run() {
             //Changes the UI to let the user know that input isn't allowed for a while.
@@ -76,7 +95,18 @@ public class ButtonsPresenter {
      * @param newQueueTime An int corresponding to the button clicked.
      */
     public void buttonClicked(int newQueueTime) {
-        new ServerUpdateTask().execute(newQueueTime);
+        if (buttonOnCooldown) {
+            // Makes so that toasts doesn't stack.
+            if (toast != null) {
+                toast.cancel();
+            }
+            toast = Toast.makeText(view, view.getResources().getString(R.string.wait_part_one) + " " + ButtonsPresenter.DISABLE_TIME / 1000 + " " + view.getResources().getString(R.string.wait_part_two), Toast.LENGTH_SHORT);
+            toast.setDuration(1);
+            toast.show();
+        } else {
+            buttonOnCooldown = true;        // So that no input is accepted in a while
+            new ServerUpdateTask().execute(newQueueTime);
+        }
     }
 
     /**
@@ -140,10 +170,14 @@ public class ButtonsPresenter {
         return buttonOnCooldown;
     }
 
+    public void logOut() {
+        ParseUser.logOut();
+        Intent intent = new Intent(view, MainActivity.class);
+        view.startActivity(intent);
+    }
 
-    /**
-     * A task to be be run on another thread, making sure that it shows a loading indicator when the task is executing.
-     */
+
+    // A task to be be run on another thread, making sure that it shows a loading indicator when the task is executing.
     private class ServerUpdateTask extends AsyncTask<Integer, Void, Void> {
 
         @Override

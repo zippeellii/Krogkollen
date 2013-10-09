@@ -21,12 +21,10 @@ import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.CompoundButton.OnCheckedChangeListener;
 import android.widget.Toast;
-
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.Projection;
 import com.google.android.gms.maps.model.*;
-
 import se.chalmers.krogkollen.R;
 import se.chalmers.krogkollen.backend.NoBackendAccessException;
 import se.chalmers.krogkollen.backend.NotFoundInBackendException;
@@ -62,29 +60,31 @@ public class MapActivity extends Activity implements IMapView {
     /**
      * Identifier for the intent used to start the activity for detailed view.
      */
-    public static final String MARKER_PUB_ID = "se.chalmers.krogkollen.MARKER_PUB_ID";
+    public static final String	MARKER_PUB_ID	= "se.chalmers.krogkollen.MARKER_PUB_ID";
 
-    public static final int USER_ZOOM = 16;
-    public static final int MARKER_ZOOM = 18;
-    public static final int DEFAULT_ZOOM = 12;
+    public static final int		USER_ZOOM		= 16;
+    public static final int		MARKER_ZOOM		= 18;
+    public static final int		DEFAULT_ZOOM	= 12;
 
-    private MapPresenter presenter;
-    private Marker userMarker;
-    private ProgressDialog progressDialog;
+    private MapPresenter		presenter;
+    private Marker				userMarker;
+    private ProgressDialog		progressDialog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_map);
 
+        // Get the map from backend.
         try {
             MapWrapper.INSTANCE.init(this);
         } catch (NoBackendAccessException e) {
-            showErrorMessage(getResources().getString(R.string.error_no_backend_access)); // TODO standard? if so, update other occurances
+            showErrorMessage(getResources().getString(R.string.error_no_backend_access));
         } catch (NotFoundInBackendException e) {
             showErrorMessage(getResources().getString(R.string.error_no_backend_item));
         }
 
+        // Create a presenter for this view.
         presenter = new MapPresenter();
         presenter.setView(this);
 
@@ -105,6 +105,10 @@ public class MapActivity extends Activity implements IMapView {
             }
         });
 
+        // Set the presenter as listener for markers and user indicator.
+        //MapWrapper.INSTANCE.getMap().setOnMarkerClickListener(presenter); // TODO: FIX SO IT WORKS LIKE THIS
+
+        // Remove the default logo icon and add our list icon.
         ActionBar actionBar = getActionBar();
         actionBar.setIcon(R.drawable.list_icon);
         actionBar.setDisplayHomeAsUpEnabled(true);
@@ -127,7 +131,8 @@ public class MapActivity extends Activity implements IMapView {
      * @param zoom how close to zoom in on the user.
      */
     public void moveCameraToPosition(LatLng pos, int zoom) {
-        MapWrapper.INSTANCE.getMap().animateCamera(CameraUpdateFactory.newCameraPosition(new CameraPosition(pos, zoom, 0, 0)));
+        MapWrapper.INSTANCE.getMap().animateCamera(
+                CameraUpdateFactory.newCameraPosition(new CameraPosition(pos, zoom, 0, 0)));
     }
 
     /**
@@ -135,7 +140,7 @@ public class MapActivity extends Activity implements IMapView {
      *
      * @param latLng the user location
      */
-    public void addUserMarker(LatLng latLng){
+    public void addUserMarker(LatLng latLng) {
         userMarker = MapWrapper.INSTANCE.getMap().addMarker(new MarkerOptions()
                 .position(latLng)
                 .icon(BitmapDescriptorFactory.fromResource(R.drawable.user_marker))
@@ -149,11 +154,11 @@ public class MapActivity extends Activity implements IMapView {
     }
 
     /**
-     * ** Method written by Google, found on stackoverflow.com **
-     * ** http://stackoverflow.com/questions/13728041/move-markers-in-google-map-v2-android **
-     * Moves the user marker smoothly to a new position.
+     * ** Method written by Google, found on stackoverflow.com ** **
+     * http://stackoverflow.com/questions/13728041/move-markers-in-google-map-v2-android ** Moves
+     * the user marker smoothly to a new position.
      *
-     * @param toPosition	the position to where the marker will be moved
+     * @param toPosition the position to where the marker will be moved
      */
     public void animateUserMarker(final LatLng toPosition) {
         final Handler handler = new Handler();
@@ -189,7 +194,8 @@ public class MapActivity extends Activity implements IMapView {
 
     @Override
     public void showProgressDialog() {
-        progressDialog = ProgressDialog.show(MapActivity.this, "", getString(R.string.map_updating), false, false);
+        progressDialog = ProgressDialog.show(MapActivity.this, "",
+                getString(R.string.map_updating), false, false);
     }
 
     @Override
@@ -212,19 +218,19 @@ public class MapActivity extends Activity implements IMapView {
     @Override
     public void onBackPressed() {
 
-        //Get what activity you came from originally.
+        // Get what activity you came from originally.
         int activity = this.getIntent().getIntExtra(ActivityID.ACTIVITY_ID, 0);
         Intent intent;
-        switch(activity) {
+        switch (activity) {
             case ActivityID.LIST:
                 // TODO do something here
-                //If you came from the list view, return there.
-                //Intent intent = new Intent(this, ListActivity.class);
-                //intent.putExtra(ActivityID.ACTIVITY_ID, CallingActivity.MAP);
-                //this.startActivity(intent);
+                // If you came from the list view, return there.
+                // Intent intent = new Intent(this, ListActivity.class);
+                // intent.putExtra(ActivityID.ACTIVITY_ID, CallingActivity.MAP);
+                // this.startActivity(intent);
                 break;
             default:
-                //If you came from anything else, return to home screen.
+                // If you came from anything else, return to home screen.
                 intent = new Intent(Intent.ACTION_MAIN); // TODO use navigate method
                 intent.addCategory(Intent.CATEGORY_HOME);
                 startActivity(intent);
@@ -256,21 +262,21 @@ public class MapActivity extends Activity implements IMapView {
 
     @Override
     public void showAlertDialog(final String msg, final boolean showCheckbox) {
-        //Create most of the dialog that will be shown if either wifi or gps are disabled.
+        // Create most of the dialog that will be shown if either wifi or gps are disabled.
         Builder builder = new Builder(this);
         final ArrayList<Integer> selected = new ArrayList<Integer>();
 
         if (showCheckbox) {
-            //Check box, making it possible to chose not to show this dialog again.
+            // Check box, making it possible to chose not to show this dialog again.
             View checkBoxView = View.inflate(this, R.layout.checkbox, null);
-            CheckBox checkBox = (CheckBox)checkBoxView.findViewById(R.id.checkbox);
+            CheckBox checkBox = (CheckBox) checkBoxView.findViewById(R.id.checkbox);
             checkBox.setOnCheckedChangeListener(new OnCheckedChangeListener() {
 
                 @Override
                 public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                     if (isChecked) {
                         selected.add(0);
-                    } else if(selected.size() != 0){
+                    } else if (selected.size() != 0) {
                         selected.clear();
                     }
                 }
@@ -281,24 +287,27 @@ public class MapActivity extends Activity implements IMapView {
         builder.setTitle(R.string.alert_dialog_title);
         builder.setMessage(msg);
 
-        //Set listeners to the buttons in the dialog and chose appropriate consequences for clicks.
-        builder.setPositiveButton(R.string.alert_dialog_activate, new DialogInterface.OnClickListener() {
-            public void onClick(DialogInterface dialog, int which) {
-                if (showCheckbox) {
-                    presenter.saveOption(!selected.isEmpty());
-                }
-                //Send user to location settings on the phone.
-                Intent intent = new Intent(android.provider.Settings.ACTION_LOCATION_SOURCE_SETTINGS);
-                startActivity(intent);
-            }
-        });
-        builder.setNegativeButton(R.string.alert_dialog_cancel, new DialogInterface.OnClickListener() {
-            public void onClick(DialogInterface dialog, int which) {
-                if (showCheckbox) {
-                    presenter.saveOption(!selected.isEmpty());
-                }
-            }
-        });
+        // Set listeners to the buttons in the dialog and chose appropriate consequences for clicks.
+        builder.setPositiveButton(R.string.alert_dialog_activate,
+                new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int which) {
+                        if (showCheckbox) {
+                            presenter.saveOption(!selected.isEmpty());
+                        }
+                        // Send user to location settings on the phone.
+                        Intent intent = new Intent(
+                                android.provider.Settings.ACTION_LOCATION_SOURCE_SETTINGS);
+                        startActivity(intent);
+                    }
+                });
+        builder.setNegativeButton(R.string.alert_dialog_cancel,
+                new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int which) {
+                        if (showCheckbox) {
+                            presenter.saveOption(!selected.isEmpty());
+                        }
+                    }
+                });
 
         builder.show();
     }

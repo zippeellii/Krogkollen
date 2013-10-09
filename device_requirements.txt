@@ -1,7 +1,9 @@
 
+These requirements are valid for both Krogkollen and KrogkollenAdmin
+
 Minimum requirements:
 	Android 4.0
-	X MB flash memory space
+	10 MB flash memory space
 	480 x 800 pixels screen
 	576 MB RAM
 	Wifi

@@ -2,12 +2,35 @@ package se.chalmers.KrogkollenAdmin.main;
 
 import android.app.Activity;
 import android.app.ProgressDialog;
+import android.content.Context;
+import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.KeyEvent;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.*;
+import com.parse.ParseUser;
 import se.chalmers.KrogkollenAdmin.R;
+import se.chalmers.KrogkollenAdmin.buttons.ButtonsActivity;
+
+/*
+ * This file is part of Krogkollen.
+ *
+ * Krogkollen is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * Krogkollen is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with Krogkollen.  If not, see <http://www.gnu.org/licenses/>.
+ */
 
 /**
  * First activity for the admin application.
@@ -40,6 +63,8 @@ public class MainActivity extends Activity {
 
         setupUiElements();
         addListeners();
+
+        presenter.checkIfLoggedIn();
     }
 
     /**
@@ -82,18 +107,14 @@ public class MainActivity extends Activity {
         progressDialog.hide();
     }
 
-    /**
-     * Tries to use the information in the login- and passwordfields to log in. Calls the logIn-method from Parse.com
-     * If it succeeds it sends an intent to start ButtonsActivity, otherwise it gives a toast with an errormessage.
-     */
+    // Tries to use the information in the login- and passwordfields to log in. Calls the logIn-method from Parse.com
+    // If it succeeds it sends an intent to start ButtonsActivity, otherwise it gives a toast with an errormessage.
     private void loginButtonClicked() {
         presenter.tryLogin(userNameField.getText().toString(), passwordField.getText().toString());
     }
 
-    /**
-     * Adds listener to the loginButton.
-     * Also adds listeners to the other fields so that they proceed naturally after each other.(Hop to the next field on enter-click)
-     */
+    // Adds listener to the loginButton.
+    // Also adds listeners to the other fields so that they proceed naturally after each other.(Hop to the next field on enter-click)
     private void addListeners() {
         loginButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -123,5 +144,15 @@ public class MainActivity extends Activity {
                 return false;
             }
         });
+    }
+
+    /**
+     * Returns the shared preferences of this application.
+     * From this you can tell if you are already logged in or not.
+     *
+     * @return The shared preferences.
+     */
+    public SharedPreferences getPreferences() {
+        return this.getPreferences(Context.MODE_PRIVATE);
     }
 }

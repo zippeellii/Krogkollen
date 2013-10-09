@@ -40,7 +40,7 @@ import se.chalmers.krogkollen.pub.IPub;
  * You should have received a copy of the GNU General Public License
  * along with Krogkollen.  If not, see <http://www.gnu.org/licenses/>.
  *
-<<<<<<< Updated upstream
+ <<<<<<< Updated upstream
  */
 
 /**
@@ -103,9 +103,9 @@ public class DetailedActivity extends Activity implements IDetailedView {
 
         super.onCreateOptionsMenu(menu);
 
-        // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.detailed, menu);
-        favoriteStar = menu.findItem(R.id.favorite_star);
+		// Inflate the menu; this adds items to the action bar if it is present.
+		getMenuInflater().inflate(R.menu.detailed, menu);
+		favoriteStar = menu.findItem(R.id.favorite_star);
 
         try {
             presenter.updateInfo();
@@ -207,8 +207,7 @@ public class DetailedActivity extends Activity implements IDetailedView {
 
     @Override
     public void addMarker(IPub pub) {
-        map.addMarker(MarkerOptionsFactory.createMarkerOptions(getResources(), R.drawable.yellow_marker_bg, pub.getName(),
-                pub.getTodaysOpeningHours().toString(), new LatLng(pub.getLatitude(), pub.getLongitude()), pub.getID()));
+        map.addMarker(MarkerOptionsFactory.createMarkerOptions(getResources().getDisplayMetrics() ,getResources(), pub);
     }
 
     @Override

@@ -1,12 +1,35 @@
 package se.chalmers.KrogkollenAdmin.main;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.AsyncTask;
+import android.preference.PreferenceManager;
+import android.view.View;
 import android.widget.Toast;
 import com.parse.*;
+import com.parse.R;
+import se.chalmers.KrogkollenAdmin.*;
 import se.chalmers.KrogkollenAdmin.buttons.ButtonsActivity;
+import se.chalmers.KrogkollenAdmin.buttons.ButtonsPresenter;
 
 import java.util.List;
+
+/*
+ * This file is part of Krogkollen.
+ *
+ * Krogkollen is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * Krogkollen is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with Krogkollen.  If not, see <http://www.gnu.org/licenses/>.
+ */
 
 /**
  * The presenter class for the MainActivity. It holds all the data and logic for the view.
@@ -18,6 +41,7 @@ public class MainPresenter {
 
     private String[] pubUsers;
     private MainActivity view;
+    private Toast toast;
 
     /**
      * Constructor. Gets called when the MainActivity is started, so they know each other.
@@ -49,9 +73,14 @@ public class MainPresenter {
         new LoginTask().execute(username, password);
     }
 
-    /**
-     * A task to be be run on another thread, making sure that it shows a loading indicator when the task is executing.
-     */
+    public void checkIfLoggedIn() {
+        if(ParseUser.getCurrentUser() != null) {
+            Intent intent = new Intent(view, ButtonsActivity.class);
+            view.startActivity(intent);
+        }
+    }
+
+    // A task to be be run on another thread, making sure that it shows a loading indicator when the task is executing.
     private class LoginTask extends AsyncTask<String, Void, Void> {
 
         @Override
@@ -75,13 +104,29 @@ public class MainPresenter {
             }
 
             if (loginSuccess) {
+
+                SharedPreferences settings = view.getPreferences();
+                SharedPreferences.Editor editor = settings.edit();
+                editor.putString("username", strings[0]);
+                editor.commit();
+
                 Intent intent = new Intent(view, ButtonsActivity.class);
                 view.startActivity(intent);
             } else {
-                Toast toast = Toast.makeText(view, se.chalmers.KrogkollenAdmin.R.string.wrong_password_message,
-                        Toast.LENGTH_SHORT);
-                toast.setDuration(2);
-                toast.show();
+
+                view.runOnUiThread(new Runnable() {
+                    public void run() {
+                        // Makes so that toasts doesn't stack.
+                        if (toast != null) {
+                            toast.cancel();
+                        }
+                            toast = Toast.makeText(view, se.chalmers.KrogkollenAdmin.R.string.wrong_password_message,
+                                    Toast.LENGTH_SHORT);
+                            toast.setDuration(2);
+                            toast.show();
+                    }
+
+                });
             }
             return null;
         }
@@ -110,9 +155,7 @@ public class MainPresenter {
         });
     }
 
-    /**
-     * If the connection to Parse.com failed this method is called.
-     */
+    // If the connection to Parse.com failed this method is called.
     private void userRetrievalFailed() {
         Toast toast = Toast.makeText(view, se.chalmers.KrogkollenAdmin.R.string.database_failure,
                 Toast.LENGTH_SHORT);
@@ -120,12 +163,8 @@ public class MainPresenter {
         toast.show();
     }
 
-    /**
-     * If the connection to Parse.com was successful this method is called.
-     * It puts the users in the array pubUsers.
-     *
-     * @param users The users to be put into the array.
-     */
+    // If the connection to Parse.com was successful this method is called.
+    // It puts the users in the array pubUsers.
     private void usersWereRetrievedSuccessfully(List<ParseUser> users) {
         pubUsers = new String[users.size()];
         for (int i = 0; i < pubUsers.length; i++) {

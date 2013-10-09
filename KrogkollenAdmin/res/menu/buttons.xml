@@ -15,11 +15,10 @@
          along with Krogkollen.  If not, see <http://www.gnu.org/licenses/>.
 -->
 
-<resources>
-
-    <!--
-         Customize dimensions originally defined in res/values/dimens.xml (such as
-         screen margins) for sw600dp devices (e.g. 7" tablets) here.
-    -->
-
-</resources>
+<menu xmlns:android="http://schemas.android.com/apk/res/android" >
+    <item
+            android:id="@+id/logout_item"
+            android:title="@string/log_out"
+            android:orderInCategory="100"
+            android:showAsAction="never"/>
+</menu>

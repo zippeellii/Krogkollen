@@ -17,95 +17,96 @@ package se.chalmers.krogkollen.pub;
  * along with Krogkollen.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-
 /**
- *
+ * 
  * Interface for a Pub object
- *
+ * 
  * @author Oskar Karrman
- *
+ * 
  */
 public interface IPub {
 
-    /**
-     * @return the name of the pub
-     */
-    public String getName();
+	/**
+	 * @return the name of the pub
+	 */
+	public String getName();
 
-    /**
-     * @return the description of the pub
-     */
-    public String getDescription();
+	/**
+	 * @return the description of the pub
+	 */
+	public String getDescription();
 
-    /**
-     * @return the opening hour of today
-     */
-    public int getTodaysOpeningHour();
+	/**
+	 * @return the opening hour of today
+	 */
+	public int getTodaysOpeningHour();
 
-    /**
-     * @return the closing hours of today
-     */
-    public int getTodaysClosingHour();
+	/**
+	 * @return the closing hours of today
+	 */
+	public int getTodaysClosingHour();
 
-    /**
-     * @return the age restriction of the pub
-     */
-    public int getAgeRestriction();
+	/**
+	 * @return the age restriction of the pub
+	 */
+	public int getAgeRestriction();
 
-    /**
-     * @return the current queue time of the pub
-     */
-    public int getQueueTime();
+	/**
+	 * @return the current queue time of the pub
+	 */
+	public int getQueueTime();
 
-    /**
-     * Sets the queuetime for the pub
-     */
-    public void setQueueTime(int queueTime);
+	/**
+	 * Sets the queuetime for the pub
+	 */
+	public void setQueueTime(int queueTime);
 
-    /**
-     * @return the latitude of this pub
-     */
-    public double getLatitude();
+	/**
+	 * @return the latitude of this pub
+	 */
+	public double getLatitude();
 
-    /**
-     * @return the longitude of this pub
-     */
-    public double getLongitude();
+	/**
+	 * @return the longitude of this pub
+	 */
+	public double getLongitude();
 
-    /**
-     * @return the entrance fee for the pub
-     */
-    public int getEntranceFee();
+	/**
+	 * @return the entrance fee for the pub
+	 */
+	public int getEntranceFee();
 
-    /**
-     * @return the positive rating of the pub
-     */
-    public int getPositiveRating();
+	/**
+	 * @return the positive rating of the pub
+	 */
+	public int getPositiveRating();
 
-    /**
-     * sets the number of positive ratings
-     * @param rating
-     */
-    public void setPositiveRating(int rating);
-  
-    /**
-     * @return the negative rating of the pub
-     */
-    public int getNegativeRating();
-    
-    /**
-     * sets the number of negative ratings
-     * @param rating
-     */
-    public void setNegativeRating(int rating);
-    
+	/**
+	 * sets the number of positive ratings
+	 * 
+	 * @param rating
+	 */
+	public void setPositiveRating(int rating);
+
+	/**
+	 * @return the negative rating of the pub
+	 */
+	public int getNegativeRating();
+
+	/**
+	 * sets the number of negative ratings
+	 * 
+	 * @param rating
+	 */
+	public void setNegativeRating(int rating);
+
 	/**
 	 * @return the unique ID for the pub
 	 */
-    public String getID();
+	public String getID();
 
-    /**
-     * @return todays opening and closing hours
-     */
-    public OpeningHours getTodaysOpeningHours();
+	/**
+	 * @return todays opening and closing hours
+	 */
+	public OpeningHours getTodaysOpeningHours();
 }

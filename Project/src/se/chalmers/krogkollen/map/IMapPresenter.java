@@ -40,13 +40,13 @@ public interface IMapPresenter extends IPresenter, IObserver {
 	 */
 	public abstract void pubMarkerClicked(String pubId);
 
-	/**
-	 * Start a search for an IPub object
-	 * 
-	 * @param search the string that the user searched for
-	 * @return a list containing zero or more IPub objects that matched the search
-	 */
-	public abstract List<IPub> search(String search);
+    /**
+     * Start a search for an IPub object
+     *
+     * @param search the string that the user searched for
+     * @return a list containing zero or more IPub objects that matched the search
+     */
+    public abstract List<IPub> search(String search);
 
 	/**
 	 * Determine what will happen when an action bar item is clicked.

@@ -1,19 +1,14 @@
 package se.chalmers.krogkollen.list;
 
 import android.app.ActionBar;
-import android.app.FragmentTransaction;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.view.ViewPager;
-import android.view.View;
 import android.widget.ImageButton;
 import android.widget.ListView;
 import se.chalmers.krogkollen.R;
 import se.chalmers.krogkollen.pub.IPub;
-import se.chalmers.krogkollen.pub.PubUtilities;
 import se.chalmers.krogkollen.adapter.*;
-
-import java.util.List;
 
 
 /**
@@ -42,7 +37,7 @@ public class ListActivity extends FragmentActivity implements IListView{
         
         viewPager = (ViewPager) findViewById(R.id.pager);
         actionBar = getActionBar();
-        mAdapter = new TabsPagerAdapter(getSupportFragmentManager());
+        mAdapter = new TabsPagerAdapter(getSupportFragmentManager(), presenter);
         
         viewPager.setAdapter(mAdapter);
         actionBar.setHomeButtonEnabled(false);

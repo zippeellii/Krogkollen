@@ -8,6 +8,7 @@ import android.view.View.OnClickListener;
 
 import se.chalmers.krogkollen.IPresenter;
 import se.chalmers.krogkollen.pub.IPub;
+import se.chalmers.krogkollen.search.ISort;
 
 /**
  * Interface for the ListPresenter.
@@ -19,10 +20,9 @@ public interface IListPresenter extends IPresenter, TabListener, OnPageChangeLis
 	
 	/**
 	 * Sorts a list of IPub objects according to specified SortMode
-	 * 
-	 * @param listToSort a list which should be sorted
+	 *
 	 * @param sortMode how to sort
 	 * @return the sorted list
 	 */
-	public List<IPub> sortList(List<IPub> listToSort, SortMode sortMode);
+	public IPub[] sortList(ISort sortMode);
 }

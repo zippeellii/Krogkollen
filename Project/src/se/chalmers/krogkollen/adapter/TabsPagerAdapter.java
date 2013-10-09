@@ -1,21 +1,22 @@
 package se.chalmers.krogkollen.adapter;
 
 
-import se.chalmers.krogkollen.list.DistanceFragment;
-import se.chalmers.krogkollen.list.QueuetimeFragment;
-import se.chalmers.krogkollen.list.FavoriteFragment;
-import android.support.v4.app.Fragment;
+import android.support.v4.app.ListFragment;
+import se.chalmers.krogkollen.list.*;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
  
 public class TabsPagerAdapter extends FragmentPagerAdapter {
+
+    private IListPresenter presenter;
  
-    public TabsPagerAdapter(FragmentManager fm) {
+    public TabsPagerAdapter(FragmentManager fm, IListPresenter presenter) {
         super(fm);
+        this.presenter = presenter;
     }
  
     @Override
-    public Fragment getItem(int index) {
+    public ListFragment getItem(int index) {
  
         switch (index) {
         case 0:

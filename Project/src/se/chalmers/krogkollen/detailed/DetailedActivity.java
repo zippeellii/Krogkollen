@@ -96,6 +96,10 @@ public class DetailedActivity extends Activity implements IDetailedView {
         thumbsDownLayout = (LinearLayout) findViewById(R.id.thumbsDownLayout);
 
         map = ((MapFragment) getFragmentManager().findFragmentById(R.id.map)).getMap();
+
+        getActionBar().setDisplayUseLogoEnabled(false);
+        getActionBar().setIcon(R.drawable.transparent_spacer);
+        getActionBar().setDisplayHomeAsUpEnabled(true);
     }
 
     @Override

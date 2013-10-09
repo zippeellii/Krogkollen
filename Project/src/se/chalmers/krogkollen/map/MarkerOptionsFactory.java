@@ -65,7 +65,7 @@ public class MarkerOptionsFactory {
         paint.setColor(Color.rgb(141, 141, 141));
         paint.setTextSize(resources.getDimensionPixelSize(R.dimen.marker_font_size_sub));
         canvas.drawText((pub.getTodaysOpeningHours().toString()),
-                displayMetrics.xdpi * 0.05f, displayMetrics.ydpi * 0.21f, paint);
+                displayMetrics.xdpi * 0.05f, displayMetrics.ydpi * 0.218f, paint);
 
         // Finalize the markerOptions.
         MarkerOptions options = new MarkerOptions()

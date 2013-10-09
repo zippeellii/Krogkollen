@@ -3,6 +3,7 @@ package se.chalmers.krogkollen.detailed;
 import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.view.View;
+import com.google.android.gms.maps.model.LatLng;
 import se.chalmers.krogkollen.IView;
 import se.chalmers.krogkollen.R;
 import se.chalmers.krogkollen.backend.*;
@@ -108,14 +109,17 @@ public class DetailedPresenter implements IDetailedPresenter {
 			}
 			saveThumbState(rating);
 		}
+
+        updateVotes();
 	}
 
     /**
      * Saves the state of the favorite locally
      */
     public void saveFavoriteState(){
+        System.out.println(view.getSharedPreferences(pub.getID(), 0).getBoolean("star", true));
         SharedPreferences.Editor editor = view.getSharedPreferences(pub.getID(), 0).edit();
-        editor.putBoolean("star", !(view.getSharedPreferences(pub.getID(), 0).getBoolean("star", true)));
+        editor.putBoolean("star", (!view.getSharedPreferences(pub.getID(), 0).getBoolean("star", true)));
         editor.commit();
     }
 
@@ -123,7 +127,7 @@ public class DetailedPresenter implements IDetailedPresenter {
      * Saves the state of the thumb because a user is only allowed to vote 1 time.
      * @param thumb
      */
-	public void saveThumbState(int thumb){
+	private void saveThumbState(int thumb){
 		SharedPreferences.Editor editor = view.getSharedPreferences(pub.getID(), 0).edit();
 		editor.putInt("thumb", thumb);
 		editor.commit();
@@ -134,50 +138,11 @@ public class DetailedPresenter implements IDetailedPresenter {
      * @param hour
      * @return
      */
-	public String convertOpeningHours(int hour){
+	private String convertOpeningHours(int hour){
 		if(hour / 10 ==0){
 			return "0"+hour;
 		}
 		return ""+hour;
-	}
-
-    /**
-     * Sends the queue time to the view
-     */
-	public void getQueueTime(){
-		view.updateQueueIndicator(pub.getQueueTime());
-	}
-
-    /**
-     * Sends the name, description, opening hours, age restriction and entrance fee to the view
-     */
-	public void getText(){
-		view.updateText(pub.getName(), pub.getDescription(), convertOpeningHours(pub.getTodaysOpeningHour()) + " - " +
-				(convertOpeningHours(pub.getTodaysClosingHour())), ""+pub.getAgeRestriction() + " År", ""+pub.getEntranceFee()
-				+ " :-");
-	}
-
-    /**
-     * Tells the view whether the thumb down or the thumb up is clicked.
-     */
-	public void getThumbs(){
-		view.setThumbs(view.getSharedPreferences(pub.getID(), 0).getInt("thumb", 0));
-	}
-
-    /**
-     * Tells the view weather the star is clicked or not.
-     */
-    public void getFavoriteStar(){
-        view.updateStar(view.getSharedPreferences(pub.getID(), 0).getBoolean("star", true));
-    }
-
-    /**
-     * Sends the current rating to the view.
-     * @throws NoBackendAccessException
-     * @throws NotFoundInBackendException
-     */
-	public void getVotes() throws NoBackendAccessException, NotFoundInBackendException{
-		view.updateVotes(""+ pub.getPositiveRating(), ""+ pub.getNegativeRating());
 	}
 
     /**
@@ -200,27 +165,28 @@ public class DetailedPresenter implements IDetailedPresenter {
             try {
                 BackendHandler.getInstance().updatePubLocally(pub);
             } catch (NoBackendAccessException e) {
-                e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
+                System.out.println("error");
             } catch (NotFoundInBackendException e) {
-                e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
+                System.out.println("error");
             } catch (BackendNotInitializedException e){
-                e.printStackTrace();
+                System.out.println("error");
             }
             return null;
         }
 
         protected void onPostExecute(Void result){
             view.hideProgressDialog();
-            view.refresh();
+            updateMain();
         }
     }
+
 
     @Override
     public void onClick(View view) {
         if(view.getId() == R.id.thumbsDownLayout){
             try {
                 ratingChanged(-1);
-                getVotes();
+                //updateThumbs();
             } catch (NotFoundInBackendException e) {
                 System.out.println("error");
             } catch (NoBackendAccessException e) {
@@ -232,8 +198,7 @@ public class DetailedPresenter implements IDetailedPresenter {
         else if(view.getId() == R.id.thumbsUpLayout){
             try {
                 ratingChanged(1);
-                getVotes();
-
+                //updateThumbs();
             } catch (NotFoundInBackendException e) {
                 System.out.println("error");
             } catch (NoBackendAccessException e) {
@@ -242,5 +207,27 @@ public class DetailedPresenter implements IDetailedPresenter {
                 System.out.println("error");
             }
         }
+    }
+
+    //Sends the new information to the view for displaying.
+    private void updateMain(){
+        view.updateQueueIndicator(pub.getQueueTime());
+        view.updateText(pub.getName(), pub.getDescription(), convertOpeningHours(pub.getTodaysOpeningHour()) + " - " +
+                (convertOpeningHours(pub.getTodaysClosingHour())), ""+pub.getAgeRestriction() + " År", ""+pub.getEntranceFee()
+                + " :-");
+        view.addMarker(pub);
+        view.navigateToLocation(new LatLng(pub.getLatitude(), pub.getLongitude()), 14);
+        view.showStar(view.getSharedPreferences(pub.getID(), 0).getBoolean("star", true));
+        view.setThumbs(view.getSharedPreferences(pub.getID(), 0).getInt("thumb", 0));
+        updateVotes();
+    }
+
+    public void updateStar(){
+        saveFavoriteState();
+        view.showStar(view.getSharedPreferences(pub.getID(), 0).getBoolean("star", true));
+    }
+
+    private void updateVotes(){
+        view.showVotes("" + pub.getPositiveRating(), "" + pub.getNegativeRating());
     }
 }

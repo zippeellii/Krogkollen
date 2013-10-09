@@ -6,8 +6,10 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.widget.*;
-import com.google.android.gms.maps.CameraUpdate;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.ScrollView;
+import android.widget.TextView;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapFragment;
@@ -47,7 +49,7 @@ import se.chalmers.krogkollen.pub.IPub;
 public class DetailedActivity extends Activity implements IDetailedView {
 
     /** The presenter connected to the detailed view */
-	private IDetailedPresenter presenter;
+    private IDetailedPresenter presenter;
 
     /** A bunch of view elements*/
     private TextView pubTextView, descriptionTextView,openingHoursTextView,
@@ -65,15 +67,16 @@ public class DetailedActivity extends Activity implements IDetailedView {
         setContentView(R.layout.activity_detailed);
         presenter = new DetailedPresenter();
         presenter.setView(this);
+
         try {
-			presenter.setPub(getIntent().getStringExtra(MapActivity.MARKER_PUB_ID));
-		} catch (NotFoundInBackendException e) {
-			this.showErrorMessage(e.getMessage());
-		} catch (NoBackendAccessException e) {
-			this.showErrorMessage(e.getMessage());
-		} catch (BackendNotInitializedException e) {
-			this.showErrorMessage(e.getMessage());
-		}
+            presenter.setPub(getIntent().getStringExtra(MapActivity.MARKER_PUB_ID));
+        } catch (NotFoundInBackendException e) {
+            this.showErrorMessage(e.getMessage());
+        } catch (NoBackendAccessException e) {
+            this.showErrorMessage(e.getMessage());
+        } catch (BackendNotInitializedException e) {
+            this.showErrorMessage(e.getMessage());
+        }
 
         addListeners();
 
@@ -98,40 +101,48 @@ public class DetailedActivity extends Activity implements IDetailedView {
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
 
-        System.out.println("FUCKEEEEER" + R.id.favorite_star);
         super.onCreateOptionsMenu(menu);
 
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.detailed, menu);
         favoriteStar = menu.findItem(R.id.favorite_star);
 
-        refresh();
+        try {
+            presenter.updateInfo();
+        } catch (NoBackendAccessException e) {
+            this.showErrorMessage(e.getMessage());
+        } catch (NotFoundInBackendException e) {
+            this.showErrorMessage(e.getMessage());
+        } catch (BackendNotInitializedException e) {
+            this.showErrorMessage(e.getMessage());
+        }
+
         return true;
     }
 
-	@Override
-	public void navigate(Class<?> destination) {
+    @Override
+    public void navigate(Class<?> destination) {
         Intent navigateBack = new Intent(this, destination);
         startActivity(navigateBack);
 
-	}
+    }
 
-	@Override
-	public void showErrorMessage(String message) {
-		// TODO This method should create a toast or some kind of window showing the error message
-	}
+    @Override
+    public void showErrorMessage(String message) {
+        // TODO This method should create a toast or some kind of window showing the error message
+    }
 
-	@Override
-	public void updateText(String pubName, String description, String openingHours, String age, String price) {
+    @Override
+    public void updateText(String pubName, String description, String openingHours, String age, String price) {
         pubTextView.setText(pubName);
         descriptionTextView.setText(description);
         openingHoursTextView.setText(openingHours);
         ageRestrictionTextView.setText(age);
         entranceFeeTextView.setText(price);
-	}
+    }
 
-	@Override
-	public void updateQueueIndicator(int queueTime) {
+    @Override
+    public void updateQueueIndicator(int queueTime) {
         switch(queueTime) {
             case 1:
                 queueIndicator.setBackgroundResource(R.drawable.detailed_queue_green);
@@ -146,28 +157,12 @@ public class DetailedActivity extends Activity implements IDetailedView {
                 queueIndicator.setBackgroundResource(R.drawable.detailed_queue_gray);
                 break;
         }
-	}
+    }
 
-	@Override
-	public void navigate(Class<?> destination, Bundle extras) {
-		// TODO Auto-generated method stub
-		
-	}
+    @Override
+    public void navigate(Class<?> destination, Bundle extras) {
+        // TODO Auto-generated method stub
 
-	@Override
-	public void refresh() {
-        presenter.getQueueTime();
-        presenter.getText();
-        presenter.getThumbs();
-        presenter.getFavoriteStar();
-        
-        try {
-            presenter.getVotes();
-        } catch (NoBackendAccessException e) {
-            this.showErrorMessage(e.getMessage());
-        } catch (NotFoundInBackendException e) {
-            this.showErrorMessage(e.getMessage());
-        }
     }
 
     private void addListeners(){
@@ -195,6 +190,8 @@ public class DetailedActivity extends Activity implements IDetailedView {
                 thumbsUpImage.setBackgroundResource(R.drawable.thumb_up);
                 break;
         }
+
+
     }
 
     /**
@@ -203,15 +200,15 @@ public class DetailedActivity extends Activity implements IDetailedView {
      * @param upVotes Number of up votes.
      * @param downVotes Number of down votes.
      */
-    public void updateVotes(String upVotes, String downVotes){
+    public void showVotes(String upVotes, String downVotes){
         votesUpTextView.setText(upVotes);
         votesDownTextView.setText(downVotes);
     }
 
     @Override
-    public void addMarker(LatLng position, IPub pub) {
+    public void addMarker(IPub pub) {
         map.addMarker(MarkerOptionsFactory.createMarkerOptions(getResources(), R.drawable.yellow_marker_bg, pub.getName(),
-                pub.getTodaysOpeningHour(), position, pub.getID()));
+                pub.getTodaysOpeningHours().toString(), new LatLng(pub.getLatitude(), pub.getLongitude()), pub.getID()));
     }
 
     @Override
@@ -224,11 +221,11 @@ public class DetailedActivity extends Activity implements IDetailedView {
         switch(menuItem.getItemId()){
 
             case R.id.favorite_star:
-                presenter.saveFavoriteState();
-                presenter.getFavoriteStar();
+                presenter.updateStar();
                 break;
 
             case R.id.refresh_info:
+
                 try {
                     presenter.updateInfo();
                 } catch (NoBackendAccessException e) {
@@ -236,9 +233,8 @@ public class DetailedActivity extends Activity implements IDetailedView {
                 } catch (NotFoundInBackendException e) {
                     this.showErrorMessage(e.getMessage());
                 } catch (BackendNotInitializedException e) {
-					this.showErrorMessage(e.getMessage());
-				}
-                refresh();
+                    this.showErrorMessage(e.getMessage());
+                }
                 break;
 
             case R.id.action_settings:
@@ -251,7 +247,7 @@ public class DetailedActivity extends Activity implements IDetailedView {
      * Updates the star.
      * @param isStarFilled Represents if the star is filled or not.
      */
-    public void updateStar(boolean isStarFilled){
+    public void showStar(boolean isStarFilled){
 
         if(isStarFilled){
             favoriteStar.setIcon(R.drawable.star_not_filled);
@@ -260,6 +256,7 @@ public class DetailedActivity extends Activity implements IDetailedView {
             favoriteStar.setIcon(R.drawable.star_filled);
         }
     }
+
 
     public void showProgressDialog(){
         progressDialog = ProgressDialog.show(this, "","Uppdaterar", false, false);

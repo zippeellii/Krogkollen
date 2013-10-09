@@ -15,22 +15,42 @@ import se.chalmers.krogkollen.backend.NotFoundInBackendException;
  */
 public interface IDetailedPresenter extends IPresenter, OnClickListener {
 
+    /**
+     * Updates the thumb state.
+     *
+     * @param rating represents thumb up, down or neutral.
+     * @throws NotFoundInBackendException
+     * @throws NoBackendAccessException
+     * @throws BackendNotInitializedException
+     */
 	public void ratingChanged(int rating) throws NotFoundInBackendException, NoBackendAccessException, BackendNotInitializedException;
 
+    /**
+     * Sets the pub which the presenter is connected to.
+     *
+     * @param pubID the pub
+     * @throws NotFoundInBackendException
+     * @throws NoBackendAccessException
+     * @throws BackendNotInitializedException
+     */
     public void setPub(String pubID) throws NotFoundInBackendException, NoBackendAccessException, BackendNotInitializedException;
 
-    public void getQueueTime();
-
-    public void getText();
-
-    public void getThumbs();
-
-    public void getVotes() throws NoBackendAccessException, NotFoundInBackendException;
-
-    public void getFavoriteStar();
-
+    /**
+     * Saves the favorite state locally.
+     */
     public void saveFavoriteState();
 
+    /**
+     * Gets the information from the server
+     * @throws NoBackendAccessException
+     * @throws NotFoundInBackendException
+     * @throws BackendNotInitializedException
+     */
     public void updateInfo() throws NoBackendAccessException, NotFoundInBackendException, BackendNotInitializedException;
+
+    /**
+     * Updates the star
+     */
+    public void updateStar();
 
 }

@@ -21,11 +21,6 @@ public interface IDetailedView extends IView {
 	 * Updates the queue indicator on the detailed view
 	 */
 	public void updateQueueIndicator(int queueTime);
-	
-	/**
-	 * Called when a refresh button is clicked
-	 */
-	public void refresh();
 
     /**
      * Updates the vote text.
@@ -33,10 +28,18 @@ public interface IDetailedView extends IView {
      * @param upVotes
      * @param downVotes
      */
-    public void updateVotes(String upVotes, String downVotes);
+    public void showVotes(String upVotes, String downVotes);
 
-    public void addMarker(LatLng position, IPub pub);
+    /**
+     * Adds a marker to the map.
+     * @param pub the pub to add a marker for.
+     */
+    public void addMarker(IPub pub);
 
-
+    /**
+     * Shows the location of the coordinates on the map.
+     * @param latLng The location to show.
+     * @param zoom The speed which the map zooms to location.
+     */
     public void navigateToLocation(LatLng latLng, int zoom);
 }

@@ -41,7 +41,7 @@ public class DetailedPresenter implements IDetailedPresenter {
 
 		if (rating == 1) {
 			if (view.getSharedPreferences(pub.getID(), 0).getInt("thumb", 0) == 1) {
-				view.setThumbs(0);
+                view.setThumbs(0);
 
 				BackendHandler.getInstance().removeRatingVote(pub, 1);
 				pub.setPositiveRating(pub.getPositiveRating() - 1);
@@ -49,7 +49,7 @@ public class DetailedPresenter implements IDetailedPresenter {
 				saveThumbState(0);
 
 			} else if (view.getSharedPreferences(pub.getID(), 0).getInt("thumb", 0) == -1) {
-				view.setThumbs(1);
+                view.setThumbs(1);
 
 				BackendHandler.getInstance().removeRatingVote(pub, -1);
 				pub.setNegativeRating(pub.getNegativeRating() - 1);
@@ -59,7 +59,7 @@ public class DetailedPresenter implements IDetailedPresenter {
 
 				saveThumbState(1);
 			} else {
-				view.setThumbs(1);
+                view.setThumbs(1);
 
 				BackendHandler.getInstance().addRatingVote(pub, 1);
 				pub.setPositiveRating(pub.getPositiveRating() + 1);
@@ -113,7 +113,6 @@ public class DetailedPresenter implements IDetailedPresenter {
      * Saves the state of the favorite locally
      */
     public void saveFavoriteState(){
-        System.out.println(view.getSharedPreferences(pub.getID(), 0).getBoolean("star", true));
         SharedPreferences.Editor editor = view.getSharedPreferences(pub.getID(), 0).edit();
         editor.putBoolean("star", (!view.getSharedPreferences(pub.getID(), 0).getBoolean("star", true)));
         editor.commit();
@@ -125,8 +124,7 @@ public class DetailedPresenter implements IDetailedPresenter {
      */
 	private void saveThumbState(int thumb){
 		SharedPreferences.Editor editor = view.getSharedPreferences(pub.getID(), 0).edit();
-		editor.putBoolean("star",
-				!(view.getSharedPreferences(pub.getID(), 0).getBoolean("star", true)));
+		editor.putInt("thumb", thumb);
 		editor.commit();
 	}
 
@@ -210,8 +208,8 @@ public class DetailedPresenter implements IDetailedPresenter {
     private void updateMain(){
         view.updateQueueIndicator(pub.getQueueTime());
         view.updateText(pub.getName(), pub.getDescription(), convertOpeningHours(pub.getTodaysOpeningHour()) + " - " +
-                (convertOpeningHours(pub.getTodaysClosingHour())), ""+pub.getAgeRestriction() + " År", ""+pub.getEntranceFee()
-                + " :-");
+                (convertOpeningHours(pub.getTodaysClosingHour())), ""+pub.getAgeRestriction() + " år", ""+pub.getEntranceFee()
+                + ":-");
         view.addMarker(pub);
         view.navigateToLocation(new LatLng(pub.getLatitude(), pub.getLongitude()), 14);
         view.showStar(view.getSharedPreferences(pub.getID(), 0).getBoolean("star", true));

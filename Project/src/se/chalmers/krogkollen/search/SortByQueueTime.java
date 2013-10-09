@@ -11,8 +11,8 @@ public class SortByQueueTime implements ISort {
 
 	@Override
 	public List<IPub> sortAlgorithm(List<IPub> pubs) {
-		for(int i = 0; i < pubs.size(); i++){
-			for(int j = i; j < pubs.size()-i; j++){
+		for(int i = 1; i < pubs.size(); i++){
+			for(int j = 0; j < pubs.size()-i; j++){
 				if(pubs.get(j).getQueueTime() > pubs.get(j+1).getQueueTime()){
 					IPub temp = pubs.get(j);
 					pubs.set(j, pubs.get(j + 1));

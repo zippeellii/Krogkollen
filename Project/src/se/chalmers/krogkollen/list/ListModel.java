@@ -1,6 +1,8 @@
 package se.chalmers.krogkollen.list;
 
 import java.util.List;
+
+import android.util.Log;
 import se.chalmers.krogkollen.pub.IPub;
 import se.chalmers.krogkollen.pub.PubUtilities;
 import se.chalmers.krogkollen.search.ISort;
@@ -20,9 +22,9 @@ public class ListModel {
 	 * @return the sorted algorithm
 	 */
 	public IPub[] getSortedArray(ISort algorithm){
-		//List<IPub> sortedList = algorithm.sortAlgorithm(originalPubList);
+		List<IPub> sortedList = algorithm.sortAlgorithm(originalPubList);
 		
-		return convertListToArray(originalPubList);
+		return convertListToArray(sortedList);
 	}
 	//Converts the java.util.list to Array
 	private IPub[] convertListToArray(List <IPub> list){

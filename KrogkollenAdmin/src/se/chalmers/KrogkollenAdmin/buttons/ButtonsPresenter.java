@@ -55,18 +55,14 @@ public class ButtonsPresenter {
         }, 0, DISABLE_TIME);
     }
 
-    /**
-     * This method is called by the timer every time it reaches the DISABLE_TIME.
-     */
+    // This method is called by the timer every time it reaches the DISABLE_TIME.
     private void timerFinished() {
         //This method runs in the same thread as the timer.
         view.runOnUiThread(Timer_Tick);
     }
 
-    /**
-     * This method runs in the same thread as the UI.
-     * It activates the buttons and updates the GUI.
-     */
+    // This method runs in the same thread as the UI.
+    // It activates the buttons and updates the GUI.
     private Runnable Timer_Tick = new Runnable() {
         public void run() {
             //Changes the UI to let the user know that input isn't allowed for a while.
@@ -164,9 +160,7 @@ public class ButtonsPresenter {
     }
 
 
-    /**
-     * A task to be be run on another thread, making sure that it shows a loading indicator when the task is executing.
-     */
+    // A task to be be run on another thread, making sure that it shows a loading indicator when the task is executing.
     private class ServerUpdateTask extends AsyncTask<Integer, Void, Void> {
 
         @Override

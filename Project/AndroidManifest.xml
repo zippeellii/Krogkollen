@@ -62,6 +62,7 @@
             android:name="com.google.android.maps.v2.API_KEY"
             android:value="AIzaSyCRucmz7vhihr7MDjtm125OGj7mwba_u70" />
         
+        
 
         <activity
             android:name="se.chalmers.krogkollen.map.MapActivity"
@@ -70,7 +71,7 @@
             android:theme="@style/HideUpIcon" >
             
             <meta-data 	android:name="android.app.default_searchable"
-                		android:value=".SearchActivity" />
+                		android:value="se.chalmers.krogkollen.search.SearchActivity" />
             
         </activity>
         <activity
@@ -96,17 +97,20 @@
             android:label="@string/title_activity_list" />
         
         	<meta-data 	android:name="android.app.default_searchable"
-                		android:value=".SearchActivity" />
+                		android:value="se.chalmers.krogkollen.search.SearchActivity" />
         <activity
-            android:name="se.chalmers.krogkollen.SearchActivity"
-            android:label="@string/title_activity_search" >
+            android:name="se.chalmers.krogkollen.search.SearchActivity"
+            android:label="@string/title_activity_search"
+            android:launchMode="singleTop" >
             
 			<intent-filter>
             	<action android:name="android.intent.action.SEARCH" />
+        	</intent-filter>
+        	<intent-filter>
+            	<action android:name="android.intent.action.VIEW" />
         	</intent-filter>
        		<meta-data 	android:name="android.app.searchable"
                    		android:resource="@xml/searchable"/>	
         </activity>
     </application>
-
 </manifest>

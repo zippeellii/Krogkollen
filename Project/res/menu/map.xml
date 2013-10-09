@@ -30,8 +30,7 @@
             android:orderInCategory="100"
             android:icon="@drawable/search_icon"
             android:title="@string/search"
-            android:showAsAction="ifRoom|collapseActionView"
-            android:actionViewClass="android.widget.SearchView"/>
+            android:showAsAction="ifRoom|collapseActionView"/>
 
     <item
             android:id="@+id/go_to_my_location"

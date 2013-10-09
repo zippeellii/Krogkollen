@@ -20,8 +20,9 @@ public class ListModel {
 	 * @return the sorted algorithm
 	 */
 	public IPub[] getSortedArray(ISort algorithm){
-		List<IPub> sortedList = algorithm.sortAlgorithm(originalPubList);
-		return convertListToArray(sortedList);
+		//List<IPub> sortedList = algorithm.sortAlgorithm(originalPubList);
+		
+		return convertListToArray(originalPubList);
 	}
 	//Converts the java.util.list to Array
 	private IPub[] convertListToArray(List <IPub> list){

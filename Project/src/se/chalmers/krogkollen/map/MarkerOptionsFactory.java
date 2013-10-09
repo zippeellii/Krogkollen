@@ -2,6 +2,7 @@ package se.chalmers.krogkollen.map;
 
 import android.content.res.Resources;
 import android.graphics.*;
+import android.util.DisplayMetrics;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
@@ -32,10 +33,6 @@ import se.chalmers.krogkollen.pub.IPub;
  */
 class MarkerOptionsFactory {
 
-	private final static int	bigTextRatio	= 22;
-	private final static int	smallTextRatio	= 30;
-	private final static int	marginRatio		= 60;
-
 	/**
 	 * Creates marker options with the specified text and background from Android resources.
 	 * 
@@ -43,7 +40,7 @@ class MarkerOptionsFactory {
 	 * @param pub the pub that should be displayed on the marker.
 	 * @return a new google maps marker.
 	 */
-	public static MarkerOptions createMarkerOptions(Resources resources, IPub pub) {
+	public static MarkerOptions createMarkerOptions(DisplayMetrics displayMetrics, Resources resources, IPub pub) {
 
 		// Make the bitmap mutable, since an object retrieved from resources is set to immutable by
 		// default.
@@ -54,26 +51,21 @@ class MarkerOptionsFactory {
 		// Create a canvas so the text can be drawn on the image.
 		Canvas canvas = new Canvas(bitmapResult);
 
-		// Values used in the scaling of text and padding.
-		int screenWidth = resources.getDisplayMetrics().widthPixels;
-		int screenHeight = resources.getDisplayMetrics().heightPixels;
-		int minWidthHeight = Math.min(screenHeight, screenWidth);
-
 		// Add text to canvas.
 		Paint paint = new Paint();
 		paint.setColor(Color.rgb(44, 44, 44));
-		paint.setTextSize(minWidthHeight / bigTextRatio);
+		paint.setTextSize(resources.getDimensionPixelSize(R.dimen.marker_font_size_main));
 		paint.setTypeface(Typeface.SANS_SERIF);
 		String mainText = pub.getName();
 		if (mainText.length() > 10) {                           // if the text is too long cut it
 			mainText = mainText.substring(0, 10);
 		}
-		canvas.drawText(mainText, 7 + (minWidthHeight / marginRatio),
-				31 + (minWidthHeight / marginRatio), paint);
+		canvas.drawText(mainText, displayMetrics.xdpi * 0.05f,
+				displayMetrics.ydpi * 0.13f, paint);
 		paint.setColor(Color.rgb(141, 141, 141));
-		paint.setTextSize(minWidthHeight / smallTextRatio);
+		paint.setTextSize(resources.getDimensionPixelSize(R.dimen.marker_font_size_sub));
 		canvas.drawText((pub.getTodaysOpeningHours().toString()),
-				7 + (minWidthHeight / marginRatio), 62 + (minWidthHeight / marginRatio), paint);
+                displayMetrics.xdpi * 0.05f, displayMetrics.ydpi * 0.21f, paint);
 
 		// Finalize the markerOptions.
 		MarkerOptions options = new MarkerOptions()

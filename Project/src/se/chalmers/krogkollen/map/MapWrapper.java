@@ -46,8 +46,7 @@ public enum MapWrapper {
 
 	private ProgressDialog	progressDialog;
 
-	private MapWrapper() {
-	} // Suppress instantiation
+	private MapWrapper() {} // Suppress instantiation
 
 	/**
 	 * Initiate Google map resources and markers.

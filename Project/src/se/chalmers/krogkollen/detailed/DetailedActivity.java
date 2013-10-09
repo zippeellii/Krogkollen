@@ -15,13 +15,16 @@ import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapFragment;
 import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.Marker;
 import se.chalmers.krogkollen.R;
 import se.chalmers.krogkollen.backend.BackendNotInitializedException;
 import se.chalmers.krogkollen.backend.NoBackendAccessException;
 import se.chalmers.krogkollen.backend.NotFoundInBackendException;
+import se.chalmers.krogkollen.help.HelpActivity;
 import se.chalmers.krogkollen.map.MapActivity;
 import se.chalmers.krogkollen.map.MarkerOptionsFactory;
 import se.chalmers.krogkollen.pub.IPub;
+import se.chalmers.krogkollen.settings.SettingsActivity;
 
 /*
  * This file is part of Krogkollen.
@@ -96,6 +99,12 @@ public class DetailedActivity extends Activity implements IDetailedView {
         thumbsDownLayout = (LinearLayout) findViewById(R.id.thumbsDownLayout);
 
         map = ((MapFragment) getFragmentManager().findFragmentById(R.id.map)).getMap();
+        map.setOnMarkerClickListener(new GoogleMap.OnMarkerClickListener() {
+            @Override
+            public boolean onMarkerClick(Marker marker) {
+                return true; // Suppress default behaviour.
+            }
+        });
 
         getActionBar().setDisplayUseLogoEnabled(false);
         getActionBar().setIcon(R.drawable.transparent_spacer);
@@ -241,6 +250,10 @@ public class DetailedActivity extends Activity implements IDetailedView {
                 break;
 
             case R.id.action_settings:
+                navigate(SettingsActivity.class);
+                break;
+            case R.id.action_help:
+                navigate(HelpActivity.class);
                 break;
         }
         return true;

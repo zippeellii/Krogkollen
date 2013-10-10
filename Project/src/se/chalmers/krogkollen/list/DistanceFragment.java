@@ -20,7 +20,7 @@ public class DistanceFragment extends ListFragment {
            ListModel model = new ListModel();
 	       View rootView = inflater.inflate(R.layout.fragment_distance_list, container, false);
 
-           PubListAdapter adapter = new PubListAdapter(getActivity(), R.layout.listview_item, model.getSortedArray(new SortByQueueTime()));
+           PubListAdapter adapter = new PubListAdapter(getActivity(), R.layout.listview_item, model.getSortedArray(new SortByDistance()));
 
            setListAdapter(adapter);
 

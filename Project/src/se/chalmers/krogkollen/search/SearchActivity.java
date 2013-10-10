@@ -1,6 +1,13 @@
 package se.chalmers.krogkollen.search;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import se.chalmers.krogkollen.R;
+import se.chalmers.krogkollen.list.PubListAdapter;
+import se.chalmers.krogkollen.pub.IPub;
+import se.chalmers.krogkollen.pub.Pub;
+import se.chalmers.krogkollen.pub.PubUtilities;
 import android.os.Bundle;
 import android.app.ListActivity;
 import android.app.SearchManager;
@@ -41,6 +48,33 @@ public class SearchActivity extends ListActivity {
 	
 	// Searches
 	private void doSearch(String query) {
-		Log.d("OVWEHU", query); // TODO do this
+		List<IPub> allPubs = PubUtilities.getInstance().getPubList();
+
+		List<IPub> matches = new ArrayList<IPub>();
+		for (IPub pub : allPubs) {
+			if (pub.getName().toLowerCase().contains(query.toLowerCase())) { // TODO check this warning
+				matches.add(pub);
+			}
+		}
+		
+		IPub[] pubs = this.convertListToArray(matches);
+		
+		this.addMatchesToListView(pubs);
+	}
+	
+	// Adds all the search matches to the listview
+	private void addMatchesToListView(IPub[] pubs) {
+		PubListAdapter adapter = new PubListAdapter(this,  R.layout.listview_item, pubs);
+		
+		getListView().setAdapter(adapter);
+	}
+	
+	// TODO use in utils instead, temp
+	private IPub[] convertListToArray(List <IPub> list) {
+		Pub[] pubArray = new Pub[list.size()];
+		for(int i = 0; i < list.size(); i++){
+			pubArray[i] = (Pub)list.get(i);
+		}
+		return pubArray;
 	}
 }

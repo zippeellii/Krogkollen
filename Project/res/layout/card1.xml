@@ -7,11 +7,12 @@ This file is part of Krogkollen.
  (at your option) any later version.
  Krogkollen is distributed in the hope that it will be useful,
  but WITHOUT ANY WARRANTY; without even the implied warranty of
- MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the xxxccc
  GNU General Public License for more details.
  You should have received a copy of the GNU General Public License
  along with Krogkollen.  If not, see <http://www.gnu.org/licenses/>.
 -->
+<!--suppress AndroidLintUselessParent -->
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
              android:layout_width="match_parent"
              android:layout_height="match_parent">
@@ -33,6 +34,7 @@ This file is part of Krogkollen.
                 android:orientation="horizontal"
                 android:layout_height="match_parent"
                 android:layout_width="match_parent"
+                android:baselineAligned="false"
                 android:layout_weight="5">
 
             <LinearLayout
@@ -55,7 +57,8 @@ This file is part of Krogkollen.
                     android:orientation="horizontal"
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
-                    android:layout_weight="1">
+                    android:layout_weight="1"
+                    android:baselineAligned="false">
                 <LinearLayout
                         android:layout_gravity="right"
                         android:orientation="horizontal"

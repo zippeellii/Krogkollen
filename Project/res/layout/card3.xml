@@ -27,10 +27,35 @@ This file is part of Krogkollen.
             android:paddingRight="0dp"
             android:paddingLeft="0dp"
             android:paddingTop="0dp">
-       <fragment xmlns:android="http://schemas.android.com/apk/res/android"
-                  android:id="@+id/map"
-                  android:layout_width="match_parent"
-                  android:layout_height="match_parent"
-                  android:name="com.google.android.gms.maps.MapFragment"/>
+
+       <RelativeLayout
+               android:layout_height="match_parent"
+               android:layout_width="match_parent" >
+           <fragment xmlns:android="http://schemas.android.com/apk/res/android"
+                     android:id="@+id/map"
+                     android:layout_width="match_parent"
+                     android:layout_height="match_parent"
+                     android:name="com.google.android.gms.maps.MapFragment"/>
+           <LinearLayout
+                   android:layout_height="wrap_content"
+                   android:layout_width="wrap_content"
+                   android:paddingTop="1dp"
+                   android:paddingBottom="1dp"
+                   android:background="#FFFFFF"
+                   >
+                <ImageButton
+                        android:id="@+id/navigate"
+                        android:src="@drawable/navigate_icon"
+                        android:layout_height="wrap_content"
+                        android:layout_width="wrap_content"
+                        style="?android:attr/borderlessButtonStyle"
+                        android:background="?android:attr/selectableItemBackground">
+                </ImageButton>
+
+           </LinearLayout>
+
+
+       </RelativeLayout>
+
     </LinearLayout>
 </FrameLayout>

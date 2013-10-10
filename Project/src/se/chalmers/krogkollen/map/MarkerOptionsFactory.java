@@ -60,12 +60,12 @@ public class MarkerOptionsFactory {
         if (mainText.length() > 10) {                           // if the text is too long cut it
             mainText = mainText.substring(0, 10);
         }
-        canvas.drawText(mainText, displayMetrics.xdpi * 0.05f,
-                displayMetrics.ydpi * 0.13f, paint);
+        canvas.drawText(mainText, displayMetrics.xdpi * 0.06f,
+                displayMetrics.ydpi * 0.15f, paint);
         paint.setColor(Color.rgb(141, 141, 141));
         paint.setTextSize(resources.getDimensionPixelSize(R.dimen.marker_font_size_sub));
         canvas.drawText((pub.getTodaysOpeningHours().toString()),
-                displayMetrics.xdpi * 0.05f, displayMetrics.ydpi * 0.218f, paint);
+                displayMetrics.xdpi * 0.06f, displayMetrics.ydpi * 0.238f, paint);
 
         // Finalize the markerOptions.
         MarkerOptions options = new MarkerOptions()

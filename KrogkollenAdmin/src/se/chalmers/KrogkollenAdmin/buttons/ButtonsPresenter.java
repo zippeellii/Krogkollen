@@ -1,7 +1,14 @@
 package se.chalmers.KrogkollenAdmin.buttons;
 
+import android.app.Notification;
+import android.app.NotificationManager;
+import android.app.PendingIntent;
+import android.app.TaskStackBuilder;
+import android.content.Context;
 import android.content.Intent;
+import android.net.Uri;
 import android.os.AsyncTask;
+import android.support.v4.app.NotificationCompat;
 import android.view.View;
 import android.widget.Toast;
 import com.parse.ParseException;
@@ -43,9 +50,15 @@ public class ButtonsPresenter {
     private ParseObject object;
     private ButtonsActivity view;
     private Timer inputDisabledTimer;
+    private Timer notificationTimer;
+    private boolean firstTimeNotificationTimer = true;
     public static final int DISABLE_TIME = 20000;
+    public static final int NOTIFICATION_TIME = 1000*60*30;
+    public static final int TEST1 = 10000;
+    public static final int TEST2 = 1000;
     private boolean buttonOnCooldown;
     private Toast toast;
+    private boolean notificationsDisabled;
 
     /**
      * Constructor. Gets called when the ButtonsActivity is started, so they know each other.
@@ -55,32 +68,87 @@ public class ButtonsPresenter {
     public ButtonsPresenter(ButtonsActivity butt) {
         view = butt;
 
-        runTimer();
+        runInputTimer();
+        runNotificationTimer();
     }
 
     /**
      * Runs a timer that handles disabling of the buttons. Makes sure that the user doesn't spam the server by disabling more than one click every 20 second.
      */
-    public void runTimer() {
+    public void runInputTimer() {
         inputDisabledTimer = new Timer();
         inputDisabledTimer.schedule(new TimerTask() {
             @Override
             public void run() {
-                timerFinished();
+                    disableTimerFinished();
             }
 
         }, 0, DISABLE_TIME);
     }
 
-    // This method is called by the timer every time it reaches the DISABLE_TIME.
-    private void timerFinished() {
+    public void runNotificationTimer() {
+        notificationTimer = new Timer();
+        notificationTimer.schedule(new TimerTask() {
+            @Override
+            public void run() {
+                if (!firstTimeNotificationTimer) {
+                    notificationTimerFinished();
+                } else {
+                    firstTimeNotificationTimer = false;
+                }
+            }
+
+        }, 0, NOTIFICATION_TIME);
+    }
+
+    private void notificationTimerFinished() {
         //This method runs in the same thread as the timer.
-        view.runOnUiThread(Timer_Tick);
+        view.runOnUiThread(Notification_Timer_Tick);
+    }
+
+    private Runnable Notification_Timer_Tick = new Runnable() {
+        public void run() {
+            //Changes the UI to let the user know that input isn't allowed for a while.
+            //This method runs in the same thread as the GUI.
+            if (!notificationsDisabled) {
+                showNotification();
+            }
+        }
+    };
+
+    public void showNotification(){
+        NotificationCompat.Builder mBuilder =
+                new NotificationCompat.Builder(view)
+                        .setSmallIcon(R.drawable.krogkollen_admin_logo)
+                        .setContentTitle(view.getResources().getString(R.string.notification_title))
+                        .setContentText(view.getResources().getString(R.string.notification_subtext));
+        // Creates an explicit intent for an Activity in your app
+        Intent resultIntent = new Intent(view, ButtonsActivity.class);
+
+        // The stack builder object will contain an artificial back stack for the
+        // started Activity.
+        // This ensures that navigating backward from the Activity leads out of
+        // your application to the Home screen.
+        TaskStackBuilder stackBuilder = TaskStackBuilder.create(view);
+        // Adds the back stack for the Intent (but not the Intent itself)
+        stackBuilder.addParentStack(ButtonsActivity.class);
+        // Adds the Intent that starts the Activity to the top of the stack
+        stackBuilder.addNextIntent(resultIntent);
+        PendingIntent resultPendingIntent = stackBuilder.getPendingIntent(0, PendingIntent.FLAG_UPDATE_CURRENT);
+        mBuilder.setContentIntent(resultPendingIntent);
+        NotificationManager mNotificationManager = (NotificationManager) view.getSystemService(Context.NOTIFICATION_SERVICE);
+        // mId allows you to update the notification later on.
+        mNotificationManager.notify(1, mBuilder.build());
+    }
+
+    private void disableTimerFinished() {
+        //This method runs in the same thread as the timer.
+        view.runOnUiThread(Disable_Timer_Tick);
     }
 
     // This method runs in the same thread as the UI.
     // It activates the buttons and updates the GUI.
-    private Runnable Timer_Tick = new Runnable() {
+    private Runnable Disable_Timer_Tick = new Runnable() {
         public void run() {
             //Changes the UI to let the user know that input isn't allowed for a while.
             //This method runs in the same thread as the GUI.
@@ -104,6 +172,9 @@ public class ButtonsPresenter {
             toast.setDuration(1);
             toast.show();
         } else {
+            notificationTimer.cancel();
+            firstTimeNotificationTimer = true;
+            runNotificationTimer();
             buttonOnCooldown = true;        // So that no input is accepted in a while
             new ServerUpdateTask().execute(newQueueTime);
         }
@@ -119,7 +190,7 @@ public class ButtonsPresenter {
             query.whereEqualTo("owner", ParseUser.getCurrentUser());
             object = query.getFirst();
         } catch (ParseException pe) {
-            return;
+            // Do something perhaps
         }
     }
 
@@ -171,11 +242,23 @@ public class ButtonsPresenter {
     }
 
     public void logOut() {
+        notificationTimer.cancel();
+        inputDisabledTimer.cancel();
         ParseUser.logOut();
         Intent intent = new Intent(view, MainActivity.class);
         view.startActivity(intent);
     }
 
+    public void toggleNotifications() {
+        if (notificationsDisabled) {
+            notificationTimer.cancel();
+            firstTimeNotificationTimer = true;
+            runNotificationTimer();
+        } else {
+            notificationTimer.cancel();
+        }
+        notificationsDisabled = !notificationsDisabled;
+    }
 
     // A task to be be run on another thread, making sure that it shows a loading indicator when the task is executing.
     private class ServerUpdateTask extends AsyncTask<Integer, Void, Void> {

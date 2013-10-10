@@ -1,9 +1,10 @@
 package se.chalmers.KrogkollenAdmin.buttons;
 
-import android.app.Activity;
-import android.app.ProgressDialog;
+import android.app.*;
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.v4.app.NotificationCompat;
 import android.text.Html;
 import android.view.*;
 import android.widget.*;
@@ -64,12 +65,25 @@ public class ButtonsActivity extends Activity {
             logOut();
 
             return true;
+        } else if (menuItem.getItemId() == R.id.notifications_item) {
+            toggleNotifications();
         }
         return false;
     }
 
+    private void toggleNotifications() {
+        presenter.toggleNotifications();
+    }
+
     private void logOut() {
         presenter.logOut();
+    }
+
+    @Override
+    public void onBackPressed() {
+        Intent intent = new Intent(Intent.ACTION_MAIN);
+        intent.addCategory(Intent.CATEGORY_HOME);
+        startActivity(intent);
     }
 
     @Override

@@ -21,4 +21,10 @@
             android:title="@string/log_out"
             android:orderInCategory="100"
             android:showAsAction="never"/>
+
+    <item
+            android:id="@+id/notifications_item"
+            android:title="@string/notifications"
+            android:orderInCategory="100"
+            android:showAsAction="never"/>
 </menu>

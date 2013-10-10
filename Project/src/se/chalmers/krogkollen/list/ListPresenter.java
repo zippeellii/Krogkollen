@@ -2,6 +2,7 @@ package se.chalmers.krogkollen.list;
 
 import java.util.List;
 
+import android.content.SharedPreferences;
 import se.chalmers.krogkollen.IView;
 import se.chalmers.krogkollen.pub.IPub;
 import android.app.ActionBar.Tab;
@@ -22,6 +23,8 @@ public class ListPresenter implements IListPresenter {
 		//this.view = view;
 		
 	}
+
+
 
 	@Override
 	public IPub[] sortList(ISort sortMode) {

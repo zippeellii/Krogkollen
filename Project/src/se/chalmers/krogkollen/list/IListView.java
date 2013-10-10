@@ -14,9 +14,6 @@ public interface IListView extends IView{
 	/**
 	 * Called when the refresh button is clicked
 	 */
-	public void refreshButtonClicked();
-
-    public void updateStar(boolean isStarFilled);
     
     public void setActionBarSelectedNavigationItem(int pos);
     public void setViewPagerCurrentItem(int pos);

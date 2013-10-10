@@ -2,13 +2,14 @@
 <LinearLayout
         xmlns:android="http://schemas.android.com/apk/res/android"
         android:orientation="horizontal"
+        android:gravity="center_vertical"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="match_parent"
         android:padding="10dp">
 
     <ImageView android:id="@+id/listview_image"
                android:layout_width="wrap_content"
-               android:layout_height="match_parent"
+               android:layout_height="wrap_content"
                android:gravity="center_vertical"
                android:layout_alignParentTop="true"
                android:layout_alignParentBottom="true"
@@ -18,8 +19,8 @@
 
         <LinearLayout
                         android:orientation="vertical"
-                        android:layout_height="match_parent"
-                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_width="wrap_content"
                         android:layout_marginTop="5dp"
                         android:layout_marginLeft="5dp"
                         android:layout_marginRight="5dp"
@@ -30,8 +31,6 @@
                       android:layout_width="match_parent"
                       android:layout_height="match_parent"
                       android:layout_weight="1"
-                      android:gravity="center_vertical"
-                      android:textStyle="bold"
                       android:textSize="20dp"
                       android:textColor="#333333"
                       android:textAppearance="?android:attr/textAppearanceLarge"/>
@@ -41,10 +40,8 @@
                      android:layout_width="match_parent"
                      android:layout_height="match_parent"
                      android:layout_weight="1"
-                     android:gravity="center_vertical"
                      android:layout_alignParentTop="true"
-                     android:textStyle="bold"
-                     android:textSize="12dp"
+                     android:textSize="16dp"
                      android:textColor="#777777"
                      android:text="3 km"/>
 
@@ -52,15 +49,19 @@
 
         </LinearLayout>
 
-    <ImageButton
+        <LinearLayout
+
+            android:layout_weight="1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="right">
+
+            <ImageButton
                 android:id="@+id/favorite_star_list"
                 android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:layout_gravity="left|center"
-                android:layout_alignParentTop="true"
-                android:layout_alignParentBottom="true"
+                android:layout_height="wrap_content"
                 android:layout_marginRight="15dp"
-                android:layout_marginTop="5dp"
-                android:layout_marginBottom="5dp"/>
+                android:onClick="clicked_favorite_star"/>
+        </LinearLayout>
 
 </LinearLayout>

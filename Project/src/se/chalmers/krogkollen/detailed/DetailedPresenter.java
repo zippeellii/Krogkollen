@@ -31,7 +31,6 @@ public class DetailedPresenter implements IDetailedPresenter {
 	public void setPub(String pubID) throws NoBackendAccessException, NotFoundInBackendException,
 			BackendNotInitializedException {
 		pub = PubUtilities.getInstance().getPub(pubID);
-		BackendHandler.getInstance().updatePubLocally(pub);
 	}
 
 	// TODO Can this be refactored?

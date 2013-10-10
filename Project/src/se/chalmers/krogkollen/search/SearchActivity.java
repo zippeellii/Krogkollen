@@ -12,7 +12,6 @@ import android.os.Bundle;
 import android.app.ListActivity;
 import android.app.SearchManager;
 import android.content.Intent;
-import android.util.Log;
 import android.view.View;
 import android.widget.ListView;
 
@@ -48,6 +47,8 @@ public class SearchActivity extends ListActivity {
 	
 	// Searches
 	private void doSearch(String query) {
+		this.setTitle("Sök: " + query); // TODO "sökning" move to XML
+		
 		List<IPub> allPubs = PubUtilities.getInstance().getPubList();
 
 		List<IPub> matches = new ArrayList<IPub>();

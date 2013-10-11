@@ -69,7 +69,7 @@ public class MainPresenter {
     }
 
     public void checkIfLoggedIn() {
-        if(ParseUser.getCurrentUser() != null) {
+        if (ParseUser.getCurrentUser() != null) {
             Intent intent = new Intent(view, ButtonsActivity.class);
             view.startActivity(intent);
         }
@@ -115,10 +115,10 @@ public class MainPresenter {
                         if (toast != null) {
                             toast.cancel();
                         }
-                            toast = Toast.makeText(view, se.chalmers.KrogkollenAdmin.R.string.wrong_password_message,
-                                    Toast.LENGTH_SHORT);
-                            toast.setDuration(2);
-                            toast.show();
+                        toast = Toast.makeText(view, se.chalmers.KrogkollenAdmin.R.string.wrong_password_message,
+                                Toast.LENGTH_SHORT);
+                        toast.setDuration(2);
+                        toast.show();
                     }
 
                 });

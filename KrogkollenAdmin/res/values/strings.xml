@@ -32,7 +32,7 @@ This file is part of Krogkollen.
     <string name="yellow_button_text">15 – 45 minuter</string>
     <string name="red_button_text">Mer än 45 minuter</string>
     <string name="wait_part_one">Vänta</string>
-    <string name="wait_part_two"> sekunder mellan klicken.</string>
+    <string name="wait_part_two">sekunder mellan klicken.</string>
     <string name="queue_now">Nuvarande:</string>
     <string name="ready">Redo för input!</string>
     <string name="green">Grön</string>

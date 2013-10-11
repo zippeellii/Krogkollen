@@ -1,5 +1,6 @@
 package se.chalmers.KrogkollenAdmin.buttons;
 
+import android.app.Notification;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.app.TaskStackBuilder;
@@ -49,8 +50,10 @@ public class ButtonsPresenter {
     private Timer inputDisabledTimer;
     private Timer notificationTimer;
     private boolean firstTimeNotificationTimer = true;
-    public static final int DISABLE_TIME = 20000;
-    public static final int NOTIFICATION_TIME = 1000*60*30;
+    public static final int DISABLE_TIME = 1000;
+            //20000;
+    public static final int NOTIFICATION_TIME = 5000;
+            //1000 * 60 * 30;
     private boolean buttonOnCooldown;
     private Toast toast;
     private boolean notificationsDisabled;
@@ -62,9 +65,23 @@ public class ButtonsPresenter {
      */
     public ButtonsPresenter(ButtonsActivity butt) {
         view = butt;
+    }
 
+    /**
+     * Starts both the timers.
+     */
+    public void startTimers() {
+        disableTimer(inputDisabledTimer);
+        disableTimer(notificationTimer);
         runInputTimer();
         runNotificationTimer();
+    }
+
+    private void disableTimer(Timer timer) {
+        if (timer != null) {
+            timer.cancel();
+            timer = null;
+        }
     }
 
     /**
@@ -75,13 +92,14 @@ public class ButtonsPresenter {
         inputDisabledTimer.schedule(new TimerTask() {
             @Override
             public void run() {
-                    disableTimerFinished();
+                disableTimerFinished();
             }
 
         }, 0, DISABLE_TIME);
     }
 
-    public void runNotificationTimer() {
+    // Creates a new timer for the notifications, and runs it.
+    private void runNotificationTimer() {
         notificationTimer = new Timer();
         notificationTimer.schedule(new TimerTask() {
             @Override
@@ -96,11 +114,13 @@ public class ButtonsPresenter {
         }, 0, NOTIFICATION_TIME);
     }
 
+    // This method is called whenever the notification goes up to the time given.
     private void notificationTimerFinished() {
         //This method runs in the same thread as the timer.
         view.runOnUiThread(Notification_Timer_Tick);
     }
 
+    // Only called by notificationsTimerFinished and runs on the GUI thread.
     private Runnable Notification_Timer_Tick = new Runnable() {
         public void run() {
             //Changes the UI to let the user know that input isn't allowed for a while.
@@ -111,12 +131,18 @@ public class ButtonsPresenter {
         }
     };
 
-    public void showNotification(){
+    private void showNotification() {
+        long vibrationPattern[] = new long[10];
+        for (int i = 0; i < vibrationPattern.length; i++) {
+            vibrationPattern[i] = 1L;
+
+        }
         NotificationCompat.Builder mBuilder =
                 new NotificationCompat.Builder(view)
                         .setSmallIcon(R.drawable.krogkollen_admin_logo)
                         .setContentTitle(view.getResources().getString(R.string.notification_title))
-                        .setContentText(view.getResources().getString(R.string.notification_subtext));
+                        .setContentText(view.getResources().getString(R.string.notification_subtext))
+                        .setVibrate(vibrationPattern);
         // Creates an explicit intent for an Activity in your app
         Intent resultIntent = new Intent(view, ButtonsActivity.class);
 
@@ -133,7 +159,9 @@ public class ButtonsPresenter {
         mBuilder.setContentIntent(resultPendingIntent);
         NotificationManager mNotificationManager = (NotificationManager) view.getSystemService(Context.NOTIFICATION_SERVICE);
         // mId allows you to update the notification later on.
-        mNotificationManager.notify(1, mBuilder.build());
+        Notification notification = mBuilder.build();
+        notification.defaults |= Notification.DEFAULT_VIBRATE;
+        mNotificationManager.notify(1, notification);
     }
 
     private void disableTimerFinished() {
@@ -167,7 +195,7 @@ public class ButtonsPresenter {
             toast.setDuration(1);
             toast.show();
         } else {
-            notificationTimer.cancel();
+            disableTimer(notificationTimer);
             firstTimeNotificationTimer = true;
             runNotificationTimer();
             buttonOnCooldown = true;        // So that no input is accepted in a while
@@ -198,6 +226,7 @@ public class ButtonsPresenter {
 
     /**
      * Takes the local queueTime and sends it to the sever.
+     *
      * @param newQueueTime The queueTime to be sent to the server.
      */
     synchronized void setServerQueueTime(int newQueueTime) {
@@ -219,38 +248,29 @@ public class ButtonsPresenter {
     }
 
     /**
-     * Setter for the variable that decides if input is allowed or not.
-     *
-     * @param buttonOnCooldown Set to true if you want to disable input.
+     * Logs out the user.
+     * Cancels all the timers and tells Parse.com that the user isn't logged on any more.
+     * Sends the user to MainActivity.
      */
-    public void setButtonOnCooldown(boolean buttonOnCooldown) {
-        this.buttonOnCooldown = buttonOnCooldown;
-    }
-
-    /**
-     * Getter for the variable that decides if input is allowed or not.
-     *
-     * @return True if the input is disabled.
-     */
-    public boolean getButtonOnCooldown() {
-        return buttonOnCooldown;
-    }
-
     public void logOut() {
-        notificationTimer.cancel();
-        inputDisabledTimer.cancel();
+        disableTimer(notificationTimer);
+        disableTimer(inputDisabledTimer);
         ParseUser.logOut();
         Intent intent = new Intent(view, MainActivity.class);
         view.startActivity(intent);
     }
 
+    /**
+     * Turns on notifications if they are off.
+     * Turns off notifications if the are on.
+     */
     public void toggleNotifications() {
         if (notificationsDisabled) {
-            notificationTimer.cancel();
+            disableTimer(notificationTimer);
             firstTimeNotificationTimer = true;
             runNotificationTimer();
         } else {
-            notificationTimer.cancel();
+            disableTimer(notificationTimer);
         }
         notificationsDisabled = !notificationsDisabled;
     }

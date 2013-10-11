@@ -50,10 +50,10 @@ public class ButtonsPresenter {
     private Timer inputDisabledTimer;
     private Timer notificationTimer;
     private boolean firstTimeNotificationTimer = true;
-    public static final int DISABLE_TIME = 1000;
-            //20000;
-    public static final int NOTIFICATION_TIME = 5000;
-            //1000 * 60 * 30;
+    public static final int DISABLE_TIME = 20000;
+            // Testvalue: 1000;
+    public static final int NOTIFICATION_TIME = 1000 * 60 * 30;
+            // Testvalue: 5000;
     private boolean buttonOnCooldown;
     private Toast toast;
     private boolean notificationsDisabled;

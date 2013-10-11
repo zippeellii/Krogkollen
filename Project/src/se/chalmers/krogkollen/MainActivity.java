@@ -93,7 +93,7 @@ public class MainActivity extends Activity {
         @Override
         protected void onPostExecute(Void result) {
             Intent intent = new Intent(MainActivity.this, MapActivity.class);
-            intent.putExtra("previous_activity", ActivityID.MAIN);
+            intent.putExtra(ActivityID.ACTIVITY_ID, ActivityID.MAIN);
             startActivity(intent);
         }
     }

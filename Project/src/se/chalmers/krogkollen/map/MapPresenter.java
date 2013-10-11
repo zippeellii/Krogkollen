@@ -17,9 +17,11 @@ import se.chalmers.krogkollen.backend.NoBackendAccessException;
 import se.chalmers.krogkollen.backend.NotFoundInBackendException;
 import se.chalmers.krogkollen.detailed.DetailedActivity;
 import se.chalmers.krogkollen.help.HelpActivity;
+import se.chalmers.krogkollen.list.ListActivity;
 import se.chalmers.krogkollen.pub.IPub;
 import se.chalmers.krogkollen.pub.PubUtilities;
 import se.chalmers.krogkollen.settings.SettingsActivity;
+import se.chalmers.krogkollen.utils.ActivityID;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -104,9 +106,9 @@ public class MapPresenter implements IMapPresenter {
                 mapView.navigate(SettingsActivity.class);
                 break;
             case android.R.id.home:
-
-                // OPEN LIST VIEW HERE
-                // USE NAVIGATE IN MAP VIEW / MAP ACTIVITY.
+                Bundle bundle = new Bundle();
+                bundle.putInt(ActivityID.ACTIVITY_ID, ActivityID.MAP);
+                mapView.navigate(ListActivity.class, bundle);
 
                 break;
             default:

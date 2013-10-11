@@ -81,8 +81,6 @@ public class DetailedActivity extends Activity implements IDetailedView {
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-
-        System.out.println("FUCKEEEEER" + R.id.favorite_star);
         super.onCreateOptionsMenu(menu);
 
         // Inflate the menu; this adds items to the action bar if it is present.
@@ -159,11 +157,10 @@ public class DetailedActivity extends Activity implements IDetailedView {
      */
     public void addThumbsUpButtonListener(){
         thumbsUpButton = (ImageButton) findViewById(R.id.thumbsUpButton);
-        thumbsUpButton.setOnClickListener(new View.OnClickListener() {
+        thumbsUpButton.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View view){
                 try {
-
                     presenter.ratingChanged(1);
                     presenter.getVotes();
 

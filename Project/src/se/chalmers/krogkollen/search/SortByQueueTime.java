@@ -1,5 +1,6 @@
 package se.chalmers.krogkollen.search;
 
+import java.util.ArrayList;
 import java.util.List;
 import se.chalmers.krogkollen.pub.IPub;
 /**
@@ -7,12 +8,21 @@ import se.chalmers.krogkollen.pub.IPub;
  * @author Jonathan Nilsfors
  *
  */
-public class SortByQueueTime implements ISort {
+public class SortByQueueTime extends Sort {
 
 	@Override
-	public List<IPub> sortAlgorithm(List<IPub> pubs) {
-		// TODO Implement sorting algorithm
-		return null;
+	public List<IPub> sortAlgorithm(final List<IPub> pubs) {
+		List<IPub> copyOfPubs = this.copyPubList(pubs);
+		for(int i = 1; i < copyOfPubs.size(); i++){
+			for(int j = 0; j < copyOfPubs.size()-i; j++){
+				if(copyOfPubs.get(j).getQueueTime() > copyOfPubs.get(j+1).getQueueTime()){
+					IPub temp = copyOfPubs.get(j);
+					copyOfPubs.set(j, copyOfPubs.get(j + 1));
+					copyOfPubs.set((j+1), temp);
+				}
+			}
+		}
+		return copyOfPubs;
 	}
 
 }

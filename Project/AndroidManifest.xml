@@ -14,7 +14,7 @@
          GNU General Public License for more details.
 
          You should have received a copy of the GNU General Public License
-         along with Krogkollen.  If not, see <http://www.gnu.org/licenses/>.
+         along with Krogkollen.  If not, see <http://www.gnu.org/licenses/>.
 -->
 
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
@@ -32,7 +32,7 @@
     <uses-permission android:name="com.google.android.providers.gsf.permission.READ_GSERVICES" />
     <!--
      The following two permissions are not required to use
-     Google Maps Android API v2, but are recommended.
+     Google Maps Android API v2, but are recommended.
     -->
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
@@ -53,7 +53,7 @@
             android:theme="@style/NoActionBar" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-				
+
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
@@ -61,18 +61,15 @@
         <meta-data
             android:name="com.google.android.maps.v2.API_KEY"
             android:value="AIzaSyCRucmz7vhihr7MDjtm125OGj7mwba_u70" />
-        
-        
 
         <activity
             android:name="se.chalmers.krogkollen.map.MapActivity"
             android:configChanges="orientation|keyboardHidden"
             android:label="@string/title_activity_map"
             android:theme="@style/HideUpIcon" >
-            
-            <meta-data 	android:name="android.app.default_searchable"
-                		android:value="se.chalmers.krogkollen.search.SearchActivity" />
-            
+            <meta-data
+                android:name="android.app.default_searchable"
+                android:value="se.chalmers.krogkollen.search.SearchActivity" />
         </activity>
         <activity
             android:name="se.chalmers.krogkollen.detailed.DetailedActivity"
@@ -95,22 +92,30 @@
         <activity
             android:name="se.chalmers.krogkollen.list.ListActivity"
             android:label="@string/title_activity_list" />
-        
-        	<meta-data 	android:name="android.app.default_searchable"
-                		android:value="se.chalmers.krogkollen.search.SearchActivity" />
+
+        <meta-data
+            android:name="android.app.default_searchable"
+            android:value="se.chalmers.krogkollen.search.SearchActivity" />
+
         <activity
             android:name="se.chalmers.krogkollen.search.SearchActivity"
             android:label="@string/title_activity_search"
             android:launchMode="singleTop" >
-            
-			<intent-filter>
-            	<action android:name="android.intent.action.SEARCH" />
-        	</intent-filter>
-        	<intent-filter>
-            	<action android:name="android.intent.action.VIEW" />
-        	</intent-filter>
-       		<meta-data 	android:name="android.app.searchable"
-                   		android:resource="@xml/searchable"/>	
+            <intent-filter>
+                <action android:name="android.intent.action.SEARCH" />
+            </intent-filter>
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+            </intent-filter>
+
+            <meta-data
+                android:name="android.app.searchable"
+                android:resource="@xml/searchable" />
         </activity>
+
+        <provider
+            android:name="se.chalmers.krogkollen.search.SearchContentProvider"
+            android:authorities="se.chalmers.krogkollen.search.SearchContentProvider" >
+        </provider>
     </application>
 </manifest>

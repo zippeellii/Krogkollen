@@ -4,7 +4,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 import se.chalmers.krogkollen.R;
+import se.chalmers.krogkollen.detailed.DetailedActivity;
 import se.chalmers.krogkollen.list.PubListAdapter;
+import se.chalmers.krogkollen.map.MapActivity;
 import se.chalmers.krogkollen.pub.IPub;
 import se.chalmers.krogkollen.pub.Pub;
 import se.chalmers.krogkollen.pub.PubUtilities;
@@ -36,29 +38,33 @@ public class SearchActivity extends ListActivity {
 		// Call detail activity for clicked entry
 	}
 
-	// Checks if the intent passed is a search intent
+	// Checks if the intent passed is a search intent or 
+	// an intent to open the detailed view.
 	private void handleIntent(Intent intent) {
-		if (Intent.ACTION_SEARCH.equals(intent.getAction())) {
+		if (intent.getAction().equals(Intent.ACTION_SEARCH)) {
 			String query = intent.getStringExtra(SearchManager.QUERY);
-			
 			this.doSearch(query);
+		} else {
+			String pubID = intent.getDataString();
+			Intent newIntent = new Intent(this, DetailedActivity.class);
+			newIntent.putExtra(MapActivity.MARKER_PUB_ID, pubID);
+			
+			// This leaks window but also makes sure that pressing the back button
+			// from the detailed view doesn't return the user to this activity but map or list.
+			this.finish();
+			startActivity(newIntent);
 		}
 	}
 	
 	// Searches
 	private void doSearch(String query) {
-		this.setTitle("Sök: " + query); // TODO "sökning" move to XML
+		this.setTitle(R.string.title_activity_search + ": " + query); // TODO "sökning" move to XML
 		
 		List<IPub> allPubs = PubUtilities.getInstance().getPubList();
 
-		List<IPub> matches = new ArrayList<IPub>();
-		for (IPub pub : allPubs) {
-			if (pub.getName().toLowerCase().contains(query.toLowerCase())) { // TODO check this warning
-				matches.add(pub);
-			}
-		}
+		List<IPub> matchingPubs = getMatchingPubs(query, allPubs);
 		
-		IPub[] pubs = this.convertListToArray(matches);
+		IPub[] pubs = this.convertListToArray(matchingPubs);
 		
 		this.addMatchesToListView(pubs);
 	}
@@ -77,5 +83,21 @@ public class SearchActivity extends ListActivity {
 			pubArray[i] = (Pub)list.get(i);
 		}
 		return pubArray;
+	}
+	
+	/**
+	 * Searches a list of IPubs for Pubs with names that in some way matches the query.
+	 * @param query the search
+	 * @param allPubs the list with pubs to search in
+	 * @return	a list of IPubs where all Pubs match the query
+	 */
+	public static List<IPub> getMatchingPubs(String query, List<IPub> allPubs) {
+		List<IPub> matchingPubs = new ArrayList<IPub>();
+		for (IPub pub : allPubs) {
+			if (pub.getName().toLowerCase().contains(query.toLowerCase())) { // TODO check this warning
+				matchingPubs.add(pub);
+			}
+		}
+		return matchingPubs;
 	}
 }

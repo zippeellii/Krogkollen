@@ -70,6 +70,6 @@ This file is part of Krogkollen.
     
 	<!-- Search strings -->
     <string name="search_hint">Sök efter en krog</string>
-    <string name="title_activity_search">SearchActivity</string>
+    <string name="title_activity_search">Sök</string>
 
 </resources>

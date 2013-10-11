@@ -18,7 +18,6 @@ import se.chalmers.krogkollen.utils.Distance;
 
 import java.text.*;
 
-
 public class PubListAdapter extends ArrayAdapter<IPub> {
 
     Context context;
@@ -78,7 +77,6 @@ public class PubListAdapter extends ArrayAdapter<IPub> {
             }
         });
 
-
         switch(pub.getQueueTime()){
         case 1:
         	holder.imgIcon.setImageResource(R.drawable.detailed_queue_green);
@@ -94,7 +92,6 @@ public class PubListAdapter extends ArrayAdapter<IPub> {
         	break;
         }
         return row;
-
 
     }
 
@@ -120,12 +117,12 @@ public class PubListAdapter extends ArrayAdapter<IPub> {
         }
     }
 
-
     static class PubHolder
     {
         ImageView imgIcon;
         TextView txtTitle;
         TextView distanceText;
         ImageButton favoriteStar;
+
     }
 }

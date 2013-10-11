@@ -77,7 +77,7 @@ public class MainActivity extends Activity {
 
 			// If you want to use the mockup backend, comment the above line and
 			// uncomment the line below
-			// BackendHandler.getInstance().setBackend(new BackendMockup(0));
+			//BackendHandler.getInstance().setBackend(new BackendMockup(0));
 
 			try {
 				PubUtilities.getInstance().loadPubList();

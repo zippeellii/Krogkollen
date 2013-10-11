@@ -2,8 +2,11 @@ package se.chalmers.krogkollen.map;
 
 import android.content.SharedPreferences;
 import android.content.res.Resources;
+
 import com.google.android.gms.maps.model.LatLng;
+
 import se.chalmers.krogkollen.IView;
+import se.chalmers.krogkollen.search.ICanSearch;
 
 /*
  * This file is part of Krogkollen.
@@ -28,7 +31,7 @@ import se.chalmers.krogkollen.IView;
  * @author Oskar Karrman
  * 
  */
-public interface IMapView extends IView {
+public interface IMapView extends IView, ICanSearch{
 
 	/**
 	 * Adds the GPS-location of the phone as a marker in the map view.

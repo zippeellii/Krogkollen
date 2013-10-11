@@ -49,7 +49,7 @@ public class MainActivity extends Activity {
 
     /**
      * Called when the activity is first created.
-     *
+     * <p/>
      * Initiates all the objects in the class and calls methods to setup server-connection.
      */
     @Override

@@ -18,20 +18,20 @@ This file is part of Krogkollen.
 -->
 
 <selector xmlns:android="http://schemas.android.com/apk/res/android">
-    <item android:state_selected="true" >
+    <item android:state_selected="true">
         <shape>
             <solid
-                    android:color="#F5AB0C" />
+                    android:color="#F5AB0C"/>
             <stroke
                     android:width="1dp"
-                    android:color="#bb6008" />
+                    android:color="#bb6008"/>
             <corners
-                    android:radius="3dp" />
+                    android:radius="3dp"/>
             <padding
                     android:left="10dp"
                     android:top="10dp"
                     android:right="10dp"
-                    android:bottom="10dp" />
+                    android:bottom="10dp"/>
         </shape>
     </item>
     <item>
@@ -39,17 +39,17 @@ This file is part of Krogkollen.
             <gradient
                     android:startColor="#C2973C"
                     android:endColor="#8F5721"
-                    android:angle="270" />
+                    android:angle="270"/>
             <stroke
                     android:width="1dp"
-                    android:color="#bb6008" />
+                    android:color="#bb6008"/>
             <corners
-                    android:radius="4dp" />
+                    android:radius="4dp"/>
             <padding
                     android:left="10dp"
                     android:top="10dp"
                     android:right="10dp"
-                    android:bottom="10dp" />
+                    android:bottom="10dp"/>
         </shape>
     </item>
 </selector>

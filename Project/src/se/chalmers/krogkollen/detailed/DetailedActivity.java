@@ -114,7 +114,6 @@ public class DetailedActivity extends Activity implements IDetailedView {
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-
         super.onCreateOptionsMenu(menu);
 
 		// Inflate the menu; this adds items to the action bar if it is present.
@@ -175,7 +174,7 @@ public class DetailedActivity extends Activity implements IDetailedView {
 
     @Override
     public void navigate(Class<?> destination, Bundle extras) {
-        // TODO Auto-generated method stub
+        // TODO Auto-generated method stu
 
     }
 

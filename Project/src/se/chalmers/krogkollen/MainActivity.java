@@ -77,7 +77,7 @@ public class MainActivity extends Activity {
 
 			// If you want to use the mockup backend, comment the above line and
 			// uncomment the line below
-			// BackendHandler.getInstance().setBackend(new BackendMockup(0));
+			//BackendHandler.getInstance().setBackend(new BackendMockup(0));
 
 			try {
 				PubUtilities.getInstance().loadPubList();
@@ -94,11 +94,11 @@ public class MainActivity extends Activity {
 			return null;
 		}
 
-		@Override
-		protected void onPostExecute(Void result) {
-			Intent intent = new Intent(MainActivity.this, MapActivity.class);
-			intent.putExtra("previous_activity", ActivityID.MAIN);
-			startActivity(intent);
-		}
-	}
+        @Override
+        protected void onPostExecute(Void result) {
+            Intent intent = new Intent(MainActivity.this, MapActivity.class);
+            intent.putExtra(ActivityID.ACTIVITY_ID, ActivityID.MAIN);
+            startActivity(intent);
+        }
+    }
 }

@@ -2,6 +2,8 @@ package se.chalmers.krogkollen.settings;
 
 import android.app.Activity;
 import android.os.Bundle;
+import android.support.v4.app.NavUtils;
+import android.view.MenuItem;
 import se.chalmers.krogkollen.R;
 
 /**
@@ -24,4 +26,15 @@ public class SettingsActivity extends Activity {
 		getActionBar().setIcon(R.drawable.transparent_spacer);
 		getActionBar().setTitle(R.string.settings_title);
 	}
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case android.R.id.home:
+                NavUtils.navigateUpFromSameTask(this);
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
+        }
+    }
 }

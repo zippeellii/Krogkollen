@@ -1,15 +1,20 @@
 package se.chalmers.krogkollen.detailed;
 
+import android.content.Intent;
 import android.content.SharedPreferences;
+import android.net.Uri;
 import android.os.AsyncTask;
 import android.view.View;
 import com.google.android.gms.maps.model.LatLng;
 import se.chalmers.krogkollen.IView;
 import se.chalmers.krogkollen.R;
-import se.chalmers.krogkollen.backend.*;
+import se.chalmers.krogkollen.backend.BackendHandler;
+import se.chalmers.krogkollen.backend.BackendNotInitializedException;
+import se.chalmers.krogkollen.backend.NoBackendAccessException;
+import se.chalmers.krogkollen.backend.NotFoundInBackendException;
+import se.chalmers.krogkollen.map.UserLocation;
 import se.chalmers.krogkollen.pub.IPub;
 import se.chalmers.krogkollen.pub.PubUtilities;
-import se.chalmers.krogkollen.utils.StringConverter;
 
 /**
  * A presenter class for the detailed view of a pub
@@ -201,6 +206,12 @@ public class DetailedPresenter implements IDetailedPresenter {
             } catch (BackendNotInitializedException e){
                 System.out.println("error");
             }
+        } else if (view.getId() == R.id.navigate) {
+            Intent i = new Intent(Intent.ACTION_VIEW, Uri.parse("http://maps.google.com/maps?saddr="
+                    + UserLocation.getInstance().getCurrentLatLng().latitude + ","
+                    + UserLocation.getInstance().getCurrentLatLng().longitude + "&daddr="
+                    + pub.getLatitude() + "," + pub.getLongitude()));
+            this.view.startActivity(i);
         }
     }
 

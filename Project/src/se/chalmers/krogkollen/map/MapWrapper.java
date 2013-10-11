@@ -57,6 +57,7 @@ public enum MapWrapper {
 		pubMarkers = new ArrayList<Marker>();
 		googleMap = ((MapFragment) activity.getFragmentManager().findFragmentById(R.id.map))
 				.getMap();
+        googleMap.getUiSettings().setCompassEnabled(false);
 		this.resources = activity.getResources();
 		this.context = activity;
         displayMetrics = resources.getDisplayMetrics();

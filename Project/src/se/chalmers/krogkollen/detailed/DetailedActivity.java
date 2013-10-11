@@ -4,12 +4,10 @@ import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.v4.app.NavUtils;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.widget.ImageView;
-import android.widget.LinearLayout;
-import android.widget.ScrollView;
-import android.widget.TextView;
+import android.widget.*;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapFragment;
@@ -106,6 +104,9 @@ public class DetailedActivity extends Activity implements IDetailedView {
             }
         });
 
+        map.getUiSettings().setCompassEnabled(false);
+        map.getUiSettings().setZoomControlsEnabled(false);
+
         getActionBar().setDisplayUseLogoEnabled(false);
         getActionBar().setIcon(R.drawable.transparent_spacer);
         getActionBar().setDisplayHomeAsUpEnabled(true);
@@ -181,6 +182,7 @@ public class DetailedActivity extends Activity implements IDetailedView {
     private void addListeners(){
         findViewById(R.id.thumbsUpLayout).setOnClickListener(presenter);
         findViewById(R.id.thumbsDownLayout).setOnClickListener(presenter);
+        findViewById(R.id.navigate).setOnClickListener(presenter);
     }
 
     /**
@@ -255,6 +257,9 @@ public class DetailedActivity extends Activity implements IDetailedView {
             case R.id.action_help:
                 navigate(HelpActivity.class);
                 break;
+            case android.R.id.home:
+                NavUtils.navigateUpFromSameTask(this);
+                return true;
         }
         return true;
     }

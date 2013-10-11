@@ -29,5 +29,6 @@ public class QueuetimeFragment extends ListFragment {
 
         return rootView;
     }
+
 }
 

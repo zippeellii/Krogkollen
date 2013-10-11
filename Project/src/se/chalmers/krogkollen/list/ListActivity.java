@@ -32,8 +32,7 @@ public class ListActivity extends FragmentActivity implements IListView{
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_list);
-        
-        //Detta �r bara f�r TEST
+
         
         viewPager = (ViewPager) findViewById(R.id.pager);
         actionBar = getActionBar();
@@ -50,8 +49,6 @@ public class ListActivity extends FragmentActivity implements IListView{
         }
 
         viewPager.setOnPageChangeListener(presenter);
-
-        //DETTA �R BARA F�R TEST SLUT
 
     }
 
@@ -72,7 +69,7 @@ public class ListActivity extends FragmentActivity implements IListView{
     @Override
     public void navigate(Class<?> destination, Bundle extras) {
         Intent intent = new Intent(this, destination);
-        //intent.putExtra(MARKER_PUB_ID, extras.getString(MapPresenter.MAP_PRESENTER_KEY));
+        //TODO intent.putExtra(MARKER_PUB_ID, extras.getString(MapPresenter.MAP_PRESENTER_KEY));
         startActivity(intent);
     }
 
@@ -81,7 +78,4 @@ public class ListActivity extends FragmentActivity implements IListView{
 		// TODO Auto-generated method stub
 		
 	}
-
-    //public void favoriteStarClickHandler(View v){
-    //}
 }

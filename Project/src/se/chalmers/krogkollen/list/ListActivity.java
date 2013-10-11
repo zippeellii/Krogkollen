@@ -6,15 +6,11 @@ import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.view.ViewPager;
 import android.view.Menu;
-import android.view.View;
-import android.widget.AdapterView;
 import android.widget.ListView;
 import se.chalmers.krogkollen.R;
 import se.chalmers.krogkollen.adapter.*;
 import se.chalmers.krogkollen.map.MapActivity;
 import se.chalmers.krogkollen.map.MapPresenter;
-import se.chalmers.krogkollen.pub.IPub;
-
 
 /**
  * Activity for the list view. This shows a list that is sorted by a few default values, that the user can chose between.
@@ -26,11 +22,13 @@ public class ListActivity extends FragmentActivity implements IListView{
 	private ViewPager viewPager;
     private TabsPagerAdapter mAdapter;
     private ActionBar actionBar;
+    
     // Tab titles
     private String[] tabs = { "K�tid", "Distans", "Favoriter" };
     private IListPresenter presenter;
-    private ListView list;
+    private ListView list;  // TODO check this warning
 
+    @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_list);
@@ -65,10 +63,12 @@ public class ListActivity extends FragmentActivity implements IListView{
         return true;
     }
 
-
+    @Override
     public void setActionBarSelectedNavigationItem(int pos){
     	actionBar.setSelectedNavigationItem(pos);
     }
+    
+    @Override
     public void setViewPagerCurrentItem(int pos){
     	viewPager.setCurrentItem(pos);
     }

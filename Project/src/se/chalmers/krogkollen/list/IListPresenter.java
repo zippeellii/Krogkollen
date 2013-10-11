@@ -1,10 +1,7 @@
 package se.chalmers.krogkollen.list;
 
-import java.util.List;
-
 import android.app.ActionBar.TabListener;
 import android.support.v4.view.ViewPager.OnPageChangeListener;
-import android.view.View.OnClickListener;
 
 import se.chalmers.krogkollen.IPresenter;
 import se.chalmers.krogkollen.pub.IPub;

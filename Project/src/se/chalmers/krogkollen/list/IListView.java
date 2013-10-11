@@ -1,6 +1,5 @@
 package se.chalmers.krogkollen.list;
 
-import android.app.ActionBar;
 import se.chalmers.krogkollen.IView;
 
 /**
@@ -9,12 +8,10 @@ import se.chalmers.krogkollen.IView;
  * @author Albin Garpetun Created 2013-09-22
  */
 public interface IListView extends IView {
-
-	/**
-	 * Called when the refresh button is clicked
-	 */
-    
+	
+	// TODO javadoc
     public void setActionBarSelectedNavigationItem(int pos);
+    
+    // TODO javadoc
     public void setViewPagerCurrentItem(int pos);
-
 }

@@ -6,11 +6,9 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import se.chalmers.krogkollen.search.SortByDistance;
 import se.chalmers.krogkollen.search.SortByQueueTime;
 
 public class FavoriteFragment extends ListFragment {
-
 	
 	   @Override
 	    public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -24,6 +22,5 @@ public class FavoriteFragment extends ListFragment {
                setListAdapter(adapter);
 
                return rootView;
-
 	   }
 }

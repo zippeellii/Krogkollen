@@ -155,6 +155,7 @@ public class DetailedPresenter implements IDetailedPresenter {
         new UpdateTask().execute();
     }
 
+    // TODO what does this method do?
     private class UpdateTask extends AsyncTask<Void, Void, Void>{
         protected void onPreExecute(){
             view.showProgressDialog();
@@ -228,11 +229,13 @@ public class DetailedPresenter implements IDetailedPresenter {
         updateVotes();
     }
 
+    // TODO jAVADOC
     public void updateStar(){
         saveFavoriteState();
         view.showStar(view.getSharedPreferences(pub.getID(), 0).getBoolean("star", true));
     }
 
+    // TODO what does this do?
     private void updateVotes(){
         view.showVotes("" + pub.getPositiveRating(), "" + pub.getNegativeRating());
     }

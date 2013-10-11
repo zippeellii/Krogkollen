@@ -57,7 +57,7 @@ public class DetailedActivity extends Activity implements IDetailedView {
             ageRestrictionTextView, entranceFeeTextView, votesUpTextView, votesDownTextView;
     private ImageView thumbsUpImage, thumbsDownImage, queueIndicator;
     private MenuItem favoriteStar;
-    private LinearLayout thumbsUpLayout, thumbsDownLayout;
+    private LinearLayout thumbsUpLayout, thumbsDownLayout; // TODO these are never used?
     private ProgressDialog progressDialog;
 
     private GoogleMap map;
@@ -178,6 +178,7 @@ public class DetailedActivity extends Activity implements IDetailedView {
 
     }
 
+    // TODO what does this do?
     private void addListeners(){
         findViewById(R.id.thumbsUpLayout).setOnClickListener(presenter);
         findViewById(R.id.thumbsDownLayout).setOnClickListener(presenter);
@@ -204,8 +205,6 @@ public class DetailedActivity extends Activity implements IDetailedView {
                 thumbsUpImage.setBackgroundResource(R.drawable.thumb_up);
                 break;
         }
-
-
     }
 
     /**
@@ -232,13 +231,10 @@ public class DetailedActivity extends Activity implements IDetailedView {
     @Override
     public boolean onOptionsItemSelected(MenuItem menuItem){
         switch(menuItem.getItemId()){
-
             case R.id.favorite_star:
                 presenter.updateStar();
                 break;
-
             case R.id.refresh_info:
-
                 try {
                     presenter.updateInfo();
                 } catch (NoBackendAccessException e) {
@@ -249,7 +245,6 @@ public class DetailedActivity extends Activity implements IDetailedView {
                     this.showErrorMessage(e.getMessage());
                 }
                 break;
-
             case R.id.action_settings:
                 navigate(SettingsActivity.class);
                 break;
@@ -277,11 +272,12 @@ public class DetailedActivity extends Activity implements IDetailedView {
         }
     }
 
-
+    // TODO javadoc
     public void showProgressDialog(){
         progressDialog = ProgressDialog.show(this, "","Uppdaterar", false, false);
     }
 
+    // TODO javadoc
     public void hideProgressDialog(){
         progressDialog.hide();
     }

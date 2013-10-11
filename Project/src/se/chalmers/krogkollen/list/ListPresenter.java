@@ -1,21 +1,12 @@
 package se.chalmers.krogkollen.list;
 
-import java.util.List;
-
-import android.content.SharedPreferences;
 import se.chalmers.krogkollen.IView;
 import se.chalmers.krogkollen.pub.IPub;
 import android.app.ActionBar.Tab;
 import android.app.FragmentTransaction;
-import android.view.View;
 import se.chalmers.krogkollen.search.ISort;
 
-
-	/*
-	 * This class should hold A list of all the pubs. Different search-states Somehow create a
-	 * string that depends on the pub as well as the search-state.
-	 */
-
+// TODO javadoc
 public class ListPresenter implements IListPresenter {
 	private IListView view;
 	private ListModel model;
@@ -26,9 +17,8 @@ public class ListPresenter implements IListPresenter {
 	}
 	@Override
 	public void setView(IView view) {
+		// TODO empty method?
 	}
-
-
 
 	@Override
 	public IPub[] sortList(ISort sortMode) {

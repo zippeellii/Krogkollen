@@ -2,11 +2,11 @@ package se.chalmers.krogkollen.list;
 
 import java.util.List;
 
-import android.util.Log;
 import se.chalmers.krogkollen.pub.IPub;
 import se.chalmers.krogkollen.pub.Pub;
 import se.chalmers.krogkollen.pub.PubUtilities;
 import se.chalmers.krogkollen.search.ISort;
+
 /**
  * A class containing logic for the list view
  * @author Jonathan Nilsfors
@@ -17,6 +17,7 @@ public class ListModel {
 	public ListModel(){
 		originalPubList = PubUtilities.getInstance().getPubList();
 	}
+	
 	/**
 	 * Returns the original pub list sorted as specified by algorithm
 	 * @param algorithm wanted to use
@@ -27,6 +28,7 @@ public class ListModel {
 		
 		return convertListToArray(sortedList);
 	}
+	
 	//Converts the java.util.list to Array
 	private IPub[] convertListToArray(List <IPub> list){
 		Pub[] pubArray = new Pub[list.size()];

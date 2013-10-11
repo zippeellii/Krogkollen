@@ -16,8 +16,7 @@ public class BackendHandler {
 	private static IBackend			backendInstance	= null;
 
 	// Private constructor to prevent accessibility
-	private BackendHandler() {
-	}
+	private BackendHandler() {}
 
 	/**
 	 * Returns the instance for this singleton

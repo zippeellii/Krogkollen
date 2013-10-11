@@ -18,6 +18,7 @@ import se.chalmers.krogkollen.utils.Distance;
 
 import java.text.*;
 
+// TODO javadoc
 public class PubListAdapter extends ArrayAdapter<IPub> {
 
     Context context;
@@ -26,6 +27,7 @@ public class PubListAdapter extends ArrayAdapter<IPub> {
     View row;
     PubHolder holder;
 
+    // TODO jAVADOC
     public PubListAdapter(Context context, int layoutResourceId, IPub[] data) {
         super(context, layoutResourceId, data);
         this.layoutResourceId = layoutResourceId;
@@ -117,6 +119,7 @@ public class PubListAdapter extends ArrayAdapter<IPub> {
         }
     }
 
+    // TODO javadoc
     static class PubHolder
     {
         ImageView imgIcon;

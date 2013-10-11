@@ -11,7 +11,7 @@ import android.view.View;
 import se.chalmers.krogkollen.search.ISort;
 
 
-	/*
+	/**
 	 * This class should hold A list of all the pubs. Different search-states Somehow create a
 	 * string that depends on the pub as well as the search-state.
 	 */

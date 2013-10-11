@@ -6,14 +6,14 @@ import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.view.ViewPager;
 import android.view.Menu;
-import android.view.View;
-import android.widget.AdapterView;
+import android.view.MenuItem;
 import android.widget.ListView;
 import se.chalmers.krogkollen.R;
 import se.chalmers.krogkollen.adapter.*;
+import se.chalmers.krogkollen.map.IMapView;
 import se.chalmers.krogkollen.map.MapActivity;
 import se.chalmers.krogkollen.map.MapPresenter;
-import se.chalmers.krogkollen.pub.IPub;
+
 
 
 /**
@@ -24,13 +24,15 @@ import se.chalmers.krogkollen.pub.IPub;
 public class ListActivity extends FragmentActivity implements IListView{
 
 	private ViewPager viewPager;
+    private IMapView mapView;
     private TabsPagerAdapter mAdapter;
     private ActionBar actionBar;
     // Tab titles
-    private String[] tabs = { "K�tid", "Distans", "Favoriter" };
+    private String[] tabs = { "Kötid", "Distans", "Favoriter" };
     private IListPresenter presenter;
     private ListView list;
 
+    @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_list);
@@ -52,6 +54,11 @@ public class ListActivity extends FragmentActivity implements IListView{
 
         viewPager.setOnPageChangeListener(presenter);
 
+        // Remove the default logo icon and add our list icon.
+        ActionBar actionBar = getActionBar();
+        actionBar.setIcon(R.drawable.map_icon);
+        actionBar.setDisplayHomeAsUpEnabled(true);
+
     }
 
     // Start the activity in a local method to keep the right context.
@@ -66,6 +73,10 @@ public class ListActivity extends FragmentActivity implements IListView{
     }
 
 
+    /**
+     *
+     * @param pos
+     */
     public void setActionBarSelectedNavigationItem(int pos){
     	actionBar.setSelectedNavigationItem(pos);
     }
@@ -91,4 +102,23 @@ public class ListActivity extends FragmentActivity implements IListView{
 		// TODO Auto-generated method stub
 
 	}
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.refresh_info:
+                //TODO implement
+                //new RefreshTask().execute();
+                break;
+            case R.id.search:
+                //TODO implement
+               // this.onSearch();
+                break;
+
+            case android.R.id.home:
+                this.navigate(MapActivity.class);
+                break;
+        }
+        return super.onOptionsItemSelected(item);
+    }
 }

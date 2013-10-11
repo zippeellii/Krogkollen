@@ -6,24 +6,27 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import se.chalmers.krogkollen.search.SortByDistance;
 import se.chalmers.krogkollen.search.SortByQueueTime;
 
+
+/**
+ *  A fragment showing a list with all favorites
+ */
 public class FavoriteFragment extends ListFragment {
 
-	
-	   @Override
-	    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-	            Bundle savedInstanceState) {
 
-               ListModel model = new ListModel();
-               View rootView = inflater.inflate(R.layout.fragment_favorites_list, container, false);
+    @Override
+    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+                             Bundle savedInstanceState) {
 
-               PubListAdapter adapter = new PubListAdapter(getActivity(), R.layout.listview_item, model.getSortedArray(new SortByQueueTime()));
+        ListModel model = new ListModel();
+        View rootView = inflater.inflate(R.layout.fragment_favorites_list, container, false);
 
-               setListAdapter(adapter);
+        PubListAdapter adapter = new PubListAdapter(getActivity(), R.layout.listview_item, model.getSortedArray(new SortByQueueTime()));
 
-               return rootView;
+        setListAdapter(adapter);
 
-	   }
+        return rootView;
+
+    }
 }

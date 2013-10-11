@@ -8,8 +8,7 @@ import se.chalmers.krogkollen.pub.Pub;
 import se.chalmers.krogkollen.pub.PubUtilities;
 import se.chalmers.krogkollen.search.ISort;
 /**
- * A class containing logic for the list view
- * @author Jonathan Nilsfors
+ * A class containing logic for the list view.
  *
  */
 public class ListModel {

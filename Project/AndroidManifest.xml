@@ -14,17 +14,17 @@
          GNU General Public License for more details.
 
          You should have received a copy of the GNU General Public License
-         along with Foobar.  If not, see <http://www.gnu.org/licenses/>.
+         along with Krogkollen.  If not, see <http://www.gnu.org/licenses/>.
 -->
 
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-          package="se.chalmers.krogkollen"
-          android:versionCode="1"
-          android:versionName="0.3" >
+    package="se.chalmers.krogkollen"
+    android:versionCode="1"
+    android:versionName="1.0.0" >
 
     <uses-sdk
-            android:minSdkVersion="14"
-            android:targetSdkVersion="18" />
+        android:minSdkVersion="14"
+        android:targetSdkVersion="18" />
 
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
@@ -32,25 +32,25 @@
     <uses-permission android:name="com.google.android.providers.gsf.permission.READ_GSERVICES" />
     <!--
      The following two permissions are not required to use
-     Google Maps Android API v2, but are recommended.
+     Google Maps Android API v2, but are recommended.
     -->
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
 
     <uses-feature
-            android:glEsVersion="0x00020000"
-            android:required="true" />
+        android:glEsVersion="0x00020000"
+        android:required="true" />
 
     <application
-            android:allowBackup="true"
-            android:icon="@drawable/ic_launcher"
-            android:label="@string/app_name"
-            android:theme="@style/AppTheme" >
+        android:allowBackup="true"
+        android:icon="@drawable/ic_launcher"
+        android:label="@string/app_name"
+        android:theme="@style/AppTheme" >
         <activity
-                android:name="se.chalmers.krogkollen.MainActivity"
-                android:label="@string/app_name"
-                android:theme="@style/NoActionBar"
-                android:configChanges="orientation|keyboardHidden" >
+            android:name="se.chalmers.krogkollen.MainActivity"
+            android:configChanges="orientation|keyboardHidden"
+            android:label="@string/app_name"
+            android:theme="@style/NoActionBar" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -59,18 +59,26 @@
         </activity>
 
         <meta-data
-                android:name="com.google.android.maps.v2.API_KEY"
-                android:value="AIzaSyDs1IaB9cVNYB4tj9z0DB_Loo5N-a9u768" />
+            android:name="com.google.android.maps.v2.API_KEY"
+            android:value="AIzaSyDs1IaB9cVNYB4tj9z0DB_Loo5N-a9u768" />
 
         <activity
-                android:name="se.chalmers.krogkollen.map.MapActivity"
-                android:label="@string/title_activity_map"
-                android:theme="@style/HideUpIcon"
-                android:configChanges="orientation|keyboardHidden" >
+            android:name="se.chalmers.krogkollen.map.MapActivity"
+            android:configChanges="orientation|keyboardHidden"
+            android:label="@string/title_activity_map"
+            android:theme="@style/HideUpIcon" >
+            <meta-data
+                android:name="android.app.default_searchable"
+                android:value="se.chalmers.krogkollen.search.SearchActivity" />
         </activity>
         <activity android:name="se.chalmers.krogkollen.detailed.DetailedActivity"
                   android:label="@string/title_activity_detailed"
+                  android:parentActivityName="se.chalmers.krogkollen.map.MapActivity"
                   android:configChanges="orientation|keyboardHidden" >
+            <!-- Parent activity meta-data to support 4.0 and lower -->
+            <meta-data
+                    android:name="android.support.PARENT_ACTIVITY"
+                    android:value="se.chalmers.krogkollen.map.MapActivity" />
         </activity>
         <activity android:name="se.chalmers.krogkollen.help.HelpActivity"
                   android:label="@string/title_activity_help"
@@ -78,15 +86,45 @@
                   android:configChanges="orientation|keyboardHidden">
             <!-- Parent activity meta-data to support 4.0 and lower -->
             <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="se.chalmers.krogkollen.map.MapActivity" />
+        </activity>
+        <activity
+            android:name="se.chalmers.krogkollen.settings.SettingsActivity"
+                  android:parentActivityName="se.chalmers.krogkollen.map.MapActivity"
+            android:configChanges="orientation|keyboardHidden" />
+        	<!-- Parent activity meta-data to support 4.0 and lower -->
+            <meta-data
                     android:name="android.support.PARENT_ACTIVITY"
                     android:value="se.chalmers.krogkollen.map.MapActivity" />
+        <activity
+            android:name="se.chalmers.krogkollen.list.ListActivity"
+            android:label="@string/title_activity_list" />
+        
+        <meta-data
+            android:name="android.app.default_searchable"
+            android:value="se.chalmers.krogkollen.search.SearchActivity" />
+
+
+        <activity
+            android:name="se.chalmers.krogkollen.search.SearchActivity"
+            android:label="@string/title_activity_search"
+            android:launchMode="singleTop" >
+            <intent-filter>
+                <action android:name="android.intent.action.SEARCH" />
+            </intent-filter>
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+            </intent-filter>
+
+            <meta-data
+                android:name="android.app.searchable"
+                android:resource="@xml/searchable" />
         </activity>
 
-        <activity android:name=".settings.SettingsActivity"
-                  android:configChanges="orientation|keyboardHidden"/>
-
-        <activity android:name=".list.ListActivity"
-                  android:label="@string/title_activity_list"/>
+        <provider
+            android:name="se.chalmers.krogkollen.search.SearchContentProvider"
+            android:authorities="se.chalmers.krogkollen.search.SearchContentProvider" >
+        </provider>
     </application>
-
 </manifest>

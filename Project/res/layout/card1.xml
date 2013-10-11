@@ -7,11 +7,12 @@ This file is part of Krogkollen.
  (at your option) any later version.
  Krogkollen is distributed in the hope that it will be useful,
  but WITHOUT ANY WARRANTY; without even the implied warranty of
- MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the xxxccc
  GNU General Public License for more details.
  You should have received a copy of the GNU General Public License
- along with Foobar.  If not, see <http://www.gnu.org/licenses/>.
+ along with Krogkollen.  If not, see <http://www.gnu.org/licenses/>.
 -->
+<!--suppress AndroidLintUselessParent -->
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
              android:layout_width="match_parent"
              android:layout_height="match_parent">
@@ -33,7 +34,8 @@ This file is part of Krogkollen.
                 android:orientation="horizontal"
                 android:layout_height="match_parent"
                 android:layout_width="match_parent"
-                android:layout_weight="3">
+                android:baselineAligned="false"
+                android:layout_weight="5">
 
             <LinearLayout
                     android:orientation="horizontal"
@@ -52,39 +54,58 @@ This file is part of Krogkollen.
             </LinearLayout>
 
             <LinearLayout
-                    android:layout_gravity="right"
                     android:orientation="horizontal"
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
                     android:layout_weight="1"
-                    android:gravity="right">
-                <ImageButton
-                        android:id="@+id/thumbsUpButton"
-                        android:background="@drawable/thumb_up"
-                        android:layout_height="25dp"
-                        android:layout_width="25dp"
-                        android:layout_marginRight="5dp"></ImageButton>
-                <TextView
-                        android:layout_marginRight="10dp"
-                        android:layout_width="wrap_content"
+                    android:baselineAligned="false">
+                <LinearLayout
+                        android:layout_gravity="right"
+                        android:orientation="horizontal"
+                        android:layout_width="0dp"
                         android:layout_height="match_parent"
-                        android:id="@+id/thumbsUpTextView"
-                        android:text="@string/thumbs_up"
-                        android:textColor="#777777"/>
-                <ImageButton
-                        android:id="@+id/thumbsDownButton"
-                        android:background="@drawable/thumb_down"
-                        android:layout_height="25dp"
-                        android:layout_width="25dp"
-                        android:layout_marginRight="5dp">
-                        </ImageButton>
-                <TextView
-                        android:layout_marginRight="5dp"
-                        android:layout_width="wrap_content"
+                        android:layout_weight="1"
+                        android:gravity="right"
+                        android:id="@+id/thumbsUpLayout">
+                    <ImageView
+                            android:id="@+id/thumbsUpButton"
+                            android:background="@drawable/thumb_up"
+                            android:layout_height="25dp"
+                            android:layout_width="25dp"
+                            android:layout_marginRight="5dp"></ImageView>
+                    <TextView
+                            android:layout_marginRight="10dp"
+                            android:layout_width="wrap_content"
+                            android:layout_height="match_parent"
+                            android:id="@+id/thumbsUpTextView"
+                            android:text="@string/thumbs_up"
+                            android:textColor="#777777"/>
+                </LinearLayout>
+
+                <LinearLayout
+                        android:id="@+id/thumbsDownLayout"
+                        android:layout_gravity="right"
+                        android:orientation="horizontal"
+                        android:layout_width="0dp"
                         android:layout_height="match_parent"
-                        android:id="@+id/thumbsDownTextView"
-                        android:text="@string/thumbs_down"
-                        android:textColor="#777777"/>
+                        android:layout_weight="1"
+                        android:gravity="right">
+
+                    <ImageView
+                            android:id="@+id/thumbsDownButton"
+                            android:background="@drawable/thumb_down"
+                            android:layout_height="25dp"
+                            android:layout_width="25dp"
+                            android:layout_marginRight="5dp">
+                            </ImageView>
+                    <TextView
+                            android:layout_marginRight="5dp"
+                            android:layout_width="wrap_content"
+                            android:layout_height="match_parent"
+                            android:id="@+id/thumbsDownTextView"
+                            android:text="@string/thumbs_down"
+                            android:textColor="#777777"/>
+                </LinearLayout>
             </LinearLayout>
 
 

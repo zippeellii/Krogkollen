@@ -1,6 +1,8 @@
 package se.chalmers.krogkollen.detailed;
 
+import android.view.View.OnClickListener;
 import se.chalmers.krogkollen.IPresenter;
+import se.chalmers.krogkollen.backend.BackendNotInitializedException;
 import se.chalmers.krogkollen.backend.NoBackendAccessException;
 import se.chalmers.krogkollen.backend.NotFoundInBackendException;
 
@@ -10,38 +12,43 @@ import se.chalmers.krogkollen.backend.NotFoundInBackendException;
  * @author Oskar Karrman
  *
  */
-public interface IDetailedPresenter extends IPresenter {
-
-	/**
-	 * Indicates that rating for a pub has changed
-	 *
-	 * @param rating the new rating of the pub
-	 */
-	public void ratingChanged(int rating) throws NotFoundInBackendException, NoBackendAccessException;
+public interface IDetailedPresenter extends IPresenter, OnClickListener {
 
     /**
-     * Sets pub that is related to the presenter
+     * Updates the thumb state.
      *
-     * @param pubID The pubs ID
+     * @param rating represents thumb up, down or neutral.
+     * @throws NotFoundInBackendException
+     * @throws NoBackendAccessException
+     * @throws BackendNotInitializedException
      */
-    public void setPub(String pubID) throws NotFoundInBackendException, NoBackendAccessException;
+	public void ratingChanged(int rating) throws NotFoundInBackendException, NoBackendAccessException, BackendNotInitializedException;
 
     /**
-     * Getter for queue time.
-     * @return queue time
+     * Sets the pub which the presenter is connected to.
+     *
+     * @param pubID the pub
+     * @throws NotFoundInBackendException
+     * @throws NoBackendAccessException
+     * @throws BackendNotInitializedException
      */
-    public void getQueueTime();
+    public void setPub(String pubID) throws NotFoundInBackendException, NoBackendAccessException, BackendNotInitializedException;
 
-    public void getText();
-
-    public void getThumbs();
-
-    public void getVotes() throws NoBackendAccessException, NotFoundInBackendException;
-
-    public void getFavoriteStar();
-
+    /**
+     * Saves the favorite state locally.
+     */
     public void saveFavoriteState();
 
-    public void updateInfo() throws NoBackendAccessException, NotFoundInBackendException;
+    /**
+     * Gets the information from the server
+     * @throws NoBackendAccessException
+     * @throws NotFoundInBackendException
+     * @throws BackendNotInitializedException
+     */
+    public void updateInfo() throws NoBackendAccessException, NotFoundInBackendException, BackendNotInitializedException;
 
+    /**
+     * Updates the star
+     */
+    public void updateStar();
 }

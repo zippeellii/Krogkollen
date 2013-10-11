@@ -1,5 +1,7 @@
 package se.chalmers.krogkollen.pub;
+
 import com.google.android.gms.maps.model.LatLng;
+
 /*
  * This file is part of Krogkollen.
  *
@@ -18,64 +20,64 @@ import com.google.android.gms.maps.model.LatLng;
  */
 
 /**
- *
+ * 
  * A class representing a pub
  * 
  * @author Jonathan Nilsfors
  * @author Albin Garpetun
  * @author Oskar Karrman
- *
+ * 
  */
-public class Pub implements IPub{
+public class Pub implements IPub {
 
-	private String name;
-	private String description;
-	private int todaysOpeningHour;
-	private int todaysClosingHour;
-	private double latitude;
-	private double longitude;
-	private int ageRestriction;
-	private int queueTime;
-    private int entranceFee;
-    private int positiveRating;
-    private int negativeRating;
-	private final String ID;
-	
+	private String			name;
+	private String			description;
+	private int				todaysOpeningHour;
+	private int				todaysClosingHour;
+	private double			latitude;
+	private double			longitude;
+	private int				ageRestriction;
+	private int				queueTime;
+	private int				entranceFee;
+	private int				positiveRating;
+	private int				negativeRating;
+	private final String	ID;
+
 	/**
 	 * Create a new Pub object with default values
 	 */
 	public Pub() {
 		this("Name", "Description", 0.0, 0.0, 0, 0, 0, 0, 0, 0, 0, "ID");
 	}
-	
+
 	/**
 	 * Create a new Pub object
 	 * 
-	 * @param name 				the name
-	 * @param description 		the description
-	 * @param latitude 			the latitude position
-	 * @param longitude 		the longitude position
-	 * @param ageRestriction 	the age restriction
-	 * @param entranceFee 		the entrance fee
+	 * @param name the name
+	 * @param description the description
+	 * @param latitude the latitude position
+	 * @param longitude the longitude position
+	 * @param ageRestriction the age restriction
+	 * @param entranceFee the entrance fee
 	 * @param todaysOpeningHour todays opening hour
 	 * @param todaysClosingHour todays closing hour
-	 * @param positiveRating 	positive rating of the pub
-	 * @param negativeRating 	negative rating of the pub
-	 * @param queueTime 		the current queue time of the pub
-	 * @param ID 				the ID of the pub
+	 * @param positiveRating positive rating of the pub
+	 * @param negativeRating negative rating of the pub
+	 * @param queueTime the current queue time of the pub
+	 * @param ID the ID of the pub
 	 */
-	public Pub(	String name,
-				String description,
-				double latitude,
-				double longitude,
-				int ageRestriction,
-				int entranceFee,
-				int todaysOpeningHour,
-				int todaysClosingHour,
-				int positiveRating,
-				int negativeRating,
-				int queueTime,
-				String ID) {
+	public Pub(String name,
+		String description,
+		double latitude,
+		double longitude,
+		int ageRestriction,
+		int entranceFee,
+		int todaysOpeningHour,
+		int todaysClosingHour,
+		int positiveRating,
+		int negativeRating,
+		int queueTime,
+		String ID) {
 		this.name = name;
 		this.description = description;
 		this.latitude = latitude;
@@ -89,14 +91,12 @@ public class Pub implements IPub{
 		this.queueTime = queueTime;
 		this.ID = ID;
 	}
-	
-	/**
-	 * @return todays opening and closing hours
-	 */
+
+	@Override
 	public OpeningHours getTodaysOpeningHours() {
 		return new OpeningHours(this.todaysOpeningHour, this.todaysClosingHour);
 	}
-	
+
 	/**
 	 * @return the coordinates of the pub
 	 */
@@ -124,18 +124,18 @@ public class Pub implements IPub{
 		return this.queueTime;
 	}
 
-    @Override
-    public int getEntranceFee(){
-        return this.entranceFee;
-    }
+	@Override
+	public int getEntranceFee() {
+		return this.entranceFee;
+	}
 
 	@Override
 	public void setQueueTime(int queueTime) {
-		//No negative time allowed
-		if(queueTime < 0){
+		// No negative time allowed
+		if (queueTime < 0) {
 			this.queueTime = 0;
 		}
-		else{
+		else {
 			this.queueTime = queueTime;
 		}
 
@@ -144,13 +144,13 @@ public class Pub implements IPub{
 	@Override
 	public String getID() {
 		return this.ID;
-    }
+	}
 
 	@Override
 	public int getPositiveRating() {
 		return this.positiveRating;
 	}
-	
+
 	@Override
 	public void setPositiveRating(int rating) {
 		this.positiveRating = rating;
@@ -160,7 +160,7 @@ public class Pub implements IPub{
 	public int getNegativeRating() {
 		return this.negativeRating;
 	}
-	
+
 	@Override
 	public void setNegativeRating(int rating) {
 		this.negativeRating = rating;

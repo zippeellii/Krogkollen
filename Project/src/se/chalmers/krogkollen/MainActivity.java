@@ -7,7 +7,11 @@ import android.location.LocationManager;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.view.Menu;
-import se.chalmers.krogkollen.backend.Backend;
+import se.chalmers.krogkollen.backend.BackendHandler;
+import se.chalmers.krogkollen.backend.BackendMockup;
+import se.chalmers.krogkollen.backend.BackendNotInitializedException;
+import se.chalmers.krogkollen.backend.NoBackendAccessException;
+import se.chalmers.krogkollen.backend.ParseBackend;
 import se.chalmers.krogkollen.map.MapActivity;
 import se.chalmers.krogkollen.map.UserLocation;
 import se.chalmers.krogkollen.pub.PubUtilities;
@@ -31,55 +35,69 @@ import se.chalmers.krogkollen.utils.ActivityID;
  */
 
 /**
- *
+ * 
  * A class used for starting the application
- *
+ * 
  * @author Jonathan Nilsfors
  * @author Oskar Karrman
- *
+ * 
  */
 public class MainActivity extends Activity {
 
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
+	@Override
+	protected void onCreate(Bundle savedInstanceState) {
+		super.onCreate(savedInstanceState);
 
-        new InitResourcesTask().execute();
-    }
+		new InitResourcesTask().execute();
+	}
 
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.main, menu);
-        return true;
-    }
+	@Override
+	public boolean onCreateOptionsMenu(Menu menu) {
+		// Inflate the menu; this adds items to the action bar if it is present.
+		getMenuInflater().inflate(R.menu.main, menu);
+		return true;
+	}
 
+	// TODO comment what this does
+	private class InitResourcesTask extends AsyncTask<Void, Void, Void> {
 
-    private class InitResourcesTask extends AsyncTask<Void, Void, Void> {
+		@Override
+		protected void onPreExecute() {
+			setContentView(R.layout.activity_main);
+		}
 
-        @Override
-        protected void onPreExecute() {
-            setContentView(R.layout.activity_main);
-        }
+		@Override
+		protected Void doInBackground(Void... voids) {
 
-        @Override
-        protected Void doInBackground(Void... voids) {
+			// Tells the backend handler to initialize its server connection
+			// with a backend to Parse.com
+			BackendHandler.getInstance().setBackend(
+					new ParseBackend(MainActivity.this, "WgLQnilANHpjM3xITq0nM0eW8dByIgDDmxJzf6se",
+							"9ZK7yjE1NiD244ymDHb8ZpbbWNNv3RuQq7ceEvJc"));
 
-            //Tells the backend to initialize its server connection
-            Backend.init(MainActivity.this, "WgLQnilANHpjM3xITq0nM0eW8dByIgDDmxJzf6se", "9ZK7yjE1NiD244ymDHb8ZpbbWNNv3RuQq7ceEvJc");
+			// If you want to use the mockup backend, comment the above line and
+			// uncomment the line below
+			//BackendHandler.getInstance().setBackend(new BackendMockup(0));
 
-            PubUtilities.getInstance().loadPubList();
+			try {
+				PubUtilities.getInstance().loadPubList();
+			} catch (NoBackendAccessException e) {
+				// TODO Auto-generated catch block
+			} catch (BackendNotInitializedException e) {
+				// TODO Auto-generated catch block
+			}
 
-            //initiate the user location and start the map activity.
-            UserLocation.init((LocationManager) MainActivity.this.getSystemService(Context.LOCATION_SERVICE));
+			// initiate the user location and start the map activity.
+			UserLocation.init((LocationManager) MainActivity.this
+					.getSystemService(Context.LOCATION_SERVICE));
 
-            return null;
-        }
+			return null;
+		}
 
         @Override
         protected void onPostExecute(Void result) {
             Intent intent = new Intent(MainActivity.this, MapActivity.class);
-            intent.putExtra("previous_activity", ActivityID.MAIN);
+            intent.putExtra(ActivityID.ACTIVITY_ID, ActivityID.MAIN);
             startActivity(intent);
         }
     }

@@ -12,7 +12,7 @@
          GNU General Public License for more details.
 
          You should have received a copy of the GNU General Public License
-         along with Foobar.  If not, see <http://www.gnu.org/licenses/>.
+         along with Krogkollen.  If not, see <http://www.gnu.org/licenses/>.
 -->
 
 <resources>
@@ -20,6 +20,8 @@
     <!-- Default screen margins, per the Android Design guidelines. -->
     <dimen name="activity_horizontal_margin">16dp</dimen>
     <dimen name="activity_vertical_margin">16dp</dimen>
+    <dimen name="marker_font_size_main">17sp</dimen>
+    <dimen name="marker_font_size_sub">12sp</dimen>
 
 
 </resources>

@@ -1,0 +1,19 @@
+
+These requirements are valid for both Krogkollen and KrogkollenAdmin
+
+Minimum requirements:
+	Android 4.0
+	10 MB flash memory space
+	480 x 800 pixels screen
+	576 MB RAM
+	Wifi
+	GPS
+	1 GHz processor
+
+Tested phones:
+	HTC Desire
+	Google Nexus 4
+	Google Galaxy Nexus
+	Samsung Galaxy S4
+	Samsung Galaxy S4 Mini
+	Samsung Galaxy S3

@@ -5,148 +5,153 @@ import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.res.Resources;
 import android.os.AsyncTask;
+import android.util.DisplayMetrics;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapFragment;
-import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import se.chalmers.krogkollen.R;
-import se.chalmers.krogkollen.backend.Backend;
 import se.chalmers.krogkollen.backend.NoBackendAccessException;
 import se.chalmers.krogkollen.backend.NotFoundInBackendException;
 import se.chalmers.krogkollen.pub.IPub;
 import se.chalmers.krogkollen.pub.PubUtilities;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * MapWrapper (UTF-8)
- *
- * Singleton that wraps around a Google Maps v2 map, which makes
- * it possible to retrieve the same map system wide and instantiate from
- * loading screen.
- *
- * Author: Johan Backman
- * Author: Linnea Otterlind
- * Date: 2013-10-03
+ * 
+ * Singleton that wraps around a Google Maps v2 map, which makes it possible to retrieve the same
+ * map system wide and instantiate from loading screen.
+ * 
+ * @author Johan Backman
+ * @author Linnea Otterlind
  */
 
 public enum MapWrapper {
 
-    /**
-     * Enum singleton instance variable.
-     */
-    INSTANCE;
+	/**
+	 * Enum singleton instance variable.
+	 */
+	INSTANCE;
 
-    private GoogleMap googleMap;
-    private List<Marker> pubMarkers;
-    private Resources resources;
-    private Context context;
+	private GoogleMap		googleMap;
+	private List<Marker>	pubMarkers;
+	private Resources		resources;
+	private Context			context;
+    private DisplayMetrics  displayMetrics;
 
-    private ProgressDialog progressDialog;
+	private ProgressDialog	progressDialog;
 
-    private MapWrapper() {} // Suppress instantiation
+	private MapWrapper() {} // Suppress instantiation
 
-    /**
-     * Initiate Google map resources and markers.
-     *
-     * @param activity from an activity.
-     */
-    public void init(Activity activity) throws NoBackendAccessException, NotFoundInBackendException {
-        pubMarkers = new ArrayList<Marker>();
-        googleMap = ((MapFragment) activity.getFragmentManager().findFragmentById(R.id.map)).getMap();
-        this.resources = activity.getResources();
-        this.context = activity;
-        this.addPubMarkers();
-    }
+	/**
+	 * Initiate Google map resources and markers.
+	 * 
+	 * @param activity from an activity.
+	 */
+	public void init(Activity activity) throws NoBackendAccessException, NotFoundInBackendException {
+		pubMarkers = new ArrayList<Marker>();
+		googleMap = ((MapFragment) activity.getFragmentManager().findFragmentById(R.id.map))
+				.getMap();
+        googleMap.getUiSettings().setCompassEnabled(false);
+		this.resources = activity.getResources();
+		this.context = activity;
+        displayMetrics = resources.getDisplayMetrics();
+		this.addPubMarkers(PubUtilities.getInstance().getPubList());
+	}
 
-    // Add markers for all pubs on the server to the map.
-    private void addPubMarkers() throws NoBackendAccessException, NotFoundInBackendException {
-        IPub[] pubArray = new IPub[PubUtilities.getInstance().getPubList().size()];
+	// Add markers for all pubs on the server to the map.
+	private void addPubMarkers(List<IPub> pubs) throws NoBackendAccessException,
+			NotFoundInBackendException {
+		IPub[] pubArray = new IPub[pubs.size()];
 
-        for (int i = 0; i < PubUtilities.getInstance().getPubList().size(); i++) {
-            pubArray[i] = PubUtilities.getInstance().getPubList().get(i);
-        }
-        
-        new CreateMarkerTask().execute(pubArray);
-    }
+		for (int i = 0; i < pubs.size(); i++) {
+			pubArray[i] = pubs.get(i);
+		}
+		new CreateMarkerTask().execute(pubArray);
+	}
 
-    /**
-     * Removes all pub markers, loads and adds them again.
-     */
-    public synchronized void refreshPubMarkers() throws NoBackendAccessException, NotFoundInBackendException {
-        for(Marker pubMarker: this.pubMarkers){
-            pubMarker.remove();
-        }
-        this.pubMarkers.clear();
-        this.addPubMarkers();
-    }
+	/**
+	 * Removes all pub markers, loads and adds them again.
+	 */
+	public synchronized void refreshPubMarkers(HashMap<IPub, Integer> changedPubsHash)
+			throws NoBackendAccessException, NotFoundInBackendException {
 
-    /**
-     * @return the map in the wrapper.
-     */
-    public GoogleMap getMap() {
-        return this.googleMap;
-    }
+		List<IPub> changedPubs = new ArrayList<IPub>();
 
+		for (Map.Entry<IPub, Integer> entry : changedPubsHash.entrySet()) {
 
-    public void setContext(Context context) {
-        this.context = context;
-    }
+			IPub pub = entry.getKey();
+			Integer integer = entry.getValue();
 
-    private class CreateMarkerTask extends AsyncTask<IPub, Void, List<MarkerOptions>> {
+			// Find added and changed pubs
+			if (integer == MapPresenter.PUB_CHANGED || integer == MapPresenter.PUB_ADDED) {
+				changedPubs.add(pub);
+			}
 
-        @Override
-        protected void onPreExecute()
-        {
-            progressDialog = ProgressDialog.show(context, "", "Laddar pubbar...", false, false);
-        }
+			// Just remove pub markers for pubs that currently got a marker on the map.
+			for (Marker marker : pubMarkers) {
+				if (pub.getID().equalsIgnoreCase(marker.getId())) {
+					marker.remove();
+					pubMarkers.remove(marker);
+				}
+			}
+		}
+		this.addPubMarkers(changedPubs);
+	}
 
-        @Override
-        protected List<MarkerOptions> doInBackground(IPub... pubs) {
+	/**
+	 * @return the map in the wrapper.
+	 */
+	public GoogleMap getMap() {
+		return this.googleMap;
+	}
 
-            List<MarkerOptions> listMarkerOptions = new ArrayList<MarkerOptions>();
+	/**
+	 * Sets the context of this wrapper
+	 * 
+	 * @param context the context
+	 */
+	public void setContext(Context context) {
+		this.context = context;
+	}
 
-            for (int i = 0; i < pubs.length; i++) {
-                IPub pub = pubs[i];
+	// Used to direct workload when creating markers to another thread.
+	private class CreateMarkerTask extends AsyncTask<IPub, Void, List<MarkerOptions>> {
 
-                int drawable = 0;
+		@Override
+		protected void onPreExecute()
+		{
+			progressDialog = ProgressDialog.show(context, "",
+					resources.getString(R.string.loading_pubs), false, false);
+		}
 
-                // Determine which marker color to add.
-                try {
-                    switch (Backend.getInstance().getQueueTime(pub)) {
-                        case 1:
-                            drawable = R.drawable.green_marker_bg;
-                            break;
-                        case 2:
-                            drawable = R.drawable.yellow_marker_bg;
-                            break;
-                        case 3:
-                            drawable = R.drawable.red_marker_bg;
-                            break;
-                        default:
-                            drawable = R.drawable.gray_marker_bg;
-                            break;
-                    }
-                } catch (NoBackendAccessException e) {
+		@Override
+		protected List<MarkerOptions> doInBackground(IPub... pubs) {
 
-                } catch (NotFoundInBackendException e) {
+			List<MarkerOptions> listMarkerOptions = new ArrayList<MarkerOptions>();
 
-                }
-                listMarkerOptions.add(MarkerOptionsFactory.createMarkerOptions(resources, drawable, pub.getName(), pub.getTodaysOpeningHour(),
-                        new LatLng(pub.getLatitude(), pub.getLongitude()), pub.getID()));
+			// Create options for all the markers
+			for (int i = 0; i < pubs.length; i++) {
+				IPub pub = pubs[i];
+				listMarkerOptions.add(MarkerOptionsFactory.createMarkerOptions(displayMetrics, resources, pub));
+			}
+			return listMarkerOptions;
+		}
 
-            }
-            return listMarkerOptions;
-        }
+		@Override
+		protected void onPostExecute(List<MarkerOptions> markerOptions) {
 
-        @Override
-        protected void onPostExecute(List<MarkerOptions> markerOptions) {
-            for (MarkerOptions markerOption : markerOptions) {
-                pubMarkers.add(googleMap.addMarker(markerOption));
-            }
-            progressDialog.hide();
-        }
-    }
+			// When settings are finished add all the markers to the map
+			// This is a GUI process and needs to be run here on the GUI thread.
+			for (MarkerOptions markerOption : markerOptions) {
+				pubMarkers.add(googleMap.addMarker(markerOption));
+			}
+			progressDialog.hide();
+		}
+	}
 }

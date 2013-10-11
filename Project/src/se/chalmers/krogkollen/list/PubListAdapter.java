@@ -10,8 +10,13 @@ import android.widget.ArrayAdapter;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
+import com.google.android.gms.maps.model.LatLng;
 import se.chalmers.krogkollen.R;
+import se.chalmers.krogkollen.map.UserLocation;
 import se.chalmers.krogkollen.pub.IPub;
+import se.chalmers.krogkollen.utils.Distance;
+
+import java.text.*;
 
 
 public class PubListAdapter extends ArrayAdapter<IPub> {
@@ -55,8 +60,9 @@ public class PubListAdapter extends ArrayAdapter<IPub> {
         updateStar(context.getSharedPreferences(this.getItem(position).getID(), 0).getBoolean("star", true), holder);
 
         IPub pub = data[position];
+        DecimalFormat numberFormat = new DecimalFormat("#0.00");
         holder.txtTitle.setText(pub.getName());
-        holder.distanceText.setText("distance");
+        holder.distanceText.setText(""+(numberFormat.format(Distance.calcDistBetweenTwoLatLng(new LatLng(pub.getLatitude(),pub.getLongitude()), UserLocation.getInstance().getCurrentLatLng())))+" km");
         holder.favoriteStar.setTag(position);
 
 

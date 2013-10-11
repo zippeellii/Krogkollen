@@ -6,11 +6,14 @@ import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.view.ViewPager;
 import android.view.Menu;
+import android.view.MenuItem;
 import android.widget.ListView;
 import se.chalmers.krogkollen.R;
 import se.chalmers.krogkollen.adapter.*;
+import se.chalmers.krogkollen.map.IMapView;
 import se.chalmers.krogkollen.map.MapActivity;
 import se.chalmers.krogkollen.map.MapPresenter;
+
 
 /**
  * Activity for the list view. This shows a list that is sorted by a few default values, that the user can chose between.
@@ -20,11 +23,12 @@ import se.chalmers.krogkollen.map.MapPresenter;
 public class ListActivity extends FragmentActivity implements IListView{
 
 	private ViewPager viewPager;
+    private IMapView mapView;
     private TabsPagerAdapter mAdapter;
     private ActionBar actionBar;
     
     // Tab titles
-    private String[] tabs = { "K�tid", "Distans", "Favoriter" };
+    private String[] tabs = { "Kötid", "Distans", "Favoriter" };
     private IListPresenter presenter;
     private ListView list;  // TODO check this warning
 
@@ -49,6 +53,11 @@ public class ListActivity extends FragmentActivity implements IListView{
         }
 
         viewPager.setOnPageChangeListener(presenter);
+
+        // Remove the default logo icon and add our list icon.
+        ActionBar actionBar = getActionBar();
+        actionBar.setIcon(R.drawable.map_icon);
+        actionBar.setDisplayHomeAsUpEnabled(true);
 
     }
 
@@ -91,4 +100,23 @@ public class ListActivity extends FragmentActivity implements IListView{
 		// TODO Auto-generated method stub
 
 	}
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.refresh_info:
+                //TODO implement
+                //new RefreshTask().execute();
+                break;
+            case R.id.search:
+                //TODO implement
+               // this.onSearch();
+                break;
+
+            case android.R.id.home:
+                this.navigate(MapActivity.class);
+                break;
+        }
+        return super.onOptionsItemSelected(item);
+    }
 }

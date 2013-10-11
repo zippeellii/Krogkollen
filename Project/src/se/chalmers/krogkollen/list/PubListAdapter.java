@@ -18,7 +18,9 @@ import se.chalmers.krogkollen.utils.Distance;
 
 import java.text.*;
 
-// TODO javadoc
+/**
+ * An adapter handling the different items in a list
+ */
 public class PubListAdapter extends ArrayAdapter<IPub> {
 
     Context context;
@@ -27,7 +29,12 @@ public class PubListAdapter extends ArrayAdapter<IPub> {
     View row;
     PubHolder holder;
 
-    // TODO jAVADOC
+    /**
+     * A constructor that creates an PubListAdapter.
+     * @param context
+     * @param layoutResourceId
+     * @param data
+     */
     public PubListAdapter(Context context, int layoutResourceId, IPub[] data) {
         super(context, layoutResourceId, data);
         this.layoutResourceId = layoutResourceId;
@@ -119,7 +126,10 @@ public class PubListAdapter extends ArrayAdapter<IPub> {
         }
     }
 
-    // TODO javadoc
+
+    /**
+     * Static holder for pubs
+     */
     static class PubHolder
     {
         ImageView imgIcon;

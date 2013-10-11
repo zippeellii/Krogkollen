@@ -26,5 +26,7 @@
             android:id="@+id/notifications_item"
             android:title="@string/notifications"
             android:orderInCategory="100"
-            android:showAsAction="never"/>
+            android:showAsAction="never"
+            android:checkable="true"
+            android:checked="true"/>
 </menu>

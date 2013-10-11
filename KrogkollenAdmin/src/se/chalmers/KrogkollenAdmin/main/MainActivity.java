@@ -7,13 +7,13 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.KeyEvent;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
-import android.widget.*;
-import com.parse.ParseUser;
+import android.widget.ArrayAdapter;
+import android.widget.AutoCompleteTextView;
+import android.widget.Button;
+import android.widget.EditText;
 import se.chalmers.KrogkollenAdmin.R;
-import se.chalmers.KrogkollenAdmin.buttons.ButtonsActivity;
 
 /*
  * This file is part of Krogkollen.
@@ -65,6 +65,13 @@ public class MainActivity extends Activity {
         addListeners();
 
         presenter.checkIfLoggedIn();
+    }
+
+    @Override
+    public void onBackPressed() {
+        Intent intent = new Intent(Intent.ACTION_MAIN);
+        intent.addCategory(Intent.CATEGORY_HOME);
+        startActivity(intent);
     }
 
     /**
@@ -124,17 +131,13 @@ public class MainActivity extends Activity {
         });
 
         // This listener makes sure to hide the on-screen keyboard if they click 'next' in the password-field.
-        passwordField.setOnKeyListener(new View.OnKeyListener()
-        {
-            public boolean onKey(View v, int keyCode, KeyEvent event)
-            {
-                if (event.getAction() == KeyEvent.ACTION_DOWN)
-                {
-                    switch (keyCode)
-                    {
+        passwordField.setOnKeyListener(new View.OnKeyListener() {
+            public boolean onKey(View v, int keyCode, KeyEvent event) {
+                if (event.getAction() == KeyEvent.ACTION_DOWN) {
+                    switch (keyCode) {
                         case KeyEvent.KEYCODE_DPAD_CENTER:
                         case KeyEvent.KEYCODE_ENTER:
-                            InputMethodManager imm = (InputMethodManager)getSystemService(INPUT_METHOD_SERVICE);
+                            InputMethodManager imm = (InputMethodManager) getSystemService(INPUT_METHOD_SERVICE);
                             imm.hideSoftInputFromWindow(passwordField.getWindowToken(), 0);
                             return true;
                         default:

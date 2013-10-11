@@ -1,16 +1,13 @@
 package se.chalmers.KrogkollenAdmin.buttons;
 
-import android.app.*;
-import android.content.Context;
+import android.app.Activity;
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.v4.app.NotificationCompat;
 import android.text.Html;
 import android.view.*;
-import android.widget.*;
-import com.parse.ParseUser;
+import android.widget.Button;
 import se.chalmers.KrogkollenAdmin.R;
-import se.chalmers.KrogkollenAdmin.main.MainActivity;
 
 /*
  * This file is part of Krogkollen.
@@ -66,6 +63,7 @@ public class ButtonsActivity extends Activity {
 
             return true;
         } else if (menuItem.getItemId() == R.id.notifications_item) {
+            menuItem.setChecked(!menuItem.isChecked());
             toggleNotifications();
         }
         return false;

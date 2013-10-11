@@ -44,5 +44,5 @@ This file is part of Krogkollen.
     <string name="logo">The logo</string>
     <string name="notification_title">Uppdatera kötiden!</string>
     <string name="notification_subtext">30 minuter har gått</string>
-    <string name="notifications">Toggle notifications</string>
+    <string name="notifications">Notiser</string>
 </resources>

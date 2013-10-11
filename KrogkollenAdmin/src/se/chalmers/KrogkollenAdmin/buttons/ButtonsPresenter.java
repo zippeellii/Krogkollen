@@ -1,15 +1,12 @@
 package se.chalmers.KrogkollenAdmin.buttons;
 
-import android.app.Notification;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.app.TaskStackBuilder;
 import android.content.Context;
 import android.content.Intent;
-import android.net.Uri;
 import android.os.AsyncTask;
 import android.support.v4.app.NotificationCompat;
-import android.view.View;
 import android.widget.Toast;
 import com.parse.ParseException;
 import com.parse.ParseObject;
@@ -54,8 +51,6 @@ public class ButtonsPresenter {
     private boolean firstTimeNotificationTimer = true;
     public static final int DISABLE_TIME = 20000;
     public static final int NOTIFICATION_TIME = 1000*60*30;
-    public static final int TEST1 = 10000;
-    public static final int TEST2 = 1000;
     private boolean buttonOnCooldown;
     private Toast toast;
     private boolean notificationsDisabled;

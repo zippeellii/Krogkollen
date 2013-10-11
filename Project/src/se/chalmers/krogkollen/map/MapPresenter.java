@@ -84,7 +84,7 @@ public class MapPresenter implements IMapPresenter, GoogleMap.OnMarkerClickListe
                 new RefreshTask().execute();
                 break;
             case R.id.search:
-                // Open search
+                mapView.onSearch();
                 break;
             case R.id.go_to_my_location:
                 // If no position has been found, show corresponding dialog, otherwise move the

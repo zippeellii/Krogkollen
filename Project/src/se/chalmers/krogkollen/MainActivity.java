@@ -94,11 +94,11 @@ public class MainActivity extends Activity {
 			return null;
 		}
 
-		@Override
-		protected void onPostExecute(Void result) {
-			Intent intent = new Intent(MainActivity.this, MapActivity.class);
-			intent.putExtra("previous_activity", ActivityID.MAIN);
-			startActivity(intent);
-		}
-	}
+        @Override
+        protected void onPostExecute(Void result) {
+            Intent intent = new Intent(MainActivity.this, MapActivity.class);
+            intent.putExtra(ActivityID.ACTIVITY_ID, ActivityID.MAIN);
+            startActivity(intent);
+        }
+    }
 }

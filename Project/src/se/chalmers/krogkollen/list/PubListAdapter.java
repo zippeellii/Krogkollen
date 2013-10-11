@@ -2,6 +2,7 @@ package se.chalmers.krogkollen.list;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,16 +13,14 @@ import android.widget.TextView;
 import se.chalmers.krogkollen.R;
 import se.chalmers.krogkollen.pub.IPub;
 
-/**
- * @author Albin Garpetun
- *         Created 2013-09-22
- */
+
 public class PubListAdapter extends ArrayAdapter<IPub> {
 
     Context context;
     int layoutResourceId;
     IPub data[] = null;
     View row;
+    PubHolder holder;
 
     public PubListAdapter(Context context, int layoutResourceId, IPub[] data) {
         super(context, layoutResourceId, data);
@@ -33,7 +32,7 @@ public class PubListAdapter extends ArrayAdapter<IPub> {
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
         row = convertView;
-        PubHolder holder = null;
+        holder = null;
 
         if(row == null)
         {
@@ -44,8 +43,7 @@ public class PubListAdapter extends ArrayAdapter<IPub> {
             holder.imgIcon = (ImageView)row.findViewById(R.id.listview_image);
             holder.txtTitle = (TextView)row.findViewById(R.id.listview_title);
             holder.distanceText = (TextView)row.findViewById(R.id.listview_distance);
-            holder.listButton = (ImageButton)row.findViewById(R.id.favorite_star_list);
-            holder.listButton.setBackgroundResource(R.drawable.star_filled);
+            holder.favoriteStar = (ImageButton)row.findViewById(R.id.favorite_star_list);
 
             row.setTag(holder);
         }
@@ -54,9 +52,27 @@ public class PubListAdapter extends ArrayAdapter<IPub> {
             holder = (PubHolder)row.getTag();
         }
 
+        updateStar(context.getSharedPreferences(this.getItem(position).getID(), 0).getBoolean("star", true), holder);
+
         IPub pub = data[position];
         holder.txtTitle.setText(pub.getName());
         holder.distanceText.setText("distance");
+        holder.favoriteStar.setTag(position);
+
+
+        holder.favoriteStar.setOnClickListener(new View.OnClickListener() {
+            PubHolder tmp = holder;
+            @Override
+            public void onClick(View v) {
+                int pos = (Integer)v.getTag();
+                saveFavoriteState(pos);
+                updateStar(context.getSharedPreferences(data[pos].getID(), 0).getBoolean("star", true), tmp);
+
+
+            }
+        });
+
+
         switch(pub.getQueueTime()){
         case 1:
         	holder.imgIcon.setImageResource(R.drawable.detailed_queue_green);
@@ -72,16 +88,38 @@ public class PubListAdapter extends ArrayAdapter<IPub> {
         	break;
         }
         return row;
+
+
     }
+
+    /**
+     * Saves the state of the favorite locally
+     */
+    public void saveFavoriteState(int pos){
+        SharedPreferences.Editor editor = context.getSharedPreferences(data[pos].getID(), 0).edit();
+        editor.putBoolean("star", !(context.getSharedPreferences(data[pos].getID(), 0).getBoolean("star", true)));
+        editor.commit();
+    }
+
+    /**
+     * Updates the star.
+     * @param isStarFilled Represents if the star is filled or not.
+     */
+    public void updateStar(boolean isStarFilled, PubHolder holder){
+        if(isStarFilled){
+            holder.favoriteStar.setBackgroundResource(R.drawable.star_not_filled);
+        }
+        else{
+            holder.favoriteStar.setBackgroundResource(R.drawable.star_filled);
+        }
+    }
+
 
     static class PubHolder
     {
-
-
         ImageView imgIcon;
         TextView txtTitle;
         TextView distanceText;
-        ImageButton listButton;
-
+        ImageButton favoriteStar;
     }
 }

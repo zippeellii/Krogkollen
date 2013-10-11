@@ -1,12 +1,16 @@
 package se.chalmers.krogkollen.list;
 
 import android.app.ActionBar;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.view.ViewPager;
 import android.view.View;
+import android.widget.AdapterView;
+import android.widget.ListView;
 import se.chalmers.krogkollen.R;
 import se.chalmers.krogkollen.adapter.*;
+import se.chalmers.krogkollen.map.MapPresenter;
 import se.chalmers.krogkollen.pub.IPub;
 
 
@@ -23,6 +27,7 @@ public class ListActivity extends FragmentActivity implements IListView{
     // Tab titles
     private String[] tabs = { "K�tid", "Distans", "Favoriter" };
     private IListPresenter presenter;
+    private ListView list;
 
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -60,12 +65,15 @@ public class ListActivity extends FragmentActivity implements IListView{
 
     @Override
     public void navigate(Class<?> destination) {
-        //To change body of implemented methods use File | Settings | File Templates.
+        Intent intent = new Intent(this, destination);
+        startActivity(intent);
     }
 
     @Override
     public void navigate(Class<?> destination, Bundle extras) {
-        //To change body of implemented methods use File | Settings | File Templates.
+        Intent intent = new Intent(this, destination);
+        //intent.putExtra(MARKER_PUB_ID, extras.getString(MapPresenter.MAP_PRESENTER_KEY));
+        startActivity(intent);
     }
 
     @Override
@@ -74,6 +82,6 @@ public class ListActivity extends FragmentActivity implements IListView{
 		
 	}
 
-    public void favoriteStarClickHandler(View v){
-    }
+    //public void favoriteStarClickHandler(View v){
+    //}
 }

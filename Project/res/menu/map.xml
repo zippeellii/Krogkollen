@@ -26,17 +26,18 @@
             android:showAsAction="ifRoom"/>
 
     <item
+            android:id="@+id/go_to_my_location"
+            android:icon="@drawable/my_location_icon"
+            android:orderInCategory="120"
+            android:showAsAction="ifRoom"
+            android:title="@string/go_to_my_location"/>
+
+    <item
             android:id="@+id/search"
             android:orderInCategory="100"
             android:icon="@drawable/search_icon"
             android:title="@string/search"
             android:showAsAction="ifRoom|collapseActionView"/>
-
-    <item
-            android:id="@+id/go_to_my_location"
-            android:orderInCategory="100"
-            android:showAsAction="never"
-            android:title="@string/go_to_my_location"/>
 
     <item
             android:id="@+id/action_help"

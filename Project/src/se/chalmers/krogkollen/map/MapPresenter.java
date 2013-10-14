@@ -7,10 +7,8 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
 import android.view.MenuItem;
-
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.model.LatLng;
-
 import com.google.android.gms.maps.model.Marker;
 import se.chalmers.krogkollen.IView;
 import se.chalmers.krogkollen.R;
@@ -22,7 +20,6 @@ import se.chalmers.krogkollen.help.HelpActivity;
 import se.chalmers.krogkollen.list.ListActivity;
 import se.chalmers.krogkollen.pub.IPub;
 import se.chalmers.krogkollen.pub.PubUtilities;
-import se.chalmers.krogkollen.settings.SettingsActivity;
 import se.chalmers.krogkollen.utils.ActivityID;
 
 import java.util.ArrayList;
@@ -98,9 +95,6 @@ public class MapPresenter implements IMapPresenter, GoogleMap.OnMarkerClickListe
                 break;
             case R.id.action_help:
                 mapView.navigate(HelpActivity.class);
-                break;
-            case R.id.action_settings:
-                mapView.navigate(SettingsActivity.class);
                 break;
             case android.R.id.home:
                 Bundle bundle = new Bundle();

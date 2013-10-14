@@ -1,5 +1,7 @@
 package se.chalmers.krogkollen.pub;
 
+import java.util.Date;
+
 import com.google.android.gms.maps.model.LatLng;
 
 /*
@@ -42,12 +44,13 @@ public class Pub implements IPub {
 	private int				positiveRating;
 	private int				negativeRating;
 	private final String	ID;
+	private long			queueTimeLastUpdatedTimestamp;
 
 	/**
 	 * Create a new Pub object with default values
 	 */
 	public Pub() {
-		this("Name", "Description", 0.0, 0.0, 0, 0, 0, 0, 0, 0, 0, "ID");
+		this("Name", "Description", 0.0, 0.0, 0, 0, 0, 0, 0, 0, 0, 0, "ID");
 	}
 
 	/**
@@ -77,7 +80,9 @@ public class Pub implements IPub {
 		int positiveRating,
 		int negativeRating,
 		int queueTime,
-		String ID) {
+		long queueTimeLastUpdatedTimestamp,
+		String ID) 
+	{
 		this.name = name;
 		this.description = description;
 		this.latitude = latitude;
@@ -89,6 +94,7 @@ public class Pub implements IPub {
 		this.positiveRating = positiveRating;
 		this.negativeRating = negativeRating;
 		this.queueTime = queueTime;
+		this.queueTimeLastUpdatedTimestamp = queueTimeLastUpdatedTimestamp;
 		this.ID = ID;
 	}
 
@@ -97,9 +103,7 @@ public class Pub implements IPub {
 		return new OpeningHours(this.todaysOpeningHour, this.todaysClosingHour);
 	}
 
-	/**
-	 * @return the coordinates of the pub
-	 */
+	@Override
 	public LatLng getCoordinates() {
 		return new LatLng(this.latitude, this.longitude);
 	}
@@ -184,5 +188,15 @@ public class Pub implements IPub {
 	@Override
 	public double getLongitude() {
 		return this.longitude;
+	}
+
+	@Override
+	public void setQueueTimeLastUpdatedTimestamp(long queueTimeLastUpdatedTimestamp) {
+		this.queueTimeLastUpdatedTimestamp = queueTimeLastUpdatedTimestamp;
+	}
+
+	@Override
+	public long getQueueTimeLastUpdatedTimestamp() {
+		return this.queueTimeLastUpdatedTimestamp;
 	}
 }

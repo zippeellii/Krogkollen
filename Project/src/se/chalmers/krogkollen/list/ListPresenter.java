@@ -4,7 +4,7 @@ import se.chalmers.krogkollen.IView;
 import se.chalmers.krogkollen.pub.IPub;
 import android.app.ActionBar.Tab;
 import android.app.FragmentTransaction;
-import se.chalmers.krogkollen.search.ISort;
+import se.chalmers.krogkollen.sort.ISort;
 
 // TODO javadoc
 public class ListPresenter implements IListPresenter {

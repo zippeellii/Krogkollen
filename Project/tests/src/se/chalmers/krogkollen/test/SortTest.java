@@ -7,7 +7,7 @@ import org.junit.Test;
 
 import se.chalmers.krogkollen.pub.IPub;
 import se.chalmers.krogkollen.pub.Pub;
-import se.chalmers.krogkollen.search.SortByQueueTime;
+import se.chalmers.krogkollen.sort.SortByQueueTime;
 import android.test.AndroidTestCase;
 
 public class SortTest extends AndroidTestCase {

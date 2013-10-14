@@ -2,10 +2,9 @@ package se.chalmers.krogkollen.list;
 
 import android.app.ActionBar.TabListener;
 import android.support.v4.view.ViewPager.OnPageChangeListener;
-
 import se.chalmers.krogkollen.IPresenter;
 import se.chalmers.krogkollen.pub.IPub;
-import se.chalmers.krogkollen.search.ISort;
+import se.chalmers.krogkollen.sort.ISort;
 
 /**
  * Interface for the ListPresenter.

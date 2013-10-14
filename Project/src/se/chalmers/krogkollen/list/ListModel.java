@@ -5,7 +5,7 @@ import java.util.List;
 import se.chalmers.krogkollen.pub.IPub;
 import se.chalmers.krogkollen.pub.Pub;
 import se.chalmers.krogkollen.pub.PubUtilities;
-import se.chalmers.krogkollen.search.ISort;
+import se.chalmers.krogkollen.sort.ISort;
 
 /**
  * A class containing logic for the list view.

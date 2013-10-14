@@ -30,7 +30,6 @@ public class ListActivity extends FragmentActivity implements IListView {
         setContentView(R.layout.activity_list);
 
         //Detta är bara för TEST
-
         viewPager = (ViewPager) findViewById(R.id.pager);
         actionBar = getActionBar();
         mAdapter = new TabsPagerAdapter(getSupportFragmentManager(), presenter);
@@ -46,9 +45,6 @@ public class ListActivity extends FragmentActivity implements IListView {
         }
 
         viewPager.setOnPageChangeListener(presenter);
-
-        //DETTA ÄR BARA FÖR TEST SLUT
-
     }
 
 
@@ -68,16 +64,14 @@ public class ListActivity extends FragmentActivity implements IListView {
     @Override
     public void navigate(Class<?> destination, Bundle extras) {
         Intent intent = new Intent(this, destination);
-        //intent.putExtra(MARKER_PUB_ID, extras.getString(MapPresenter.MAP_PRESENTER_KEY));
+        //TODO intent.putExtra(MARKER_PUB_ID, extras.getString(MapPresenter.MAP_PRESENTER_KEY));
         startActivity(intent);
-    }
-
-    @Override
-    public void showErrorMessage(String message) {
-        // TODO Auto-generated method stub
-
     }
 
     //public void favoriteStarClickHandler(View v){
     //}
+	public void showErrorMessage(String message) {
+		// TODO Auto-generated method stub
+		
+	}
 }

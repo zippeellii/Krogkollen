@@ -58,7 +58,7 @@ public class SearchActivity extends ListActivity {
 	
 	// Searches
 	private void doSearch(String query) {
-		this.setTitle(R.string.title_activity_search + ": " + query); // TODO "sökning" move to XML
+		this.setTitle(this.getResources().getString(R.string.title_activity_search) + ": " + query); // TODO "sökning" move to XML
 		
 		List<IPub> allPubs = PubUtilities.getInstance().getPubList();
 

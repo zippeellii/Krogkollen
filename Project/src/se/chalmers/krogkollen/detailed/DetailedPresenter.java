@@ -166,11 +166,11 @@ public class DetailedPresenter implements IDetailedPresenter {
             try {
                 BackendHandler.getInstance().updatePubLocally(pub);
             } catch (NoBackendAccessException e) {
-                System.out.println("error");
+                System.out.println("error"); // TODO wtf
             } catch (NotFoundInBackendException e) {
-                System.out.println("error");
+                System.out.println("error"); // TODO wtf
             } catch (BackendNotInitializedException e){
-                System.out.println("error");
+                System.out.println("error"); // TODO wtf
             }
             return null;
         }

@@ -60,7 +60,7 @@ public class ParseBackend implements IBackend {
 			// Makes it possible to handle as a java.util.List
 			tempList = query.find();
 			for (ParseObject object : tempList) {
-				tempPubList.add(this.convertParseObjecttoIPub(object));
+				tempPubList.add(this.convertParseObjectToPub(object));
 			}
 		} catch (com.parse.ParseException e1) {
 			throw new NoBackendAccessException(e1.getMessage());
@@ -99,7 +99,7 @@ public class ParseBackend implements IBackend {
 				throw new NoBackendAccessException(e.getMessage());
 			}
 		}
-		return this.convertParseObjecttoIPub(object);
+		return this.convertParseObjectToPub(object);
 	}
 
 	@Override
@@ -157,14 +157,22 @@ public class ParseBackend implements IBackend {
 	 * @param object the ParseObject
 	 * @return the IPub representation of the ParseObject
 	 */
-	public IPub convertParseObjecttoIPub(ParseObject object) {
+	public IPub convertParseObjectToPub(ParseObject object) {
 		int hourFourDigit = StringConverter.convertStringToFragmentedInt(
 				object.getString("openingHours"), 5);
+		long queueTimeLastUpdatedTimestamp = object.getLong("queueTimeLastUpdated");
+		int queueTime = object.getInt("queueTime");
+		
+		if (!queueTimeIsRecentlyUpdated(queueTimeLastUpdatedTimestamp)) {
+			queueTime = 0;
+		}
+		
 		return new Pub(object.getString("name"), object.getString("description"),
 				object.getDouble("latitude"), object.getDouble("longitude"),
 				object.getInt("ageRestriction"), object.getInt("entranceFee"),
 				(hourFourDigit / 100), (hourFourDigit % 100), object.getInt("posRate"),
-				object.getInt("negRate"), object.getInt("queueTime"), object.getObjectId());
+				object.getInt("negRate"), queueTime,
+				queueTimeLastUpdatedTimestamp, object.getObjectId());
 	}
 
 	@Override
@@ -235,8 +243,28 @@ public class ParseBackend implements IBackend {
 				throw new NoBackendAccessException(e.getMessage());
 			}
 		}
-		pub.setQueueTime(object.getInt("queueTime"));
+		long lastUpdate = object.getLong("queueTimeLastUpdated");
+		
+		if (queueTimeIsRecentlyUpdated(lastUpdate)) {
+			pub.setQueueTime(object.getInt("queueTime"));
+		} else {
+			pub.setQueueTime(0);
+		}
+		
+		pub.setQueueTimeLastUpdatedTimestamp(lastUpdate);
 		pub.setPositiveRating(object.getInt("posRate"));
 		pub.setNegativeRating(object.getInt("negRate"));
+	}
+	
+	// checks if the queue time was recently updated
+	private boolean queueTimeIsRecentlyUpdated(long queueTimeLastUpdatedTimestamp) {
+		long epochTime = System.currentTimeMillis()/1000;
+		
+		// if the queue time was updated more than 30 minutes ago, it wasn't updated recently
+		if ((epochTime - queueTimeLastUpdatedTimestamp) > 1800) {
+			return false;
+		} else {
+			return true;
+		}
 	}
 }

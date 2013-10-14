@@ -1,7 +1,6 @@
 package se.chalmers.krogkollen.backend;
 
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 import android.content.Context;
@@ -29,8 +28,7 @@ public class ParseBackend implements IBackend {
 	// This exists to prevent the empty constructor to be called, since all information in the other
 	// constructor is required
 	@SuppressWarnings("unused")
-	private ParseBackend() {
-	}
+	private ParseBackend() {}
 
 	/**
 	 * Initializes the backend to Parse.com, all information is required
@@ -139,7 +137,7 @@ public class ParseBackend implements IBackend {
 	}
 
 	@Override
-	public Date getLatestUpdatedTimestamp(IPub pub) throws NoBackendAccessException,
+	public long getLatestUpdatedTimestamp(IPub pub) throws NoBackendAccessException,
 			NotFoundInBackendException {
 		ParseObject object = new ParseObject("Pub");
 
@@ -148,7 +146,7 @@ public class ParseBackend implements IBackend {
 		} catch (ParseException e) {
 			throw new NotFoundInBackendException(e.getMessage());
 		}
-		return object.getUpdatedAt();
+		return object.getLong("queueTimeLastUpdated");
 	}
 
 	/**
@@ -192,9 +190,9 @@ public class ParseBackend implements IBackend {
 		tempPub.saveInBackground(new SaveCallback() {
 			public void done(ParseException e) {
 				if (e == null) {
-					// TODO should we do something here?
+					// object saved successfully
 				} else {
-					// TODO notify user
+					// TODO throw something from here, why is it not possible?
 				}
 			}
 		});
@@ -207,22 +205,19 @@ public class ParseBackend implements IBackend {
 		// Create a pointer to an object of class Pub
 		ParseObject tempPub = ParseObject.createWithoutData("Pub", pub.getID());
 
-		// TODO This part can cause problems if a rating is updated after the pub was last refreshed
 		if (rating > 0) {
 			tempPub.increment("posRate", -1);
-			// tempPub.put("posRate", pub.getPositiveRating());
 		} else {
 			tempPub.increment("negRate", -1);
-			// tempPub.put("negRate", pub.getNegativeRating());
 		}
 
 		// Save
 		tempPub.saveInBackground(new SaveCallback() {
 			public void done(ParseException e) {
 				if (e == null) {
-					// TODO should we do something here?
+					// object in backend updated successfully
 				} else {
-					// TODO notify user
+					// TODO throw something, how?
 				}
 			}
 		});

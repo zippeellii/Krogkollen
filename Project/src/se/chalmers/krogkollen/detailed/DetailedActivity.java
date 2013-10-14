@@ -178,7 +178,7 @@ public class DetailedActivity extends Activity implements IDetailedView {
 
     }
 
-    // TODO what does this do?
+    // TODO comment this
     private void addListeners(){
         findViewById(R.id.thumbsUpLayout).setOnClickListener(presenter);
         findViewById(R.id.thumbsDownLayout).setOnClickListener(presenter);

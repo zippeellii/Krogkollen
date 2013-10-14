@@ -22,7 +22,7 @@ public class TabsPagerAdapter extends FragmentPagerAdapter {
  
         switch (index) {
         case 0:
-            // Top Rated fragment activity
+            // Top Rated fragment activity // TODO lol @ commentarer
             return new QueuetimeFragment();
         case 1:
             // Games fragment activity

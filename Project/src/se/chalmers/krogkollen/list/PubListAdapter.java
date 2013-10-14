@@ -18,6 +18,7 @@ import se.chalmers.krogkollen.utils.Distance;
 
 import java.text.*;
 
+// TODO why is this in krogkollen.list while TabsPagerAdapter is in krogkollen.adapter?
 /**
  * An adapter handling the different items in a list
  */
@@ -136,6 +137,5 @@ public class PubListAdapter extends ArrayAdapter<IPub> {
         TextView txtTitle;
         TextView distanceText;
         ImageButton favoriteStar;
-
     }
 }

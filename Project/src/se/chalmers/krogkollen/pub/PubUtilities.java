@@ -97,10 +97,6 @@ public class PubUtilities {
 				return pub;
 			}
 		}
-		throw new Resources.NotFoundException("The ID does not match with any pub");// TODO get this
-																					// from
-																					// strings.xml,
-																					// no static
-																					// text
+		throw new Resources.NotFoundException("The ID does not match with any pub");// TODO move text to XML
 	}
 }

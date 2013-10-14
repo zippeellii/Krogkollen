@@ -81,9 +81,9 @@ public class MapActivity extends Activity implements IMapView {
         try {
             MapWrapper.INSTANCE.init(this);
         } catch (NoBackendAccessException e) {
-            showErrorMessage(getResources().getString(R.string.error_no_backend_access));
+            showErrorMessage(e.getMessage());
         } catch (NotFoundInBackendException e) {
-            showErrorMessage(getResources().getString(R.string.error_no_backend_item));
+            showErrorMessage(e.getMessage());
         }
 
         // Create a presenter for this view.

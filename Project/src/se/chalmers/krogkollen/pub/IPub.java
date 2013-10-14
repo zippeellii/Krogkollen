@@ -1,7 +1,5 @@
 package se.chalmers.krogkollen.pub;
 
-import java.util.Date;
-
 import com.google.android.gms.maps.model.LatLng;
 
 /*

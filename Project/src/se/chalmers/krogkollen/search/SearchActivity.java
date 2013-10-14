@@ -3,6 +3,7 @@ package se.chalmers.krogkollen.search;
 import java.util.ArrayList;
 import java.util.List;
 
+import se.chalmers.krogkollen.IView;
 import se.chalmers.krogkollen.R;
 import se.chalmers.krogkollen.detailed.DetailedActivity;
 import se.chalmers.krogkollen.list.PubListAdapter;
@@ -17,7 +18,13 @@ import android.content.Intent;
 import android.view.View;
 import android.widget.ListView;
 
-public class SearchActivity extends ListActivity {
+/**
+ * This activity is shown when a user has searched for something in a search widget
+ * 
+ * @author Oskar Karrman
+ *
+ */
+public class SearchActivity extends ListActivity implements IView {
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -58,7 +65,7 @@ public class SearchActivity extends ListActivity {
 	
 	// Searches
 	private void doSearch(String query) {
-		this.setTitle(this.getResources().getString(R.string.title_activity_search) + ": " + query); // TODO "sökning" move to XML
+		this.setTitle(this.getResources().getString(R.string.title_activity_search) + ": " + query);
 		
 		List<IPub> allPubs = PubUtilities.getInstance().getPubList();
 
@@ -99,5 +106,23 @@ public class SearchActivity extends ListActivity {
 			}
 		}
 		return matchingPubs;
+	}
+
+	@Override
+	public void navigate(Class<?> destination) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void navigate(Class<?> destination, Bundle extras) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void showErrorMessage(String message) {
+		// TODO Auto-generated method stub
+		
 	}
 }

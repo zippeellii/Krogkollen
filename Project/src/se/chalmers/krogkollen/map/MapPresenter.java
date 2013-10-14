@@ -263,11 +263,11 @@ public class MapPresenter implements IMapPresenter, GoogleMap.OnMarkerClickListe
 
                         MapWrapper.INSTANCE.refreshPubMarkers(changedPubsHash);
                     } catch (NoBackendAccessException e) {
-                        mapView.showErrorMessage(resources.getString(R.string.error_no_backend_access));
+                        mapView.showErrorMessage(e.getMessage());
                     } catch (NotFoundInBackendException e) {
-                        mapView.showErrorMessage(resources.getString(R.string.error_no_backend_item));
+                        mapView.showErrorMessage(e.getMessage());
                     } catch (BackendNotInitializedException e) {
-                        mapView.showErrorMessage(resources.getString(R.string.error_no_backend_access));
+                        mapView.showErrorMessage(e.getMessage());
                     }
                 }
             });

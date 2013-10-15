@@ -11,12 +11,15 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ScrollView;
 import android.widget.TextView;
+import android.widget.Toast;
+
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapFragment;
 import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
+
 import se.chalmers.krogkollen.R;
 import se.chalmers.krogkollen.backend.BackendNotInitializedException;
 import se.chalmers.krogkollen.backend.NoBackendAccessException;
@@ -145,7 +148,11 @@ public class DetailedActivity extends Activity implements IDetailedView {
 
     @Override
     public void showErrorMessage(String message) {
-        // TODO This method should create a toast or some kind of window showing the error message
+    	CharSequence text = message;
+    	int duration = Toast.LENGTH_LONG;
+
+    	Toast toast = Toast.makeText(this, text, duration);
+    	toast.show();
     }
 
     @Override

@@ -18,6 +18,7 @@ import android.app.SearchManager;
 import android.content.Intent;
 import android.view.View;
 import android.widget.ListView;
+import android.widget.Toast;
 
 /**
  * This activity is shown when a user has searched for something in a search widget
@@ -125,7 +126,10 @@ public class SearchActivity extends ListActivity implements IView {
 
 	@Override
 	public void showErrorMessage(String message) {
-		// TODO Auto-generated method stub
-		
+    	CharSequence text = message;
+    	int duration = Toast.LENGTH_LONG;
+
+    	Toast toast = Toast.makeText(this, text, duration);
+    	toast.show();
 	}
 }

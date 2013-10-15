@@ -60,7 +60,7 @@
 
         <meta-data
             android:name="com.google.android.maps.v2.API_KEY"
-            android:value="AIzaSyDs1IaB9cVNYB4tj9z0DB_Loo5N-a9u768" />
+            android:value="AIzaSyCRucmz7vhihr7MDjtm125OGj7mwba_u70" />
 
         <activity
             android:name="se.chalmers.krogkollen.map.MapActivity"

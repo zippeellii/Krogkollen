@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import se.chalmers.krogkollen.sort.FilterFavorites;
 import se.chalmers.krogkollen.sort.SortByQueueTime;
 
 /**
@@ -21,7 +22,7 @@ public class FavoriteFragment extends ListFragment {
 		View rootView = inflater.inflate(R.layout.fragment_favorites_list, container, false);
 
 		PubListAdapter adapter = new PubListAdapter(getActivity(), R.layout.listview_item,
-				model.getSortedArray(new SortByQueueTime()));
+				model.getSortedArray(new FilterFavorites()));
 
 		setListAdapter(adapter);
 

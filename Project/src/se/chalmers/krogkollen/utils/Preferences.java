@@ -46,6 +46,6 @@ public class Preferences {
 	 * @return true or false
 	 */
 	public boolean loadPreference(String id){
-		return this.sharedPrefs.getBoolean(id, false);
+		return this.sharedPrefs.getBoolean(id, true);
 	}
 }

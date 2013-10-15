@@ -5,13 +5,9 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.view.ViewPager;
-import android.view.View;
-import android.widget.AdapterView;
 import android.widget.ListView;
 import se.chalmers.krogkollen.R;
-import se.chalmers.krogkollen.adapter.*;
-import se.chalmers.krogkollen.map.MapPresenter;
-import se.chalmers.krogkollen.pub.IPub;
+import se.chalmers.krogkollen.adapter.TabsPagerAdapter;
 
 
 /**
@@ -19,9 +15,9 @@ import se.chalmers.krogkollen.pub.IPub;
  * Such as distance, queue-time or favorites.
  *
  */
-public class ListActivity extends FragmentActivity implements IListView{
+public class ListActivity extends FragmentActivity implements IListView {
 
-	private ViewPager viewPager;
+    private ViewPager viewPager;
     private TabsPagerAdapter mAdapter;
     private ActionBar actionBar;
     // Tab titles
@@ -33,11 +29,11 @@ public class ListActivity extends FragmentActivity implements IListView{
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_list);
 
-        
+        //Detta är bara för TEST
         viewPager = (ViewPager) findViewById(R.id.pager);
         actionBar = getActionBar();
         mAdapter = new TabsPagerAdapter(getSupportFragmentManager(), presenter);
-        
+
         viewPager.setAdapter(mAdapter);
         actionBar.setHomeButtonEnabled(false);
         actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_TABS);
@@ -49,15 +45,14 @@ public class ListActivity extends FragmentActivity implements IListView{
         }
 
         viewPager.setOnPageChangeListener(presenter);
-
     }
 
 
     public void setActionBarSelectedNavigationItem(int pos){
-    	actionBar.setSelectedNavigationItem(pos);
+        actionBar.setSelectedNavigationItem(pos);
     }
     public void setViewPagerCurrentItem(int pos){
-    	viewPager.setCurrentItem(pos);
+        viewPager.setCurrentItem(pos);
     }
 
     @Override
@@ -73,7 +68,8 @@ public class ListActivity extends FragmentActivity implements IListView{
         startActivity(intent);
     }
 
-    @Override
+    //public void favoriteStarClickHandler(View v){
+    //}
 	public void showErrorMessage(String message) {
 		// TODO Auto-generated method stub
 		

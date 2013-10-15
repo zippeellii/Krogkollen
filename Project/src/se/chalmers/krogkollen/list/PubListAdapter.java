@@ -6,10 +6,7 @@ import android.content.SharedPreferences;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ArrayAdapter;
-import android.widget.ImageButton;
-import android.widget.ImageView;
-import android.widget.TextView;
+import android.widget.*;
 import se.chalmers.krogkollen.R;
 import se.chalmers.krogkollen.pub.IPub;
 
@@ -71,20 +68,19 @@ public class PubListAdapter extends ArrayAdapter<IPub> {
             }
         });
 
-
         switch(pub.getQueueTime()){
-        case 1:
-        	holder.imgIcon.setImageResource(R.drawable.detailed_queue_green);
-        	break;
-        case 2:
-        	holder.imgIcon.setImageResource(R.drawable.detailed_queue_yellow);
-        	break;
-        case 3:
-        	holder.imgIcon.setImageResource(R.drawable.detailed_queue_red);
-        	break;
-        default :
-        	holder.imgIcon.setImageResource(R.drawable.detailed_queue_gray);
-        	break;
+            case 1:
+                holder.imgIcon.setImageResource(R.drawable.detailed_queue_green);
+                break;
+            case 2:
+                holder.imgIcon.setImageResource(R.drawable.detailed_queue_yellow);
+                break;
+            case 3:
+                holder.imgIcon.setImageResource(R.drawable.detailed_queue_red);
+                break;
+            default :
+                holder.imgIcon.setImageResource(R.drawable.detailed_queue_gray);
+                break;
         }
         return row;
 

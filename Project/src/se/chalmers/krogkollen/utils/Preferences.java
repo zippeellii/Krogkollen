@@ -18,8 +18,8 @@ public class Preferences {
 	private Preferences(){
 	}
 	
-	public Preferences getInstance(){
-		if(this.prefs == null){
+	public static Preferences getInstance(){
+		if(prefs == null){
 			prefs = new Preferences();
 		}
 		return prefs;

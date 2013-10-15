@@ -15,7 +15,7 @@ import java.io.Serializable;
  * @author Albin Garpetun Created 2013-09-22
  */
 
-public interface IListPresenter extends IPresenter, TabListener, OnPageChangeListener, AdapterView.OnItemClickListener, Serializable{
+public interface IListPresenter extends IPresenter, TabListener, OnPageChangeListener, AdapterView.OnItemClickListener, Serializable {
 
     /**
      * Sorts a list of IPub objects according to specified SortMode

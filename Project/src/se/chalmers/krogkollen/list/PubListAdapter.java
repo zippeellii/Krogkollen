@@ -2,7 +2,6 @@ package se.chalmers.krogkollen.list;
 
 import android.app.Activity;
 import android.content.Context;
-import android.content.SharedPreferences;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -111,16 +110,13 @@ public class PubListAdapter extends ArrayAdapter<IPub> {
      */
     public void saveFavoriteState(int pos){
     	Preferences.getInstance().savePreference(data[pos].getID(), !Preferences.getInstance().loadPreference(data[pos].getID()));
-    	/*
-        SharedPreferences.Editor editor = context.getSharedPreferences(data[pos].getID(), 0).edit();
-        editor.putBoolean("star", !(context.getSharedPreferences(data[pos].getID(), 0).getBoolean("star", true)));
-        editor.commit();
-        */
     }
 
     /**
      * Updates the star.
+     * 
      * @param isStarFilled Represents if the star is filled or not.
+     * @param holder the PubHolder which holds the pub
      */
     public void updateStar(boolean isStarFilled, PubHolder holder){
         if(isStarFilled){
@@ -130,7 +126,6 @@ public class PubListAdapter extends ArrayAdapter<IPub> {
             holder.favoriteStar.setBackgroundResource(R.drawable.star_filled);
         }
     }
-
 
     /**
      * Static holder for pubs

@@ -34,9 +34,9 @@ import java.util.List;
  */
 public class MainPresenter {
 
-    private String[] pubUsers;
-    private MainActivity view;
-    private Toast toast;
+    private String[]        pubUsers;
+    private MainActivity    view;
+    private Toast           toast;
 
     /**
      * Constructor. Gets called when the MainActivity is started, so they know each other.
@@ -47,6 +47,10 @@ public class MainPresenter {
         view = main;
     }
 
+    /**
+     * Returns an array with pub users.
+     * @return An array with pub users.
+     */
     public String[] getPubUsers() {
         return pubUsers;
     }
@@ -68,6 +72,11 @@ public class MainPresenter {
         new LoginTask().execute(username, password);
     }
 
+    /**
+     * Checks if the user is logged in when starting the application.
+     * If it is, it sends the user to the buttons activity.
+     * If not, it does nothing.
+     */
     public void checkIfLoggedIn() {
         if (ParseUser.getCurrentUser() != null) {
             Intent intent = new Intent(view, ButtonsActivity.class);

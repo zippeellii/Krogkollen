@@ -29,9 +29,7 @@ public class ListActivity extends FragmentActivity implements IListView{
     private ActionBar actionBar;
     
     // Tab titles
-    private String[] tabs = {	getString(R.string.list_tab_name_queue_time), 
-    							getString(R.string.list_tab_name_distance), 
-    							getString(R.string.list_tab_name_favorites)};
+    private String[] tabs;
     private IListPresenter presenter;
     private ListView list;  // TODO this is never used?
 
@@ -39,6 +37,10 @@ public class ListActivity extends FragmentActivity implements IListView{
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_list);
+        
+        tabs = new String[] {	getString(R.string.list_tab_name_queue_time), 
+								getString(R.string.list_tab_name_distance), 
+								getString(R.string.list_tab_name_favorites)};
         
         // TODO is this still a test?
         //Detta är bara för TEST 

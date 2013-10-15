@@ -6,11 +6,22 @@ import android.content.SharedPreferences;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.*;
+import android.widget.ArrayAdapter;
+import android.widget.ImageButton;
+import android.widget.ImageView;
+import android.widget.TextView;
+import com.google.android.gms.maps.model.LatLng;
 import se.chalmers.krogkollen.R;
+import se.chalmers.krogkollen.map.UserLocation;
 import se.chalmers.krogkollen.pub.IPub;
+import se.chalmers.krogkollen.utils.Distance;
 
+import java.text.*;
 
+// TODO why is this in krogkollen.list while TabsPagerAdapter is in krogkollen.adapter?
+/**
+ * An adapter handling the different items in a list
+ */
 public class PubListAdapter extends ArrayAdapter<IPub> {
 
     Context context;
@@ -19,6 +30,12 @@ public class PubListAdapter extends ArrayAdapter<IPub> {
     View row;
     PubHolder holder;
 
+    /**
+     * A constructor that creates an PubListAdapter.
+     * @param context
+     * @param layoutResourceId
+     * @param data
+     */
     public PubListAdapter(Context context, int layoutResourceId, IPub[] data) {
         super(context, layoutResourceId, data);
         this.layoutResourceId = layoutResourceId;
@@ -52,8 +69,9 @@ public class PubListAdapter extends ArrayAdapter<IPub> {
         updateStar(context.getSharedPreferences(this.getItem(position).getID(), 0).getBoolean("star", true), holder);
 
         IPub pub = data[position];
+        DecimalFormat numberFormat = new DecimalFormat("#0.00");
         holder.txtTitle.setText(pub.getName());
-        holder.distanceText.setText("distance");
+        holder.distanceText.setText(""+(numberFormat.format(Distance.calcDistBetweenTwoLatLng(new LatLng(pub.getLatitude(),pub.getLongitude()), UserLocation.getInstance().getCurrentLatLng())))+" km");
         holder.favoriteStar.setTag(position);
 
 
@@ -84,7 +102,6 @@ public class PubListAdapter extends ArrayAdapter<IPub> {
         }
         return row;
 
-
     }
 
     /**
@@ -110,6 +127,9 @@ public class PubListAdapter extends ArrayAdapter<IPub> {
     }
 
 
+    /**
+     * Static holder for pubs
+     */
     static class PubHolder
     {
         ImageView imgIcon;

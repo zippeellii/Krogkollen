@@ -9,8 +9,9 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import se.chalmers.krogkollen.R;
-import se.chalmers.krogkollen.search.SortByDistance;
+import se.chalmers.krogkollen.sort.SortByDistance;
 
+// TODO javadoc
 public class DistanceFragment extends ListFragment {
 
     @Override

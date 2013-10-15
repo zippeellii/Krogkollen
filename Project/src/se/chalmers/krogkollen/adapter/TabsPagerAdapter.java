@@ -6,10 +6,12 @@ import se.chalmers.krogkollen.list.*;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
  
+// TODO javadoc
 public class TabsPagerAdapter extends FragmentPagerAdapter {
-
+	
     private IListPresenter presenter;
  
+    // TODO javadoc
     public TabsPagerAdapter(FragmentManager fm, IListPresenter presenter) {
         super(fm);
         this.presenter = presenter;
@@ -20,7 +22,7 @@ public class TabsPagerAdapter extends FragmentPagerAdapter {
  
         switch (index) {
         case 0:
-            // Top Rated fragment activity
+            // Top Rated fragment activity // TODO lol @ commentarer
             return new QueuetimeFragment();
         case 1:
             // Games fragment activity

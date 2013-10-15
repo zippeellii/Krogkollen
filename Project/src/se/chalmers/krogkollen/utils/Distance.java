@@ -2,6 +2,7 @@ package se.chalmers.krogkollen.utils;
 
 import com.google.android.gms.maps.model.LatLng;
 
+// TODO javadoc
 public class Distance {
 
 	//TODO COMMENT THIS USING THIS http://en.wikipedia.org/wiki/Haversine_formula

@@ -1,20 +1,18 @@
 package se.chalmers.krogkollen.list;
 
 import android.support.v4.app.ListFragment;
-import android.widget.AdapterView;
-import android.widget.ListView;
 import se.chalmers.krogkollen.R;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import se.chalmers.krogkollen.search.SortByQueueTime;
+import se.chalmers.krogkollen.sort.SortByQueueTime;
 
+// TODO javadoc
 public class QueuetimeFragment extends ListFragment {
 
     private PubListAdapter adapter;
     private ListModel model;
-
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -29,6 +27,5 @@ public class QueuetimeFragment extends ListFragment {
 
         return rootView;
     }
-
 }
 

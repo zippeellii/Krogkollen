@@ -1,8 +1,6 @@
-package se.chalmers.krogkollen.search;
+package se.chalmers.krogkollen.sort;
 
 import java.util.List;
-
-import android.util.Log;
 
 import com.google.android.gms.maps.model.LatLng;
 
@@ -12,12 +10,13 @@ import se.chalmers.krogkollen.utils.Distance;
 
 /**
  * A class for sorting a list with IPubs by distance from user
+ * 
  * @author Jonathan Nilsfors
- *
+ * 
  */
 public class SortByDistance extends Sort{
 
-
+	// TODO if there's time to spare, comment this algorithm
 	@Override
 	public List<IPub> sortAlgorithm(List<IPub> pubs) {
 		List<IPub> copyOfPubs = this.copyPubList(pubs);
@@ -36,5 +35,4 @@ public class SortByDistance extends Sort{
 		}
 		return copyOfPubs;
 	}
-
 }

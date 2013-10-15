@@ -8,6 +8,14 @@ import android.support.v4.view.ViewPager;
 import android.widget.ListView;
 import se.chalmers.krogkollen.R;
 import se.chalmers.krogkollen.adapter.TabsPagerAdapter;
+import android.view.Menu;
+import android.view.MenuItem;
+import android.widget.ListView;
+import se.chalmers.krogkollen.R;
+import se.chalmers.krogkollen.adapter.*;
+import se.chalmers.krogkollen.map.IMapView;
+import se.chalmers.krogkollen.map.MapActivity;
+import se.chalmers.krogkollen.map.MapPresenter;
 
 
 /**
@@ -17,14 +25,18 @@ import se.chalmers.krogkollen.adapter.TabsPagerAdapter;
  */
 public class ListActivity extends FragmentActivity implements IListView {
 
-    private ViewPager viewPager;
+
+	private ViewPager viewPager;
+    private IMapView mapView; // TODO this is never used?
     private TabsPagerAdapter mAdapter;
     private ActionBar actionBar;
+    
     // Tab titles
-    private String[] tabs = { "K�tid", "Distans", "Favoriter" };
+    private String[] tabs = { "Kötid", "Distans", "Favoriter" }; // TODO move names to XML
     private IListPresenter presenter;
-    private ListView list;
+    private ListView list;  // TODO this is never used?
 
+    @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_list);
@@ -45,12 +57,30 @@ public class ListActivity extends FragmentActivity implements IListView {
         }
 
         viewPager.setOnPageChangeListener(presenter);
+
+        // Remove the default logo icon and add our list icon.
+        ActionBar actionBar = getActionBar();
+        actionBar.setIcon(R.drawable.map_icon);
+        actionBar.setDisplayHomeAsUpEnabled(true);
     }
 
+    // Start the activity in a local method to keep the right context.
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        super.onCreateOptionsMenu(menu);
 
+        // Inflate the menu; this adds items to the action bar if it is present.
+        getMenuInflater().inflate(R.menu.list, menu);
+
+        return true;
+    }
+
+    @Override
     public void setActionBarSelectedNavigationItem(int pos){
         actionBar.setSelectedNavigationItem(pos);
     }
+    
+    @Override
     public void setViewPagerCurrentItem(int pos){
         viewPager.setCurrentItem(pos);
     }
@@ -64,7 +94,7 @@ public class ListActivity extends FragmentActivity implements IListView {
     @Override
     public void navigate(Class<?> destination, Bundle extras) {
         Intent intent = new Intent(this, destination);
-        //TODO intent.putExtra(MARKER_PUB_ID, extras.getString(MapPresenter.MAP_PRESENTER_KEY));
+        intent.putExtra(MapActivity.MARKER_PUB_ID, extras.getString(MapPresenter.MAP_PRESENTER_KEY));
         startActivity(intent);
     }
 
@@ -72,6 +102,25 @@ public class ListActivity extends FragmentActivity implements IListView {
     //}
 	public void showErrorMessage(String message) {
 		// TODO Auto-generated method stub
-		
+
 	}
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.refresh_info:
+                //TODO implement
+                //new RefreshTask().execute();
+                break;
+            case R.id.search:
+                //TODO implement
+               // this.onSearch();
+                break;
+
+            case android.R.id.home:
+                this.navigate(MapActivity.class);
+                break;
+        }
+        return super.onOptionsItemSelected(item);
+    }
 }

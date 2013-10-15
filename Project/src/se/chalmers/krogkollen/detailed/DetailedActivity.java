@@ -1,17 +1,30 @@
 package se.chalmers.krogkollen.detailed;
 
 import android.app.Activity;
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.v4.app.NavUtils;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
-import android.widget.*;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.ScrollView;
+import android.widget.TextView;
+import com.google.android.gms.maps.CameraUpdateFactory;
+import com.google.android.gms.maps.GoogleMap;
+import com.google.android.gms.maps.MapFragment;
+import com.google.android.gms.maps.model.CameraPosition;
+import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.Marker;
 import se.chalmers.krogkollen.R;
 import se.chalmers.krogkollen.backend.BackendNotInitializedException;
 import se.chalmers.krogkollen.backend.NoBackendAccessException;
 import se.chalmers.krogkollen.backend.NotFoundInBackendException;
+import se.chalmers.krogkollen.help.HelpActivity;
 import se.chalmers.krogkollen.map.MapActivity;
+import se.chalmers.krogkollen.map.MarkerOptionsFactory;
+import se.chalmers.krogkollen.pub.IPub;
 
 /*
  * This file is part of Krogkollen.
@@ -30,7 +43,7 @@ import se.chalmers.krogkollen.map.MapActivity;
  * You should have received a copy of the GNU General Public License
  * along with Krogkollen.  If not, see <http://www.gnu.org/licenses/>.
  *
-<<<<<<< Updated upstream
+ <<<<<<< Updated upstream
  */
 
 /**
@@ -39,14 +52,17 @@ import se.chalmers.krogkollen.map.MapActivity;
 public class DetailedActivity extends Activity implements IDetailedView {
 
     /** The presenter connected to the detailed view */
-	private IDetailedPresenter presenter;
+    private IDetailedPresenter presenter;
 
     /** A bunch of view elements*/
     private TextView pubTextView, descriptionTextView,openingHoursTextView,
             ageRestrictionTextView, entranceFeeTextView, votesUpTextView, votesDownTextView;
-    private ImageButton thumbsUpButton, thumbsDownButton;
-    private ImageView queueIndicator;
+    private ImageView thumbsUpImage, thumbsDownImage, queueIndicator;
     private MenuItem favoriteStar;
+    private LinearLayout thumbsUpLayout, thumbsDownLayout; // TODO these are never used?
+    private ProgressDialog progressDialog;
+
+    private GoogleMap map;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -54,18 +70,18 @@ public class DetailedActivity extends Activity implements IDetailedView {
         setContentView(R.layout.activity_detailed);
         presenter = new DetailedPresenter();
         presenter.setView(this);
-        try {
-			presenter.setPub(getIntent().getStringExtra(MapActivity.MARKER_PUB_ID));
-		} catch (NotFoundInBackendException e) {
-			this.showErrorMessage(e.getMessage());
-		} catch (NoBackendAccessException e) {
-			this.showErrorMessage(e.getMessage());
-		} catch (BackendNotInitializedException e) {
-			this.showErrorMessage(e.getMessage());
-		}
 
-        addThumbsUpButtonListener();
-        addThumbsDownButtonListener();
+        try {
+            presenter.setPub(getIntent().getStringExtra(MapActivity.MARKER_PUB_ID));
+        } catch (NotFoundInBackendException e) {
+            this.showErrorMessage(e.getMessage());
+        } catch (NoBackendAccessException e) {
+            this.showErrorMessage(e.getMessage());
+        } catch (BackendNotInitializedException e) {
+            this.showErrorMessage(e.getMessage());
+        }
+
+        addListeners();
 
         ScrollView scroll = (ScrollView) findViewById(R.id.scrollView);
         scroll.setFadingEdgeLength(100);
@@ -77,43 +93,71 @@ public class DetailedActivity extends Activity implements IDetailedView {
         queueIndicator = (ImageView) findViewById(R.id.queueIndicator);
         votesUpTextView = (TextView) findViewById(R.id.thumbsUpTextView);
         votesDownTextView = (TextView) findViewById(R.id.thumbsDownTextView);
+        thumbsUpImage = (ImageView) findViewById(R.id.thumbsUpButton);
+        thumbsDownImage = (ImageView) findViewById(R.id.thumbsDownButton);
+        thumbsUpLayout = (LinearLayout) findViewById(R.id.thumbsUpLayout);
+        thumbsDownLayout = (LinearLayout) findViewById(R.id.thumbsDownLayout);
+
+        map = ((MapFragment) getFragmentManager().findFragmentById(R.id.map)).getMap();
+        map.setOnMarkerClickListener(new GoogleMap.OnMarkerClickListener() {
+            @Override
+            public boolean onMarkerClick(Marker marker) {
+                return true; // Suppress default behaviour.
+            }
+        });
+
+        map.getUiSettings().setCompassEnabled(false);
+        map.getUiSettings().setZoomControlsEnabled(false);
+
+        getActionBar().setDisplayUseLogoEnabled(false);
+        getActionBar().setIcon(R.drawable.transparent_spacer);
+        getActionBar().setDisplayHomeAsUpEnabled(true);
     }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         super.onCreateOptionsMenu(menu);
 
-        // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.detailed, menu);
-        favoriteStar = menu.findItem(R.id.favorite_star);
+		// Inflate the menu; this adds items to the action bar if it is present.
+		getMenuInflater().inflate(R.menu.detailed, menu);
+		favoriteStar = menu.findItem(R.id.favorite_star);
 
-        refresh();
+        try {
+            presenter.updateInfo();
+        } catch (NoBackendAccessException e) {
+            this.showErrorMessage(e.getMessage());
+        } catch (NotFoundInBackendException e) {
+            this.showErrorMessage(e.getMessage());
+        } catch (BackendNotInitializedException e) {
+            this.showErrorMessage(e.getMessage());
+        }
+
         return true;
     }
 
-	@Override
-	public void navigate(Class<?> destination) {
+    @Override
+    public void navigate(Class<?> destination) {
         Intent navigateBack = new Intent(this, destination);
         startActivity(navigateBack);
 
-	}
+    }
 
-	@Override
-	public void showErrorMessage(String message) {
-		// TODO This method should create a toast or some kind of window showing the error message
-	}
+    @Override
+    public void showErrorMessage(String message) {
+        // TODO This method should create a toast or some kind of window showing the error message
+    }
 
-	@Override
-	public void updateText(String pubName, String description, String openingHours, String age, String price) {
+    @Override
+    public void updateText(String pubName, String description, String openingHours, String age, String price) {
         pubTextView.setText(pubName);
         descriptionTextView.setText(description);
         openingHoursTextView.setText(openingHours);
         ageRestrictionTextView.setText(age);
         entranceFeeTextView.setText(price);
-	}
+    }
 
-	@Override
-	public void updateQueueIndicator(int queueTime) {
+    @Override
+    public void updateQueueIndicator(int queueTime) {
         switch(queueTime) {
             case 1:
                 queueIndicator.setBackgroundResource(R.drawable.detailed_queue_green);
@@ -128,73 +172,19 @@ public class DetailedActivity extends Activity implements IDetailedView {
                 queueIndicator.setBackgroundResource(R.drawable.detailed_queue_gray);
                 break;
         }
-	}
-
-	@Override
-	public void navigate(Class<?> destination, Bundle extras) {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public void refresh() {
-        presenter.getQueueTime();
-        presenter.getText();
-        presenter.getThumbs();
-        presenter.getFavoriteStar();
-
-        try {
-            presenter.getVotes();
-        } catch (NoBackendAccessException e) {
-            this.showErrorMessage(e.getMessage());
-        } catch (NotFoundInBackendException e) {
-            this.showErrorMessage(e.getMessage());
-        }
     }
 
-    /**
-     * Adds listener to thumb up button.
-     */
-    public void addThumbsUpButtonListener(){
-        thumbsUpButton = (ImageButton) findViewById(R.id.thumbsUpButton);
-        thumbsUpButton.setOnClickListener(new View.OnClickListener(){
-            @Override
-            public void onClick(View view){
-                try {
-                    presenter.ratingChanged(1);
-                    presenter.getVotes();
+    @Override
+    public void navigate(Class<?> destination, Bundle extras) {
+        // TODO Auto-generated method stu
 
-                } catch (NotFoundInBackendException e) {
-                    showErrorMessage(e.getMessage());
-                } catch (NoBackendAccessException e) {
-                    showErrorMessage(e.getMessage());
-                } catch (BackendNotInitializedException e) {
-					showErrorMessage(e.getMessage());
-				}
-            }
-        });
     }
 
-    /**
-     * Adds listener to thumb down button.
-     */
-    public void addThumbsDownButtonListener(){
-        thumbsDownButton = (ImageButton) findViewById(R.id.thumbsDownButton);
-        thumbsDownButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                try {
-                    presenter.ratingChanged(-1);
-                    presenter.getVotes();
-                } catch (NotFoundInBackendException e) {
-                    showErrorMessage(e.getMessage());
-                } catch (NoBackendAccessException e) {
-                	showErrorMessage(e.getMessage());
-                } catch (BackendNotInitializedException e) {
-					showErrorMessage(e.getMessage());
-				}
-            }
-        });
+    // TODO comment this
+    private void addListeners(){
+        findViewById(R.id.thumbsUpLayout).setOnClickListener(presenter);
+        findViewById(R.id.thumbsDownLayout).setOnClickListener(presenter);
+        findViewById(R.id.navigate).setOnClickListener(presenter);
     }
 
     /**
@@ -205,16 +195,16 @@ public class DetailedActivity extends Activity implements IDetailedView {
     public void setThumbs(int thumb){
         switch (thumb){
             case -1:
-                thumbsDownButton.setBackgroundResource(R.drawable.thumb_down_selected);
-                thumbsUpButton.setBackgroundResource(R.drawable.thumb_up);
+                thumbsDownImage.setBackgroundResource(R.drawable.thumb_down_selected);
+                thumbsUpImage.setBackgroundResource(R.drawable.thumb_up);
                 break;
             case 1:
-                thumbsUpButton.setBackgroundResource(R.drawable.thumb_up_selected);
-                thumbsDownButton.setBackgroundResource(R.drawable.thumb_down);
+                thumbsUpImage.setBackgroundResource(R.drawable.thumb_up_selected);
+                thumbsDownImage.setBackgroundResource(R.drawable.thumb_down);
                 break;
             default:
-                thumbsDownButton.setBackgroundResource(R.drawable.thumb_down);
-                thumbsUpButton.setBackgroundResource(R.drawable.thumb_up);
+                thumbsDownImage.setBackgroundResource(R.drawable.thumb_down);
+                thumbsUpImage.setBackgroundResource(R.drawable.thumb_up);
                 break;
         }
     }
@@ -225,19 +215,27 @@ public class DetailedActivity extends Activity implements IDetailedView {
      * @param upVotes Number of up votes.
      * @param downVotes Number of down votes.
      */
-    public void updateVotes(String upVotes, String downVotes){
+    public void showVotes(String upVotes, String downVotes){
         votesUpTextView.setText(upVotes);
         votesDownTextView.setText(downVotes);
     }
 
     @Override
+    public void addMarker(IPub pub) {
+        map.addMarker(MarkerOptionsFactory.createMarkerOptions(getResources().getDisplayMetrics() ,getResources(), pub));
+    }
+
+    @Override
+    public void navigateToLocation(LatLng latLng, int zoom) {
+        map.animateCamera(CameraUpdateFactory.newCameraPosition(new CameraPosition(latLng, zoom, 0, 45)));
+    }
+
+    @Override
     public boolean onOptionsItemSelected(MenuItem menuItem){
         switch(menuItem.getItemId()){
-
             case R.id.favorite_star:
-                presenter.saveFavoriteState();
-                presenter.getFavoriteStar();
-
+                presenter.updateStar();
+                break;
             case R.id.refresh_info:
                 try {
                     presenter.updateInfo();
@@ -246,11 +244,15 @@ public class DetailedActivity extends Activity implements IDetailedView {
                 } catch (NotFoundInBackendException e) {
                     this.showErrorMessage(e.getMessage());
                 } catch (BackendNotInitializedException e) {
-					this.showErrorMessage(e.getMessage());
-				}
-                refresh();
-
-            case R.id.action_settings:
+                    this.showErrorMessage(e.getMessage());
+                }
+                break;
+            case R.id.action_help:
+                navigate(HelpActivity.class);
+                break;
+            case android.R.id.home:
+                NavUtils.navigateUpFromSameTask(this);
+                return true;
         }
         return true;
     }
@@ -259,7 +261,7 @@ public class DetailedActivity extends Activity implements IDetailedView {
      * Updates the star.
      * @param isStarFilled Represents if the star is filled or not.
      */
-    public void updateStar(boolean isStarFilled){
+    public void showStar(boolean isStarFilled){
 
         if(isStarFilled){
             favoriteStar.setIcon(R.drawable.star_not_filled);
@@ -267,5 +269,15 @@ public class DetailedActivity extends Activity implements IDetailedView {
         else{
             favoriteStar.setIcon(R.drawable.star_filled);
         }
+    }
+
+    // TODO javadoc
+    public void showProgressDialog(){
+        progressDialog = ProgressDialog.show(this, "","Uppdaterar", false, false);
+    }
+
+    // TODO javadoc
+    public void hideProgressDialog(){
+        progressDialog.hide();
     }
 }

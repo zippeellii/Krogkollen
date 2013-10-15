@@ -82,13 +82,16 @@ public class SearchActivity extends ListActivity implements IView {
 
 		PubListAdapter adapter = new PubListAdapter(this,  R.layout.listview_item, pubs);
 
-		String[] string = {"Din sökning gav inga träffar"};
-		ArrayAdapter<String> stringAdapter = new ArrayAdapter<String>(this, R.layout.listview_item, string);
+		String[] string = {getString(R.string.no_search_results)};
+		ArrayAdapter<String> stringAdapter = new ArrayAdapter<String>(this, R.layout.textview_item, string);
+		
 
 		if(pubs.length != 0) {
 			this.getListView().setAdapter(adapter);
+			this.getListView().setFooterDividersEnabled(true);
 		} else {
 			this.getListView().setAdapter(stringAdapter);
+			this.getListView().setFooterDividersEnabled(false);
 		}
 	}
 

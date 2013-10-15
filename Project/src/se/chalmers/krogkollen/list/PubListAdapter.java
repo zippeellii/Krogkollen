@@ -48,8 +48,7 @@ public class PubListAdapter extends ArrayAdapter<IPub> {
         row = convertView;
         holder = null;
 
-        if(row == null)
-        {
+        if(row == null){
             LayoutInflater inflater = ((Activity)context).getLayoutInflater();
             row = inflater.inflate(layoutResourceId, parent, false);
 
@@ -61,10 +60,11 @@ public class PubListAdapter extends ArrayAdapter<IPub> {
 
             row.setTag(holder);
         }
-        else
-        {
+
+        else{
             holder = (PubHolder)row.getTag();
         }
+
 
         updateStar(context.getSharedPreferences(this.getItem(position).getID(), 0).getBoolean("star", true), holder);
 
@@ -83,23 +83,22 @@ public class PubListAdapter extends ArrayAdapter<IPub> {
                 saveFavoriteState(pos);
                 updateStar(context.getSharedPreferences(data[pos].getID(), 0).getBoolean("star", true), tmp);
 
-
             }
         });
 
         switch(pub.getQueueTime()){
-        case 1:
-        	holder.imgIcon.setImageResource(R.drawable.detailed_queue_green);
-        	break;
-        case 2:
-        	holder.imgIcon.setImageResource(R.drawable.detailed_queue_yellow);
-        	break;
-        case 3:
-        	holder.imgIcon.setImageResource(R.drawable.detailed_queue_red);
-        	break;
-        default :
-        	holder.imgIcon.setImageResource(R.drawable.detailed_queue_gray);
-        	break;
+            case 1:
+                holder.imgIcon.setImageResource(R.drawable.detailed_queue_green);
+                break;
+            case 2:
+                holder.imgIcon.setImageResource(R.drawable.detailed_queue_yellow);
+                break;
+            case 3:
+                holder.imgIcon.setImageResource(R.drawable.detailed_queue_red);
+                break;
+            default :
+                holder.imgIcon.setImageResource(R.drawable.detailed_queue_gray);
+                break;
         }
         return row;
 

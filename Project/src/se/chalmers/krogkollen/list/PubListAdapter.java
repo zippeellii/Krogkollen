@@ -15,6 +15,7 @@ import se.chalmers.krogkollen.R;
 import se.chalmers.krogkollen.map.UserLocation;
 import se.chalmers.krogkollen.pub.IPub;
 import se.chalmers.krogkollen.utils.Distance;
+import se.chalmers.krogkollen.utils.Preferences;
 
 import java.text.*;
 
@@ -48,8 +49,7 @@ public class PubListAdapter extends ArrayAdapter<IPub> {
         row = convertView;
         holder = null;
 
-        if(row == null)
-        {
+        if(row == null){
             LayoutInflater inflater = ((Activity)context).getLayoutInflater();
             row = inflater.inflate(layoutResourceId, parent, false);
 
@@ -61,12 +61,13 @@ public class PubListAdapter extends ArrayAdapter<IPub> {
 
             row.setTag(holder);
         }
-        else
-        {
+
+        else{
             holder = (PubHolder)row.getTag();
         }
 
-        updateStar(context.getSharedPreferences(this.getItem(position).getID(), 0).getBoolean("star", true), holder);
+        updateStar(Preferences.getInstance().loadPreference(this.getItem(position).getID()), holder);
+        //updateStar(context.getSharedPreferences(this.getItem(position).getID(), 0).getBoolean("star", true), holder);
 
         IPub pub = data[position];
         DecimalFormat numberFormat = new DecimalFormat("#0.00");
@@ -81,25 +82,25 @@ public class PubListAdapter extends ArrayAdapter<IPub> {
             public void onClick(View v) {
                 int pos = (Integer)v.getTag();
                 saveFavoriteState(pos);
-                updateStar(context.getSharedPreferences(data[pos].getID(), 0).getBoolean("star", true), tmp);
-
+                updateStar(Preferences.getInstance().loadPreference(data[pos].getID()), tmp);
+                //updateStar(context.getSharedPreferences(data[pos].getID(), 0).getBoolean("star", true), tmp);
 
             }
         });
 
         switch(pub.getQueueTime()){
-        case 1:
-        	holder.imgIcon.setImageResource(R.drawable.detailed_queue_green);
-        	break;
-        case 2:
-        	holder.imgIcon.setImageResource(R.drawable.detailed_queue_yellow);
-        	break;
-        case 3:
-        	holder.imgIcon.setImageResource(R.drawable.detailed_queue_red);
-        	break;
-        default :
-        	holder.imgIcon.setImageResource(R.drawable.detailed_queue_gray);
-        	break;
+            case 1:
+                holder.imgIcon.setImageResource(R.drawable.detailed_queue_green);
+                break;
+            case 2:
+                holder.imgIcon.setImageResource(R.drawable.detailed_queue_yellow);
+                break;
+            case 3:
+                holder.imgIcon.setImageResource(R.drawable.detailed_queue_red);
+                break;
+            default :
+                holder.imgIcon.setImageResource(R.drawable.detailed_queue_gray);
+                break;
         }
         return row;
 
@@ -109,9 +110,12 @@ public class PubListAdapter extends ArrayAdapter<IPub> {
      * Saves the state of the favorite locally
      */
     public void saveFavoriteState(int pos){
+    	Preferences.getInstance().savePreference(data[pos].getID(), !Preferences.getInstance().loadPreference(data[pos].getID()));
+    	/*
         SharedPreferences.Editor editor = context.getSharedPreferences(data[pos].getID(), 0).edit();
         editor.putBoolean("star", !(context.getSharedPreferences(data[pos].getID(), 0).getBoolean("star", true)));
         editor.commit();
+        */
     }
 
     /**

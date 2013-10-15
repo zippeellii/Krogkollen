@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.AsyncTask;
+import android.preference.PreferenceManager;
 import android.view.View;
 
 import com.google.android.gms.maps.model.LatLng;
@@ -18,6 +19,7 @@ import se.chalmers.krogkollen.backend.NotFoundInBackendException;
 import se.chalmers.krogkollen.map.UserLocation;
 import se.chalmers.krogkollen.pub.IPub;
 import se.chalmers.krogkollen.pub.PubUtilities;
+import se.chalmers.krogkollen.utils.Preferences;
 
 /**
  * A presenter class for the detailed view of a pub
@@ -120,9 +122,10 @@ public class DetailedPresenter implements IDetailedPresenter {
      * Saves the state of the favorite locally
      */
     public void saveFavoriteState(){
-        SharedPreferences.Editor editor = view.getSharedPreferences(pub.getID(), 0).edit();
+    	Preferences.getInstance().savePreference(pub.getID(), !Preferences.getInstance().loadPreference(pub.getID()));
+       /* SharedPreferences.Editor editor = view.getSharedPreferences(pub.getID(), 0).edit();
         editor.putBoolean("star", (!view.getSharedPreferences(pub.getID(), 0).getBoolean("star", true)));
-        editor.commit();
+        editor.commit();*/
     }
 
     /**
@@ -226,7 +229,7 @@ public class DetailedPresenter implements IDetailedPresenter {
                 + ":-"); // TODO put "år" in xml
         view.addMarker(pub);
         view.navigateToLocation(new LatLng(pub.getLatitude(), pub.getLongitude()), 14);
-        view.showStar(view.getSharedPreferences(pub.getID(), 0).getBoolean("star", true));
+        view.showStar(Preferences.getInstance().loadPreference(pub.getID()));
         view.setThumbs(view.getSharedPreferences(pub.getID(), 0).getInt("thumb", 0));
         view.removeMarker();
         view.addMarker(pub);
@@ -236,7 +239,7 @@ public class DetailedPresenter implements IDetailedPresenter {
     @Override
     public void updateStar(){
         saveFavoriteState();
-        view.showStar(view.getSharedPreferences(pub.getID(), 0).getBoolean("star", true));
+        view.showStar(Preferences.getInstance().loadPreference(pub.getID()));
     }
 
     // Updates the votes in the view

@@ -3,6 +3,7 @@ package se.chalmers.krogkollen.detailed;
 import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Intent;
+import android.content.pm.ActivityInfo;
 import android.os.Bundle;
 import android.support.v4.app.NavUtils;
 import android.view.Menu;
@@ -68,8 +69,12 @@ public class DetailedActivity extends Activity implements IDetailedView {
     @Override
     public void onCreate(Bundle savedInstanceState) {
 
+        //Sets display mode to portrait only.
+        setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
+
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_detailed);
+
         presenter = new DetailedPresenter();
         presenter.setView(this);
 

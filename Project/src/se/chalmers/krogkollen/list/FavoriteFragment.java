@@ -6,7 +6,7 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import se.chalmers.krogkollen.search.SortByQueueTime;
+import se.chalmers.krogkollen.sort.SortByQueueTime;
 
 /**
  * A fragment showing a list with all favorites

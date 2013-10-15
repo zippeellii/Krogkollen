@@ -1,6 +1,7 @@
-package se.chalmers.krogkollen.search;
+package se.chalmers.krogkollen.sort;
 
 import java.util.List;
+
 import se.chalmers.krogkollen.pub.IPub;
 
 /**
@@ -11,6 +12,7 @@ import se.chalmers.krogkollen.pub.IPub;
  */
 public class SortByQueueTime extends Sort {
 
+	// if there's time to spare, comment this algorithm
 	@Override
 	public List<IPub> sortAlgorithm(final List<IPub> pubs) {
 		List<IPub> copyOfPubs = this.copyPubList(pubs);
@@ -27,5 +29,4 @@ public class SortByQueueTime extends Sort {
 		}
 		return copyOfPubs;
 	}
-
 }

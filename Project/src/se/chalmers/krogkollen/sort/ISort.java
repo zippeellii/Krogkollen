@@ -1,4 +1,4 @@
-package se.chalmers.krogkollen.search;
+package se.chalmers.krogkollen.sort;
 
 import java.util.List;
 

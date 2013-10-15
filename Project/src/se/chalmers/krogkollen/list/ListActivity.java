@@ -23,14 +23,14 @@ import se.chalmers.krogkollen.map.MapPresenter;
 public class ListActivity extends FragmentActivity implements IListView{
 
 	private ViewPager viewPager;
-    private IMapView mapView;
+    private IMapView mapView; // TODO this is never used?
     private TabsPagerAdapter mAdapter;
     private ActionBar actionBar;
     
     // Tab titles
-    private String[] tabs = { "Kötid", "Distans", "Favoriter" };
+    private String[] tabs = { "Kötid", "Distans", "Favoriter" }; // TODO move names to XML
     private IListPresenter presenter;
-    private ListView list;  // TODO check this warning
+    private ListView list;  // TODO this is never used?
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -58,7 +58,6 @@ public class ListActivity extends FragmentActivity implements IListView{
         ActionBar actionBar = getActionBar();
         actionBar.setIcon(R.drawable.map_icon);
         actionBar.setDisplayHomeAsUpEnabled(true);
-
     }
 
     // Start the activity in a local method to keep the right context.

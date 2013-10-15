@@ -1,7 +1,6 @@
 package se.chalmers.krogkollen.backend;
 
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 import android.content.Context;
@@ -29,8 +28,7 @@ public class ParseBackend implements IBackend {
 	// This exists to prevent the empty constructor to be called, since all information in the other
 	// constructor is required
 	@SuppressWarnings("unused")
-	private ParseBackend() {
-	}
+	private ParseBackend() {}
 
 	/**
 	 * Initializes the backend to Parse.com, all information is required
@@ -60,7 +58,7 @@ public class ParseBackend implements IBackend {
 			// Makes it possible to handle as a java.util.List
 			tempList = query.find();
 			for (ParseObject object : tempList) {
-				tempPubList.add(this.convertParseObjecttoIPub(object));
+				tempPubList.add(this.convertParseObjectToPub(object));
 			}
 		} catch (com.parse.ParseException e1) {
 			throw new NoBackendAccessException(e1.getMessage());
@@ -99,7 +97,7 @@ public class ParseBackend implements IBackend {
 				throw new NoBackendAccessException(e.getMessage());
 			}
 		}
-		return this.convertParseObjecttoIPub(object);
+		return this.convertParseObjectToPub(object);
 	}
 
 	@Override
@@ -139,7 +137,7 @@ public class ParseBackend implements IBackend {
 	}
 
 	@Override
-	public Date getLatestUpdatedTimestamp(IPub pub) throws NoBackendAccessException,
+	public long getLatestUpdatedTimestamp(IPub pub) throws NoBackendAccessException,
 			NotFoundInBackendException {
 		ParseObject object = new ParseObject("Pub");
 
@@ -148,7 +146,7 @@ public class ParseBackend implements IBackend {
 		} catch (ParseException e) {
 			throw new NotFoundInBackendException(e.getMessage());
 		}
-		return object.getUpdatedAt();
+		return object.getLong("queueTimeLastUpdated");
 	}
 
 	/**
@@ -157,14 +155,22 @@ public class ParseBackend implements IBackend {
 	 * @param object the ParseObject
 	 * @return the IPub representation of the ParseObject
 	 */
-	public IPub convertParseObjecttoIPub(ParseObject object) {
+	public IPub convertParseObjectToPub(ParseObject object) {
 		int hourFourDigit = StringConverter.convertStringToFragmentedInt(
 				object.getString("openingHours"), 5);
+		long queueTimeLastUpdatedTimestamp = object.getLong("queueTimeLastUpdated");
+		int queueTime = object.getInt("queueTime");
+		
+		if (!queueTimeIsRecentlyUpdated(queueTimeLastUpdatedTimestamp)) {
+			queueTime = 0;
+		}
+		
 		return new Pub(object.getString("name"), object.getString("description"),
 				object.getDouble("latitude"), object.getDouble("longitude"),
 				object.getInt("ageRestriction"), object.getInt("entranceFee"),
 				(hourFourDigit / 100), (hourFourDigit % 100), object.getInt("posRate"),
-				object.getInt("negRate"), object.getInt("queueTime"), object.getObjectId());
+				object.getInt("negRate"), queueTime,
+				queueTimeLastUpdatedTimestamp, object.getObjectId());
 	}
 
 	@Override
@@ -184,9 +190,9 @@ public class ParseBackend implements IBackend {
 		tempPub.saveInBackground(new SaveCallback() {
 			public void done(ParseException e) {
 				if (e == null) {
-					// TODO should we do something here?
+					// object saved successfully
 				} else {
-					// TODO notify user
+					// TODO throw something from here, why is it not possible?
 				}
 			}
 		});
@@ -199,22 +205,19 @@ public class ParseBackend implements IBackend {
 		// Create a pointer to an object of class Pub
 		ParseObject tempPub = ParseObject.createWithoutData("Pub", pub.getID());
 
-		// TODO This part can cause problems if a rating is updated after the pub was last refreshed
 		if (rating > 0) {
 			tempPub.increment("posRate", -1);
-			// tempPub.put("posRate", pub.getPositiveRating());
 		} else {
 			tempPub.increment("negRate", -1);
-			// tempPub.put("negRate", pub.getNegativeRating());
 		}
 
 		// Save
 		tempPub.saveInBackground(new SaveCallback() {
 			public void done(ParseException e) {
 				if (e == null) {
-					// TODO should we do something here?
+					// object in backend updated successfully
 				} else {
-					// TODO notify user
+					// TODO throw something, how?
 				}
 			}
 		});
@@ -235,8 +238,28 @@ public class ParseBackend implements IBackend {
 				throw new NoBackendAccessException(e.getMessage());
 			}
 		}
-		pub.setQueueTime(object.getInt("queueTime"));
+		long lastUpdate = object.getLong("queueTimeLastUpdated");
+		
+		if (queueTimeIsRecentlyUpdated(lastUpdate)) {
+			pub.setQueueTime(object.getInt("queueTime"));
+		} else {
+			pub.setQueueTime(0);
+		}
+		
+		pub.setQueueTimeLastUpdatedTimestamp(lastUpdate);
 		pub.setPositiveRating(object.getInt("posRate"));
 		pub.setNegativeRating(object.getInt("negRate"));
+	}
+	
+	// checks if the queue time was recently updated
+	private boolean queueTimeIsRecentlyUpdated(long queueTimeLastUpdatedTimestamp) {
+		long epochTime = System.currentTimeMillis()/1000;
+		
+		// if the queue time was updated more than 30 minutes ago, it wasn't updated recently
+		if ((epochTime - queueTimeLastUpdatedTimestamp) > 1800) {
+			return false;
+		} else {
+			return true;
+		}
 	}
 }

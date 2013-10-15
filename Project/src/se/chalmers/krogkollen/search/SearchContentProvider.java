@@ -13,6 +13,7 @@ import android.database.MatrixCursor;
 import android.net.Uri;
 import android.provider.BaseColumns;
 
+// TODO javadoc
 public class SearchContentProvider extends ContentProvider {
 
 	private MatrixCursor cursor;
@@ -29,7 +30,7 @@ public class SearchContentProvider extends ContentProvider {
 	@Override
 	public Cursor query(Uri uri, String[] projection, String selection, String[] selectionArgs, String sortOrder) {
 		//Find matches.
-		String query = uri.getLastPathSegment().toLowerCase();
+		String query = uri.getLastPathSegment().toLowerCase(); // TODO check error
 
 		List<IPub> allPubs = PubUtilities.getInstance().getPubList();
 		List<IPub> matchingPubs = SearchActivity.getMatchingPubs(query, allPubs);

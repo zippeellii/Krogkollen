@@ -1,5 +1,7 @@
 package se.chalmers.krogkollen.pub;
 
+import com.google.android.gms.maps.model.LatLng;
+
 /*
  * This file is part of Krogkollen.
  *
@@ -58,6 +60,7 @@ public interface IPub {
 
 	/**
 	 * Sets the queuetime for the pub
+	 * @param queueTime the queue time of the pub
 	 */
 	public void setQueueTime(int queueTime);
 
@@ -71,6 +74,11 @@ public interface IPub {
 	 */
 	public double getLongitude();
 
+	/**
+	 * @return the coordinates of this pub as a LatLng object
+	 */
+	public LatLng getCoordinates();
+	
 	/**
 	 * @return the entrance fee for the pub
 	 */
@@ -109,4 +117,14 @@ public interface IPub {
 	 * @return todays opening and closing hours
 	 */
 	public OpeningHours getTodaysOpeningHours();
+	
+	/**
+	 * @param queueTimeLastUpdated the time the queue time was last updated
+	 */
+	public void setQueueTimeLastUpdatedTimestamp(long queueTimeLastUpdatedTimestamp);
+	
+	/**
+	 * @return the time the queue time was last updated
+	 */
+	public long getQueueTimeLastUpdatedTimestamp();
 }

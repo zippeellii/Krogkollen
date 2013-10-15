@@ -148,8 +148,9 @@ public class ButtonsPresenter {
      */
     synchronized void setServerQueueTime(int newQueueTime) {
         try {
-            object.put("queueTime", newQueueTime);
-            object.save();
+        	object.put("queueTimeLastUpdated", System.currentTimeMillis()/1000);
+        	object.put("queueTime", newQueueTime);
+        	object.save();
         } catch (ParseException pe) {
             return;
         }

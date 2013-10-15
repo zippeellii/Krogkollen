@@ -166,11 +166,11 @@ public class DetailedPresenter implements IDetailedPresenter {
             try {
                 BackendHandler.getInstance().updatePubLocally(pub);
             } catch (NoBackendAccessException e) {
-                System.out.println("error");
+                view.showErrorMessage(e.getMessage());
             } catch (NotFoundInBackendException e) {
-                System.out.println("error");
+            	view.showErrorMessage(e.getMessage());
             } catch (BackendNotInitializedException e){
-                System.out.println("error");
+            	view.showErrorMessage(e.getMessage());
             }
             return null;
         }
@@ -189,11 +189,11 @@ public class DetailedPresenter implements IDetailedPresenter {
                 ratingChanged(-1);
                 //updateThumbs();
             } catch (NotFoundInBackendException e) {
-                System.out.println("error");
+            	this.view.showErrorMessage(e.getMessage());
             } catch (NoBackendAccessException e) {
-                System.out.println("error");
+                this.view.showErrorMessage(e.getMessage());
             } catch (BackendNotInitializedException e){
-                System.out.println("error");
+            	this.view.showErrorMessage(e.getMessage());
             }
         }
         else if(view.getId() == R.id.thumbsUpLayout){
@@ -201,11 +201,11 @@ public class DetailedPresenter implements IDetailedPresenter {
                 ratingChanged(1);
                 //updateThumbs();
             } catch (NotFoundInBackendException e) {
-                System.out.println("error");
+            	this.view.showErrorMessage(e.getMessage());
             } catch (NoBackendAccessException e) {
-                System.out.println("error");
+            	this.view.showErrorMessage(e.getMessage());
             } catch (BackendNotInitializedException e){
-                System.out.println("error");
+            	this.view.showErrorMessage(e.getMessage());
             }
         } else if (view.getId() == R.id.navigate) {
             Intent i = new Intent(Intent.ACTION_VIEW, Uri.parse("http://maps.google.com/maps?saddr="
@@ -221,7 +221,7 @@ public class DetailedPresenter implements IDetailedPresenter {
         view.updateQueueIndicator(pub.getQueueTime());
         view.updateText(pub.getName(), pub.getDescription(), convertOpeningHours(pub.getTodaysOpeningHour()) + " - " +
                 (convertOpeningHours(pub.getTodaysClosingHour())), ""+pub.getAgeRestriction() + " år", ""+pub.getEntranceFee()
-                + ":-");
+                + ":-"); // TODO put "år" in xml
         view.addMarker(pub);
         view.navigateToLocation(new LatLng(pub.getLatitude(), pub.getLongitude()), 14);
         view.showStar(view.getSharedPreferences(pub.getID(), 0).getBoolean("star", true));
@@ -229,7 +229,7 @@ public class DetailedPresenter implements IDetailedPresenter {
         updateVotes();
     }
 
-    // TODO jAVADOC
+    @Override
     public void updateStar(){
         saveFavoriteState();
         view.showStar(view.getSharedPreferences(pub.getID(), 0).getBoolean("star", true));

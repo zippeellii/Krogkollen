@@ -7,7 +7,10 @@ import android.os.Bundle;
 import android.support.v4.app.NavUtils;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.widget.*;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.ScrollView;
+import android.widget.TextView;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapFragment;
@@ -22,7 +25,6 @@ import se.chalmers.krogkollen.help.HelpActivity;
 import se.chalmers.krogkollen.map.MapActivity;
 import se.chalmers.krogkollen.map.MarkerOptionsFactory;
 import se.chalmers.krogkollen.pub.IPub;
-import se.chalmers.krogkollen.settings.SettingsActivity;
 
 /*
  * This file is part of Krogkollen.
@@ -178,7 +180,7 @@ public class DetailedActivity extends Activity implements IDetailedView {
 
     }
 
-    // TODO what does this do?
+    // TODO comment this
     private void addListeners(){
         findViewById(R.id.thumbsUpLayout).setOnClickListener(presenter);
         findViewById(R.id.thumbsDownLayout).setOnClickListener(presenter);
@@ -244,9 +246,6 @@ public class DetailedActivity extends Activity implements IDetailedView {
                 } catch (BackendNotInitializedException e) {
                     this.showErrorMessage(e.getMessage());
                 }
-                break;
-            case R.id.action_settings:
-                navigate(SettingsActivity.class);
                 break;
             case R.id.action_help:
                 navigate(HelpActivity.class);

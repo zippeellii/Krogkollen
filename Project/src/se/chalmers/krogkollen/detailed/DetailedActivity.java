@@ -63,6 +63,7 @@ public class DetailedActivity extends Activity implements IDetailedView {
     private ProgressDialog progressDialog;
 
     private GoogleMap map;
+    private Marker marker;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -112,6 +113,8 @@ public class DetailedActivity extends Activity implements IDetailedView {
         getActionBar().setDisplayUseLogoEnabled(false);
         getActionBar().setIcon(R.drawable.transparent_spacer);
         getActionBar().setDisplayHomeAsUpEnabled(true);
+
+        System.out.println("____________after_____________");
     }
 
     @Override
@@ -222,7 +225,17 @@ public class DetailedActivity extends Activity implements IDetailedView {
 
     @Override
     public void addMarker(IPub pub) {
-        map.addMarker(MarkerOptionsFactory.createMarkerOptions(getResources().getDisplayMetrics() ,getResources(), pub));
+        if (marker == null) {
+            marker = map.addMarker(MarkerOptionsFactory.createMarkerOptions(getResources().getDisplayMetrics() ,getResources(), pub));
+        }
+    }
+
+    @Override
+    public void removeMarker() {
+        if (marker != null) {
+            marker.remove();
+            marker = null;
+        }
     }
 
     @Override

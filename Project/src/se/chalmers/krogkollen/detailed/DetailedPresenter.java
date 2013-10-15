@@ -226,6 +226,8 @@ public class DetailedPresenter implements IDetailedPresenter {
         view.navigateToLocation(new LatLng(pub.getLatitude(), pub.getLongitude()), 14);
         view.showStar(view.getSharedPreferences(pub.getID(), 0).getBoolean("star", true));
         view.setThumbs(view.getSharedPreferences(pub.getID(), 0).getInt("thumb", 0));
+        view.removeMarker();
+        view.addMarker(pub);
         updateVotes();
     }
 
@@ -235,7 +237,7 @@ public class DetailedPresenter implements IDetailedPresenter {
         view.showStar(view.getSharedPreferences(pub.getID(), 0).getBoolean("star", true));
     }
 
-    // TODO what does this do?
+    // Updates the votes in the view
     private void updateVotes(){
         view.showVotes("" + pub.getPositiveRating(), "" + pub.getNegativeRating());
     }

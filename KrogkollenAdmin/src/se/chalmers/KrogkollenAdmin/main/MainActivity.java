@@ -41,15 +41,15 @@ import se.chalmers.KrogkollenAdmin.R;
  */
 public class MainActivity extends Activity {
 
-    private Button loginButton;
-    private AutoCompleteTextView userNameField;
-    private EditText passwordField;
-    private ProgressDialog progressDialog;
-    private MainPresenter presenter;
+    private Button                  loginButton;
+    private AutoCompleteTextView    userNameField;
+    private EditText                passwordField;
+    private ProgressDialog          progressDialog;
+    private MainPresenter           presenter;
 
     /**
      * Called when the activity is first created.
-     * <p/>
+     *
      * Initiates all the objects in the class and calls methods to setup server-connection.
      */
     @Override

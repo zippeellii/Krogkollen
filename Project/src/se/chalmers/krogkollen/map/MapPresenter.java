@@ -124,6 +124,7 @@ public class MapPresenter implements IMapPresenter, GoogleMap.OnMarkerClickListe
 
     @Override
     public void pubMarkerClicked(String title) {
+        System.out.println("_____________before________________");
         Bundle bundle = new Bundle();
         bundle.putString(MAP_PRESENTER_KEY, title);
         mapView.navigate(DetailedActivity.class, bundle);

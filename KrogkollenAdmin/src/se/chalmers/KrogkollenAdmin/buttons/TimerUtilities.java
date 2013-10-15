@@ -8,18 +8,14 @@ import java.util.TimerTask;
  *         Created 2013-09-22
  */
 public class TimerUtilities {
-    private ButtonsPresenter presenter;
-    private Timer inputDisabledTimer;
-    private Timer notificationTimer;
-    private boolean firstTimeNotificationTimer = true;
-    private boolean firstTimeInputTimer = true;
-    public static final int DISABLE_TIME =
-             20000;
-            // 1000;
-    public static final int NOTIFICATION_TIME =
-             1000 * 60 * 30;
-            // 5000;
-    private static TimerUtilities instance = null;
+    private ButtonsPresenter        presenter;
+    private Timer                   inputDisabledTimer;
+    private Timer                   notificationTimer;
+    private boolean                 firstTimeNotificationTimer  = true;
+    private boolean                 firstTimeInputTimer         = true;
+    public static final int         DISABLE_TIME                = 20000;
+    public static final int         NOTIFICATION_TIME           = 1000 * 60 * 30;
+    private static TimerUtilities   instance                    = null;
 
     protected TimerUtilities() {
         // Exists only to defeat instantiation.

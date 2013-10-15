@@ -36,11 +36,11 @@ import se.chalmers.KrogkollenAdmin.R;
  */
 public class ButtonsActivity extends Activity {
 
-    private Button greenButton;
-    private Button yellowButton;
-    private Button redButton;
-    private ProgressDialog progressDialog;
-    private ButtonsPresenter presenter;
+    private Button              greenButton;
+    private Button              yellowButton;
+    private Button              redButton;
+    private ProgressDialog      progressDialog;
+    private ButtonsPresenter    presenter;
 
     /**
      * Called when the activity is first created.
@@ -59,29 +59,19 @@ public class ButtonsActivity extends Activity {
     @Override
     public boolean onOptionsItemSelected(MenuItem menuItem) {
         if (menuItem.getItemId() == R.id.logout_item) {
-            logOut();
+            presenter.logOut();
 
             return true;
         } else if (menuItem.getItemId() == R.id.notifications_item) {
             menuItem.setChecked(!menuItem.isChecked());
-            toggleNotifications();
+            presenter.toggleNotifications();
         }
         return false;
     }
 
-    private void toggleNotifications() {
-        presenter.toggleNotifications();
-    }
-
-    private void logOut() {
-        presenter.logOut();
-    }
-
     @Override
     public void onBackPressed() {
-        Intent intent = new Intent(Intent.ACTION_MAIN);
-        intent.addCategory(Intent.CATEGORY_HOME);
-        startActivity(intent);
+        presenter.leaveApplication();
     }
 
     @Override
@@ -109,7 +99,7 @@ public class ButtonsActivity extends Activity {
         greenButton.setOnTouchListener(new View.OnTouchListener() {
             @Override
             public boolean onTouch(View v, MotionEvent event) {
-                buttonClicked(1);
+                presenter.buttonClicked(1);
                 return true;
             }
         });
@@ -117,7 +107,7 @@ public class ButtonsActivity extends Activity {
         yellowButton.setOnTouchListener(new View.OnTouchListener() {
             @Override
             public boolean onTouch(View v, MotionEvent event) {
-                buttonClicked(2);
+                presenter.buttonClicked(2);
                 return true;
             }
         });
@@ -125,19 +115,10 @@ public class ButtonsActivity extends Activity {
         redButton.setOnTouchListener(new View.OnTouchListener() {
             @Override
             public boolean onTouch(View v, MotionEvent event) {
-                buttonClicked(3);
+                presenter.buttonClicked(3);
                 return true;
             }
         });
-    }
-
-    /**
-     * Sets the buttons visibility and then tells the presenter which button got clicked.
-     *
-     * @param i the button clicked.
-     */
-    private void buttonClicked(int i) {
-        presenter.buttonClicked(i);
     }
 
     /**
@@ -159,15 +140,7 @@ public class ButtonsActivity extends Activity {
      */
     public void updateGUI() {
         String msg;
-/*
-        if (presenter.getButtonOnCooldown()) {
-            // Sets the first part of the string to tell the user to wait.
-            msg = getResources().getString(R.string.wait_part_one) + " " + (presenter.DISABLE_TIME/1000) + " " + getResources().getString(R.string.wait_part_two);
-        } else {
-            // Sets the first part of the string to tell the user it is ready.
-            msg = getResources().getString(R.string.ready);
-        }
-*/
+
         redButton.setSelected(false);
         yellowButton.setSelected(false);
         greenButton.setSelected(false);
@@ -193,8 +166,12 @@ public class ButtonsActivity extends Activity {
                 setTitle(Html.fromHtml(msg));
                 redButton.setSelected(true);
                 break;
+            case 0:
+                msg = getResources().getString(R.string.no_information);
+                setTitle(msg);
+                break;
             default:
-                msg = getResources().getString(R.string.buttons_activity);
+                msg = getResources().getString(R.string.no_information);
                 setTitle(msg);
                 break;
         }

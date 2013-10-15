@@ -112,6 +112,8 @@ public class DetailedActivity extends Activity implements IDetailedView {
         getActionBar().setDisplayUseLogoEnabled(false);
         getActionBar().setIcon(R.drawable.transparent_spacer);
         getActionBar().setDisplayHomeAsUpEnabled(true);
+
+        System.out.println("____________after_____________");
     }
 
     @Override

@@ -4,6 +4,7 @@ package se.chalmers.KrogkollenAdmin.buttons;
 import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Intent;
+import android.content.pm.ActivityInfo;
 import android.os.Bundle;
 import android.text.Html;
 import android.view.*;
@@ -47,6 +48,7 @@ public class ButtonsActivity extends Activity {
      */
     @Override
     public void onCreate(Bundle savedInstanceState) {
+        setRequestedOrientation (ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_buttons);
         getActionBar().setDisplayShowHomeEnabled(false);

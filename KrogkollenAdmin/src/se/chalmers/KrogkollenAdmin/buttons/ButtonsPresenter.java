@@ -16,9 +16,6 @@ import com.parse.ParseUser;
 import se.chalmers.KrogkollenAdmin.R;
 import se.chalmers.KrogkollenAdmin.main.MainActivity;
 
-import java.util.Timer;
-import java.util.TimerTask;
-
 /*
  * This file is part of Krogkollen.
  *
@@ -47,16 +44,10 @@ public class ButtonsPresenter {
     private int queueTime;
     private ParseObject object;
     private ButtonsActivity view;
-    private Timer inputDisabledTimer;
-    private Timer notificationTimer;
-    private boolean firstTimeNotificationTimer = true;
-    public static final int DISABLE_TIME = 20000;
-            // Testvalue: 1000;
-    public static final int NOTIFICATION_TIME = 1000 * 60 * 30;
-            // Testvalue: 5000;
     private boolean buttonOnCooldown;
     private Toast toast;
     private boolean notificationsDisabled;
+    private TimerUtilities timerUtilities;
 
     /**
      * Constructor. Gets called when the ButtonsActivity is started, so they know each other.
@@ -65,73 +56,17 @@ public class ButtonsPresenter {
      */
     public ButtonsPresenter(ButtonsActivity butt) {
         view = butt;
+        timerUtilities = TimerUtilities.getInstance();
+        timerUtilities.setupActivePresenter(this);
+        setupParseObject();
+        setLocalQueueTime();
     }
 
-    /**
-     * Starts both the timers.
-     */
-    public void startTimers() {
-        disableTimer(inputDisabledTimer);
-        disableTimer(notificationTimer);
-        runInputTimer();
-        runNotificationTimer();
-    }
-
-    private void disableTimer(Timer timer) {
-        if (timer != null) {
-            timer.cancel();
-            timer = null;
+    public void showNotification() {
+        if (notificationsDisabled) {
+            return;
         }
-    }
 
-    /**
-     * Runs a timer that handles disabling of the buttons. Makes sure that the user doesn't spam the server by disabling more than one click every 20 second.
-     */
-    public void runInputTimer() {
-        inputDisabledTimer = new Timer();
-        inputDisabledTimer.schedule(new TimerTask() {
-            @Override
-            public void run() {
-                disableTimerFinished();
-            }
-
-        }, 0, DISABLE_TIME);
-    }
-
-    // Creates a new timer for the notifications, and runs it.
-    private void runNotificationTimer() {
-        notificationTimer = new Timer();
-        notificationTimer.schedule(new TimerTask() {
-            @Override
-            public void run() {
-                if (!firstTimeNotificationTimer) {
-                    notificationTimerFinished();
-                } else {
-                    firstTimeNotificationTimer = false;
-                }
-            }
-
-        }, 0, NOTIFICATION_TIME);
-    }
-
-    // This method is called whenever the notification goes up to the time given.
-    private void notificationTimerFinished() {
-        //This method runs in the same thread as the timer.
-        view.runOnUiThread(Notification_Timer_Tick);
-    }
-
-    // Only called by notificationsTimerFinished and runs on the GUI thread.
-    private Runnable Notification_Timer_Tick = new Runnable() {
-        public void run() {
-            //Changes the UI to let the user know that input isn't allowed for a while.
-            //This method runs in the same thread as the GUI.
-            if (!notificationsDisabled) {
-                showNotification();
-            }
-        }
-    };
-
-    private void showNotification() {
         long vibrationPattern[] = new long[10];
         for (int i = 0; i < vibrationPattern.length; i++) {
             vibrationPattern[i] = 1L;
@@ -164,22 +99,6 @@ public class ButtonsPresenter {
         mNotificationManager.notify(1, notification);
     }
 
-    private void disableTimerFinished() {
-        //This method runs in the same thread as the timer.
-        view.runOnUiThread(Disable_Timer_Tick);
-    }
-
-    // This method runs in the same thread as the UI.
-    // It activates the buttons and updates the GUI.
-    private Runnable Disable_Timer_Tick = new Runnable() {
-        public void run() {
-            //Changes the UI to let the user know that input isn't allowed for a while.
-            //This method runs in the same thread as the GUI.
-            buttonOnCooldown = false;
-            view.updateGUI();
-        }
-    };
-
     /**
      * Calls some methods when a button is clicked.
      *
@@ -191,13 +110,11 @@ public class ButtonsPresenter {
             if (toast != null) {
                 toast.cancel();
             }
-            toast = Toast.makeText(view, view.getResources().getString(R.string.wait_part_one) + " " + ButtonsPresenter.DISABLE_TIME / 1000 + " " + view.getResources().getString(R.string.wait_part_two), Toast.LENGTH_SHORT);
+            toast = Toast.makeText(view, view.getResources().getString(R.string.wait_part_one) + " " + TimerUtilities.DISABLE_TIME / 1000 + " " + view.getResources().getString(R.string.wait_part_two), Toast.LENGTH_SHORT);
             toast.setDuration(1);
             toast.show();
         } else {
-            disableTimer(notificationTimer);
-            firstTimeNotificationTimer = true;
-            runNotificationTimer();
+            timerUtilities.resetNotificationTimer();
             buttonOnCooldown = true;        // So that no input is accepted in a while
             new ServerUpdateTask().execute(newQueueTime);
         }
@@ -253,8 +170,7 @@ public class ButtonsPresenter {
      * Sends the user to MainActivity.
      */
     public void logOut() {
-        disableTimer(notificationTimer);
-        disableTimer(inputDisabledTimer);
+        timerUtilities.disableAllTimers();
         ParseUser.logOut();
         Intent intent = new Intent(view, MainActivity.class);
         view.startActivity(intent);
@@ -266,11 +182,9 @@ public class ButtonsPresenter {
      */
     public void toggleNotifications() {
         if (notificationsDisabled) {
-            disableTimer(notificationTimer);
-            firstTimeNotificationTimer = true;
-            runNotificationTimer();
+            timerUtilities.resetNotificationTimer();
         } else {
-            disableTimer(notificationTimer);
+            timerUtilities.disableNotificationTimer();
         }
         notificationsDisabled = !notificationsDisabled;
     }
@@ -298,5 +212,14 @@ public class ButtonsPresenter {
             view.updateGUI();
             view.hideProgressDialog();
         }
+    }
+
+    public ButtonsActivity getView() {
+        return view;
+    }
+
+    public void inputAcceptedAgain() {
+        buttonOnCooldown = false;
+        view.updateGUI();
     }
 }

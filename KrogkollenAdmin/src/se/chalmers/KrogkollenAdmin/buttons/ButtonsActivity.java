@@ -51,15 +51,9 @@ public class ButtonsActivity extends Activity {
         setContentView(R.layout.activity_buttons);
         getActionBar().setDisplayShowHomeEnabled(false);
         presenter = new ButtonsPresenter(this);
-        presenter.startTimers();
-        presenter.setupParseObject();
-        presenter.setLocalQueueTime();
         setupUiElements();
         addListenersOnButtons();
         updateGUI();
-        for (int i = 0; i < 10; i++) {
-            System.out.println("OMG FU");
-        }
     }
 
     @Override

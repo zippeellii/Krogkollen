@@ -62,7 +62,7 @@ public class TimerUtilities {
         inputDisabledTimer.schedule(new TimerTask() {
             @Override
             public void run() {
-                if (!firstTimeNotificationTimer) {
+                if (!firstTimeInputTimer) {
                     disableTimerFinished();
                 } else {
                     firstTimeInputTimer = false;

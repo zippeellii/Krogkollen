@@ -211,8 +211,8 @@ public class UserLocation implements LocationListener, IObservable {
 	 * 
 	 * @param location The new Location that you want to evaluate
 	 * @param currentBestLocation The current Location fix, to which you want to compare the new one
-	 */ //  TODO why is this protected?
-	protected boolean isBetterLocation(Location location, Location currentBestLocation) {
+	 */
+	private boolean isBetterLocation(Location location, Location currentBestLocation) {
 		if (currentBestLocation == null) {
 			// A new location is always better than no location
 			return true;

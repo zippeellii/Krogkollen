@@ -20,7 +20,7 @@ import se.chalmers.krogkollen.map.MapPresenter;
  * Such as distance, queue-time or favorites.
  *
  */
-public class ListActivity extends FragmentActivity implements IListView {
+public class ListActivity extends FragmentActivity implements IListView{
 
 
 	private ViewPager viewPager;
@@ -41,7 +41,7 @@ public class ListActivity extends FragmentActivity implements IListView {
         //Detta är bara för TEST
         viewPager = (ViewPager) findViewById(R.id.pager);
         actionBar = getActionBar();
-        mAdapter = new TabsPagerAdapter(getSupportFragmentManager(), presenter);
+        mAdapter = new TabsPagerAdapter(getSupportFragmentManager());
 
         viewPager.setAdapter(mAdapter);
         actionBar.setHomeButtonEnabled(false);

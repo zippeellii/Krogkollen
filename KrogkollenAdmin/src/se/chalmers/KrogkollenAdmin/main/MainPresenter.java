@@ -99,11 +99,15 @@ public class MainPresenter {
 
 
             boolean loginSuccess = false;
+            boolean noConnection = false;
 
             try {
                 ParseUser.logIn(strings[0], strings[1]);
                 loginSuccess = true;
             } catch (ParseException e) {
+                if (e.getCode() == ParseException.CONNECTION_FAILED) {
+                    noConnection = true;
+                }
                 e.printStackTrace();
             }
 
@@ -118,19 +122,33 @@ public class MainPresenter {
                 view.startActivity(intent);
             } else {
 
-                view.runOnUiThread(new Runnable() {
-                    public void run() {
-                        // Makes so that toasts doesn't stack.
-                        if (toast != null) {
-                            toast.cancel();
+                if (noConnection) {
+                    view.runOnUiThread(new Runnable() {
+                        public void run() {
+                            // Makes so that toasts doesn't stack.
+                            if (toast != null) {
+                                toast.cancel();
+                            }
+                            toast = Toast.makeText(view, se.chalmers.KrogkollenAdmin.R.string.no_connection_message,
+                                    Toast.LENGTH_SHORT);
+                            toast.setDuration(2);
+                            toast.show();
                         }
-                        toast = Toast.makeText(view, se.chalmers.KrogkollenAdmin.R.string.wrong_password_message,
-                                Toast.LENGTH_SHORT);
-                        toast.setDuration(2);
-                        toast.show();
-                    }
-
-                });
+                    });
+                } else {
+                    view.runOnUiThread(new Runnable() {
+                        public void run() {
+                            // Makes so that toasts doesn't stack.
+                            if (toast != null) {
+                                toast.cancel();
+                            }
+                            toast = Toast.makeText(view, se.chalmers.KrogkollenAdmin.R.string.wrong_password_message,
+                                    Toast.LENGTH_SHORT);
+                            toast.setDuration(2);
+                            toast.show();
+                        }
+                    });
+                }
             }
             return null;
         }

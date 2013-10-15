@@ -5,10 +5,13 @@ import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.view.View;
+
 import com.google.android.gms.maps.model.LatLng;
+
 import se.chalmers.krogkollen.IView;
 import se.chalmers.krogkollen.R;
 import se.chalmers.krogkollen.backend.BackendHandler;
+import se.chalmers.krogkollen.backend.BackendMockup;
 import se.chalmers.krogkollen.backend.BackendNotInitializedException;
 import se.chalmers.krogkollen.backend.NoBackendAccessException;
 import se.chalmers.krogkollen.backend.NotFoundInBackendException;
@@ -166,11 +169,11 @@ public class DetailedPresenter implements IDetailedPresenter {
             try {
                 BackendHandler.getInstance().updatePubLocally(pub);
             } catch (NoBackendAccessException e) {
-                view.showErrorMessage(e.getMessage());
+                view.showErrorMessage(view.getString(R.string.error_no_backend_access));
             } catch (NotFoundInBackendException e) {
-            	view.showErrorMessage(e.getMessage());
-            } catch (BackendNotInitializedException e){
-            	view.showErrorMessage(e.getMessage());
+                view.showErrorMessage(view.getString(R.string.error_no_backend_item));
+            } catch (BackendNotInitializedException e) {
+                view.showErrorMessage(view.getString(R.string.error_backend_not_initialized));
             }
             return null;
         }
@@ -188,24 +191,24 @@ public class DetailedPresenter implements IDetailedPresenter {
             try {
                 ratingChanged(-1);
                 //updateThumbs();
-            } catch (NotFoundInBackendException e) {
-            	this.view.showErrorMessage(e.getMessage());
             } catch (NoBackendAccessException e) {
-                this.view.showErrorMessage(e.getMessage());
-            } catch (BackendNotInitializedException e){
-            	this.view.showErrorMessage(e.getMessage());
+                this.view.showErrorMessage(this.view.getString(R.string.error_no_backend_access));
+            } catch (NotFoundInBackendException e) {
+                this.view.showErrorMessage(this.view.getString(R.string.error_no_backend_item));
+            } catch (BackendNotInitializedException e) {
+                this.view.showErrorMessage(this.view.getString(R.string.error_backend_not_initialized));
             }
         }
         else if(view.getId() == R.id.thumbsUpLayout){
             try {
                 ratingChanged(1);
                 //updateThumbs();
-            } catch (NotFoundInBackendException e) {
-            	this.view.showErrorMessage(e.getMessage());
             } catch (NoBackendAccessException e) {
-            	this.view.showErrorMessage(e.getMessage());
-            } catch (BackendNotInitializedException e){
-            	this.view.showErrorMessage(e.getMessage());
+                this.view.showErrorMessage(this.view.getString(R.string.error_no_backend_access));
+            } catch (NotFoundInBackendException e) {
+                this.view.showErrorMessage(this.view.getString(R.string.error_no_backend_item));
+            } catch (BackendNotInitializedException e) {
+                this.view.showErrorMessage(this.view.getString(R.string.error_backend_not_initialized));
             }
         } else if (view.getId() == R.id.navigate) {
             Intent i = new Intent(Intent.ACTION_VIEW, Uri.parse("http://maps.google.com/maps?saddr="

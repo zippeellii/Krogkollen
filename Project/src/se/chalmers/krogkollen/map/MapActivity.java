@@ -13,6 +13,7 @@ import android.graphics.Point;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.SystemClock;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -28,6 +29,9 @@ import com.google.android.gms.maps.Projection;
 import com.google.android.gms.maps.model.*;
 
 import se.chalmers.krogkollen.R;
+import se.chalmers.krogkollen.backend.BackendHandler;
+import se.chalmers.krogkollen.backend.BackendMockup;
+import se.chalmers.krogkollen.backend.BackendNotInitializedException;
 import se.chalmers.krogkollen.backend.NoBackendAccessException;
 import se.chalmers.krogkollen.backend.NotFoundInBackendException;
 import se.chalmers.krogkollen.utils.ActivityID;
@@ -81,9 +85,9 @@ public class MapActivity extends Activity implements IMapView {
         try {
             MapWrapper.INSTANCE.init(this);
         } catch (NoBackendAccessException e) {
-            showErrorMessage(e.getMessage());
+            this.showErrorMessage(this.getString(R.string.error_no_backend_access));
         } catch (NotFoundInBackendException e) {
-            showErrorMessage(e.getMessage());
+            this.showErrorMessage(this.getString(R.string.error_no_backend_item));
         }
 
         // Create a presenter for this view.
@@ -256,7 +260,7 @@ public class MapActivity extends Activity implements IMapView {
     @Override
     public void showErrorMessage(String message) {
         CharSequence text = message;
-        int duration = Toast.LENGTH_SHORT;
+        int duration = Toast.LENGTH_LONG;
 
         Toast toast = Toast.makeText(this, text, duration);
         toast.show();

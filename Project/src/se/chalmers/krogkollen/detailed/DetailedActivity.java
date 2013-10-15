@@ -74,12 +74,12 @@ public class DetailedActivity extends Activity implements IDetailedView {
 
         try {
             presenter.setPub(getIntent().getStringExtra(MapActivity.MARKER_PUB_ID));
-        } catch (NotFoundInBackendException e) {
-            this.showErrorMessage(e.getMessage());
         } catch (NoBackendAccessException e) {
-            this.showErrorMessage(e.getMessage());
+            this.showErrorMessage(this.getString(R.string.error_no_backend_access));
+        } catch (NotFoundInBackendException e) {
+            this.showErrorMessage(this.getString(R.string.error_no_backend_item));
         } catch (BackendNotInitializedException e) {
-            this.showErrorMessage(e.getMessage());
+            this.showErrorMessage(this.getString(R.string.error_backend_not_initialized));
         }
 
         addListeners();
@@ -113,8 +113,6 @@ public class DetailedActivity extends Activity implements IDetailedView {
         getActionBar().setDisplayUseLogoEnabled(false);
         getActionBar().setIcon(R.drawable.transparent_spacer);
         getActionBar().setDisplayHomeAsUpEnabled(true);
-
-        System.out.println("____________after_____________");
     }
 
     @Override
@@ -128,11 +126,11 @@ public class DetailedActivity extends Activity implements IDetailedView {
         try {
             presenter.updateInfo();
         } catch (NoBackendAccessException e) {
-            this.showErrorMessage(e.getMessage());
+            this.showErrorMessage(this.getString(R.string.error_no_backend_access));
         } catch (NotFoundInBackendException e) {
-            this.showErrorMessage(e.getMessage());
+            this.showErrorMessage(this.getString(R.string.error_no_backend_item));
         } catch (BackendNotInitializedException e) {
-            this.showErrorMessage(e.getMessage());
+            this.showErrorMessage(this.getString(R.string.error_backend_not_initialized));
         }
 
         return true;
@@ -253,11 +251,11 @@ public class DetailedActivity extends Activity implements IDetailedView {
                 try {
                     presenter.updateInfo();
                 } catch (NoBackendAccessException e) {
-                    this.showErrorMessage(e.getMessage());
+                    this.showErrorMessage(this.getString(R.string.error_no_backend_access));
                 } catch (NotFoundInBackendException e) {
-                    this.showErrorMessage(e.getMessage());
+                    this.showErrorMessage(this.getString(R.string.error_no_backend_item));
                 } catch (BackendNotInitializedException e) {
-                    this.showErrorMessage(e.getMessage());
+                    this.showErrorMessage(this.getString(R.string.error_backend_not_initialized));
                 }
                 break;
             case R.id.action_help:

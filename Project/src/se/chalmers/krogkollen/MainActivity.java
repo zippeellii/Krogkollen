@@ -11,6 +11,7 @@ import android.os.Bundle;
 import android.view.Menu;
 import android.widget.Toast;
 import se.chalmers.krogkollen.backend.BackendHandler;
+import se.chalmers.krogkollen.backend.BackendMockup;
 import se.chalmers.krogkollen.backend.BackendNotInitializedException;
 import se.chalmers.krogkollen.backend.NoBackendAccessException;
 import se.chalmers.krogkollen.backend.ParseBackend;
@@ -55,7 +56,7 @@ public class MainActivity extends Activity {
         if (isNetworkAvailable()) {
             new InitResourcesTask().execute();
         } else {
-            Toast.makeText(this, R.string.error_no_connection, 3).show();
+            Toast.makeText(this, R.string.error_no_connection, Toast.LENGTH_LONG).show();
             this.finish();
         }
 	}
@@ -93,7 +94,7 @@ public class MainActivity extends Activity {
 
 			// If you want to use the mockup backend, comment the above line and
 			// uncomment the line below
-			//BackendHandler.getInstance().setBackend(new BackendMockup(0));
+//			BackendHandler.getInstance().setBackend(new BackendMockup(0));
 
 			try {
 				PubUtilities.getInstance().loadPubList();

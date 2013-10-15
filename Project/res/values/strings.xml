@@ -54,9 +54,7 @@ This file is part of Krogkollen.
     <string name="help_gray">Grå färg betyder att Krogkollen inte har fått någon aktuell information från krogen i fråga.</string>
     <string name="title_activity_detailed">Info</string>
     <string name="title_activity_help">Hjälp</string>
-    <string name="favorite_star_string">favorisera</string>
-    <string name="error_no_backend_access">Error cannot access server.</string>
-    <string name="error_no_backend_item">Cannot find item in server.</string>
+    <string name="favorite_star_string">Lägg till favorit</string>
     <string name="pref_storage_title">Lagring</string>
     <string name="pref_remove_favorites_desc">Ta bort sparade favoriter.</string>
     <string name="pref_remove_favorites_title">Rensa favoriter</string>
@@ -64,9 +62,14 @@ This file is part of Krogkollen.
     <string name="pref_remove_cache_title">Rensa cache</string>
     <string name="settings_title">Inställningar</string>
     <string name="title_activity_list">Listvy</string>
-    <string name="map_updating">Uppdaterar krogar...</string>
+    <string name="map_updating">Uppdaterar krogar&#8230;</string>
     <string name="map_user_name">user</string>
-    <string name="loading_pubs">Laddar krogar...</string>
+    <string name="loading_pubs">Laddar krogar&#8230;</string>
+    
+    <!--  Error message strings -->
+    <string name="error_no_backend_access">Serverfel, kan ej ansluta till servern.\nKontakta Krogkollen.</string>
+    <string name="error_no_backend_item">Serverfel, hittar ej krogen i databasen.\nKontakta Krogkollen..</string>
+    <string name="error_backend_not_initialized">Serverfel, servern har ej initierats.\nKontakta Krogkollen.</string>
     
 	<!-- Search strings -->
     <string name="search_hint">Sök efter en krog</string>

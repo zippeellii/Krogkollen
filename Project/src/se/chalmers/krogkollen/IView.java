@@ -1,5 +1,6 @@
 package se.chalmers.krogkollen;
 
+import android.content.Context;
 import android.os.Bundle;
 
 /*

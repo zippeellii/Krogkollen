@@ -4,7 +4,6 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.AsyncTask;
-import android.preference.PreferenceManager;
 import android.view.View;
 
 import com.google.android.gms.maps.model.LatLng;
@@ -12,7 +11,6 @@ import com.google.android.gms.maps.model.LatLng;
 import se.chalmers.krogkollen.IView;
 import se.chalmers.krogkollen.R;
 import se.chalmers.krogkollen.backend.BackendHandler;
-import se.chalmers.krogkollen.backend.BackendMockup;
 import se.chalmers.krogkollen.backend.BackendNotInitializedException;
 import se.chalmers.krogkollen.backend.NoBackendAccessException;
 import se.chalmers.krogkollen.backend.NotFoundInBackendException;
@@ -114,7 +112,6 @@ public class DetailedPresenter implements IDetailedPresenter {
 			}
 			saveThumbState(rating);
 		}
-
         updateVotes();
 	}
 
@@ -123,9 +120,6 @@ public class DetailedPresenter implements IDetailedPresenter {
      */
     public void saveFavoriteState(){
     	Preferences.getInstance().savePreference(pub.getID(), !Preferences.getInstance().loadPreference(pub.getID()));
-       /* SharedPreferences.Editor editor = view.getSharedPreferences(pub.getID(), 0).edit();
-        editor.putBoolean("star", (!view.getSharedPreferences(pub.getID(), 0).getBoolean("star", true)));
-        editor.commit();*/
     }
 
     /**
@@ -139,7 +133,7 @@ public class DetailedPresenter implements IDetailedPresenter {
 	}
 
     /**
-     * Converts the hour string
+     * Converts the hour string, e.g. if 3 is entered, 03 is returned
      * @param hour
      * @return
      */
@@ -154,18 +148,16 @@ public class DetailedPresenter implements IDetailedPresenter {
      * Updates the info of a pub
      * @throws NoBackendAccessException
      * @throws NotFoundInBackendException
-     * @throws BackendNotInitializedException 
      */
     public void updateInfo() throws NoBackendAccessException, NotFoundInBackendException{
         new UpdateTask().execute();
     }
 
-    // TODO what does this method do?
+    // Updates the info about the pub in another thread
     private class UpdateTask extends AsyncTask<Void, Void, Void>{
         protected void onPreExecute(){
             view.showProgressDialog();
         }
-
         protected Void doInBackground(Void... voids){
 
             try {
@@ -186,13 +178,11 @@ public class DetailedPresenter implements IDetailedPresenter {
         }
     }
 
-
     @Override
     public void onClick(View view) {
         if(view.getId() == R.id.thumbsDownLayout){
             try {
                 ratingChanged(-1);
-                //updateThumbs();
             } catch (NoBackendAccessException e) {
                 this.view.showErrorMessage(this.view.getString(R.string.error_no_backend_access));
             } catch (NotFoundInBackendException e) {
@@ -204,7 +194,6 @@ public class DetailedPresenter implements IDetailedPresenter {
         else if(view.getId() == R.id.thumbsUpLayout){
             try {
                 ratingChanged(1);
-                //updateThumbs();
             } catch (NoBackendAccessException e) {
                 this.view.showErrorMessage(this.view.getString(R.string.error_no_backend_access));
             } catch (NotFoundInBackendException e) {
@@ -225,8 +214,9 @@ public class DetailedPresenter implements IDetailedPresenter {
     private void updateMain(){
         view.updateQueueIndicator(pub.getQueueTime());
         view.updateText(pub.getName(), pub.getDescription(), convertOpeningHours(pub.getTodaysOpeningHour()) + " - " +
-                (convertOpeningHours(pub.getTodaysClosingHour())), ""+pub.getAgeRestriction() + " år", ""+pub.getEntranceFee()
-                + ":-"); // TODO put "år" in xml
+                (convertOpeningHours(pub.getTodaysClosingHour())), ""+pub.getAgeRestriction() + " " 
+                		+ view.getString(R.string.information_text_year), ""+pub.getEntranceFee()
+                		+ ":-");
         view.addMarker(pub);
         view.navigateToLocation(new LatLng(pub.getLatitude(), pub.getLongitude()), 14);
         view.showStar(Preferences.getInstance().loadPreference(pub.getID()));

@@ -9,7 +9,7 @@ import android.support.v4.app.FragmentPagerAdapter;
 // TODO javadoc
 public class TabsPagerAdapter extends FragmentPagerAdapter {
 	
-    private IListPresenter presenter;
+    private IListPresenter presenter; // TODO never used?
  
     // TODO javadoc
     public TabsPagerAdapter(FragmentManager fm, IListPresenter presenter) {

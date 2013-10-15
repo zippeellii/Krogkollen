@@ -19,6 +19,7 @@ import se.chalmers.krogkollen.map.MapActivity;
 import se.chalmers.krogkollen.map.UserLocation;
 import se.chalmers.krogkollen.pub.PubUtilities;
 import se.chalmers.krogkollen.utils.ActivityID;
+import se.chalmers.krogkollen.utils.Preferences;
 
 /*
  * This file is part of Krogkollen.
@@ -85,6 +86,9 @@ public class MainActivity extends Activity {
 
 		@Override
 		protected Void doInBackground(Void... voids) {
+			
+			//Initiates the preferences holder
+			Preferences.getInstance().init(getApplicationContext());
 
 			// Tells the backend handler to initialize its server connection
 			// with a backend to Parse.com
@@ -103,6 +107,7 @@ public class MainActivity extends Activity {
 			} catch (BackendNotInitializedException e) {
 				// TODO Auto-generated catch block
 			}
+			
 
 			// initiate the user location and start the map activity.
 			UserLocation.init((LocationManager) MainActivity.this

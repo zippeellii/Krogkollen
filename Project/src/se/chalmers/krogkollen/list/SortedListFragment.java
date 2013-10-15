@@ -11,6 +11,7 @@ import se.chalmers.krogkollen.adapter.TabsPagerAdapter;
 import se.chalmers.krogkollen.detailed.DetailedActivity;
 import se.chalmers.krogkollen.map.MapPresenter;
 import se.chalmers.krogkollen.pub.IPub;
+import se.chalmers.krogkollen.sort.FilterFavorites;
 import se.chalmers.krogkollen.sort.ISort;
 import se.chalmers.krogkollen.sort.SortByDistance;
 import se.chalmers.krogkollen.sort.SortByQueueTime;
@@ -63,7 +64,7 @@ public class SortedListFragment extends ListFragment {
                 break;
 
             case 2:
-                sort = new SortByDistance();
+                sort = new FilterFavorites();
                 break;
         }
 

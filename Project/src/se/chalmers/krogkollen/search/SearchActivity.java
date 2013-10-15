@@ -16,6 +16,7 @@ import android.app.ListActivity;
 import android.app.SearchManager;
 import android.content.Intent;
 import android.view.View;
+import android.widget.ArrayAdapter;
 import android.widget.ListView;
 
 /**
@@ -32,7 +33,7 @@ public class SearchActivity extends ListActivity implements IView {
 		setContentView(R.layout.activity_search);
 		handleIntent(getIntent());
 	}
-	
+
 	@Override
 	public void onNewIntent(Intent intent) {
 		setIntent(intent);
@@ -55,34 +56,42 @@ public class SearchActivity extends ListActivity implements IView {
 			String pubID = intent.getDataString();
 			Intent newIntent = new Intent(this, DetailedActivity.class);
 			newIntent.putExtra(MapActivity.MARKER_PUB_ID, pubID);
-			
+
 			// This leaks window but also makes sure that pressing the back button
 			// from the detailed view doesn't return the user to this activity but map or list.
 			this.finish();
 			startActivity(newIntent);
 		}
 	}
-	
+
 	// Searches
 	private void doSearch(String query) {
 		this.setTitle(this.getResources().getString(R.string.title_activity_search) + ": " + query);
-		
+
 		List<IPub> allPubs = PubUtilities.getInstance().getPubList();
 
 		List<IPub> matchingPubs = getMatchingPubs(query, allPubs);
-		
+
 		IPub[] pubs = this.convertListToArray(matchingPubs);
-		
+
 		this.addMatchesToListView(pubs);
 	}
-	
+
 	// Adds all the search matches to the listview
 	private void addMatchesToListView(IPub[] pubs) {
+
 		PubListAdapter adapter = new PubListAdapter(this,  R.layout.listview_item, pubs);
-		
-		getListView().setAdapter(adapter);
+
+		String[] string = {"Din sökning gav inga träffar"};
+		ArrayAdapter<String> stringAdapter = new ArrayAdapter<String>(this, R.layout.listview_item, string);
+
+		if(pubs.length != 0) {
+			this.getListView().setAdapter(adapter);
+		} else {
+			this.getListView().setAdapter(stringAdapter);
+		}
 	}
-	
+
 	// TODO use in utils instead, temp
 	private IPub[] convertListToArray(List <IPub> list) {
 		Pub[] pubArray = new Pub[list.size()];
@@ -91,7 +100,7 @@ public class SearchActivity extends ListActivity implements IView {
 		}
 		return pubArray;
 	}
-	
+
 	/**
 	 * Searches a list of IPubs for Pubs with names that in some way matches the query.
 	 * @param query the search
@@ -111,18 +120,18 @@ public class SearchActivity extends ListActivity implements IView {
 	@Override
 	public void navigate(Class<?> destination) {
 		// TODO Auto-generated method stub
-		
+
 	}
 
 	@Override
 	public void navigate(Class<?> destination, Bundle extras) {
 		// TODO Auto-generated method stub
-		
+
 	}
 
 	@Override
 	public void showErrorMessage(String message) {
 		// TODO Auto-generated method stub
-		
+
 	}
 }

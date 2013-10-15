@@ -80,10 +80,8 @@
         <activity android:name="se.chalmers.krogkollen.detailed.DetailedActivity"
                   android:label="@string/title_activity_detailed"
                   android:configChanges="orientation|keyboardHidden"
-                  android:screenOrientation="portrait">
-
-                  android:parentActivityName="se.chalmers.krogkollen.map.MapActivity"
-                  android:configChanges="orientation|keyboardHidden" >
+                  android:screenOrientation="portrait"
+                  android:parentActivityName="se.chalmers.krogkollen.map.MapActivity">
             <!-- Parent activity meta-data to support 4.0 and lower -->
             <meta-data
                     android:name="android.support.PARENT_ACTIVITY"
@@ -92,20 +90,13 @@
         <activity android:name="se.chalmers.krogkollen.help.HelpActivity"
                   android:label="@string/title_activity_help"
                   android:parentActivityName="se.chalmers.krogkollen.map.MapActivity"
-                  android:configChanges="orientation|keyboardHidden">
+                  android:configChanges="orientation|keyboardHidden"
+                  android:screenOrientation="portrait" >
             <!-- Parent activity meta-data to support 4.0 and lower -->
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="se.chalmers.krogkollen.map.MapActivity" />
         </activity>
-        <activity
-            android:name="se.chalmers.krogkollen.settings.SettingsActivity"
-                  android:parentActivityName="se.chalmers.krogkollen.map.MapActivity"
-            android:configChanges="orientation|keyboardHidden" />
-        	<!-- Parent activity meta-data to support 4.0 and lower -->
-            <meta-data
-                    android:name="android.support.PARENT_ACTIVITY"
-                    android:value="se.chalmers.krogkollen.map.MapActivity" />
         <activity
             android:name="se.chalmers.krogkollen.list.ListActivity"
             android:label="@string/title_activity_list" />

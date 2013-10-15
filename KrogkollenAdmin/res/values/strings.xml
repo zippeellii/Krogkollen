@@ -27,7 +27,7 @@ This file is part of Krogkollen.
     <string name="database_failure">Connection with database failed, could not load pubs.</string>
 
     <!-- Strings used in the ButtonsActivity -->
-    <string name="buttons_activity">Ingen information finns för tillfället.</string>
+    <string name="no_information">Ingen information finns för tillfället.</string>
     <string name="green_button_text">0 – 15 minuter</string>
     <string name="yellow_button_text">15 – 45 minuter</string>
     <string name="red_button_text">Mer än 45 minuter</string>

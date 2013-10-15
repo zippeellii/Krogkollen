@@ -64,10 +64,6 @@ public class MapActivity extends Activity implements IMapView {
      */
     public static final String	MARKER_PUB_ID	= "se.chalmers.krogkollen.MARKER_PUB_ID";
 
-    public static final int		USER_ZOOM		= 16;
-    public static final int		MARKER_ZOOM		= 18;
-    public static final int		DEFAULT_ZOOM	= 12;
-
     private MapPresenter		presenter;
     private Marker				userMarker;
     private ProgressDialog		progressDialog;
@@ -95,7 +91,7 @@ public class MapActivity extends Activity implements IMapView {
             public boolean onMarkerClick(Marker marker) {
 
                 // Move camera to the clicked marker.
-                moveCameraToPosition(marker.getPosition(), MARKER_ZOOM);
+                moveCameraToPosition(marker.getPosition(), MapWrapper.INSTANCE.getMap().getCameraPosition().zoom);
 
                 if (marker.getTitle().equalsIgnoreCase(getString(R.string.map_user_name))) {
                     // TODO Open favorites.
@@ -127,21 +123,13 @@ public class MapActivity extends Activity implements IMapView {
         return true;
     }
 
-    /**
-     * Center the Google maps camera on the user.
-     *
-     * @param zoom how close to zoom in on the user.
-     */
-    public void moveCameraToPosition(LatLng pos, int zoom) {
+    @Override
+    public void moveCameraToPosition(LatLng pos, float zoom) {
         MapWrapper.INSTANCE.getMap().animateCamera(
                 CameraUpdateFactory.newCameraPosition(new CameraPosition(pos, zoom, 0, 0)));
     }
 
-    /**
-     * Adds a user marker to the map.
-     *
-     * @param latLng the user location
-     */
+    @Override
     public void addUserMarker(LatLng latLng) {
         userMarker = MapWrapper.INSTANCE.getMap().addMarker(new MarkerOptions()
                 .position(latLng)
@@ -155,13 +143,7 @@ public class MapActivity extends Activity implements IMapView {
         return true;
     }
 
-    /**
-     * ** Method written by Google, found on stackoverflow.com ** **
-     * http://stackoverflow.com/questions/13728041/move-markers-in-google-map-v2-android ** Moves
-     * the user marker smoothly to a new position.
-     *
-     * @param toPosition the position to where the marker will be moved
-     */
+    @Override
     public void animateUserMarker(final LatLng toPosition) {
         final Handler handler = new Handler();
         final long start = SystemClock.uptimeMillis();

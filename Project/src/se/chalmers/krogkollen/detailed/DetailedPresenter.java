@@ -236,7 +236,7 @@ public class DetailedPresenter implements IDetailedPresenter {
         view.showStar(view.getSharedPreferences(pub.getID(), 0).getBoolean("star", true));
     }
 
-    // TODO what does this do?
+    // Updates the votes in the view
     private void updateVotes(){
         view.showVotes("" + pub.getPositiveRating(), "" + pub.getNegativeRating());
     }

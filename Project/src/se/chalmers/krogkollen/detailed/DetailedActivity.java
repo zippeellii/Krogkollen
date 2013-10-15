@@ -8,8 +8,6 @@ import android.support.v4.app.NavUtils;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
-import android.widget.ScrollView;
 import android.widget.TextView;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -59,7 +57,6 @@ public class DetailedActivity extends Activity implements IDetailedView {
             ageRestrictionTextView, entranceFeeTextView, votesUpTextView, votesDownTextView;
     private ImageView thumbsUpImage, thumbsDownImage, queueIndicator;
     private MenuItem favoriteStar;
-    private LinearLayout thumbsUpLayout, thumbsDownLayout; // TODO these are never used?
     private ProgressDialog progressDialog;
 
     private GoogleMap map;
@@ -86,8 +83,6 @@ public class DetailedActivity extends Activity implements IDetailedView {
 
         addListeners();
 
-        ScrollView scroll = (ScrollView) findViewById(R.id.scrollView);
-        scroll.setFadingEdgeLength(100);
         pubTextView= (TextView) findViewById(R.id.pub_name);
         descriptionTextView = (TextView) findViewById(R.id.description);
         openingHoursTextView = (TextView) findViewById(R.id.opening_hours);
@@ -98,8 +93,6 @@ public class DetailedActivity extends Activity implements IDetailedView {
         votesDownTextView = (TextView) findViewById(R.id.thumbsDownTextView);
         thumbsUpImage = (ImageView) findViewById(R.id.thumbsUpButton);
         thumbsDownImage = (ImageView) findViewById(R.id.thumbsDownButton);
-        thumbsUpLayout = (LinearLayout) findViewById(R.id.thumbsUpLayout);
-        thumbsDownLayout = (LinearLayout) findViewById(R.id.thumbsDownLayout);
 
         map = ((MapFragment) getFragmentManager().findFragmentById(R.id.map)).getMap();
         map.setOnMarkerClickListener(new GoogleMap.OnMarkerClickListener() {
@@ -115,6 +108,8 @@ public class DetailedActivity extends Activity implements IDetailedView {
         getActionBar().setDisplayUseLogoEnabled(false);
         getActionBar().setIcon(R.drawable.transparent_spacer);
         getActionBar().setDisplayHomeAsUpEnabled(true);
+
+        System.out.println("____________after_____________");
     }
 
     @Override

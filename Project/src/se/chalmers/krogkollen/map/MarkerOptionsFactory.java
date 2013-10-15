@@ -42,8 +42,7 @@ public class MarkerOptionsFactory {
      */
     public static MarkerOptions createMarkerOptions(final DisplayMetrics displayMetrics, final Resources resources, final IPub pub) {
 
-        // Make the bitmap mutable, since an object retrieved from resources is set to immutable by
-        // default.
+        // Make the bitmap mutable, since an object retrieved from resources is set to immutable by default.
         Bitmap bitmap = getBackgroundPicture(pub.getQueueTime(), resources);
         Bitmap bitmapResult = bitmap.copy(Bitmap.Config.ARGB_8888, true);
         bitmap.recycle();
@@ -58,7 +57,8 @@ public class MarkerOptionsFactory {
         paint.setTypeface(Typeface.SANS_SERIF);
         String mainText = pub.getName();
         if (mainText.length() > 10) {                           // if the text is too long cut it
-            mainText = mainText.substring(0, 10);
+            mainText = mainText.substring(0, 9);
+            mainText += ".";
         }
         canvas.drawText(mainText, displayMetrics.xdpi * 0.06f,
                 displayMetrics.ydpi * 0.15f, paint);

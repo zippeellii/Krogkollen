@@ -11,6 +11,7 @@ import se.chalmers.krogkollen.map.MapActivity;
 import se.chalmers.krogkollen.pub.IPub;
 import se.chalmers.krogkollen.pub.Pub;
 import se.chalmers.krogkollen.pub.PubUtilities;
+import se.chalmers.krogkollen.sort.SortBySearchRelevance;
 import android.os.Bundle;
 import android.app.ListActivity;
 import android.app.SearchManager;
@@ -70,6 +71,8 @@ public class SearchActivity extends ListActivity implements IView {
 		List<IPub> allPubs = PubUtilities.getInstance().getPubList();
 
 		List<IPub> matchingPubs = getMatchingPubs(query, allPubs);
+		
+		matchingPubs = new SortBySearchRelevance(query).sortAlgorithm(matchingPubs);
 		
 		IPub[] pubs = this.convertListToArray(matchingPubs);
 		

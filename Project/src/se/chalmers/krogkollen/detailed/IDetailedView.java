@@ -38,6 +38,11 @@ public interface IDetailedView extends IView {
     public void addMarker(IPub pub);
 
     /**
+     * Remove the marker from the map if such exist.
+     */
+    public void removeMarker();
+
+    /**
      * Shows the location of the coordinates on the map.
      * @param latLng The location to show.
      * @param zoom The speed which the map zooms to location.

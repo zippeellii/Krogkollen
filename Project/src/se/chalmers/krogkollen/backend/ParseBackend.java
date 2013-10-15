@@ -255,8 +255,8 @@ public class ParseBackend implements IBackend {
 	private boolean queueTimeIsRecentlyUpdated(long queueTimeLastUpdatedTimestamp) {
 		long epochTime = System.currentTimeMillis()/1000;
 		
-		// if the queue time was updated more than 30 minutes ago, it wasn't updated recently
-		if ((epochTime - queueTimeLastUpdatedTimestamp) > 1800) {
+		// if the queue time was updated more than 60 minutes ago, it wasn't updated recently
+		if ((epochTime - queueTimeLastUpdatedTimestamp) > 3200) {
 			return false;
 		} else {
 			return true;

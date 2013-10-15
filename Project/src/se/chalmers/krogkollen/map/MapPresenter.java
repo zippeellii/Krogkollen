@@ -38,9 +38,15 @@ public class MapPresenter implements IMapPresenter, GoogleMap.OnMarkerClickListe
      * Key value used when sending intents from this class.
      */
     public static final String	MAP_PRESENTER_KEY	= "se.chalmers.krogkollen.MAP_PRESENTER_KEY";
-    public static final int		PUB_REMOVED			= -1;
-    public static final int		PUB_CHANGED			= 0;
-    public static final int		PUB_ADDED			= 1;
+    
+    public static final int		PUB_REMOVED		= -1;
+    public static final int		PUB_CHANGED		= 0;
+    public static final int		PUB_ADDED		= 1;
+    
+    public static final int		USER_ZOOM		= 16;
+    public static final int		DEFAULT_ZOOM	= 12;
+    
+    public static final LatLng 	DEFAULT_LOCATION	= new LatLng(57.70887, 11.974613);
 
     private IMapView			mapView;
     private UserLocation		userLocation;
@@ -64,7 +70,7 @@ public class MapPresenter implements IMapPresenter, GoogleMap.OnMarkerClickListe
 
         // Use a default zoom if no position is found.
         if (userLocation.getCurrentLatLng() == null) {
-            mapView.moveCameraToPosition(new LatLng(57.70887, 11.974613), MapActivity.DEFAULT_ZOOM);
+            mapView.moveCameraToPosition(DEFAULT_LOCATION, DEFAULT_ZOOM);
         }
     }
 
@@ -89,8 +95,7 @@ public class MapPresenter implements IMapPresenter, GoogleMap.OnMarkerClickListe
                 if (userLocation.getCurrentLatLng() == null) {
                     showDialog(userLocation.getProviderStatus(), false);
                 } else {
-                    mapView.moveCameraToPosition(userLocation.getCurrentLatLng(),
-                            MapActivity.USER_ZOOM);
+                    mapView.moveCameraToPosition(userLocation.getCurrentLatLng(), USER_ZOOM);
                 }
                 break;
             case R.id.action_help:
@@ -131,8 +136,7 @@ public class MapPresenter implements IMapPresenter, GoogleMap.OnMarkerClickListe
             // User location has received a first location so a user marker is added and
             // map is centered on user.
             this.mapView.addUserMarker(this.userLocation.getCurrentLatLng());
-            this.mapView.moveCameraToPosition(userLocation.getCurrentLatLng(),
-                    MapActivity.USER_ZOOM);
+            this.mapView.moveCameraToPosition(userLocation.getCurrentLatLng(), USER_ZOOM);
         } else if (status == Status.NORMAL_UPDATE) {
             // The location has been updated, move the marker accordingly.
             this.mapView.animateUserMarker(this.userLocation.getCurrentLatLng());
@@ -172,7 +176,7 @@ public class MapPresenter implements IMapPresenter, GoogleMap.OnMarkerClickListe
     public boolean onMarkerClick(Marker marker) {
 
         // Move camera to the clicked marker.
-        mapView.moveCameraToPosition(marker.getPosition(), MapActivity.MARKER_ZOOM);
+        mapView.moveCameraToPosition(marker.getPosition(), MapWrapper.INSTANCE.getMap().getCameraPosition().zoom);
 
         if (marker.getTitle().equalsIgnoreCase(resources.getString(R.string.map_user_name))) {
             // TODO Open favorites.

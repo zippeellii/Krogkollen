@@ -8,8 +8,6 @@ import android.support.v4.app.NavUtils;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
-import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -62,7 +60,6 @@ public class DetailedActivity extends Activity implements IDetailedView {
             ageRestrictionTextView, entranceFeeTextView, votesUpTextView, votesDownTextView;
     private ImageView thumbsUpImage, thumbsDownImage, queueIndicator;
     private MenuItem favoriteStar;
-    private LinearLayout thumbsUpLayout, thumbsDownLayout; // TODO these are never used?
     private ProgressDialog progressDialog;
 
     private GoogleMap map;
@@ -70,10 +67,12 @@ public class DetailedActivity extends Activity implements IDetailedView {
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
+
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_detailed);
         presenter = new DetailedPresenter();
         presenter.setView(this);
+
 
         try {
             presenter.setPub(getIntent().getStringExtra(MapActivity.MARKER_PUB_ID));
@@ -87,8 +86,6 @@ public class DetailedActivity extends Activity implements IDetailedView {
 
         addListeners();
 
-        ScrollView scroll = (ScrollView) findViewById(R.id.scrollView);
-        scroll.setFadingEdgeLength(100);
         pubTextView= (TextView) findViewById(R.id.pub_name);
         descriptionTextView = (TextView) findViewById(R.id.description);
         openingHoursTextView = (TextView) findViewById(R.id.opening_hours);
@@ -99,8 +96,6 @@ public class DetailedActivity extends Activity implements IDetailedView {
         votesDownTextView = (TextView) findViewById(R.id.thumbsDownTextView);
         thumbsUpImage = (ImageView) findViewById(R.id.thumbsUpButton);
         thumbsDownImage = (ImageView) findViewById(R.id.thumbsDownButton);
-        thumbsUpLayout = (LinearLayout) findViewById(R.id.thumbsUpLayout);
-        thumbsDownLayout = (LinearLayout) findViewById(R.id.thumbsDownLayout);
 
         map = ((MapFragment) getFragmentManager().findFragmentById(R.id.map)).getMap();
         map.setOnMarkerClickListener(new GoogleMap.OnMarkerClickListener() {
@@ -291,7 +286,7 @@ public class DetailedActivity extends Activity implements IDetailedView {
 
     // TODO javadoc
     public void showProgressDialog(){
-        progressDialog = ProgressDialog.show(this, "","Uppdaterar", false, false);
+        progressDialog = ProgressDialog.show(this, "","Uppdaterar info", false, false);
     }
 
     // TODO javadoc

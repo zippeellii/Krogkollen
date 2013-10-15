@@ -37,6 +37,13 @@ public class BackendHandler {
 	public void setBackend(IBackend backend) {
 		backendInstance = backend;
 	}
+	
+	/**
+	 * @return the current initialized backend
+	 */
+	public IBackend getBackend() {
+		return backendInstance;
+	}
 
 	/**
 	 * @return a list containing all pubs in the current backend

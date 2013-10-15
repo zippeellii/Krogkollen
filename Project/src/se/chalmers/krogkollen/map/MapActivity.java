@@ -77,9 +77,9 @@ public class MapActivity extends Activity implements IMapView {
         try {
             MapWrapper.INSTANCE.init(this);
         } catch (NoBackendAccessException e) {
-            showErrorMessage(e.getMessage());
+            this.showErrorMessage(this.getString(R.string.error_no_backend_access));
         } catch (NotFoundInBackendException e) {
-            showErrorMessage(e.getMessage());
+            this.showErrorMessage(this.getString(R.string.error_no_backend_item));
         }
 
         // Create a presenter for this view.
@@ -237,11 +237,11 @@ public class MapActivity extends Activity implements IMapView {
 
     @Override
     public void showErrorMessage(String message) {
-        CharSequence text = message;
-        int duration = Toast.LENGTH_SHORT;
+    	CharSequence text = message;
+    	int duration = Toast.LENGTH_LONG;
 
-        Toast toast = Toast.makeText(this, text, duration);
-        toast.show();
+    	Toast toast = Toast.makeText(this, text, duration);
+    	toast.show();
     }
 
     @Override

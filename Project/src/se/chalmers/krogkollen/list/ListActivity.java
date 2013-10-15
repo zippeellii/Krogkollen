@@ -23,14 +23,13 @@ import se.chalmers.krogkollen.map.MapPresenter;
  */
 public class ListActivity extends FragmentActivity implements IListView{
 
-
 	private ViewPager viewPager;
     private IMapView mapView; // TODO this is never used?
     private TabsPagerAdapter mAdapter;
     private ActionBar actionBar;
     
     // Tab titles
-    private String[] tabs = { "Kötid", "Distans", "Favoriter" }; // TODO move names to XML
+    private String[] tabs;
     private IListPresenter presenter;
     private ListView list;  // TODO this is never used?
 
@@ -38,8 +37,13 @@ public class ListActivity extends FragmentActivity implements IListView{
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_list);
-
-        //Detta är bara för TEST
+        
+        tabs = new String[] {	getString(R.string.list_tab_name_queue_time), 
+								getString(R.string.list_tab_name_distance), 
+								getString(R.string.list_tab_name_favorites)};
+        
+        // TODO is this still a test?
+        //Detta är bara för TEST 
         viewPager = (ViewPager) findViewById(R.id.pager);
         actionBar = getActionBar();
         mAdapter = new TabsPagerAdapter(getSupportFragmentManager());
@@ -47,6 +51,7 @@ public class ListActivity extends FragmentActivity implements IListView{
         actionBar.setHomeButtonEnabled(false);
         actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_TABS);
         presenter = new ListPresenter(this);
+        
         // Adding Tabs
         for (String tab_name : tabs) {
             actionBar.addTab(actionBar.newTab().setText(tab_name)
@@ -97,8 +102,7 @@ public class ListActivity extends FragmentActivity implements IListView{
         startActivity(intent);
     }
 
-    //public void favoriteStarClickHandler(View v){
-    //}
+    @Override
 	public void showErrorMessage(String message) {
     	CharSequence text = message;
     	int duration = Toast.LENGTH_LONG;

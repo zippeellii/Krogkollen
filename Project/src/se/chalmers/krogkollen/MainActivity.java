@@ -68,7 +68,8 @@ public class MainActivity extends Activity {
 		getMenuInflater().inflate(R.menu.main, menu);
 		return true;
 	}
-
+	
+	// Checks if a network connection is available
     private boolean isNetworkAvailable() {
         ConnectivityManager connectivityManager
                 = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
@@ -76,13 +77,8 @@ public class MainActivity extends Activity {
         return activeNetworkInfo != null && activeNetworkInfo.isConnected();
     }
 
-	// TODO comment what this does
+	// Initiates required functions in another thread
 	private class InitResourcesTask extends AsyncTask<Void, Void, Void> {
-
-		@Override
-		protected void onPreExecute() {
-
-		}
 
 		@Override
 		protected Void doInBackground(Void... voids) {
@@ -98,7 +94,7 @@ public class MainActivity extends Activity {
 
 			// If you want to use the mockup backend, comment the above line and
 			// uncomment the line below
-//			BackendHandler.getInstance().setBackend(new BackendMockup(0));
+			//BackendHandler.getInstance().setBackend(new BackendMockup(0));
 
 			try {
 				PubUtilities.getInstance().loadPubList();
@@ -107,7 +103,6 @@ public class MainActivity extends Activity {
 			} catch (BackendNotInitializedException e) {
 				// TODO Auto-generated catch block
 			}
-			
 
 			// initiate the user location and start the map activity.
 			UserLocation.init((LocationManager) MainActivity.this

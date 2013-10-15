@@ -14,9 +14,9 @@ import se.chalmers.krogkollen.pub.Pub;
  */
 public class BackendMockup implements IBackend {
 
-	ArrayList<IPub>	pubs			= new ArrayList<IPub>();
-	public boolean			throwNoBackend	= false;
-	public boolean			throwNotFound	= false;
+	ArrayList<IPub>		pubs			= new ArrayList<IPub>();
+	public boolean		throwNoBackend	= false;
+	public boolean		throwNotFound	= false;
 
 	/**
 	 * Instantiates a new BackendMockup

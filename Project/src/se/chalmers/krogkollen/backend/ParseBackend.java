@@ -16,8 +16,8 @@ import se.chalmers.krogkollen.pub.Pub;
 import se.chalmers.krogkollen.utils.StringConverter;
 
 /**
- * A singleton backend handling the connection between the client and the server Uses parse.com as
- * backend provider
+ * A backend handling the connection between the client and the server.
+ * Uses parse.com as backend provider
  * 
  * @author Jonathan Nilsfors
  * @author Oskar Karrman

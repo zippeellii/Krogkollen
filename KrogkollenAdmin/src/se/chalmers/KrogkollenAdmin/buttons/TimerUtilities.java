@@ -4,6 +4,8 @@ import java.util.Timer;
 import java.util.TimerTask;
 
 /**
+ * A singleton utility class holding all the timers and the logic surrounding them.
+ *
  * @author Albin Garpetun
  *         Created 2013-09-22
  */
@@ -21,6 +23,10 @@ public class TimerUtilities {
         // Exists only to defeat instantiation.
     }
 
+    /**
+     * Gets an instance of the class. If it already exists 1 instance of it, it returns that one.
+     * @return The instance.
+     */
     public static TimerUtilities getInstance() {
         if(instance == null) {
             instance = new TimerUtilities();
@@ -28,17 +34,28 @@ public class TimerUtilities {
         return instance;
     }
 
+    /**
+     * Associates a presenter with the TimerUtilties class.
+     * This is to prevent that more than one presenter uses the timer class, and thus multiplicates the timers.
+     * @param presenter The presenter to be associated with.
+     */
     public void setupActivePresenter(ButtonsPresenter presenter) {
         this.presenter = presenter;
         resetNotificationTimer();
         resetInputTimer();
     }
 
+    /**
+     * Disables all the timers active.
+     */
     public void disableAllTimers() {
         disableTimer(inputDisabledTimer);
         disableTimer(notificationTimer);
     }
 
+    /**
+     * Disables the notification timer.
+     */
     public void disableNotificationTimer() {
         disableTimer(notificationTimer);
     }
@@ -50,9 +67,6 @@ public class TimerUtilities {
         }
     }
 
-    /**
-     * Runs a timer that handles disabling of the buttons. Makes sure that the user doesn't spam the server by disabling more than one click every 20 second.
-     */
     private void runInputTimer() {
         inputDisabledTimer = new Timer();
         inputDisabledTimer.schedule(new TimerTask() {
@@ -120,6 +134,9 @@ public class TimerUtilities {
         runInputTimer();
     }
 
+    /**
+     * Resets the notification timer.
+     */
     public void resetNotificationTimer() {
         disableTimer(notificationTimer);
         firstTimeNotificationTimer = true;

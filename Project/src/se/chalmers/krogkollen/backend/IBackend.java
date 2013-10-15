@@ -82,7 +82,7 @@ public interface IBackend {
 			NoBackendAccessException;
 
 	/**
-	 * Returns the date of which the pub was latest updated
+	 * Returns the timestamp of when the pub was latest updated
 	 * 
 	 * @param pub the requested pub
 	 * @return latest update timestamp
@@ -93,8 +93,8 @@ public interface IBackend {
 			NoBackendAccessException;
 
 	/**
-	 * Updates the pub object with the current info about the queue time, positive and negative
-	 * rating
+	 * Updates the pub object with the current info about the queue time, queue timestamp,
+	 * positive and negative rating
 	 * 
 	 * @param pub the pub which values should be updated
 	 * @throws NoBackendAccessException

@@ -37,6 +37,13 @@ public class BackendHandler {
 	public void setBackend(IBackend backend) {
 		backendInstance = backend;
 	}
+	
+	/**
+	 * @return the current initialized backend
+	 */
+	public IBackend getBackend() {
+		return backendInstance;
+	}
 
 	/**
 	 * @return a list containing all pubs in the current backend
@@ -63,7 +70,7 @@ public class BackendHandler {
 
 	/**
 	 * 
-	 * @param id
+	 * @param id the pub ID
 	 * @return the IPub object for the specified ID
 	 * @throws NoBackendAccessException
 	 * @throws NotFoundInBackendException
@@ -105,7 +112,7 @@ public class BackendHandler {
 	/**
 	 * 
 	 * @param pub
-	 * @return a Date object for when the specified pub was last updated in the current backend
+	 * @return the timestamp for when the specified pub was last updated in the current backend
 	 * @throws NoBackendAccessException
 	 * @throws NotFoundInBackendException
 	 * @throws BackendNotInitializedException
@@ -119,7 +126,7 @@ public class BackendHandler {
 	/**
 	 * Adds a rating vote for the specified pub in the current backend
 	 * 
-	 * @param pub
+	 * @param pub the pub for which the rating should be added to
 	 * @param rating the rating vote to add
 	 * @throws NoBackendAccessException
 	 * @throws NotFoundInBackendException
@@ -134,7 +141,7 @@ public class BackendHandler {
 	/**
 	 * Removes a rating vote for the specified pub in the current backend
 	 * 
-	 * @param pub
+	 * @param pub the pub for which the rating should be added to
 	 * @param rating the rating vote to remove
 	 * @throws NoBackendAccessException
 	 * @throws NotFoundInBackendException

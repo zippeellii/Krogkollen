@@ -124,7 +124,6 @@ public class MapPresenter implements IMapPresenter, GoogleMap.OnMarkerClickListe
 
     @Override
     public void pubMarkerClicked(String title) {
-        System.out.println("_____________before________________");
         Bundle bundle = new Bundle();
         bundle.putString(MAP_PRESENTER_KEY, title);
         mapView.navigate(DetailedActivity.class, bundle);
@@ -262,11 +261,11 @@ public class MapPresenter implements IMapPresenter, GoogleMap.OnMarkerClickListe
 
                         MapWrapper.INSTANCE.refreshPubMarkers(changedPubsHash);
                     } catch (NoBackendAccessException e) {
-                        mapView.showErrorMessage(e.getMessage());
+                        mapView.showErrorMessage(mapView.getResources().getString(R.string.error_no_backend_access));
                     } catch (NotFoundInBackendException e) {
-                        mapView.showErrorMessage(e.getMessage());
+                        mapView.showErrorMessage(mapView.getResources().getString(R.string.error_no_backend_item));
                     } catch (BackendNotInitializedException e) {
-                        mapView.showErrorMessage(e.getMessage());
+                        mapView.showErrorMessage(mapView.getResources().getString(R.string.error_backend_not_initialized));
                     }
                 }
             });

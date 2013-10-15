@@ -11,6 +11,7 @@ import android.os.Bundle;
 import android.view.Menu;
 import android.widget.Toast;
 import se.chalmers.krogkollen.backend.BackendHandler;
+import se.chalmers.krogkollen.backend.BackendMockup;
 import se.chalmers.krogkollen.backend.BackendNotInitializedException;
 import se.chalmers.krogkollen.backend.NoBackendAccessException;
 import se.chalmers.krogkollen.backend.ParseBackend;
@@ -18,6 +19,7 @@ import se.chalmers.krogkollen.map.MapActivity;
 import se.chalmers.krogkollen.map.UserLocation;
 import se.chalmers.krogkollen.pub.PubUtilities;
 import se.chalmers.krogkollen.utils.ActivityID;
+import se.chalmers.krogkollen.utils.Preferences;
 
 /*
  * This file is part of Krogkollen.
@@ -55,7 +57,7 @@ public class MainActivity extends Activity {
         if (isNetworkAvailable()) {
             new InitResourcesTask().execute();
         } else {
-            Toast.makeText(this, R.string.error_no_connection, 3).show();
+            Toast.makeText(this, R.string.error_no_connection, Toast.LENGTH_LONG).show();
             this.finish();
         }
 	}
@@ -66,7 +68,8 @@ public class MainActivity extends Activity {
 		getMenuInflater().inflate(R.menu.main, menu);
 		return true;
 	}
-
+	
+	// Checks if a network connection is available
     private boolean isNetworkAvailable() {
         ConnectivityManager connectivityManager
                 = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
@@ -74,16 +77,14 @@ public class MainActivity extends Activity {
         return activeNetworkInfo != null && activeNetworkInfo.isConnected();
     }
 
-	// TODO comment what this does
+	// Initiates required functions in another thread
 	private class InitResourcesTask extends AsyncTask<Void, Void, Void> {
 
 		@Override
-		protected void onPreExecute() {
-
-		}
-
-		@Override
 		protected Void doInBackground(Void... voids) {
+			
+			//Initiates the preferences holder
+			Preferences.getInstance().init(getApplicationContext());
 
 			// Tells the backend handler to initialize its server connection
 			// with a backend to Parse.com

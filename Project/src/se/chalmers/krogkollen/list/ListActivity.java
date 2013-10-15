@@ -8,8 +8,9 @@ import android.support.v4.view.ViewPager;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.ListView;
+import android.widget.Toast;
 import se.chalmers.krogkollen.R;
-import se.chalmers.krogkollen.adapter.*;
+import se.chalmers.krogkollen.adapter.TabsPagerAdapter;
 import se.chalmers.krogkollen.map.IMapView;
 import se.chalmers.krogkollen.map.MapActivity;
 import se.chalmers.krogkollen.map.MapPresenter;
@@ -21,6 +22,7 @@ import se.chalmers.krogkollen.map.MapPresenter;
  *
  */
 public class ListActivity extends FragmentActivity implements IListView{
+
 
 	private ViewPager viewPager;
     private IMapView mapView; // TODO this is never used?
@@ -37,11 +39,11 @@ public class ListActivity extends FragmentActivity implements IListView{
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_list);
 
-        
+        //Detta är bara för TEST
         viewPager = (ViewPager) findViewById(R.id.pager);
         actionBar = getActionBar();
-        mAdapter = new TabsPagerAdapter(getSupportFragmentManager(), presenter);
-        
+        mAdapter = new TabsPagerAdapter(getSupportFragmentManager());
+
         viewPager.setAdapter(mAdapter);
         actionBar.setHomeButtonEnabled(false);
         actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_TABS);
@@ -73,12 +75,12 @@ public class ListActivity extends FragmentActivity implements IListView{
 
     @Override
     public void setActionBarSelectedNavigationItem(int pos){
-    	actionBar.setSelectedNavigationItem(pos);
+        actionBar.setSelectedNavigationItem(pos);
     }
     
     @Override
     public void setViewPagerCurrentItem(int pos){
-    	viewPager.setCurrentItem(pos);
+        viewPager.setCurrentItem(pos);
     }
 
     @Override
@@ -94,10 +96,14 @@ public class ListActivity extends FragmentActivity implements IListView{
         startActivity(intent);
     }
 
-    @Override
+    //public void favoriteStarClickHandler(View v){
+    //}
 	public void showErrorMessage(String message) {
-		// TODO Auto-generated method stub
+    	CharSequence text = message;
+    	int duration = Toast.LENGTH_LONG;
 
+    	Toast toast = Toast.makeText(this, text, duration);
+    	toast.show();
 	}
 
     @Override

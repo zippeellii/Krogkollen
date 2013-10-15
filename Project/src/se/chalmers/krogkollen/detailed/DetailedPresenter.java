@@ -1,15 +1,20 @@
 package se.chalmers.krogkollen.detailed;
 
+import android.content.Intent;
 import android.content.SharedPreferences;
+import android.net.Uri;
 import android.os.AsyncTask;
 import android.view.View;
 import com.google.android.gms.maps.model.LatLng;
 import se.chalmers.krogkollen.IView;
 import se.chalmers.krogkollen.R;
-import se.chalmers.krogkollen.backend.*;
+import se.chalmers.krogkollen.backend.BackendHandler;
+import se.chalmers.krogkollen.backend.BackendNotInitializedException;
+import se.chalmers.krogkollen.backend.NoBackendAccessException;
+import se.chalmers.krogkollen.backend.NotFoundInBackendException;
+import se.chalmers.krogkollen.map.UserLocation;
 import se.chalmers.krogkollen.pub.IPub;
 import se.chalmers.krogkollen.pub.PubUtilities;
-import se.chalmers.krogkollen.utils.StringConverter;
 
 /**
  * A presenter class for the detailed view of a pub
@@ -149,6 +154,7 @@ public class DetailedPresenter implements IDetailedPresenter {
         new UpdateTask().execute();
     }
 
+    // TODO what does this method do?
     private class UpdateTask extends AsyncTask<Void, Void, Void>{
         protected void onPreExecute(){
             view.showProgressDialog();
@@ -159,11 +165,11 @@ public class DetailedPresenter implements IDetailedPresenter {
             try {
                 BackendHandler.getInstance().updatePubLocally(pub);
             } catch (NoBackendAccessException e) {
-                System.out.println("error");
+                view.showErrorMessage(e.getMessage());
             } catch (NotFoundInBackendException e) {
-                System.out.println("error");
+            	view.showErrorMessage(e.getMessage());
             } catch (BackendNotInitializedException e){
-                System.out.println("error");
+            	view.showErrorMessage(e.getMessage());
             }
             return null;
         }
@@ -182,11 +188,11 @@ public class DetailedPresenter implements IDetailedPresenter {
                 ratingChanged(-1);
                 //updateThumbs();
             } catch (NotFoundInBackendException e) {
-                System.out.println("error");
+            	this.view.showErrorMessage(e.getMessage());
             } catch (NoBackendAccessException e) {
-                System.out.println("error");
+                this.view.showErrorMessage(e.getMessage());
             } catch (BackendNotInitializedException e){
-                System.out.println("error");
+            	this.view.showErrorMessage(e.getMessage());
             }
         }
         else if(view.getId() == R.id.thumbsUpLayout){
@@ -194,12 +200,18 @@ public class DetailedPresenter implements IDetailedPresenter {
                 ratingChanged(1);
                 //updateThumbs();
             } catch (NotFoundInBackendException e) {
-                System.out.println("error");
+            	this.view.showErrorMessage(e.getMessage());
             } catch (NoBackendAccessException e) {
-                System.out.println("error");
+            	this.view.showErrorMessage(e.getMessage());
             } catch (BackendNotInitializedException e){
-                System.out.println("error");
+            	this.view.showErrorMessage(e.getMessage());
             }
+        } else if (view.getId() == R.id.navigate) {
+            Intent i = new Intent(Intent.ACTION_VIEW, Uri.parse("http://maps.google.com/maps?saddr="
+                    + UserLocation.getInstance().getCurrentLatLng().latitude + ","
+                    + UserLocation.getInstance().getCurrentLatLng().longitude + "&daddr="
+                    + pub.getLatitude() + "," + pub.getLongitude()));
+            this.view.startActivity(i);
         }
     }
 
@@ -208,7 +220,7 @@ public class DetailedPresenter implements IDetailedPresenter {
         view.updateQueueIndicator(pub.getQueueTime());
         view.updateText(pub.getName(), pub.getDescription(), convertOpeningHours(pub.getTodaysOpeningHour()) + " - " +
                 (convertOpeningHours(pub.getTodaysClosingHour())), ""+pub.getAgeRestriction() + " år", ""+pub.getEntranceFee()
-                + ":-");
+                + ":-"); // TODO put "år" in xml
         view.addMarker(pub);
         view.navigateToLocation(new LatLng(pub.getLatitude(), pub.getLongitude()), 14);
         view.showStar(view.getSharedPreferences(pub.getID(), 0).getBoolean("star", true));
@@ -216,11 +228,13 @@ public class DetailedPresenter implements IDetailedPresenter {
         updateVotes();
     }
 
+    @Override
     public void updateStar(){
         saveFavoriteState();
         view.showStar(view.getSharedPreferences(pub.getID(), 0).getBoolean("star", true));
     }
 
+    // TODO what does this do?
     private void updateVotes(){
         view.showVotes("" + pub.getPositiveRating(), "" + pub.getNegativeRating());
     }

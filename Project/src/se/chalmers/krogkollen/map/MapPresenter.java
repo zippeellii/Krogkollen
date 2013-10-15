@@ -7,10 +7,8 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
 import android.view.MenuItem;
-
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.model.LatLng;
-
 import com.google.android.gms.maps.model.Marker;
 import se.chalmers.krogkollen.IView;
 import se.chalmers.krogkollen.R;
@@ -19,9 +17,10 @@ import se.chalmers.krogkollen.backend.NoBackendAccessException;
 import se.chalmers.krogkollen.backend.NotFoundInBackendException;
 import se.chalmers.krogkollen.detailed.DetailedActivity;
 import se.chalmers.krogkollen.help.HelpActivity;
+import se.chalmers.krogkollen.list.ListActivity;
 import se.chalmers.krogkollen.pub.IPub;
 import se.chalmers.krogkollen.pub.PubUtilities;
-import se.chalmers.krogkollen.settings.SettingsActivity;
+import se.chalmers.krogkollen.utils.ActivityID;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -82,7 +81,7 @@ public class MapPresenter implements IMapPresenter, GoogleMap.OnMarkerClickListe
                 new RefreshTask().execute();
                 break;
             case R.id.search:
-                // Open search
+                mapView.onSearch();
                 break;
             case R.id.go_to_my_location:
                 // If no position has been found, show corresponding dialog, otherwise move the
@@ -97,13 +96,10 @@ public class MapPresenter implements IMapPresenter, GoogleMap.OnMarkerClickListe
             case R.id.action_help:
                 mapView.navigate(HelpActivity.class);
                 break;
-            case R.id.action_settings:
-                mapView.navigate(SettingsActivity.class);
-                break;
             case android.R.id.home:
-
-                // OPEN LIST VIEW HERE
-                // USE NAVIGATE IN MAP VIEW / MAP ACTIVITY.
+                Bundle bundle = new Bundle();
+                bundle.putInt(ActivityID.ACTIVITY_ID, ActivityID.MAP);
+                mapView.navigate(ListActivity.class, bundle);
 
                 break;
             default:
@@ -261,11 +257,11 @@ public class MapPresenter implements IMapPresenter, GoogleMap.OnMarkerClickListe
 
                         MapWrapper.INSTANCE.refreshPubMarkers(changedPubsHash);
                     } catch (NoBackendAccessException e) {
-                        mapView.showErrorMessage(resources.getString(R.string.error_no_backend_access));
+                        mapView.showErrorMessage(e.getMessage());
                     } catch (NotFoundInBackendException e) {
-                        mapView.showErrorMessage(resources.getString(R.string.error_no_backend_item));
+                        mapView.showErrorMessage(e.getMessage());
                     } catch (BackendNotInitializedException e) {
-                        mapView.showErrorMessage(resources.getString(R.string.error_no_backend_access));
+                        mapView.showErrorMessage(e.getMessage());
                     }
                 }
             });

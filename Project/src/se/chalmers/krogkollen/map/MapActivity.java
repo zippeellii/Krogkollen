@@ -21,10 +21,12 @@ import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.CompoundButton.OnCheckedChangeListener;
 import android.widget.Toast;
+
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.Projection;
 import com.google.android.gms.maps.model.*;
+
 import se.chalmers.krogkollen.R;
 import se.chalmers.krogkollen.backend.NoBackendAccessException;
 import se.chalmers.krogkollen.backend.NotFoundInBackendException;
@@ -79,9 +81,9 @@ public class MapActivity extends Activity implements IMapView {
         try {
             MapWrapper.INSTANCE.init(this);
         } catch (NoBackendAccessException e) {
-            showErrorMessage(getResources().getString(R.string.error_no_backend_access));
+            showErrorMessage(e.getMessage());
         } catch (NotFoundInBackendException e) {
-            showErrorMessage(getResources().getString(R.string.error_no_backend_item));
+            showErrorMessage(e.getMessage());
         }
 
         // Create a presenter for this view.
@@ -316,4 +318,9 @@ public class MapActivity extends Activity implements IMapView {
     public Resources getResources() {
         return super.getResources();
     }
+
+	@Override
+	public void onSearch() {
+		this.onSearchRequested();
+	}
 }

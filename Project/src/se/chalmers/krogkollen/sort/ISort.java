@@ -1,4 +1,4 @@
-package se.chalmers.krogkollen.search;
+package se.chalmers.krogkollen.sort;
 
 import java.util.List;
 
@@ -17,5 +17,6 @@ public interface ISort {
 	 * @param pubs the list that should be sorted
 	 * @return the sorted list
 	 */
-	public List<IPub> sortAlgorithm(List<IPub> pubs);
+	public List<IPub> sortAlgorithm(final List<IPub> pubs);
+	
 }

@@ -5,6 +5,7 @@ package se.chalmers.krogkollen.utils;
  */
 public interface IObserver {
 
+	// TODO javadoc
 	public enum Status {
 		FIRST_LOCATION,
 		NORMAL_UPDATE,

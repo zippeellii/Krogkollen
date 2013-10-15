@@ -6,6 +6,30 @@ Legend:
 * changes
 --------------------
 
+1.0.0 - Search, list view, sorting
+
+	MAIN APP
++ Created a mockup backend class to use for testing and keeping the API requests low
++ Added a way to view all pubs in a list view
++ Created interfaces and implemented sorting algorithms
++ Added tests
++ Added text to help view
++ Implemented Google Maps functionality in the detailed view
++ Added search functionality with search suggestions
+* Fixed text and position scaling for map markers depending on screen size
+* Extdended click area for rating buttons
+* Refactored backend classes
+* Refactored refresh algorithm, it is now threaded and faster
+* Refactored the detailed view
+* Changed marker creation process
+
+	ADMIN APP
+* Fixed loading indicators
+* Cleaned up code
+* Fixed back button not working after logging out
+
+--------------------
+
 0.3.0 - Backend, refactoring, small features and fixes, threading
 
 	MAIN APP

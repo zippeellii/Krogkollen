@@ -1,6 +1,5 @@
 package se.chalmers.krogkollen.backend;
 
-import java.util.Date;
 import java.util.List;
 
 import se.chalmers.krogkollen.pub.IPub;
@@ -16,8 +15,7 @@ public class BackendHandler {
 	private static IBackend			backendInstance	= null;
 
 	// Private constructor to prevent accessibility
-	private BackendHandler() {
-	}
+	private BackendHandler() {}
 
 	/**
 	 * Returns the instance for this singleton
@@ -112,7 +110,7 @@ public class BackendHandler {
 	 * @throws NotFoundInBackendException
 	 * @throws BackendNotInitializedException
 	 */
-	public Date getLatestUpdatedTimestamp(IPub pub) throws NoBackendAccessException,
+	public long getLatestUpdatedTimestamp(IPub pub) throws NoBackendAccessException,
 			NotFoundInBackendException, BackendNotInitializedException {
 		this.checkBackendInstance();
 		return backendInstance.getLatestUpdatedTimestamp(pub);

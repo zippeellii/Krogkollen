@@ -4,11 +4,13 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.location.LocationManager;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.view.Menu;
+import android.widget.Toast;
 import se.chalmers.krogkollen.backend.BackendHandler;
-import se.chalmers.krogkollen.backend.BackendMockup;
 import se.chalmers.krogkollen.backend.BackendNotInitializedException;
 import se.chalmers.krogkollen.backend.NoBackendAccessException;
 import se.chalmers.krogkollen.backend.ParseBackend;
@@ -48,7 +50,14 @@ public class MainActivity extends Activity {
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 
-		new InitResourcesTask().execute();
+        setContentView(R.layout.activity_main);
+
+        if (isNetworkAvailable()) {
+            new InitResourcesTask().execute();
+        } else {
+            Toast.makeText(this, R.string.error_no_connection, 3).show();
+            this.finish();
+        }
 	}
 
 	@Override
@@ -58,12 +67,19 @@ public class MainActivity extends Activity {
 		return true;
 	}
 
+    private boolean isNetworkAvailable() {
+        ConnectivityManager connectivityManager
+                = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
+        NetworkInfo activeNetworkInfo = connectivityManager.getActiveNetworkInfo();
+        return activeNetworkInfo != null && activeNetworkInfo.isConnected();
+    }
+
 	// TODO comment what this does
 	private class InitResourcesTask extends AsyncTask<Void, Void, Void> {
 
 		@Override
 		protected void onPreExecute() {
-			setContentView(R.layout.activity_main);
+
 		}
 
 		@Override
@@ -77,7 +93,7 @@ public class MainActivity extends Activity {
 
 			// If you want to use the mockup backend, comment the above line and
 			// uncomment the line below
-			// BackendHandler.getInstance().setBackend(new BackendMockup(0));
+			//BackendHandler.getInstance().setBackend(new BackendMockup(0));
 
 			try {
 				PubUtilities.getInstance().loadPubList();
@@ -94,11 +110,11 @@ public class MainActivity extends Activity {
 			return null;
 		}
 
-		@Override
-		protected void onPostExecute(Void result) {
-			Intent intent = new Intent(MainActivity.this, MapActivity.class);
-			intent.putExtra("previous_activity", ActivityID.MAIN);
-			startActivity(intent);
-		}
-	}
+        @Override
+        protected void onPostExecute(Void result) {
+            Intent intent = new Intent(MainActivity.this, MapActivity.class);
+            intent.putExtra(ActivityID.ACTIVITY_ID, ActivityID.MAIN);
+            startActivity(intent);
+        }
+    }
 }

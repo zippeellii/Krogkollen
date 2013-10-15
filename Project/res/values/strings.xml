@@ -67,5 +67,10 @@ This file is part of Krogkollen.
     <string name="map_updating">Uppdaterar krogar...</string>
     <string name="map_user_name">user</string>
     <string name="loading_pubs">Laddar krogar...</string>
+    
+	<!-- Search strings -->
+    <string name="search_hint">Sök efter en krog</string>
+    <string name="title_activity_search">Sök</string>
+    <string name="error_no_connection">Ingen anslutning</string>
 
 </resources>

@@ -15,10 +15,18 @@
          along with Krogkollen.  If not, see <http://www.gnu.org/licenses/>.
 -->
 
-<menu xmlns:android="http://schemas.android.com/apk/res/android" >
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
     <item
             android:id="@+id/logout_item"
             android:title="@string/log_out"
             android:orderInCategory="100"
             android:showAsAction="never"/>
+
+    <item
+            android:id="@+id/notifications_item"
+            android:title="@string/notifications"
+            android:orderInCategory="100"
+            android:showAsAction="never"
+            android:checkable="true"
+            android:checked="true"/>
 </menu>

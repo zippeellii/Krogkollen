@@ -1,6 +1,5 @@
 package se.chalmers.krogkollen.backend;
 
-import java.util.Date;
 import java.util.List;
 
 import se.chalmers.krogkollen.pub.IPub;
@@ -86,11 +85,11 @@ public interface IBackend {
 	 * Returns the date of which the pub was latest updated
 	 * 
 	 * @param pub the requested pub
-	 * @return latest update date
+	 * @return latest update timestamp
 	 * @throws NotFoundInBackendException
 	 * @throws NoBackendAccessException
 	 */
-	public Date getLatestUpdatedTimestamp(IPub pub) throws NotFoundInBackendException,
+	public long getLatestUpdatedTimestamp(IPub pub) throws NotFoundInBackendException,
 			NoBackendAccessException;
 
 	/**

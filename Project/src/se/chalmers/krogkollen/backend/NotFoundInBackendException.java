@@ -18,6 +18,7 @@ public class NotFoundInBackendException extends Exception {
 	 * Create a new NotFoundInBackendException without additional information
 	 */
 	public NotFoundInBackendException() {
+		super();
 	}
 
 	/**

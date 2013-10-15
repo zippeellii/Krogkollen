@@ -1,15 +1,14 @@
 package se.chalmers.KrogkollenAdmin.buttons;
 
+
 import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.Html;
 import android.view.*;
-import android.widget.*;
-import com.parse.ParseUser;
+import android.widget.Button;
 import se.chalmers.KrogkollenAdmin.R;
-import se.chalmers.KrogkollenAdmin.main.MainActivity;
 
 /*
  * This file is part of Krogkollen.
@@ -52,24 +51,43 @@ public class ButtonsActivity extends Activity {
         setContentView(R.layout.activity_buttons);
         getActionBar().setDisplayShowHomeEnabled(false);
         presenter = new ButtonsPresenter(this);
+        presenter.startTimers();
         presenter.setupParseObject();
         presenter.setLocalQueueTime();
         setupUiElements();
         addListenersOnButtons();
         updateGUI();
+        for (int i = 0; i < 10; i++) {
+            System.out.println("OMG FU");
+        }
     }
 
+    @Override
     public boolean onOptionsItemSelected(MenuItem menuItem) {
         if (menuItem.getItemId() == R.id.logout_item) {
             logOut();
 
             return true;
+        } else if (menuItem.getItemId() == R.id.notifications_item) {
+            menuItem.setChecked(!menuItem.isChecked());
+            toggleNotifications();
         }
         return false;
     }
 
+    private void toggleNotifications() {
+        presenter.toggleNotifications();
+    }
+
     private void logOut() {
         presenter.logOut();
+    }
+
+    @Override
+    public void onBackPressed() {
+        Intent intent = new Intent(Intent.ACTION_MAIN);
+        intent.addCategory(Intent.CATEGORY_HOME);
+        startActivity(intent);
     }
 
     @Override
@@ -121,6 +139,7 @@ public class ButtonsActivity extends Activity {
 
     /**
      * Sets the buttons visibility and then tells the presenter which button got clicked.
+     *
      * @param i the button clicked.
      */
     private void buttonClicked(int i) {
@@ -162,22 +181,26 @@ public class ButtonsActivity extends Activity {
         // These cases adds the current button active to the string. If there is one.
         // They also set that button to be selected.
         switch (presenter.getQueueTime()) {
-            case 1: msg = getResources().getString(R.string.queue_now) +
-                    " <font color='#70c656'>" + getResources().getString(R.string.green) + "</font>";
+            case 1:
+                msg = getResources().getString(R.string.queue_now) +
+                        " <font color='#70c656'>" + getResources().getString(R.string.green) + "</font>";
                 setTitle(Html.fromHtml(msg));
                 greenButton.setSelected(true);
                 break;
-            case 2: msg = getResources().getString(R.string.queue_now) +
-                    " <font color='#f3ae1b'>" + getResources().getString(R.string.yellow) + "</font>";
+            case 2:
+                msg = getResources().getString(R.string.queue_now) +
+                        " <font color='#f3ae1b'>" + getResources().getString(R.string.yellow) + "</font>";
                 setTitle(Html.fromHtml(msg));
                 yellowButton.setSelected(true);
                 break;
-            case 3: msg = getResources().getString(R.string.queue_now) +
-                    " <font color='#ef4444'>" + getResources().getString(R.string.red) + "</font>";
+            case 3:
+                msg = getResources().getString(R.string.queue_now) +
+                        " <font color='#ef4444'>" + getResources().getString(R.string.red) + "</font>";
                 setTitle(Html.fromHtml(msg));
                 redButton.setSelected(true);
                 break;
-            default: msg = getResources().getString(R.string.buttons_activity);
+            default:
+                msg = getResources().getString(R.string.buttons_activity);
                 setTitle(msg);
                 break;
         }

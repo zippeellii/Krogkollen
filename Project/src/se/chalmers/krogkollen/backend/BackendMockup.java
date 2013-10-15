@@ -1,7 +1,6 @@
 package se.chalmers.krogkollen.backend;
 
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 import se.chalmers.krogkollen.pub.IPub;
@@ -119,12 +118,12 @@ public class BackendMockup implements IBackend {
 	}
 
 	@Override
-	public Date getLatestUpdatedTimestamp(IPub pub) throws NotFoundInBackendException,
+	public long getLatestUpdatedTimestamp(IPub pub) throws NotFoundInBackendException,
 			NoBackendAccessException {
 		this.throwNoBackend();
 		this.throwNotFound();
 
-		return new Date(2010, 11, 25);
+		return pubs.get(0).getQueueTimeLastUpdatedTimestamp();
 	}
 
 	@Override

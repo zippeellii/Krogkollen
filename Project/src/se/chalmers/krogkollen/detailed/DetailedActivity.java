@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.v4.app.NavUtils;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.ImageView;
@@ -15,10 +16,12 @@ import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapFragment;
 import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.Marker;
 import se.chalmers.krogkollen.R;
 import se.chalmers.krogkollen.backend.BackendNotInitializedException;
 import se.chalmers.krogkollen.backend.NoBackendAccessException;
 import se.chalmers.krogkollen.backend.NotFoundInBackendException;
+import se.chalmers.krogkollen.help.HelpActivity;
 import se.chalmers.krogkollen.map.MapActivity;
 import se.chalmers.krogkollen.map.MarkerOptionsFactory;
 import se.chalmers.krogkollen.pub.IPub;
@@ -56,7 +59,7 @@ public class DetailedActivity extends Activity implements IDetailedView {
             ageRestrictionTextView, entranceFeeTextView, votesUpTextView, votesDownTextView;
     private ImageView thumbsUpImage, thumbsDownImage, queueIndicator;
     private MenuItem favoriteStar;
-    private LinearLayout thumbsUpLayout, thumbsDownLayout;
+    private LinearLayout thumbsUpLayout, thumbsDownLayout; // TODO these are never used?
     private ProgressDialog progressDialog;
 
     private GoogleMap map;
@@ -98,11 +101,23 @@ public class DetailedActivity extends Activity implements IDetailedView {
         thumbsDownLayout = (LinearLayout) findViewById(R.id.thumbsDownLayout);
 
         map = ((MapFragment) getFragmentManager().findFragmentById(R.id.map)).getMap();
+        map.setOnMarkerClickListener(new GoogleMap.OnMarkerClickListener() {
+            @Override
+            public boolean onMarkerClick(Marker marker) {
+                return true; // Suppress default behaviour.
+            }
+        });
+
+        map.getUiSettings().setCompassEnabled(false);
+        map.getUiSettings().setZoomControlsEnabled(false);
+
+        getActionBar().setDisplayUseLogoEnabled(false);
+        getActionBar().setIcon(R.drawable.transparent_spacer);
+        getActionBar().setDisplayHomeAsUpEnabled(true);
     }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-
         super.onCreateOptionsMenu(menu);
 
 		// Inflate the menu; this adds items to the action bar if it is present.
@@ -163,13 +178,15 @@ public class DetailedActivity extends Activity implements IDetailedView {
 
     @Override
     public void navigate(Class<?> destination, Bundle extras) {
-        // TODO Auto-generated method stub
+        // TODO Auto-generated method stu
 
     }
 
+    // TODO comment this
     private void addListeners(){
         findViewById(R.id.thumbsUpLayout).setOnClickListener(presenter);
         findViewById(R.id.thumbsDownLayout).setOnClickListener(presenter);
+        findViewById(R.id.navigate).setOnClickListener(presenter);
     }
 
     /**
@@ -192,8 +209,6 @@ public class DetailedActivity extends Activity implements IDetailedView {
                 thumbsUpImage.setBackgroundResource(R.drawable.thumb_up);
                 break;
         }
-
-
     }
 
     /**
@@ -220,13 +235,10 @@ public class DetailedActivity extends Activity implements IDetailedView {
     @Override
     public boolean onOptionsItemSelected(MenuItem menuItem){
         switch(menuItem.getItemId()){
-
             case R.id.favorite_star:
                 presenter.updateStar();
                 break;
-
             case R.id.refresh_info:
-
                 try {
                     presenter.updateInfo();
                 } catch (NoBackendAccessException e) {
@@ -237,9 +249,12 @@ public class DetailedActivity extends Activity implements IDetailedView {
                     this.showErrorMessage(e.getMessage());
                 }
                 break;
-
-            case R.id.action_settings:
+            case R.id.action_help:
+                navigate(HelpActivity.class);
                 break;
+            case android.R.id.home:
+                NavUtils.navigateUpFromSameTask(this);
+                return true;
         }
         return true;
     }
@@ -258,11 +273,12 @@ public class DetailedActivity extends Activity implements IDetailedView {
         }
     }
 
-
+    // TODO javadoc
     public void showProgressDialog(){
         progressDialog = ProgressDialog.show(this, "","Uppdaterar info", false, false);
     }
 
+    // TODO javadoc
     public void hideProgressDialog(){
         progressDialog.hide();
     }

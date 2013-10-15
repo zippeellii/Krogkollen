@@ -1,6 +1,5 @@
 package se.chalmers.krogkollen.detailed;
 
-import android.content.DialogInterface;
 import android.view.View.OnClickListener;
 import se.chalmers.krogkollen.IPresenter;
 import se.chalmers.krogkollen.backend.BackendNotInitializedException;
@@ -52,5 +51,4 @@ public interface IDetailedPresenter extends IPresenter, OnClickListener {
      * Updates the star
      */
     public void updateStar();
-
 }

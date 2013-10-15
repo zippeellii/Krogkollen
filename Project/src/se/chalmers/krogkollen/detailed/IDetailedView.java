@@ -12,14 +12,14 @@ import se.chalmers.krogkollen.pub.IPub;
  */
 public interface IDetailedView extends IView {
 
-	/**
-	 * Updates all text fields on the detailed view
-	 */
+	// TODO javadoc
 	public void updateText(String pubName, String description, String openingHours, String age,
 			String price);
 
 	/**
 	 * Updates the queue indicator on the detailed view
+	 * 
+	 * @param queueTime the queue time used to update
 	 */
 	public void updateQueueIndicator(int queueTime);
 

@@ -3,14 +3,9 @@ package se.chalmers.KrogkollenAdmin.main;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.AsyncTask;
-import android.preference.PreferenceManager;
-import android.view.View;
 import android.widget.Toast;
 import com.parse.*;
-import com.parse.R;
-import se.chalmers.KrogkollenAdmin.*;
 import se.chalmers.KrogkollenAdmin.buttons.ButtonsActivity;
-import se.chalmers.KrogkollenAdmin.buttons.ButtonsPresenter;
 
 import java.util.List;
 
@@ -74,7 +69,7 @@ public class MainPresenter {
     }
 
     public void checkIfLoggedIn() {
-        if(ParseUser.getCurrentUser() != null) {
+        if (ParseUser.getCurrentUser() != null) {
             Intent intent = new Intent(view, ButtonsActivity.class);
             view.startActivity(intent);
         }
@@ -120,10 +115,10 @@ public class MainPresenter {
                         if (toast != null) {
                             toast.cancel();
                         }
-                            toast = Toast.makeText(view, se.chalmers.KrogkollenAdmin.R.string.wrong_password_message,
-                                    Toast.LENGTH_SHORT);
-                            toast.setDuration(2);
-                            toast.show();
+                        toast = Toast.makeText(view, se.chalmers.KrogkollenAdmin.R.string.wrong_password_message,
+                                Toast.LENGTH_SHORT);
+                        toast.setDuration(2);
+                        toast.show();
                     }
 
                 });

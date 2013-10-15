@@ -58,5 +58,10 @@ public interface IMapPresenter extends IPresenter, IObserver {
 	 */
 	public void onResume();
 
-    void pubMarkerClicked(String title);
+	/**
+	 * Indicates that a pub marker has been clicked
+	 * 
+	 * @param id the id of the clicked pub
+	 */
+    void pubMarkerClicked(String id);
 }

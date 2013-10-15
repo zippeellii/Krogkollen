@@ -46,8 +46,7 @@ public enum MapWrapper {
 
 	private ProgressDialog	progressDialog;
 
-	private MapWrapper() {
-	} // Suppress instantiation
+	private MapWrapper() {} // Suppress instantiation
 
 	/**
 	 * Initiate Google map resources and markers.
@@ -58,6 +57,7 @@ public enum MapWrapper {
 		pubMarkers = new ArrayList<Marker>();
 		googleMap = ((MapFragment) activity.getFragmentManager().findFragmentById(R.id.map))
 				.getMap();
+        googleMap.getUiSettings().setCompassEnabled(false);
 		this.resources = activity.getResources();
 		this.context = activity;
         displayMetrics = resources.getDisplayMetrics();

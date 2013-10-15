@@ -21,7 +21,6 @@
         </activity>
 
         <activity android:name=".buttons.ButtonsActivity"
-                  android:screenOrientation="portrait"
                   android:label="@string/no_information">
         </activity>
     </application>

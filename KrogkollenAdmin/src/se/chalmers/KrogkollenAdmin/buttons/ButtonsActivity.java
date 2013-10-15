@@ -48,7 +48,6 @@ public class ButtonsActivity extends Activity {
      */
     @Override
     public void onCreate(Bundle savedInstanceState) {
-        setRequestedOrientation (ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_buttons);
         getActionBar().setDisplayShowHomeEnabled(false);

@@ -2,18 +2,24 @@ package se.chalmers.krogkollen.list;
 
 import android.app.ActionBar.Tab;
 import android.app.FragmentTransaction;
+import android.os.Bundle;
+import android.view.View;
+import android.widget.AdapterView;
 import se.chalmers.krogkollen.IView;
+import se.chalmers.krogkollen.detailed.DetailedActivity;
+import se.chalmers.krogkollen.map.MapActivity;
+import se.chalmers.krogkollen.map.MapPresenter;
 import se.chalmers.krogkollen.pub.IPub;
 import se.chalmers.krogkollen.sort.ISort;
 
 // TODO javadoc
 public class ListPresenter implements IListPresenter {
 
-    private IListView view;
+    private IListView listView;
     private ListModel model;
 
     public ListPresenter(IListView view){
-        this.view = view;
+        this.listView = view;
         this.model = new ListModel();
     }
     @Override
@@ -39,7 +45,7 @@ public class ListPresenter implements IListPresenter {
     }
     @Override
     public void onPageSelected(int arg0) {
-        view.setActionBarSelectedNavigationItem(arg0);
+        listView.setActionBarSelectedNavigationItem(arg0);
 
     }
     @Override
@@ -49,12 +55,20 @@ public class ListPresenter implements IListPresenter {
     }
     @Override
     public void onTabSelected(Tab tab, FragmentTransaction ft) {
-        view.setViewPagerCurrentItem(tab.getPosition());
+        listView.setViewPagerCurrentItem(tab.getPosition());
 
     }
     @Override
     public void onTabUnselected(Tab tab, FragmentTransaction ft) {
         // TODO Auto-generated method stub
 
+    }
+
+    @Override
+    public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+        Bundle bundle = new Bundle();
+        //IPub pub = (IPub)adapterView.getItemAtPosition(i);
+        bundle.putString(MapPresenter.MAP_PRESENTER_KEY, "aXqzzvQb7X");
+        listView.navigate(DetailedActivity.class, bundle);
     }
 }

@@ -7,8 +7,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import se.chalmers.krogkollen.R;
 import se.chalmers.krogkollen.pub.IPub;
-import se.chalmers.krogkollen.search.ISort;
-import se.chalmers.krogkollen.search.SortByDistance;
+import se.chalmers.krogkollen.sort.ISort;
 
 /**
  * Created with IntelliJ IDEA.
@@ -21,9 +20,11 @@ public class SortedListFragment extends ListFragment {
 
 
     private IPub[] data;
+    private IListPresenter presenter;
 
-    public SortedListFragment(ISort sort){
-
+    public SortedListFragment(ISort sort, IListPresenter presenter){
+        this.presenter = presenter;
+        data = presenter.sortList(sort);
     }
 
 
@@ -31,12 +32,13 @@ public class SortedListFragment extends ListFragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
 
-        ListModel model = new ListModel();
-        View rootView = inflater.inflate(R.layout.fragment_distance_list, container, false);
+        View rootView = inflater.inflate(R.layout.fragment_listview, container, false);
 
-        PubListAdapter adapter = new PubListAdapter(getActivity(), R.layout.listview_item, model.getSortedArray(new SortByDistance()));
+        PubListAdapter adapter = new PubListAdapter(getActivity(), R.layout.listview_item, data);
 
         setListAdapter(adapter);
+
+        getListView().setOnItemClickListener(presenter);
 
         return rootView;
     }

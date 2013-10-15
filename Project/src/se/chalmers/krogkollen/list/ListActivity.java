@@ -43,7 +43,6 @@ public class ListActivity extends FragmentActivity implements IListView{
         viewPager = (ViewPager) findViewById(R.id.pager);
         actionBar = getActionBar();
         mAdapter = new TabsPagerAdapter(getSupportFragmentManager());
-
         viewPager.setAdapter(mAdapter);
         actionBar.setHomeButtonEnabled(false);
         actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_TABS);
@@ -75,11 +74,13 @@ public class ListActivity extends FragmentActivity implements IListView{
 
     @Override
     public void setActionBarSelectedNavigationItem(int pos){
+    	mAdapter.notifyDataSetChanged();
         actionBar.setSelectedNavigationItem(pos);
     }
     
     @Override
     public void setViewPagerCurrentItem(int pos){
+    	mAdapter.notifyDataSetChanged();
         viewPager.setCurrentItem(pos);
     }
 
@@ -110,12 +111,10 @@ public class ListActivity extends FragmentActivity implements IListView{
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.refresh_info:
-                //TODO implement
-                //new RefreshTask().execute();
+                mAdapter.notifyDataSetChanged();
                 break;
             case R.id.search:
-                //TODO implement
-               // this.onSearch();
+            	this.onSearchRequested();
                 break;
 
             case android.R.id.home:

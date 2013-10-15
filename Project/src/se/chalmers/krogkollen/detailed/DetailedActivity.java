@@ -67,10 +67,12 @@ public class DetailedActivity extends Activity implements IDetailedView {
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
+
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_detailed);
         presenter = new DetailedPresenter();
         presenter.setView(this);
+
 
         try {
             presenter.setPub(getIntent().getStringExtra(MapActivity.MARKER_PUB_ID));
@@ -284,7 +286,7 @@ public class DetailedActivity extends Activity implements IDetailedView {
 
     // TODO javadoc
     public void showProgressDialog(){
-        progressDialog = ProgressDialog.show(this, "","Uppdaterar", false, false);
+        progressDialog = ProgressDialog.show(this, "","Uppdaterar info", false, false);
     }
 
     // TODO javadoc

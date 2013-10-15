@@ -14,7 +14,10 @@
          GNU General Public License for more details.
 
          You should have received a copy of the GNU General Public License
-         along with Krogkollen.  If not, see <http://www.gnu.org/licenses/>.
+         along with Krogkollen.  If not, see <http://www.gnu.org/licenses/>.
+
+
+
 -->
 
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
@@ -32,7 +35,10 @@
     <uses-permission android:name="com.google.android.providers.gsf.permission.READ_GSERVICES" />
     <!--
      The following two permissions are not required to use
-     Google Maps Android API v2, but are recommended.
+     Google Maps Android API v2, but are recommended.
+
+
+
     -->
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
@@ -73,6 +79,9 @@
         </activity>
         <activity android:name="se.chalmers.krogkollen.detailed.DetailedActivity"
                   android:label="@string/title_activity_detailed"
+                  android:configChanges="orientation|keyboardHidden"
+                  android:screenOrientation="portrait">
+
                   android:parentActivityName="se.chalmers.krogkollen.map.MapActivity"
                   android:configChanges="orientation|keyboardHidden" >
             <!-- Parent activity meta-data to support 4.0 and lower -->

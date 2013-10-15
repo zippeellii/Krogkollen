@@ -1,23 +1,14 @@
 package se.chalmers.krogkollen.list;
 
-<<<<<<< HEAD
 import android.app.ActionBar.Tab;
 import android.app.FragmentTransaction;
 import se.chalmers.krogkollen.IView;
 import se.chalmers.krogkollen.pub.IPub;
-import se.chalmers.krogkollen.search.ISort;
-=======
-import se.chalmers.krogkollen.IView;
-import se.chalmers.krogkollen.pub.IPub;
-import android.app.ActionBar.Tab;
-import android.app.FragmentTransaction;
 import se.chalmers.krogkollen.sort.ISort;
->>>>>>> dev
 
 // TODO javadoc
 public class ListPresenter implements IListPresenter {
 
-<<<<<<< HEAD
     private IListView view;
     private ListModel model;
 
@@ -33,19 +24,6 @@ public class ListPresenter implements IListPresenter {
 
     @Override
     public IPub[] sortList(ISort sortMode) {
-=======
-	public ListPresenter(IListView view){
-		this.view = view;
-		this.model = new ListModel();
-	}
-	@Override
-	public void setView(IView view) {
-		// TODO empty method?
-	}
-
-	@Override
-	public IPub[] sortList(ISort sortMode) {
->>>>>>> dev
         return model.getSortedArray(sortMode);
     }
 

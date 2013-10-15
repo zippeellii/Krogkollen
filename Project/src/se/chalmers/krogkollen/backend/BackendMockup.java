@@ -15,8 +15,8 @@ import se.chalmers.krogkollen.pub.Pub;
 public class BackendMockup implements IBackend {
 
 	ArrayList<IPub>	pubs			= new ArrayList<IPub>();
-	boolean			throwNoBackend	= false;
-	boolean			throwNotFound	= false;
+	public boolean			throwNoBackend	= false;
+	public boolean			throwNotFound	= false;
 
 	/**
 	 * Instantiates a new BackendMockup
@@ -25,7 +25,7 @@ public class BackendMockup implements IBackend {
 	 *            NotFoundInBackendException
 	 */
 	public BackendMockup(int exceptions) {
-		this.pubs.add(new Pub());
+		this.pubs.add(new Pub("Name", "Description", 57.6875, 11.97669, 20, 100, 10, 20, 10, 20, 1, 1, "temp"));
 
 		switch (exceptions) {
 			case 1:

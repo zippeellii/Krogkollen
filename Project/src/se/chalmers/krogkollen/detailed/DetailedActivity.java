@@ -9,12 +9,15 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
+
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapFragment;
 import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
+
 import se.chalmers.krogkollen.R;
 import se.chalmers.krogkollen.backend.BackendNotInitializedException;
 import se.chalmers.krogkollen.backend.NoBackendAccessException;
@@ -73,12 +76,12 @@ public class DetailedActivity extends Activity implements IDetailedView {
 
         try {
             presenter.setPub(getIntent().getStringExtra(MapActivity.MARKER_PUB_ID));
-        } catch (NotFoundInBackendException e) {
-            this.showErrorMessage(e.getMessage());
         } catch (NoBackendAccessException e) {
-            this.showErrorMessage(e.getMessage());
+            this.showErrorMessage(this.getString(R.string.error_no_backend_access));
+        } catch (NotFoundInBackendException e) {
+            this.showErrorMessage(this.getString(R.string.error_no_backend_item));
         } catch (BackendNotInitializedException e) {
-            this.showErrorMessage(e.getMessage());
+            this.showErrorMessage(this.getString(R.string.error_backend_not_initialized));
         }
 
         addListeners();
@@ -108,8 +111,6 @@ public class DetailedActivity extends Activity implements IDetailedView {
         getActionBar().setDisplayUseLogoEnabled(false);
         getActionBar().setIcon(R.drawable.transparent_spacer);
         getActionBar().setDisplayHomeAsUpEnabled(true);
-
-        System.out.println("____________after_____________");
     }
 
     @Override
@@ -123,11 +124,11 @@ public class DetailedActivity extends Activity implements IDetailedView {
         try {
             presenter.updateInfo();
         } catch (NoBackendAccessException e) {
-            this.showErrorMessage(e.getMessage());
+            this.showErrorMessage(this.getString(R.string.error_no_backend_access));
         } catch (NotFoundInBackendException e) {
-            this.showErrorMessage(e.getMessage());
+            this.showErrorMessage(this.getString(R.string.error_no_backend_item));
         } catch (BackendNotInitializedException e) {
-            this.showErrorMessage(e.getMessage());
+            this.showErrorMessage(this.getString(R.string.error_backend_not_initialized));
         }
 
         return true;
@@ -142,7 +143,11 @@ public class DetailedActivity extends Activity implements IDetailedView {
 
     @Override
     public void showErrorMessage(String message) {
-        // TODO This method should create a toast or some kind of window showing the error message
+    	CharSequence text = message;
+    	int duration = Toast.LENGTH_LONG;
+
+    	Toast toast = Toast.makeText(this, text, duration);
+    	toast.show();
     }
 
     @Override
@@ -248,11 +253,11 @@ public class DetailedActivity extends Activity implements IDetailedView {
                 try {
                     presenter.updateInfo();
                 } catch (NoBackendAccessException e) {
-                    this.showErrorMessage(e.getMessage());
+                    this.showErrorMessage(this.getString(R.string.error_no_backend_access));
                 } catch (NotFoundInBackendException e) {
-                    this.showErrorMessage(e.getMessage());
+                    this.showErrorMessage(this.getString(R.string.error_no_backend_item));
                 } catch (BackendNotInitializedException e) {
-                    this.showErrorMessage(e.getMessage());
+                    this.showErrorMessage(this.getString(R.string.error_backend_not_initialized));
                 }
                 break;
             case R.id.action_help:

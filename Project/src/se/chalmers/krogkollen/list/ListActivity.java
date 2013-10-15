@@ -8,6 +8,7 @@ import android.support.v4.view.ViewPager;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.ListView;
+import android.widget.Toast;
 import se.chalmers.krogkollen.R;
 import se.chalmers.krogkollen.adapter.*;
 import se.chalmers.krogkollen.map.IMapView;
@@ -96,8 +97,11 @@ public class ListActivity extends FragmentActivity implements IListView{
 
     @Override
 	public void showErrorMessage(String message) {
-		// TODO Auto-generated method stub
+    	CharSequence text = message;
+    	int duration = Toast.LENGTH_LONG;
 
+    	Toast toast = Toast.makeText(this, text, duration);
+    	toast.show();
 	}
 
     @Override

@@ -2,14 +2,12 @@ package se.chalmers.krogkollen.list;
 
 
 import android.support.v4.app.ListFragment;
-import android.widget.ListView;
 import se.chalmers.krogkollen.R;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import se.chalmers.krogkollen.search.SortByDistance;
-import se.chalmers.krogkollen.search.SortByQueueTime;
 
 public class DistanceFragment extends ListFragment {
 
@@ -26,5 +24,4 @@ public class DistanceFragment extends ListFragment {
 
 	       return rootView;
 	    }
-
 }

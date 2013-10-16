@@ -9,18 +9,22 @@ import se.chalmers.krogkollen.sort.ISort;
 
 /**
  * A class containing logic for the list view.
- *
  */
 public class ListModel {
 	private List <IPub> originalPubList;
+	
+	/**
+	 * Creates a new ListModel
+	 */
 	public ListModel(){
 		originalPubList = PubUtilities.getInstance().getPubList();
 	}
 	
 	/**
 	 * Returns the original pub list sorted as specified by algorithm
+	 * 
 	 * @param algorithm wanted to use
-	 * @return the sorted algorithm
+	 * @return the sorted list
 	 */
 	public IPub[] getSortedArray(ISort algorithm){
 		List<IPub> sortedList = algorithm.sortAlgorithm(originalPubList);

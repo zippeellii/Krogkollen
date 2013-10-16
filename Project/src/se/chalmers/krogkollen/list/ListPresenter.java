@@ -42,7 +42,6 @@ public class ListPresenter implements IListPresenter {
     @Override
     public void onPageSelected(int arg0) {
         listView.setActionBarSelectedNavigationItem(arg0);
-
     }
     @Override
     public void onTabReselected(Tab tab, FragmentTransaction ft) {

@@ -142,7 +142,6 @@ public class DetailedActivity extends Activity implements IDetailedView {
     public void navigate(Class<?> destination) {
         Intent navigateBack = new Intent(this, destination);
         startActivity(navigateBack);
-
     }
 
     @Override
@@ -184,10 +183,9 @@ public class DetailedActivity extends Activity implements IDetailedView {
     @Override
     public void navigate(Class<?> destination, Bundle extras) {
         // TODO Auto-generated method stu
-
     }
 
-    // TODO comment this
+    // Adds listeners to all buttons
     private void addListeners(){
         findViewById(R.id.thumbsUpLayout).setOnClickListener(presenter);
         findViewById(R.id.thumbsDownLayout).setOnClickListener(presenter);
@@ -282,18 +280,21 @@ public class DetailedActivity extends Activity implements IDetailedView {
 
         if(isStarFilled){
             favoriteStar.setIcon(R.drawable.star_not_filled);
-        }
-        else{
+        } else {
             favoriteStar.setIcon(R.drawable.star_filled);
         }
     }
 
-    // TODO javadoc
+    /**
+     * Shows a progress dialog indicating that the info is being updated
+     */
     public void showProgressDialog(){
-        progressDialog = ProgressDialog.show(this, "","Uppdaterar info", false, false);
+        progressDialog = ProgressDialog.show(this, "",getString(R.string.dialog_updating_info), false, false);
     }
 
-    // TODO javadoc
+    /**
+     * Hides the progress dialog
+     */
     public void hideProgressDialog(){
         progressDialog.hide();
     }

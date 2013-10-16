@@ -17,6 +17,7 @@ import java.io.Serializable;
 
 public interface IListPresenter extends IPresenter, TabListener, OnPageChangeListener{
 
+
     /**
      * Sorts a list of IPub objects according to specified SortMode
      *

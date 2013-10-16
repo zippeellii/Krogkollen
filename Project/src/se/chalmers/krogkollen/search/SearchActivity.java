@@ -7,8 +7,6 @@ import se.chalmers.krogkollen.IView;
 import se.chalmers.krogkollen.R;
 import se.chalmers.krogkollen.adapter.SearchViewAdapter;
 import se.chalmers.krogkollen.detailed.DetailedActivity;
-import se.chalmers.krogkollen.list.PubListAdapter;
-import se.chalmers.krogkollen.list.SortedListFragment;
 import se.chalmers.krogkollen.map.MapActivity;
 import se.chalmers.krogkollen.pub.IPub;
 import se.chalmers.krogkollen.pub.Pub;

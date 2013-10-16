@@ -8,6 +8,7 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 import se.chalmers.krogkollen.R;
 import se.chalmers.krogkollen.pub.IPub;
+import se.chalmers.krogkollen.utils.Constants;
 
 /*
  * This file is part of Krogkollen.
@@ -77,17 +78,17 @@ public class MarkerOptionsFactory {
         return options;
     }
 
-    // Find the right background to use.
+    // Find the right background to use and decode the bitmap.
     private static Bitmap getBackgroundPicture(int queueTime, final Resources resources) {
         switch (queueTime) {
             case 1:
-                return BitmapFactory.decodeResource(resources, R.drawable.green_marker_bg);
+                return BitmapFactory.decodeResource(resources, Constants.MAP_SHORT_QUEUE);
             case 2:
-                return BitmapFactory.decodeResource(resources, R.drawable.yellow_marker_bg);
+                return BitmapFactory.decodeResource(resources, Constants.MAP_MEDIUM_QUEUE);
             case 3:
-                return BitmapFactory.decodeResource(resources, R.drawable.red_marker_bg);
+                return BitmapFactory.decodeResource(resources, Constants.MAP_LONG_QUEUE);
             default:
-                return BitmapFactory.decodeResource(resources, R.drawable.gray_marker_bg);
+                return BitmapFactory.decodeResource(resources, Constants.MAP_NO_INFO_QUEUE);
         }
     }
 }

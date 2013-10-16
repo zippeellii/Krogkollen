@@ -17,7 +17,6 @@ import se.chalmers.krogkollen.pub.IPub;
 import se.chalmers.krogkollen.pub.Pub;
 import se.chalmers.krogkollen.pub.PubUtilities;
 import se.chalmers.krogkollen.sort.SortBySearchRelevance;
-import se.chalmers.krogkollen.utils.ActivityID;
 import se.chalmers.krogkollen.utils.Constants;
 
 import java.util.ArrayList;
@@ -49,7 +48,6 @@ public class SearchActivity extends ListActivity implements IView {
 	@Override
 	public void onListItemClick(ListView l, View v, int position, long id) {
 		Bundle bundle = new Bundle();
-		bundle.putInt(ActivityID.ACTIVITY_ID, ActivityID.MAP); // TODO check
 		bundle.putString(MapPresenter.MAP_PRESENTER_KEY, pubs[position].getID());
 		this.navigate(DetailedActivity.class, bundle);
 	}

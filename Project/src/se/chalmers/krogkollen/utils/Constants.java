@@ -8,16 +8,19 @@ import se.chalmers.krogkollen.R;
  */
 public class Constants {
 
-    public static int SHORT_QUEUE = R.drawable.detailed_queue_green;
-	public static int MEDIUM_QUEUE = R.drawable.detailed_queue_yellow;
-	public static int LONG_QUEUE = R.drawable.detailed_queue_red;
-	public static int NO_INFO_QUEUE = R.drawable.detailed_queue_gray;
+    public static int MAP_SHORT_QUEUE = R.drawable.green_marker_bg;
+	public static int MAP_MEDIUM_QUEUE = R.drawable.yellow_marker_bg;
+	public static int MAP_LONG_QUEUE = R.drawable.red_marker_bg;
+	public static int MAP_NO_INFO_QUEUE = R.drawable.gray_marker_bg;
 
     public static String ACTIVITY_FROM = "FROM";
 
     public static final String MAP_ACTIVITY_NAME = "MapActivity";
-    public static final String HELP_ACTIVITY_NAME = "ListActivity";
-    public static final String LIST_ACTIVITY_NAME = "HelpActivity";
+    public static final String HELP_ACTIVITY_NAME = "HelpActivity";
+    public static final String LIST_ACTIVITY_NAME = "ListActivity";
     public static final String DETAILED_ACTIVITY_NAME = "DetailedActivity";
     public static final String SEARCH_ACTIVITY_NAME = "SearchActivity";
+
+    public static final String	ACTIVITY_ID		= "se.chalmers.krogkollen.ACTIVITY_ID";
+    public static final int		MAIN			= 100;
 }

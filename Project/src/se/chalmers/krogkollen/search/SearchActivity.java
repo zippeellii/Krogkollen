@@ -5,8 +5,10 @@ import java.util.List;
 
 import se.chalmers.krogkollen.IView;
 import se.chalmers.krogkollen.R;
+import se.chalmers.krogkollen.adapter.SearchViewAdapter;
 import se.chalmers.krogkollen.detailed.DetailedActivity;
 import se.chalmers.krogkollen.list.PubListAdapter;
+import se.chalmers.krogkollen.list.SortedListFragment;
 import se.chalmers.krogkollen.map.MapActivity;
 import se.chalmers.krogkollen.pub.IPub;
 import se.chalmers.krogkollen.pub.Pub;
@@ -82,7 +84,7 @@ public class SearchActivity extends ListActivity implements IView {
 	
 	// Adds all the search matches to the listview
 	private void addMatchesToListView(IPub[] pubs) {
-		PubListAdapter adapter = new PubListAdapter(this,  R.layout.listview_item, pubs);
+		SearchViewAdapter adapter = new SearchViewAdapter(this, R.layout.searchview_item, pubs);
 		
 		getListView().setAdapter(adapter);
 	}

@@ -1,4 +1,13 @@
-package se.chalmers.krogkollen.list;
+package se.chalmers.krogkollen.adapter;
+
+
+/**
+ * Created with IntelliJ IDEA.
+ * User: filipcarlen
+ * Date: 2013-10-16
+ * Time: 11:17
+ * To change this template use File | Settings | File Templates.
+ */
 
 import android.app.Activity;
 import android.content.Context;
@@ -6,7 +15,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
-import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 import com.google.android.gms.maps.model.LatLng;
@@ -14,35 +22,32 @@ import se.chalmers.krogkollen.R;
 import se.chalmers.krogkollen.map.UserLocation;
 import se.chalmers.krogkollen.pub.IPub;
 import se.chalmers.krogkollen.utils.Distance;
-import se.chalmers.krogkollen.utils.Preferences;
 
 import java.text.*;
 
 // TODO why is this in krogkollen.list while TabsPagerAdapter is in krogkollen.adapter?
 /**
- * An adapter handling the different items in a list
+ * An adapter handling the different items in a search list
  */
-public class PubListAdapter extends ArrayAdapter<IPub> {
+public class SearchViewAdapter extends ArrayAdapter<IPub> {
 
     Context context;
     int layoutResourceId;
     IPub data[] = null;
     View row;
     PubHolder holder;
-    SortedListFragment fragment;
 
     /**
-     * A constructor that creates an PubListAdapter.
+     * A constructor that creates an SearchViewAdapter.
      * @param context
      * @param layoutResourceId
      * @param data
      */
-    public PubListAdapter(Context context, int layoutResourceId, IPub[] data, SortedListFragment fragment) {
+    public SearchViewAdapter(Context context, int layoutResourceId, IPub[] data) {
         super(context, layoutResourceId, data);
         this.layoutResourceId = layoutResourceId;
         this.context = context;
         this.data = data;
-        this.fragment = fragment;
 
     }
 
@@ -59,7 +64,6 @@ public class PubListAdapter extends ArrayAdapter<IPub> {
             holder.imgIcon = (ImageView)row.findViewById(R.id.listview_image);
             holder.txtTitle = (TextView)row.findViewById(R.id.listview_title);
             holder.distanceText = (TextView)row.findViewById(R.id.listview_distance);
-            holder.favoriteStar = (ImageButton)row.findViewById(R.id.favorite_star_list);
 
             row.setTag(holder);
         }
@@ -68,26 +72,10 @@ public class PubListAdapter extends ArrayAdapter<IPub> {
             holder = (PubHolder)row.getTag();
         }
 
-        updateStar(Preferences.getInstance().loadPreference(this.getItem(position).getID()), holder);
-
         IPub pub = data[position];
         DecimalFormat numberFormat = new DecimalFormat("#0.00");
         holder.txtTitle.setText(pub.getName());
-        holder.distanceText.setText(""+(numberFormat.format(Distance.calcDistBetweenTwoLatLng(new LatLng(pub.getLatitude(),pub.getLongitude()), UserLocation.getInstance().getCurrentLatLng())))+" km");
-        holder.favoriteStar.setTag(position);
-
-
-        holder.favoriteStar.setOnClickListener(new View.OnClickListener() {
-            PubHolder tmp = holder;
-            @Override
-            public void onClick(View v) {
-                int pos = (Integer)v.getTag();
-                saveFavoriteState(pos);
-                updateStar(Preferences.getInstance().loadPreference(data[pos].getID()), tmp);
-                fragment.update();
-
-            }
-        });
+        holder.distanceText.setText(""+(numberFormat.format(Distance.calcDistBetweenTwoLatLng(new LatLng(pub.getLatitude(), pub.getLongitude()), UserLocation.getInstance().getCurrentLatLng())))+" km");
 
         switch(pub.getQueueTime()){
             case 1:
@@ -108,28 +96,6 @@ public class PubListAdapter extends ArrayAdapter<IPub> {
     }
 
     /**
-     * Saves the state of the favorite locally
-     */
-    public void saveFavoriteState(int pos){
-    	Preferences.getInstance().savePreference(data[pos].getID(), !Preferences.getInstance().loadPreference(data[pos].getID()));
-    }
-
-    /**
-     * Updates the star.
-     * 
-     * @param isStarFilled Represents if the star is filled or not.
-     * @param holder the PubHolder which holds the pub
-     */
-    public void updateStar(boolean isStarFilled, PubHolder holder){
-        if(isStarFilled){
-            holder.favoriteStar.setBackgroundResource(R.drawable.star_not_filled);
-        }
-        else{
-            holder.favoriteStar.setBackgroundResource(R.drawable.star_filled);
-        }
-    }
-
-    /**
      * Static holder for pubs
      */
     static class PubHolder
@@ -137,6 +103,6 @@ public class PubListAdapter extends ArrayAdapter<IPub> {
         ImageView imgIcon;
         TextView txtTitle;
         TextView distanceText;
-        ImageButton favoriteStar;
     }
 }
+

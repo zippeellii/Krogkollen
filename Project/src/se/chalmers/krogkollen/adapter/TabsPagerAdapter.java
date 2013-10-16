@@ -10,7 +10,7 @@ import android.support.v4.app.FragmentPagerAdapter;
 // TODO javadoc
 public class TabsPagerAdapter extends FragmentPagerAdapter {
 
-    public static String SORT_MODE = "SORT_MODE";
+    public static final String SORT_MODE = "SORT_MODE";
  
     // TODO javadoc
     public TabsPagerAdapter(FragmentManager fm) {
@@ -43,6 +43,11 @@ public class TabsPagerAdapter extends FragmentPagerAdapter {
     public int getCount() {
         // get item count - equal to number of tabs
         return 3;
+    }
+
+    @Override
+    public int getItemPosition(Object object) {
+        return POSITION_NONE;
     }
  
 }

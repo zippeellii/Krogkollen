@@ -73,5 +73,14 @@ This file is part of Krogkollen.
     <string name="search_hint">Sök efter en krog</string>
     <string name="title_activity_search">Sök</string>
     <string name="error_no_connection">Ingen anslutning</string>
+    
+    <!--  Detailed view strings -->
+    <string name="dialog_updating_info">Uppdaterar info&#8230;</string>
+    <string name="information_text_year">år</string>
+    
+    <!-- List view strings -->
+    <string name="list_tab_name_queue_time">Kötid</string>
+    <string name="list_tab_name_distance">Avstånd</string>
+    <string name="list_tab_name_favorites">Favoriter</string>
 
 </resources>

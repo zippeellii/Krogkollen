@@ -25,7 +25,6 @@ import se.chalmers.krogkollen.sort.SortByQueueTime;
  */
 public class SortedListFragment extends ListFragment {
 
-
     private IPub[] data;
     private PubListAdapter adapter;
     private ISort sort;
@@ -40,7 +39,7 @@ public class SortedListFragment extends ListFragment {
         data = setSortMode(getArguments().getInt(TabsPagerAdapter.SORT_MODE));
         View rootView = inflater.inflate(R.layout.fragment_listview, container, false);
 
-        adapter = new PubListAdapter(getActivity(), R.layout.listview_item, data);
+        adapter = new PubListAdapter(getActivity(), R.layout.listview_item, data, this);
 
         System.out.println(getActivity() instanceof ListActivity);
 
@@ -52,6 +51,12 @@ public class SortedListFragment extends ListFragment {
     }
 
 
+    /**
+     * Returns a sorted array of IPub objects, sort mode is chosen by the parameter
+     * 
+     * @param sortMode an int representing which sort mode to be used. 0 for SortByQueueTime, 1 for SortByDistance, 2 for FilterFavorites
+     * @return the sorted array
+     */
     public IPub[] setSortMode(int sortMode){
         switch (sortMode){
 
@@ -67,7 +72,6 @@ public class SortedListFragment extends ListFragment {
                 sort = new FilterFavorites();
                 break;
         }
-
         return model.getSortedArray(sort);
     }
 
@@ -78,6 +82,8 @@ public class SortedListFragment extends ListFragment {
         view.navigate(DetailedActivity.class, bundle);
     }
 
-
+    public void update(){
+       view.update();
+    }
 }
 

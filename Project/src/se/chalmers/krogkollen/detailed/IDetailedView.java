@@ -12,7 +12,15 @@ import se.chalmers.krogkollen.pub.IPub;
  */
 public interface IDetailedView extends IView {
 
-	// TODO javadoc
+	/**
+	 * Updates all text field in the view
+	 * 
+	 * @param pubName the pub name
+	 * @param description the pub description
+	 * @param openingHours the pubs opening hours
+	 * @param age the age restriction of the pub
+	 * @param price the entrance price to the pub
+	 */
 	public void updateText(String pubName, String description, String openingHours, String age,
 			String price);
 
@@ -24,7 +32,7 @@ public interface IDetailedView extends IView {
 	public void updateQueueIndicator(int queueTime);
 
     /**
-     * Updates the vote text.
+     * Updates the rating.
      *
      * @param upVotes
      * @param downVotes
@@ -44,6 +52,7 @@ public interface IDetailedView extends IView {
 
     /**
      * Shows the location of the coordinates on the map.
+     * 
      * @param latLng The location to show.
      * @param zoom The speed which the map zooms to location.
      */

@@ -28,6 +28,7 @@ import com.google.android.gms.maps.model.*;
 import se.chalmers.krogkollen.R;
 import se.chalmers.krogkollen.backend.NoBackendAccessException;
 import se.chalmers.krogkollen.backend.NotFoundInBackendException;
+import se.chalmers.krogkollen.utils.Constants;
 
 import java.util.ArrayList;
 
@@ -60,8 +61,6 @@ public class MapActivity extends Activity implements IMapView {
      * Identifier for the intent used to start the activity for detailed view.
      */
     public static final String	MARKER_PUB_ID	= "se.chalmers.krogkollen.MARKER_PUB_ID";
-    public static final String ACTIVITY_NAME = "MapActivity";
-    public static final String FROM = "FROM";
 
     private MapPresenter		presenter;
     private Marker				userMarker;
@@ -102,9 +101,6 @@ public class MapActivity extends Activity implements IMapView {
             }
         });
 
-        // Set the presenter as listener for markers and user indicator.
-        //MapWrapper.INSTANCE.getMap().setOnMarkerClickListener(presenter); // TODO: FIX SO IT WORKS LIKE THIS
-
         // Remove the default logo icon and add our list icon.
         ActionBar actionBar = getActionBar();
         actionBar.setIcon(R.drawable.list_icon);
@@ -112,7 +108,6 @@ public class MapActivity extends Activity implements IMapView {
         actionBar.setDisplayHomeAsUpEnabled(true);
     }
 
-    // Start the activity in a local method to keep the right context.
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         super.onCreateOptionsMenu(menu);
@@ -201,7 +196,7 @@ public class MapActivity extends Activity implements IMapView {
 
     @Override
     public void onBackPressed() {
-        Intent intent = new Intent(Intent.ACTION_MAIN); 
+        Intent intent = new Intent(Intent.ACTION_MAIN);
         intent.addCategory(Intent.CATEGORY_HOME);
         startActivity(intent);
     }
@@ -209,7 +204,7 @@ public class MapActivity extends Activity implements IMapView {
     @Override
     public void navigate(Class<?> destination) {
         Intent intent = new Intent(this, destination);
-        intent.putExtra(MapActivity.FROM, ACTIVITY_NAME);
+        intent.putExtra(Constants.ACTIVITY_FROM, Constants.MAP_ACTIVITY_NAME);
         startActivity(intent);
     }
 
@@ -217,7 +212,7 @@ public class MapActivity extends Activity implements IMapView {
     public void navigate(Class<?> destination, Bundle extras) {
         Intent intent = new Intent(this, destination);
         intent.putExtra(MARKER_PUB_ID, extras.getString(MapPresenter.MAP_PRESENTER_KEY));
-        intent.putExtra(FROM, ACTIVITY_NAME);
+        intent.putExtra(Constants.ACTIVITY_FROM, Constants.MAP_ACTIVITY_NAME);
         startActivity(intent);
     }
 

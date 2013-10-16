@@ -10,6 +10,7 @@ import android.view.MenuItem;
 import se.chalmers.krogkollen.R;
 import se.chalmers.krogkollen.list.ListActivity;
 import se.chalmers.krogkollen.map.MapActivity;
+import se.chalmers.krogkollen.utils.Constants;
 
 /**
  * Activity for the help screen
@@ -25,7 +26,7 @@ public class HelpActivity extends Activity {
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 
-        previousActivityKey = getIntent().getStringExtra(MapActivity.FROM);
+        previousActivityKey = getIntent().getStringExtra(Constants.ACTIVITY_FROM);
 
 		setContentView(R.layout.activity_help);
 	}
@@ -49,7 +50,7 @@ public class HelpActivity extends Activity {
 		switch (item.getItemId()) {
 			case android.R.id.home:
                 NavUtils.navigateUpTo(this, new Intent(this,
-                        previousActivityKey.equalsIgnoreCase(ListActivity.ACTIVITY_NAME) ?
+                        previousActivityKey.equalsIgnoreCase(Constants.LIST_ACTIVITY_NAME) ?
                                 ListActivity.class : MapActivity.class));
 				return true;
 			default:

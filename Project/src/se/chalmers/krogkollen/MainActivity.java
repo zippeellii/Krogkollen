@@ -11,7 +11,6 @@ import android.os.Bundle;
 import android.view.Menu;
 import android.widget.Toast;
 import se.chalmers.krogkollen.backend.BackendHandler;
-import se.chalmers.krogkollen.backend.BackendMockup;
 import se.chalmers.krogkollen.backend.BackendNotInitializedException;
 import se.chalmers.krogkollen.backend.NoBackendAccessException;
 import se.chalmers.krogkollen.backend.ParseBackend;
@@ -99,20 +98,21 @@ public class MainActivity extends Activity {
 			try {
 				PubUtilities.getInstance().loadPubList();
 			} catch (NoBackendAccessException e) {
-				// TODO Auto-generated catch block
+                Toast.makeText(MainActivity.this, R.string.error_no_backend_access, Toast.LENGTH_LONG).show();
 			} catch (BackendNotInitializedException e) {
-				// TODO Auto-generated catch block
+                Toast.makeText(MainActivity.this, R.string.error_backend_not_initialized, Toast.LENGTH_LONG).show();
 			}
 
 			// initiate the user location and start the map activity.
 			UserLocation.init((LocationManager) MainActivity.this
 					.getSystemService(Context.LOCATION_SERVICE));
 
-			return null;
+			return null; // No data to send to the post thread work method.
 		}
 
         @Override
         protected void onPostExecute(Void result) {
+            // Start the main app when all initialization is finished.
             Intent intent = new Intent(MainActivity.this, MapActivity.class);
             intent.putExtra(ActivityID.ACTIVITY_ID, ActivityID.MAIN);
             startActivity(intent);

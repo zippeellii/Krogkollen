@@ -38,14 +38,17 @@ public class MapPresenter implements IMapPresenter, GoogleMap.OnMarkerClickListe
      * Key value used when sending intents from this class.
      */
     public static final String	MAP_PRESENTER_KEY	= "se.chalmers.krogkollen.MAP_PRESENTER_KEY";
-    
+
     public static final int		PUB_REMOVED		= -1;
     public static final int		PUB_CHANGED		= 0;
     public static final int		PUB_ADDED		= 1;
-    
+
     public static final int		USER_ZOOM		= 16;
     public static final int		DEFAULT_ZOOM	= 12;
-    
+
+    /**
+     * Default location for map (SWEDEN).
+     */
     public static final LatLng 	DEFAULT_LOCATION	= new LatLng(57.70887, 11.974613);
 
     private IMapView			mapView;
@@ -72,12 +75,6 @@ public class MapPresenter implements IMapPresenter, GoogleMap.OnMarkerClickListe
         if (userLocation.getCurrentLatLng() == null) {
             mapView.moveCameraToPosition(DEFAULT_LOCATION, DEFAULT_ZOOM);
         }
-    }
-
-    @Override
-    public List<IPub> search(String search) {
-        // TODO Auto-generated method stub
-        return null;
     }
 
     @Override
@@ -178,7 +175,7 @@ public class MapPresenter implements IMapPresenter, GoogleMap.OnMarkerClickListe
         mapView.moveCameraToPosition(marker.getPosition(), MapWrapper.INSTANCE.getMap().getCameraPosition().zoom);
 
         if (marker.getTitle().equalsIgnoreCase(resources.getString(R.string.map_user_name))) {
-            // TODO Open favorites.
+            return true; // Suppress click on user's marker.
         } else {
             // Open detailed view.
             Bundle bundle = new Bundle();

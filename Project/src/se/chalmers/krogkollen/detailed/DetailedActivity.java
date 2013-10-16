@@ -26,6 +26,7 @@ import se.chalmers.krogkollen.list.ListActivity;
 import se.chalmers.krogkollen.map.MapActivity;
 import se.chalmers.krogkollen.map.MarkerOptionsFactory;
 import se.chalmers.krogkollen.pub.IPub;
+import se.chalmers.krogkollen.utils.Constants;
 
 /*
  * This file is part of Krogkollen.
@@ -51,7 +52,6 @@ import se.chalmers.krogkollen.pub.IPub;
  */
 public class DetailedActivity extends Activity implements IDetailedView {
 
-    public static final String ACTIVITY_NAME = "DetailedActivity";
     /** The presenter connected to the detailed view */
     private IDetailedPresenter presenter;
 
@@ -79,7 +79,7 @@ public class DetailedActivity extends Activity implements IDetailedView {
         presenter = new DetailedPresenter();
         presenter.setView(this);
 
-        previousActivityKey = getIntent().getStringExtra(MapActivity.FROM);
+        previousActivityKey = getIntent().getStringExtra(Constants.ACTIVITY_FROM);
 
         try {
             presenter.setPub(getIntent().getStringExtra(MapActivity.MARKER_PUB_ID));
@@ -144,14 +144,14 @@ public class DetailedActivity extends Activity implements IDetailedView {
     @Override
     public void navigate(Class<?> destination) {
         Intent intent = new Intent(this, destination);
-        intent.putExtra(MapActivity.FROM, ACTIVITY_NAME);
+        intent.putExtra(Constants.ACTIVITY_FROM, Constants.DETAILED_ACTIVITY_NAME);
         startActivity(intent);
     }
 
     @Override
     public void navigate(Class<?> destination, Bundle extras) {
         Intent intent = new Intent(this, destination);
-        intent.putExtra(MapActivity.FROM, ACTIVITY_NAME);
+        intent.putExtra(Constants.ACTIVITY_FROM, Constants.DETAILED_ACTIVITY_NAME);
         startActivity(intent);
     }
 
@@ -273,7 +273,7 @@ public class DetailedActivity extends Activity implements IDetailedView {
                 break;
             case android.R.id.home:
                 NavUtils.navigateUpTo(this, new Intent(this,
-                        previousActivityKey.equalsIgnoreCase(ListActivity.ACTIVITY_NAME) ?
+                        previousActivityKey.equalsIgnoreCase(Constants.LIST_ACTIVITY_NAME) ?
                                 ListActivity.class : MapActivity.class));
                 return true;
         }

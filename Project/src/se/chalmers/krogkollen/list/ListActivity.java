@@ -13,6 +13,7 @@ import se.chalmers.krogkollen.R;
 import se.chalmers.krogkollen.adapter.TabsPagerAdapter;
 import se.chalmers.krogkollen.map.MapActivity;
 import se.chalmers.krogkollen.map.MapPresenter;
+import se.chalmers.krogkollen.utils.Constants;
 
 
 /**
@@ -21,8 +22,6 @@ import se.chalmers.krogkollen.map.MapPresenter;
  *
  */
 public class ListActivity extends FragmentActivity implements IListView{
-
-    public static final String ACTIVITY_NAME = "ListActivity";
 
     private ViewPager viewPager;
     private TabsPagerAdapter mAdapter;
@@ -92,7 +91,7 @@ public class ListActivity extends FragmentActivity implements IListView{
     @Override
     public void navigate(Class<?> destination) {
         Intent intent = new Intent(this, destination);
-        intent.putExtra(MapActivity.FROM, ACTIVITY_NAME);
+        intent.putExtra(Constants.ACTIVITY_FROM, Constants.LIST_ACTIVITY_NAME);
         startActivity(intent);
     }
 
@@ -100,7 +99,7 @@ public class ListActivity extends FragmentActivity implements IListView{
     public void navigate(Class<?> destination, Bundle extras) {
         Intent intent = new Intent(this, destination);
         intent.putExtra(MapActivity.MARKER_PUB_ID, extras.getString(MapPresenter.MAP_PRESENTER_KEY));
-        intent.putExtra(MapActivity.FROM, ACTIVITY_NAME);
+        intent.putExtra(Constants.ACTIVITY_FROM, Constants.LIST_ACTIVITY_NAME);
         startActivity(intent);
     }
 

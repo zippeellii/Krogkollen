@@ -16,11 +16,10 @@ public class Constants {
     public static String ACTIVITY_FROM = "FROM";
 
     public static final String MAP_ACTIVITY_NAME = "MapActivity";
-    public static final String HELP_ACTIVITY_NAME = "HelpActivity";
+    public static final String HELP_ACTIVITY_NAME = "HelpActivity";     // Not currently in use but could come in handy
+                                                                        // if the help activity get menu items.
     public static final String LIST_ACTIVITY_NAME = "ListActivity";
     public static final String DETAILED_ACTIVITY_NAME = "DetailedActivity";
     public static final String SEARCH_ACTIVITY_NAME = "SearchActivity";
 
-    public static final String	ACTIVITY_ID		= "se.chalmers.krogkollen.ACTIVITY_ID";
-    public static final int		MAIN			= 100;
 }

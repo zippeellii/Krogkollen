@@ -212,10 +212,18 @@ public class DetailedPresenter implements IDetailedPresenter {
 
     //Sends the new information to the view for displaying.
     private void updateMain(){
+    	String openingHours;
+    	
+    	if (pub.getTodaysOpeningHours().isOpen()) {
+    		openingHours = this.convertOpeningHours(pub.getTodaysOpeningHours().getOpeningHour()) 
+            		+ " - " + this.convertOpeningHours(pub.getTodaysOpeningHours().getClosingHour());
+    	} else {
+    		openingHours = "Stängt"; // TODO in XML
+    	}
+    	
         view.updateQueueIndicator(pub.getQueueTime());
         view.updateText(pub.getName(), pub.getDescription(), 
-        		this.convertOpeningHours(pub.getTodaysOpeningHours().getOpeningHour()) 
-        		+ " - " + this.convertOpeningHours(pub.getTodaysOpeningHours().getClosingHour()),
+        		openingHours,
         		""+pub.getAgeRestriction() + " " 
                 + view.getString(R.string.information_text_year), ""+pub.getEntranceFee()
                 + ":-");

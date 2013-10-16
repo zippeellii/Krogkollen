@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import se.chalmers.krogkollen.pub.IPub;
+import se.chalmers.krogkollen.pub.OpeningHours;
 import se.chalmers.krogkollen.pub.Pub;
 
 /**
@@ -25,7 +26,7 @@ public class BackendMockup implements IBackend {
 	 *            NotFoundInBackendException
 	 */
 	public BackendMockup(int exceptions) {
-		this.pubs.add(new Pub("Name", "Description", 57.6875, 11.97669, 20, 100, 10, 20, 10, 20, 1, 1, "temp"));
+		this.pubs.add(new Pub("Name", "Description", 57.6875, 11.97669, 20, 100, new OpeningHours(10, 20), 100, 10, 1, 0, "temp"));
 
 		switch (exceptions) {
 			case 1:

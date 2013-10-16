@@ -12,6 +12,7 @@ import com.parse.ParseQuery;
 import com.parse.SaveCallback;
 
 import se.chalmers.krogkollen.pub.IPub;
+import se.chalmers.krogkollen.pub.OpeningHours;
 import se.chalmers.krogkollen.pub.Pub;
 import se.chalmers.krogkollen.utils.StringConverter;
 
@@ -168,7 +169,7 @@ public class ParseBackend implements IBackend {
 		return new Pub(object.getString("name"), object.getString("description"),
 				object.getDouble("latitude"), object.getDouble("longitude"),
 				object.getInt("ageRestriction"), object.getInt("entranceFee"),
-				(hourFourDigit / 100), (hourFourDigit % 100), object.getInt("posRate"),
+				new OpeningHours((hourFourDigit / 100), (hourFourDigit % 100)), object.getInt("posRate"),
 				object.getInt("negRate"), queueTime,
 				queueTimeLastUpdatedTimestamp, object.getObjectId());
 	}

@@ -55,8 +55,8 @@ public class OpeningHours {
 
 	@Override
 	public String toString() {
-		if (isOpen) {return	(getOpeningHour() < 10 ? "0" + getOpeningHour() : getOpeningHour()) + ":00 - " +
-							(getClosingHour() < 10 ? "0" + getClosingHour() : getClosingHour()) + ":00";
+		if (isOpen) {return	(getOpeningHour() < 10 ? "0" + String.valueOf(getOpeningHour()) : String.valueOf(getOpeningHour())) + ":00 - " + 
+							(getClosingHour() < 10 ? "0" + String.valueOf(getClosingHour()) : String.valueOf(getClosingHour())) + ":00";
 		} else {
 			return "Stängt";
 		}

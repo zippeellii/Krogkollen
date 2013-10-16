@@ -213,9 +213,12 @@ public class DetailedPresenter implements IDetailedPresenter {
     //Sends the new information to the view for displaying.
     private void updateMain(){
         view.updateQueueIndicator(pub.getQueueTime());
-        view.updateText(pub.getName(), pub.getDescription(), pub.getTodaysOpeningHours().toString(), ""+pub.getAgeRestriction() + " " 
-                		+ view.getString(R.string.information_text_year), ""+pub.getEntranceFee()
-                		+ ":-");
+        view.updateText(pub.getName(), pub.getDescription(), 
+        		this.convertOpeningHours(pub.getTodaysOpeningHours().getOpeningHour()) 
+        		+ " - " + this.convertOpeningHours(pub.getTodaysOpeningHours().getClosingHour()),
+        		""+pub.getAgeRestriction() + " " 
+                + view.getString(R.string.information_text_year), ""+pub.getEntranceFee()
+                + ":-");
         view.addMarker(pub);
         view.navigateToLocation(new LatLng(pub.getLatitude(), pub.getLongitude()), 14);
         view.showStar(Preferences.getInstance().loadPreference(pub.getID()));

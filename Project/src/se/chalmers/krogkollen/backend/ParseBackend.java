@@ -1,6 +1,7 @@
 package se.chalmers.krogkollen.backend;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
 
 import android.content.Context;
@@ -156,9 +157,89 @@ public class ParseBackend implements IBackend {
 	 * @param object the ParseObject
 	 * @return the IPub representation of the ParseObject
 	 */
-	public IPub convertParseObjectToPub(ParseObject object) {
-		int hourFourDigit = StringConverter.convertStringToFragmentedInt(
-				object.getString("openingHours"), 5);
+	public IPub convertParseObjectToPub(ParseObject object) {		
+		int hoursInFourDigits = 0;
+		
+		boolean pubClosed = false;
+		
+		// today == 1 if Sunday, 2 if Monday ... 7 if Saturday
+		int today = Calendar.getInstance().get(Calendar.DAY_OF_WEEK);
+		
+		int hour = Calendar.getInstance().get(Calendar.HOUR_OF_DAY);
+		
+		if (hour < 6) {
+			--today;
+		}
+		if (today < 1) {
+			today = today + 7;
+		}
+		
+		switch (today) {
+			case Calendar.MONDAY:
+				try {
+					hoursInFourDigits = StringConverter.convertStringToFragmentedInt(object.getString("openingHours"), 1);
+				} catch (IllegalArgumentException e) {
+					pubClosed = true;
+				}
+				break;
+
+			case Calendar.TUESDAY:
+				try {
+					hoursInFourDigits = StringConverter.convertStringToFragmentedInt(object.getString("openingHours"), 2);
+				} catch (IllegalArgumentException e) {
+					pubClosed = true;
+				}
+				break;
+
+			case Calendar.WEDNESDAY:
+				try {
+					hoursInFourDigits = StringConverter.convertStringToFragmentedInt(object.getString("openingHours"), 3);
+				} catch (IllegalArgumentException e) {
+					pubClosed = true;
+				}
+				break;
+
+			case Calendar.THURSDAY:
+				try {
+					hoursInFourDigits = StringConverter.convertStringToFragmentedInt(object.getString("openingHours"), 4);
+				} catch (IllegalArgumentException e) {
+					pubClosed = true;
+				}
+				break;
+
+			case Calendar.FRIDAY:
+				try {
+					hoursInFourDigits = StringConverter.convertStringToFragmentedInt(object.getString("openingHours"), 5);
+				} catch (IllegalArgumentException e) {
+					pubClosed = true;
+				}
+				break;
+
+			case Calendar.SATURDAY:
+				try {
+					hoursInFourDigits = StringConverter.convertStringToFragmentedInt(object.getString("openingHours"), 6);
+				} catch (IllegalArgumentException e) {
+					pubClosed = true;
+				}
+				break;
+
+			case Calendar.SUNDAY:
+				try {
+					hoursInFourDigits = StringConverter.convertStringToFragmentedInt(object.getString("openingHours"), 7);
+				} catch (IllegalArgumentException e) {
+					pubClosed = true;
+				}
+				break;
+		}
+		
+		OpeningHours openingHoursToday;
+		
+		if (pubClosed) {
+			openingHoursToday = new OpeningHours();
+		} else {
+			openingHoursToday = new OpeningHours(hoursInFourDigits/100, hoursInFourDigits%100);
+		}		
+		
 		long queueTimeLastUpdatedTimestamp = object.getLong("queueTimeLastUpdated");
 		int queueTime = object.getInt("queueTime");
 		
@@ -169,7 +250,7 @@ public class ParseBackend implements IBackend {
 		return new Pub(object.getString("name"), object.getString("description"),
 				object.getDouble("latitude"), object.getDouble("longitude"),
 				object.getInt("ageRestriction"), object.getInt("entranceFee"),
-				new OpeningHours((hourFourDigit / 100), (hourFourDigit % 100)), object.getInt("posRate"),
+				openingHoursToday, object.getInt("posRate"),
 				object.getInt("negRate"), queueTime,
 				queueTimeLastUpdatedTimestamp, object.getObjectId());
 	}

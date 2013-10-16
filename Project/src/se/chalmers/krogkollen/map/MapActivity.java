@@ -21,16 +21,13 @@ import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.CompoundButton.OnCheckedChangeListener;
 import android.widget.Toast;
-
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.Projection;
 import com.google.android.gms.maps.model.*;
-
 import se.chalmers.krogkollen.R;
 import se.chalmers.krogkollen.backend.NoBackendAccessException;
 import se.chalmers.krogkollen.backend.NotFoundInBackendException;
-import se.chalmers.krogkollen.utils.ActivityID;
 
 import java.util.ArrayList;
 
@@ -204,25 +201,9 @@ public class MapActivity extends Activity implements IMapView {
 
     @Override
     public void onBackPressed() {
-
-        // Get what activity you came from originally.
-        int activity = this.getIntent().getIntExtra(ActivityID.ACTIVITY_ID, 0);
-        Intent intent;
-        switch (activity) {
-            case ActivityID.LIST:
-                // TODO do something here
-                // If you came from the list view, return there.
-                // Intent intent = new Intent(this, ListActivity.class);
-                // intent.putExtra(ActivityID.ACTIVITY_ID, CallingActivity.MAP);
-                // this.startActivity(intent);
-                break;
-            default:
-                // If you came from anything else, return to home screen.
-                intent = new Intent(Intent.ACTION_MAIN); // TODO use navigate method
-                intent.addCategory(Intent.CATEGORY_HOME);
-                startActivity(intent);
-                break;
-        }
+        Intent intent = new Intent(Intent.ACTION_MAIN); 
+        intent.addCategory(Intent.CATEGORY_HOME);
+        startActivity(intent);
     }
 
     @Override
@@ -242,10 +223,10 @@ public class MapActivity extends Activity implements IMapView {
 
     @Override
     public void showErrorMessage(String message) {
-    	CharSequence text = message;
-    	int duration = Toast.LENGTH_LONG;
-    	Toast toast = Toast.makeText(this, text, duration);
-    	toast.show();
+        CharSequence text = message;
+        int duration = Toast.LENGTH_LONG;
+        Toast toast = Toast.makeText(this, text, duration);
+        toast.show();
     }
 
     @Override
@@ -305,8 +286,8 @@ public class MapActivity extends Activity implements IMapView {
         return super.getResources();
     }
 
-	@Override
-	public void onSearch() {
-		this.onSearchRequested();
-	}
+    @Override
+    public void onSearch() {
+        this.onSearchRequested();
+    }
 }

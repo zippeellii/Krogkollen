@@ -39,16 +39,6 @@ public interface IPub {
 	public String getDescription();
 
 	/**
-	 * @return the opening hour of today
-	 */
-	public int getTodaysOpeningHour();
-
-	/**
-	 * @return the closing hours of today
-	 */
-	public int getTodaysClosingHour();
-
-	/**
 	 * @return the age restriction of the pub
 	 */
 	public int getAgeRestriction();

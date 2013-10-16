@@ -7,13 +7,13 @@ import se.chalmers.krogkollen.IView;
 import se.chalmers.krogkollen.R;
 import se.chalmers.krogkollen.adapter.SearchViewAdapter;
 import se.chalmers.krogkollen.detailed.DetailedActivity;
-import se.chalmers.krogkollen.list.PubListAdapter;
-import se.chalmers.krogkollen.list.SortedListFragment;
 import se.chalmers.krogkollen.map.MapActivity;
+import se.chalmers.krogkollen.map.MapPresenter;
 import se.chalmers.krogkollen.pub.IPub;
 import se.chalmers.krogkollen.pub.Pub;
 import se.chalmers.krogkollen.pub.PubUtilities;
 import se.chalmers.krogkollen.sort.SortBySearchRelevance;
+import se.chalmers.krogkollen.utils.ActivityID;
 import android.os.Bundle;
 import android.app.ListActivity;
 import android.app.SearchManager;
@@ -29,6 +29,9 @@ import android.widget.Toast;
  *
  */
 public class SearchActivity extends ListActivity implements IView {
+	
+	public static final String ACTIVITY_NAME = "SearchActivity"; // TODO check this
+	IPub[] pubs;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -45,8 +48,10 @@ public class SearchActivity extends ListActivity implements IView {
 
 	@Override
 	public void onListItemClick(ListView l, View v, int position, long id) {
-		// TODO BLA
-		// Call detail activity for clicked entry
+		Bundle bundle = new Bundle();
+		bundle.putInt(ActivityID.ACTIVITY_ID, ActivityID.MAP); // TODO check
+		bundle.putString(MapPresenter.MAP_PRESENTER_KEY, pubs[position].getID());
+		this.navigate(DetailedActivity.class, bundle);
 	}
 
 	// Checks if the intent passed is a search intent or 
@@ -77,7 +82,7 @@ public class SearchActivity extends ListActivity implements IView {
 		
 		matchingPubs = new SortBySearchRelevance(query).sortAlgorithm(matchingPubs);
 		
-		IPub[] pubs = this.convertListToArray(matchingPubs);
+		pubs = this.convertListToArray(matchingPubs);
 		
 		this.addMatchesToListView(pubs);
 	}
@@ -116,14 +121,17 @@ public class SearchActivity extends ListActivity implements IView {
 
 	@Override
 	public void navigate(Class<?> destination) {
-		// TODO Auto-generated method stub
-		
+		Intent intent = new Intent(this, destination);
+        intent.putExtra(MapActivity.FROM, ACTIVITY_NAME); // TODO check this
+        startActivity(intent);
 	}
 
 	@Override
 	public void navigate(Class<?> destination, Bundle extras) {
-		// TODO Auto-generated method stub
-		
+		Intent intent = new Intent(this, destination);
+		intent.putExtra(MapActivity.MARKER_PUB_ID, extras.getString(MapPresenter.MAP_PRESENTER_KEY));
+		intent.putExtra(MapActivity.FROM, ACTIVITY_NAME); // TODO fix all this
+		startActivity(intent);
 	}
 
 	@Override

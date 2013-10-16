@@ -25,7 +25,6 @@ import se.chalmers.krogkollen.utils.Distance;
 
 import java.text.*;
 
-// TODO why is this in krogkollen.list while TabsPagerAdapter is in krogkollen.adapter?
 /**
  * An adapter handling the different items in a search list
  */
@@ -66,9 +65,7 @@ public class SearchViewAdapter extends ArrayAdapter<IPub> {
             holder.distanceText = (TextView)row.findViewById(R.id.listview_distance);
 
             row.setTag(holder);
-        }
-
-        else{
+        } else {
             holder = (PubHolder)row.getTag();
         }
 
@@ -92,7 +89,6 @@ public class SearchViewAdapter extends ArrayAdapter<IPub> {
                 break;
         }
         return row;
-
     }
 
     /**

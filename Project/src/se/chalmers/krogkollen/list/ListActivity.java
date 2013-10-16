@@ -11,6 +11,7 @@ import android.view.MenuItem;
 import android.widget.Toast;
 import se.chalmers.krogkollen.R;
 import se.chalmers.krogkollen.adapter.TabsPagerAdapter;
+import se.chalmers.krogkollen.help.HelpActivity;
 import se.chalmers.krogkollen.map.MapActivity;
 import se.chalmers.krogkollen.map.MapPresenter;
 import se.chalmers.krogkollen.utils.Constants;
@@ -121,7 +122,9 @@ public class ListActivity extends FragmentActivity implements IListView{
             case R.id.search:
             	this.onSearchRequested();
                 break;
-
+            case R.id.action_help:
+                this.navigate(HelpActivity.class);
+                break;
             case android.R.id.home:
                 NavUtils.navigateUpTo(this, new Intent(this, MapActivity.class));
                 break;

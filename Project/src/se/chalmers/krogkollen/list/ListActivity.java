@@ -75,13 +75,13 @@ public class ListActivity extends FragmentActivity implements IListView{
 
     @Override
     public void setActionBarSelectedNavigationItem(int pos){
-    	mAdapter.notifyDataSetChanged();
+    	//mAdapter.notifyDataSetChanged();
         actionBar.setSelectedNavigationItem(pos);
     }
     
     @Override
     public void setViewPagerCurrentItem(int pos){
-    	mAdapter.notifyDataSetChanged();
+    	//mAdapter.notifyDataSetChanged();
         viewPager.setCurrentItem(pos);
     }
 
@@ -122,5 +122,9 @@ public class ListActivity extends FragmentActivity implements IListView{
                 break;
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    public void update(){
+        mAdapter.notifyDataSetChanged();
     }
 }

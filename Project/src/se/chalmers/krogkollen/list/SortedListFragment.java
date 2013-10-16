@@ -39,7 +39,7 @@ public class SortedListFragment extends ListFragment {
         data = setSortMode(getArguments().getInt(TabsPagerAdapter.SORT_MODE));
         View rootView = inflater.inflate(R.layout.fragment_listview, container, false);
 
-        adapter = new PubListAdapter(getActivity(), R.layout.listview_item, data);
+        adapter = new PubListAdapter(getActivity(), R.layout.listview_item, data, this);
 
         System.out.println(getActivity() instanceof ListActivity);
 
@@ -80,6 +80,10 @@ public class SortedListFragment extends ListFragment {
         Bundle bundle = new Bundle();
         bundle.putString(MapPresenter.MAP_PRESENTER_KEY, data[position].getID());
         view.navigate(DetailedActivity.class, bundle);
+    }
+
+    public void update(){
+       view.update();
     }
 }
 

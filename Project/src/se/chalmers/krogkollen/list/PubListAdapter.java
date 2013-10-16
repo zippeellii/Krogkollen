@@ -29,6 +29,7 @@ public class PubListAdapter extends ArrayAdapter<IPub> {
     IPub data[] = null;
     View row;
     PubHolder holder;
+    SortedListFragment fragment;
 
     /**
      * A constructor that creates an PubListAdapter.
@@ -36,11 +37,13 @@ public class PubListAdapter extends ArrayAdapter<IPub> {
      * @param layoutResourceId
      * @param data
      */
-    public PubListAdapter(Context context, int layoutResourceId, IPub[] data) {
+    public PubListAdapter(Context context, int layoutResourceId, IPub[] data, SortedListFragment fragment) {
         super(context, layoutResourceId, data);
         this.layoutResourceId = layoutResourceId;
         this.context = context;
         this.data = data;
+        this.fragment = fragment;
+
     }
 
     @Override
@@ -81,6 +84,7 @@ public class PubListAdapter extends ArrayAdapter<IPub> {
                 int pos = (Integer)v.getTag();
                 saveFavoriteState(pos);
                 updateStar(Preferences.getInstance().loadPreference(data[pos].getID()), tmp);
+                fragment.update();
 
             }
         });

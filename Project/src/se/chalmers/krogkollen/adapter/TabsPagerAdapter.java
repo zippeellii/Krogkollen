@@ -44,5 +44,10 @@ public class TabsPagerAdapter extends FragmentPagerAdapter {
         // get item count - equal to number of tabs
         return 3;
     }
+
+    @Override
+    public int getItemPosition(Object object) {
+        return POSITION_NONE;
+    }
  
 }

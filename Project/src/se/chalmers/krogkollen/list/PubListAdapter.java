@@ -67,7 +67,6 @@ public class PubListAdapter extends ArrayAdapter<IPub> {
         }
 
         updateStar(Preferences.getInstance().loadPreference(this.getItem(position).getID()), holder);
-        //updateStar(context.getSharedPreferences(this.getItem(position).getID(), 0).getBoolean("star", true), holder);
 
         IPub pub = data[position];
         DecimalFormat numberFormat = new DecimalFormat("#0.00");
@@ -83,7 +82,6 @@ public class PubListAdapter extends ArrayAdapter<IPub> {
                 int pos = (Integer)v.getTag();
                 saveFavoriteState(pos);
                 updateStar(Preferences.getInstance().loadPreference(data[pos].getID()), tmp);
-                //updateStar(context.getSharedPreferences(data[pos].getID(), 0).getBoolean("star", true), tmp);
 
             }
         });

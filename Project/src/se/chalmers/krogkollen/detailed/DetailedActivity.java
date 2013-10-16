@@ -45,7 +45,6 @@ import se.chalmers.krogkollen.pub.IPub;
  * You should have received a copy of the GNU General Public License
  * along with Krogkollen.  If not, see <http://www.gnu.org/licenses/>.
  *
- <<<<<<< Updated upstream
  */
 
 /**

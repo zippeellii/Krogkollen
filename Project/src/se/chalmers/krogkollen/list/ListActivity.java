@@ -7,11 +7,9 @@ import android.support.v4.app.FragmentActivity;
 import android.support.v4.view.ViewPager;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.widget.ListView;
 import android.widget.Toast;
 import se.chalmers.krogkollen.R;
 import se.chalmers.krogkollen.adapter.TabsPagerAdapter;
-import se.chalmers.krogkollen.map.IMapView;
 import se.chalmers.krogkollen.map.MapActivity;
 import se.chalmers.krogkollen.map.MapPresenter;
 
@@ -25,14 +23,12 @@ public class ListActivity extends FragmentActivity implements IListView{
 
 
 	private ViewPager viewPager;
-    private IMapView mapView; // TODO this is never used?
     private TabsPagerAdapter mAdapter;
     private ActionBar actionBar;
     
     // Tab titles
     private String[] tabs = { "Kötid", "Distans", "Favoriter" }; // TODO move names to XML
     private IListPresenter presenter;
-    private ListView list;  // TODO this is never used?
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -48,6 +44,7 @@ public class ListActivity extends FragmentActivity implements IListView{
         actionBar.setHomeButtonEnabled(false);
         actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_TABS);
         presenter = new ListPresenter(this);
+
         // Adding Tabs
         for (String tab_name : tabs) {
             actionBar.addTab(actionBar.newTab().setText(tab_name)
@@ -96,8 +93,7 @@ public class ListActivity extends FragmentActivity implements IListView{
         startActivity(intent);
     }
 
-    //public void favoriteStarClickHandler(View v){
-    //}
+
 	public void showErrorMessage(String message) {
     	CharSequence text = message;
     	int duration = Toast.LENGTH_LONG;

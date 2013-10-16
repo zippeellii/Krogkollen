@@ -9,7 +9,7 @@ import android.support.v4.app.FragmentPagerAdapter;
 
 public class TabsPagerAdapter extends FragmentPagerAdapter {
 
-    public static String SORT_MODE = "SORT_MODE";
+    public static final String SORT_MODE = "SORT_MODE";
  
     // TODO javadoc
     public TabsPagerAdapter(FragmentManager fm) {

@@ -105,7 +105,6 @@ public class MapPresenter implements IMapPresenter, GoogleMap.OnMarkerClickListe
                 Bundle bundle = new Bundle();
                 bundle.putInt(ActivityID.ACTIVITY_ID, ActivityID.MAP);
                 mapView.navigate(ListActivity.class, bundle);
-
                 break;
             default:
                 break;

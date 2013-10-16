@@ -63,6 +63,8 @@ public class MapActivity extends Activity implements IMapView {
      * Identifier for the intent used to start the activity for detailed view.
      */
     public static final String	MARKER_PUB_ID	= "se.chalmers.krogkollen.MARKER_PUB_ID";
+    public static final String ACTIVITY_NAME = "MapActivity";
+    public static final String FROM = "FROM";
 
     private MapPresenter		presenter;
     private Marker				userMarker;
@@ -109,6 +111,7 @@ public class MapActivity extends Activity implements IMapView {
         // Remove the default logo icon and add our list icon.
         ActionBar actionBar = getActionBar();
         actionBar.setIcon(R.drawable.list_icon);
+        actionBar.setDisplayShowTitleEnabled(false);
         actionBar.setDisplayHomeAsUpEnabled(true);
     }
 
@@ -225,6 +228,7 @@ public class MapActivity extends Activity implements IMapView {
     @Override
     public void navigate(Class<?> destination) {
         Intent intent = new Intent(this, destination);
+        intent.putExtra(MapActivity.FROM, ACTIVITY_NAME);
         startActivity(intent);
     }
 
@@ -232,6 +236,7 @@ public class MapActivity extends Activity implements IMapView {
     public void navigate(Class<?> destination, Bundle extras) {
         Intent intent = new Intent(this, destination);
         intent.putExtra(MARKER_PUB_ID, extras.getString(MapPresenter.MAP_PRESENTER_KEY));
+        intent.putExtra(FROM, ACTIVITY_NAME);
         startActivity(intent);
     }
 
@@ -239,7 +244,6 @@ public class MapActivity extends Activity implements IMapView {
     public void showErrorMessage(String message) {
     	CharSequence text = message;
     	int duration = Toast.LENGTH_LONG;
-
     	Toast toast = Toast.makeText(this, text, duration);
     	toast.show();
     }

@@ -11,19 +11,18 @@ import android.view.MenuItem;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
-
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapFragment;
 import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
-
 import se.chalmers.krogkollen.R;
 import se.chalmers.krogkollen.backend.BackendNotInitializedException;
 import se.chalmers.krogkollen.backend.NoBackendAccessException;
 import se.chalmers.krogkollen.backend.NotFoundInBackendException;
 import se.chalmers.krogkollen.help.HelpActivity;
+import se.chalmers.krogkollen.list.ListActivity;
 import se.chalmers.krogkollen.map.MapActivity;
 import se.chalmers.krogkollen.map.MarkerOptionsFactory;
 import se.chalmers.krogkollen.pub.IPub;
@@ -52,6 +51,7 @@ import se.chalmers.krogkollen.pub.IPub;
  */
 public class DetailedActivity extends Activity implements IDetailedView {
 
+    public static final String ACTIVITY_NAME = "DetailedActivity";
     /** The presenter connected to the detailed view */
     private IDetailedPresenter presenter;
 
@@ -65,6 +65,8 @@ public class DetailedActivity extends Activity implements IDetailedView {
     private GoogleMap map;
     private Marker marker;
 
+    private String previousActivityKey;
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
 
@@ -77,6 +79,7 @@ public class DetailedActivity extends Activity implements IDetailedView {
         presenter = new DetailedPresenter();
         presenter.setView(this);
 
+        previousActivityKey = getIntent().getStringExtra(MapActivity.FROM);
 
         try {
             presenter.setPub(getIntent().getStringExtra(MapActivity.MARKER_PUB_ID));
@@ -121,9 +124,9 @@ public class DetailedActivity extends Activity implements IDetailedView {
     public boolean onCreateOptionsMenu(Menu menu) {
         super.onCreateOptionsMenu(menu);
 
-		// Inflate the menu; this adds items to the action bar if it is present.
-		getMenuInflater().inflate(R.menu.detailed, menu);
-		favoriteStar = menu.findItem(R.id.favorite_star);
+        // Inflate the menu; this adds items to the action bar if it is present.
+        getMenuInflater().inflate(R.menu.detailed, menu);
+        favoriteStar = menu.findItem(R.id.favorite_star);
 
         try {
             presenter.updateInfo();
@@ -140,17 +143,25 @@ public class DetailedActivity extends Activity implements IDetailedView {
 
     @Override
     public void navigate(Class<?> destination) {
-        Intent navigateBack = new Intent(this, destination);
-        startActivity(navigateBack);
+        Intent intent = new Intent(this, destination);
+        intent.putExtra(MapActivity.FROM, ACTIVITY_NAME);
+        startActivity(intent);
+    }
+
+    @Override
+    public void navigate(Class<?> destination, Bundle extras) {
+        Intent intent = new Intent(this, destination);
+        intent.putExtra(MapActivity.FROM, ACTIVITY_NAME);
+        startActivity(intent);
     }
 
     @Override
     public void showErrorMessage(String message) {
-    	CharSequence text = message;
-    	int duration = Toast.LENGTH_LONG;
+        CharSequence text = message;
+        int duration = Toast.LENGTH_LONG;
 
-    	Toast toast = Toast.makeText(this, text, duration);
-    	toast.show();
+        Toast toast = Toast.makeText(this, text, duration);
+        toast.show();
     }
 
     @Override
@@ -178,11 +189,6 @@ public class DetailedActivity extends Activity implements IDetailedView {
                 queueIndicator.setBackgroundResource(R.drawable.detailed_queue_gray);
                 break;
         }
-    }
-
-    @Override
-    public void navigate(Class<?> destination, Bundle extras) {
-        // TODO Auto-generated method stu
     }
 
     // Adds listeners to all buttons
@@ -266,7 +272,9 @@ public class DetailedActivity extends Activity implements IDetailedView {
                 navigate(HelpActivity.class);
                 break;
             case android.R.id.home:
-                NavUtils.navigateUpFromSameTask(this);
+                NavUtils.navigateUpTo(this, new Intent(this,
+                        previousActivityKey.equalsIgnoreCase(ListActivity.ACTIVITY_NAME) ?
+                                ListActivity.class : MapActivity.class));
                 return true;
         }
         return true;

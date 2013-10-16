@@ -20,8 +20,6 @@ This file is part of Krogkollen.
 <resources>
 
     <string name="app_name">Krogkollen</string>
-    <string name="action_settings">Inställningar</string>
-    <string name="hello_world">Startmeny</string>
     <string name="alert_dialog_title">Förbättra platsnoggrannheten</string>
     <string name="alert_dialog_activate">Aktivera</string>
     <string name="alert_dialog_cancel">Aktivera inte</string>

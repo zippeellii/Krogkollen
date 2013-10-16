@@ -4,6 +4,7 @@ import android.app.ActionBar;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
+import android.support.v4.app.NavUtils;
 import android.support.v4.view.ViewPager;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -24,7 +25,8 @@ import se.chalmers.krogkollen.map.MapPresenter;
 public class ListActivity extends FragmentActivity implements IListView{
 
 
-	private ViewPager viewPager;
+    public static final String ACTIVITY_NAME = "ListActivity";
+    private ViewPager viewPager;
     private IMapView mapView; // TODO this is never used?
     private TabsPagerAdapter mAdapter;
     private ActionBar actionBar;
@@ -59,6 +61,7 @@ public class ListActivity extends FragmentActivity implements IListView{
         // Remove the default logo icon and add our list icon.
         ActionBar actionBar = getActionBar();
         actionBar.setIcon(R.drawable.map_icon);
+        actionBar.setDisplayShowTitleEnabled(false);
         actionBar.setDisplayHomeAsUpEnabled(true);
     }
 
@@ -86,6 +89,7 @@ public class ListActivity extends FragmentActivity implements IListView{
     @Override
     public void navigate(Class<?> destination) {
         Intent intent = new Intent(this, destination);
+        intent.putExtra(MapActivity.FROM, ACTIVITY_NAME);
         startActivity(intent);
     }
 
@@ -93,6 +97,7 @@ public class ListActivity extends FragmentActivity implements IListView{
     public void navigate(Class<?> destination, Bundle extras) {
         Intent intent = new Intent(this, destination);
         intent.putExtra(MapActivity.MARKER_PUB_ID, extras.getString(MapPresenter.MAP_PRESENTER_KEY));
+        intent.putExtra(MapActivity.FROM, ACTIVITY_NAME);
         startActivity(intent);
     }
 
@@ -119,7 +124,7 @@ public class ListActivity extends FragmentActivity implements IListView{
                 break;
 
             case android.R.id.home:
-                this.navigate(MapActivity.class);
+                NavUtils.navigateUpTo(this, new Intent(this, MapActivity.class));
                 break;
         }
         return super.onOptionsItemSelected(item);

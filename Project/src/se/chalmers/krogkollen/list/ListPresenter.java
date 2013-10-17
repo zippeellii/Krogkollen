@@ -14,15 +14,16 @@ public class ListPresenter implements IListPresenter {
     private IListView listView;
     private ListModel model;
 
+    /**
+     * Constructs a list presenter 
+     * @param view that the listpresenter should hold
+     */
     public ListPresenter(IListView view){
         this.listView = view;
         this.model = new ListModel();
     }
     @Override
-    public void setView(IView view) {
-        //this.view = view;
-
-    }
+    public void setView(IView view){}
 
     @Override
     public IPub[] sortList(ISort sortMode) {

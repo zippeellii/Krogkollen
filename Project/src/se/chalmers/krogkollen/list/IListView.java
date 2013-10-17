@@ -23,6 +23,9 @@ public interface IListView extends IView {
      * @param pos the tab which should be switched to
      */
     public void setViewPagerCurrentItem(int pos);
-
+    
+    /**
+     * Updates the listView
+     */
     public void update();
 }

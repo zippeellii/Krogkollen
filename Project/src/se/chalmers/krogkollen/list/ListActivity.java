@@ -27,8 +27,6 @@ public class ListActivity extends FragmentActivity implements IListView{
     private ViewPager viewPager;
     private TabsPagerAdapter mAdapter;
     private ActionBar actionBar;
-    
-    // Tab titles
     private String[] tabs;
     private IListPresenter presenter;
 
@@ -36,21 +34,20 @@ public class ListActivity extends FragmentActivity implements IListView{
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_list);
-        
+        // Tab titles
         tabs = new String[] {	getString(R.string.list_tab_name_queue_time), 
 								getString(R.string.list_tab_name_distance), 
 								getString(R.string.list_tab_name_favorites)};
-        
-        // TODO is this still a test?
-        //Detta är bara för TEST 
+        //Instantiates
         viewPager = (ViewPager) findViewById(R.id.pager);
         actionBar = getActionBar();
         mAdapter = new TabsPagerAdapter(getSupportFragmentManager());
+        presenter = new ListPresenter(this);
         viewPager.setAdapter(mAdapter);
+        
         actionBar.setHomeButtonEnabled(false);
         actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_TABS);
-        presenter = new ListPresenter(this);
-
+       
         // Adding Tabs
         for (String tab_name : tabs) {
             actionBar.addTab(actionBar.newTab().setText(tab_name)
@@ -79,13 +76,11 @@ public class ListActivity extends FragmentActivity implements IListView{
 
     @Override
     public void setActionBarSelectedNavigationItem(int pos){
-    	//mAdapter.notifyDataSetChanged();
         actionBar.setSelectedNavigationItem(pos);
     }
     
     @Override
     public void setViewPagerCurrentItem(int pos){
-    	//mAdapter.notifyDataSetChanged();
         viewPager.setCurrentItem(pos);
     }
 
@@ -131,7 +126,7 @@ public class ListActivity extends FragmentActivity implements IListView{
         }
         return super.onOptionsItemSelected(item);
     }
-
+    
     public void update(){
         mAdapter.notifyDataSetChanged();
     }

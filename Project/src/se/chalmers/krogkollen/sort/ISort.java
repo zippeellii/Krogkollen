@@ -12,7 +12,7 @@ import se.chalmers.krogkollen.pub.IPub;
  */
 public interface ISort {
 	/**
-	 * Takes the list and returns it sorted
+	 * Takes the list and returns a sorted copy
 	 * 
 	 * @param pubs the list that should be sorted
 	 * @return the sorted list

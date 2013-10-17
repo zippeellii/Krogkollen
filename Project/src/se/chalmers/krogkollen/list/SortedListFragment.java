@@ -18,7 +18,7 @@ import se.chalmers.krogkollen.sort.SortByQueueTime;
 
 /**
  * Created with IntelliJ IDEA.
- * User: filipcarlen
+ * User: Filip Carlén
  * Date: 2013-10-14
  * Time: 15:56
  * To change this template use File | Settings | File Templates.
@@ -54,7 +54,7 @@ public class SortedListFragment extends ListFragment {
     /**
      * Returns a sorted array of IPub objects, sort mode is chosen by the parameter
      * 
-     * @param sortMode an int representing which sort mode to be used. 0 for SortByQueueTime, 1 for SortByDistance, 2 for FilterFavorites
+     * @param sortMode an integer representing which sort mode to be used. 0 for SortByQueueTime, 1 for SortByDistance, 2 for FilterFavorites
      * @return the sorted array
      */
     public IPub[] setSortMode(int sortMode){
@@ -81,7 +81,9 @@ public class SortedListFragment extends ListFragment {
         bundle.putString(MapPresenter.MAP_PRESENTER_KEY, data[position].getID());
         view.navigate(DetailedActivity.class, bundle);
     }
-
+    /**
+     * Tells the view to update
+     */
     public void update(){
        view.update();
     }

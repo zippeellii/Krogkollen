@@ -18,19 +18,18 @@ import se.chalmers.krogkollen.pub.Pub;
 import se.chalmers.krogkollen.pub.PubUtilities;
 import se.chalmers.krogkollen.sort.SortBySearchRelevance;
 import se.chalmers.krogkollen.utils.Constants;
-
 import java.util.ArrayList;
 import java.util.List;
-
+import android.widget.ArrayAdapter;
 /**
  * This activity is shown when a user has searched for something in a search widget
  * 
  * @author Oskar Karrman
- *
+ * 
  */
 public class SearchActivity extends ListActivity implements IView {
 
-	IPub[] pubs;
+	private IPub[]	pubs;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -38,7 +37,7 @@ public class SearchActivity extends ListActivity implements IView {
 		setContentView(R.layout.activity_search);
 		handleIntent(getIntent());
 	}
-	
+
 	@Override
 	public void onNewIntent(Intent intent) {
 		setIntent(intent);
@@ -52,7 +51,7 @@ public class SearchActivity extends ListActivity implements IView {
 		this.navigate(DetailedActivity.class, bundle);
 	}
 
-	// Checks if the intent passed is a search intent or 
+	// Checks if the intent passed is a search intent or
 	// an intent to open the detailed view.
 	private void handleIntent(Intent intent) {
 		if (intent.getAction().equals(Intent.ACTION_SEARCH)) {
@@ -62,55 +61,66 @@ public class SearchActivity extends ListActivity implements IView {
 			String pubID = intent.getDataString();
 			Intent newIntent = new Intent(this, DetailedActivity.class);
 			newIntent.putExtra(MapActivity.MARKER_PUB_ID, pubID);
-			
+
 			// This leaks window but also makes sure that pressing the back button
 			// from the detailed view doesn't return the user to this activity but map or list.
 			this.finish();
 			startActivity(newIntent);
 		}
 	}
-	
+
 	// Searches
 	private void doSearch(String query) {
 		this.setTitle(this.getResources().getString(R.string.title_activity_search) + ": " + query);
-		
+
 		List<IPub> allPubs = PubUtilities.getInstance().getPubList();
 
 		List<IPub> matchingPubs = getMatchingPubs(query, allPubs);
-		
+
 		matchingPubs = new SortBySearchRelevance(query).sortAlgorithm(matchingPubs);
-		
+
 		pubs = this.convertListToArray(matchingPubs);
 		
 		this.addMatchesToListView(pubs);
 	}
-	
+
 	// Adds all the search matches to the listview
 	private void addMatchesToListView(IPub[] pubs) {
 		SearchViewAdapter adapter = new SearchViewAdapter(this, R.layout.searchview_item, pubs);
+
+		String[] string = {getString(R.string.no_search_results)};
+		ArrayAdapter<String> stringAdapter = new ArrayAdapter<String>(this, R.layout.textview_item, string);
 		
-		getListView().setAdapter(adapter);
+		if(pubs.length != 0) {
+			this.getListView().setAdapter(adapter);
+			this.getListView().setFooterDividersEnabled(true);
+		} else {
+			this.getListView().setAdapter(stringAdapter);
+			this.getListView().setFooterDividersEnabled(false);
+		}
 	}
-	
+
 	// TODO use in utils instead, temp
-	private IPub[] convertListToArray(List <IPub> list) {
+	private IPub[] convertListToArray(List<IPub> list) {
 		Pub[] pubArray = new Pub[list.size()];
-		for(int i = 0; i < list.size(); i++){
-			pubArray[i] = (Pub)list.get(i);
+		for (int i = 0; i < list.size(); i++) {
+			pubArray[i] = (Pub) list.get(i);
 		}
 		return pubArray;
 	}
-	
+
 	/**
 	 * Searches a list of IPubs for Pubs with names that in some way matches the query.
+	 * 
 	 * @param query the search
 	 * @param allPubs the list with pubs to search in
-	 * @return	a list of IPubs where all Pubs match the query
+	 * @return a list of IPubs where all Pubs match the query
 	 */
 	public static List<IPub> getMatchingPubs(String query, List<IPub> allPubs) {
 		List<IPub> matchingPubs = new ArrayList<IPub>();
 		for (IPub pub : allPubs) {
-			if (pub.getName().toLowerCase().contains(query.toLowerCase())) { // TODO check this warning
+			if (pub.getName().toLowerCase().contains(query.toLowerCase())) { // TODO check this
+																				// warning
 				matchingPubs.add(pub);
 			}
 		}
@@ -120,8 +130,8 @@ public class SearchActivity extends ListActivity implements IView {
 	@Override
 	public void navigate(Class<?> destination) {
 		Intent intent = new Intent(this, destination);
-        intent.putExtra(Constants.ACTIVITY_FROM, Constants.SEARCH_ACTIVITY_NAME);
-        startActivity(intent);
+		intent.putExtra(Constants.ACTIVITY_FROM, Constants.SEARCH_ACTIVITY_NAME);
+		startActivity(intent);
 	}
 
 	@Override
@@ -134,10 +144,10 @@ public class SearchActivity extends ListActivity implements IView {
 
 	@Override
 	public void showErrorMessage(String message) {
-    	CharSequence text = message;
-    	int duration = Toast.LENGTH_LONG;
+		CharSequence text = message;
+		int duration = Toast.LENGTH_LONG;
 
-    	Toast toast = Toast.makeText(this, text, duration);
-    	toast.show();
+		Toast toast = Toast.makeText(this, text, duration);
+		toast.show();
 	}
 }

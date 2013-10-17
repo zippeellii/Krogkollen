@@ -73,6 +73,7 @@ This file is part of Krogkollen.
     <string name="search_hint">Sök efter en krog</string>
     <string name="title_activity_search">Sök</string>
     <string name="error_no_connection">Ingen anslutning</string>
+	<string name="no_search_results">Din sökning gav inga träffar</string>
     
     <!--  Detailed view strings -->
     <string name="dialog_updating_info">Uppdaterar info&#8230;</string>

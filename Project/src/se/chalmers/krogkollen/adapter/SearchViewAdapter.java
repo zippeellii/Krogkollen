@@ -11,13 +11,16 @@ package se.chalmers.krogkollen.adapter;
 
 import android.app.Activity;
 import android.content.Context;
+import android.graphics.Color;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
+
 import com.google.android.gms.maps.model.LatLng;
+
 import se.chalmers.krogkollen.R;
 import se.chalmers.krogkollen.map.UserLocation;
 import se.chalmers.krogkollen.pub.IPub;
@@ -88,6 +91,9 @@ public class SearchViewAdapter extends ArrayAdapter<IPub> {
                 holder.imgIcon.setImageResource(R.drawable.detailed_queue_gray);
                 break;
         }
+        
+        row.setBackgroundColor(Color.WHITE);
+        
         return row;
     }
 

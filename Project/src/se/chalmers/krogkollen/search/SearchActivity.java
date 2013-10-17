@@ -25,11 +25,11 @@ import android.widget.ArrayAdapter;
  * This activity is shown when a user has searched for something in a search widget
  * 
  * @author Oskar Karrman
- *
+ * 
  */
 public class SearchActivity extends ListActivity implements IView {
 
-	IPub[] pubs;
+	private IPub[]	pubs;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -51,7 +51,7 @@ public class SearchActivity extends ListActivity implements IView {
 		this.navigate(DetailedActivity.class, bundle);
 	}
 
-	// Checks if the intent passed is a search intent or 
+	// Checks if the intent passed is a search intent or
 	// an intent to open the detailed view.
 	private void handleIntent(Intent intent) {
 		if (intent.getAction().equals(Intent.ACTION_SEARCH)) {
@@ -76,11 +76,11 @@ public class SearchActivity extends ListActivity implements IView {
 		List<IPub> allPubs = PubUtilities.getInstance().getPubList();
 
 		List<IPub> matchingPubs = getMatchingPubs(query, allPubs);
-		
+
 		matchingPubs = new SortBySearchRelevance(query).sortAlgorithm(matchingPubs);
-		
+
 		pubs = this.convertListToArray(matchingPubs);
-	
+		
 		this.addMatchesToListView(pubs);
 	}
 
@@ -101,24 +101,26 @@ public class SearchActivity extends ListActivity implements IView {
 	}
 
 	// TODO use in utils instead, temp
-	private IPub[] convertListToArray(List <IPub> list) {
+	private IPub[] convertListToArray(List<IPub> list) {
 		Pub[] pubArray = new Pub[list.size()];
-		for(int i = 0; i < list.size(); i++){
-			pubArray[i] = (Pub)list.get(i);
+		for (int i = 0; i < list.size(); i++) {
+			pubArray[i] = (Pub) list.get(i);
 		}
 		return pubArray;
 	}
 
 	/**
 	 * Searches a list of IPubs for Pubs with names that in some way matches the query.
+	 * 
 	 * @param query the search
 	 * @param allPubs the list with pubs to search in
-	 * @return	a list of IPubs where all Pubs match the query
+	 * @return a list of IPubs where all Pubs match the query
 	 */
 	public static List<IPub> getMatchingPubs(String query, List<IPub> allPubs) {
 		List<IPub> matchingPubs = new ArrayList<IPub>();
 		for (IPub pub : allPubs) {
-			if (pub.getName().toLowerCase().contains(query.toLowerCase())) { // TODO check this warning
+			if (pub.getName().toLowerCase().contains(query.toLowerCase())) { // TODO check this
+																				// warning
 				matchingPubs.add(pub);
 			}
 		}
@@ -128,8 +130,8 @@ public class SearchActivity extends ListActivity implements IView {
 	@Override
 	public void navigate(Class<?> destination) {
 		Intent intent = new Intent(this, destination);
-        intent.putExtra(Constants.ACTIVITY_FROM, Constants.SEARCH_ACTIVITY_NAME);
-        startActivity(intent);
+		intent.putExtra(Constants.ACTIVITY_FROM, Constants.SEARCH_ACTIVITY_NAME);
+		startActivity(intent);
 	}
 
 	@Override
@@ -142,10 +144,10 @@ public class SearchActivity extends ListActivity implements IView {
 
 	@Override
 	public void showErrorMessage(String message) {
-    	CharSequence text = message;
-    	int duration = Toast.LENGTH_LONG;
+		CharSequence text = message;
+		int duration = Toast.LENGTH_LONG;
 
-    	Toast toast = Toast.makeText(this, text, duration);
-    	toast.show();
+		Toast toast = Toast.makeText(this, text, duration);
+		toast.show();
 	}
 }

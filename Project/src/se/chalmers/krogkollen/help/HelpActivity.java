@@ -2,14 +2,10 @@ package se.chalmers.krogkollen.help;
 
 import android.app.ActionBar;
 import android.app.Activity;
-import android.content.Intent;
 import android.os.Bundle;
-import android.support.v4.app.NavUtils;
 import android.view.Menu;
 import android.view.MenuItem;
 import se.chalmers.krogkollen.R;
-import se.chalmers.krogkollen.list.ListActivity;
-import se.chalmers.krogkollen.map.MapActivity;
 import se.chalmers.krogkollen.utils.Constants;
 
 /**
@@ -49,9 +45,7 @@ public class HelpActivity extends Activity {
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case android.R.id.home:
-                NavUtils.navigateUpTo(this, new Intent(this,
-                        previousActivityKey.equalsIgnoreCase(Constants.LIST_ACTIVITY_NAME) ?
-                                ListActivity.class : MapActivity.class));
+                finish();
                 return true;
             default:
                 return super.onOptionsItemSelected(item);

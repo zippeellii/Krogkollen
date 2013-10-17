@@ -33,11 +33,11 @@ import java.text.*;
  */
 public class SearchViewAdapter extends ArrayAdapter<IPub> {
 
-    Context context;
-    int layoutResourceId;
-    IPub data[] = null;
-    View row;
-    PubHolder holder;
+    private Context context;
+    private int layoutResourceId;
+    private IPub data[] = null;
+    private View row;
+    private PubHolder holder;
 
     /**
      * A constructor that creates an SearchViewAdapter.

@@ -21,7 +21,6 @@ import se.chalmers.krogkollen.backend.BackendNotInitializedException;
 import se.chalmers.krogkollen.backend.NoBackendAccessException;
 import se.chalmers.krogkollen.backend.NotFoundInBackendException;
 import se.chalmers.krogkollen.help.HelpActivity;
-import se.chalmers.krogkollen.map.MapActivity;
 import se.chalmers.krogkollen.map.MarkerOptionsFactory;
 import se.chalmers.krogkollen.pub.IPub;
 import se.chalmers.krogkollen.utils.Constants;
@@ -82,7 +81,7 @@ public class DetailedActivity extends Activity implements IDetailedView {
 		previousActivityKey = getIntent().getStringExtra(Constants.ACTIVITY_FROM);
 
 		try {
-			presenter.setPub(getIntent().getStringExtra(MapActivity.MARKER_PUB_ID));
+			presenter.setPub(getIntent().getStringExtra(Constants.MARKER_PUB_ID));
 		} catch (NoBackendAccessException e) {
 			this.showErrorMessage(this.getString(R.string.error_no_backend_access));
 		} catch (NotFoundInBackendException e) {

@@ -49,7 +49,7 @@ public class SearchActivity extends ListActivity implements IView {
     @Override
     public void onListItemClick(ListView l, View v, int position, long id) {
         Bundle bundle = new Bundle();
-        bundle.putString(MapPresenter.MAP_PRESENTER_KEY, pubs[position].getID());
+        bundle.putString(Constants.MAP_PRESENTER_KEY, pubs[position].getID());
         this.navigate(DetailedActivity.class, bundle);
     }
 
@@ -62,7 +62,7 @@ public class SearchActivity extends ListActivity implements IView {
         } else {
             String pubID = intent.getDataString();
             Intent newIntent = new Intent(this, DetailedActivity.class);
-            newIntent.putExtra(MapActivity.MARKER_PUB_ID, pubID);
+            newIntent.putExtra(Constants.MARKER_PUB_ID, pubID);
 
             // This leaks window but also makes sure that pressing the back button
             // from the detailed view doesn't return the user to this activity but map or list.
@@ -147,7 +147,7 @@ public class SearchActivity extends ListActivity implements IView {
     @Override
     public void navigate(Class<?> destination, Bundle extras) {
         Intent intent = new Intent(this, destination);
-        intent.putExtra(MapActivity.MARKER_PUB_ID, extras.getString(MapPresenter.MAP_PRESENTER_KEY));
+        intent.putExtra(Constants.MARKER_PUB_ID, extras.getString(Constants.MAP_PRESENTER_KEY));
         intent.putExtra(Constants.ACTIVITY_FROM, Constants.SEARCH_ACTIVITY_NAME);
         startActivity(intent);
     }

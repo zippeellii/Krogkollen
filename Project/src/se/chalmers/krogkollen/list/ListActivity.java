@@ -11,8 +11,6 @@ import android.widget.Toast;
 import se.chalmers.krogkollen.R;
 import se.chalmers.krogkollen.adapter.TabsPagerAdapter;
 import se.chalmers.krogkollen.help.HelpActivity;
-import se.chalmers.krogkollen.map.MapActivity;
-import se.chalmers.krogkollen.map.MapPresenter;
 import se.chalmers.krogkollen.utils.Constants;
 
 /*
@@ -111,7 +109,7 @@ public class ListActivity extends FragmentActivity implements IListView {
 	@Override
 	public void navigate(Class<?> destination, Bundle extras) {
 		Intent intent = new Intent(this, destination);
-		intent.putExtra(MapActivity.MARKER_PUB_ID, extras.getString(MapPresenter.MAP_PRESENTER_KEY));
+		intent.putExtra(Constants.MARKER_PUB_ID, extras.getString(Constants.MAP_PRESENTER_KEY));
 		intent.putExtra(Constants.ACTIVITY_FROM, Constants.LIST_ACTIVITY_NAME);
 		startActivity(intent);
 	}

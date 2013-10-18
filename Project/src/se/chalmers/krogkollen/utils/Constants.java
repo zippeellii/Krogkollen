@@ -26,4 +26,10 @@ public class Constants {
 	public static final String	SORT_MODE				= "SORT_MODE";
 
 	public static final int		LIST_NUMBER_OF_TABS		= 3;
+
+	/** Identifier for the intent used to start the activity for detailed view. */
+	public static final String	MARKER_PUB_ID			= "se.chalmers.krogkollen.MARKER_PUB_ID";
+
+	/** Key value used when sending intents */
+	public static final String	MAP_PRESENTER_KEY		= "se.chalmers.krogkollen.MAP_PRESENTER_KEY";
 }

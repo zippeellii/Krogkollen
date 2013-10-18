@@ -9,7 +9,6 @@ import android.widget.ListView;
 import se.chalmers.krogkollen.R;
 import se.chalmers.krogkollen.adapter.PubListAdapter;
 import se.chalmers.krogkollen.detailed.DetailedActivity;
-import se.chalmers.krogkollen.map.MapPresenter;
 import se.chalmers.krogkollen.pub.IPub;
 import se.chalmers.krogkollen.sort.FilterFavorites;
 import se.chalmers.krogkollen.sort.ISort;
@@ -92,7 +91,7 @@ public class SortedListFragment extends ListFragment {
 	@Override
 	public void onListItemClick(ListView l, View v, int position, long id) {
 		Bundle bundle = new Bundle();
-		bundle.putString(MapPresenter.MAP_PRESENTER_KEY, data[position].getID());
+		bundle.putString(Constants.MAP_PRESENTER_KEY, data[position].getID());
 		view.navigate(DetailedActivity.class, bundle);
 	}
 

@@ -62,9 +62,7 @@ public class DetailedActivity extends Activity implements IDetailedView {
 	private GoogleMap			map;
 	private Marker				marker;
 
-	private String				previousActivityKey;																// TODO
-																													// never
-																													// used?
+	private String				previousActivityKey; // TODO never used?
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {

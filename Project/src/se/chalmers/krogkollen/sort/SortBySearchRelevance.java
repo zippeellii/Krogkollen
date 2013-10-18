@@ -39,7 +39,7 @@ public class SortBySearchRelevance extends ASort {
 	 * @param searchString the string which a list should be sorted against
 	 */
 	public SortBySearchRelevance(String searchString) {
-		this.search = searchString.toLowerCase();
+		this.search = searchString.toLowerCase(); // TODO check error
 	}
 
 	@Override
@@ -65,7 +65,7 @@ public class SortBySearchRelevance extends ASort {
 	// evaluates how much a string matches the search string
 	// the score starts at 100 and decreases if it doesn't meet conditions
 	private int matchScore(String stringToEvaluate) {
-		stringToEvaluate = stringToEvaluate.toLowerCase();
+		stringToEvaluate = stringToEvaluate.toLowerCase(); // TODO check error
 
 		int currentScore = 100;
 

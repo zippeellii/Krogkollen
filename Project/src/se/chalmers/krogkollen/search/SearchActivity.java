@@ -118,7 +118,7 @@ public class SearchActivity extends ListActivity implements IView {
 		}
 	}
 
-	// TODO use in utils instead, temp
+	// TODO move to utils?
 	private IPub[] convertListToArray(List<IPub> list) {
 		Pub[] pubArray = new Pub[list.size()];
 		for (int i = 0; i < list.size(); i++) {

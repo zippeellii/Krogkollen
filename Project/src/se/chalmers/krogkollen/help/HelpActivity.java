@@ -25,49 +25,46 @@ import se.chalmers.krogkollen.utils.Constants;
  * along with Krogkollen.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-// TODO not checked for release
-
 /**
  * Activity for the help screen.
- *
- * @author Johan Backman 
- * Date: 2013-10-02
+ * 
+ * @author Johan Backman Date: 2013-10-02
  */
 public class HelpActivity extends Activity {
 
-    private String previousActivityKey; // TODO never used?
+	private String	previousActivityKey;	// TODO never used?
 
-    @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
+	@Override
+	public void onCreate(Bundle savedInstanceState) {
+		super.onCreate(savedInstanceState);
 
-        previousActivityKey = getIntent().getStringExtra(Constants.ACTIVITY_FROM);
+		previousActivityKey = getIntent().getStringExtra(Constants.ACTIVITY_FROM);
 
-        setContentView(R.layout.activity_help);
-    }
+		setContentView(R.layout.activity_help);
+	}
 
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        super.onCreateOptionsMenu(menu);
+	@Override
+	public boolean onCreateOptionsMenu(Menu menu) {
+		super.onCreateOptionsMenu(menu);
 
-        // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.help, menu);
+		// Inflate the menu; this adds items to the action bar if it is present.
+		getMenuInflater().inflate(R.menu.help, menu);
 
-        ActionBar actionBar = getActionBar();
-        actionBar.setDisplayHomeAsUpEnabled(true);
-        actionBar.setIcon(R.drawable.transparent_spacer);
+		ActionBar actionBar = getActionBar();
+		actionBar.setDisplayHomeAsUpEnabled(true);
+		actionBar.setIcon(R.drawable.transparent_spacer);
 
-        return true;
-    }
+		return true;
+	}
 
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()) {
-            case android.R.id.home:
-                finish();
-                return true;
-            default:
-                return super.onOptionsItemSelected(item);
-        }
-    }
+	@Override
+	public boolean onOptionsItemSelected(MenuItem item) {
+		switch (item.getItemId()) {
+			case android.R.id.home:
+				finish();
+				return true;
+			default:
+				return super.onOptionsItemSelected(item);
+		}
+	}
 }

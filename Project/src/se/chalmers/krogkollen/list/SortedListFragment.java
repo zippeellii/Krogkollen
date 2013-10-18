@@ -15,6 +15,9 @@ import se.chalmers.krogkollen.sort.FilterFavorites;
 import se.chalmers.krogkollen.sort.ISort;
 import se.chalmers.krogkollen.sort.SortByDistance;
 import se.chalmers.krogkollen.sort.SortByQueueTime;
+import se.chalmers.krogkollen.utils.Constants;
+
+// TODO not checked for release
 
 /**
  * Created with IntelliJ IDEA.
@@ -36,7 +39,7 @@ public class SortedListFragment extends ListFragment {
                              Bundle savedInstanceState) {
 
         model = new ListModel();
-        data = setSortMode(getArguments().getInt(TabsPagerAdapter.SORT_MODE));
+        data = setSortMode(getArguments().getInt(Constants.SORT_MODE));
         View rootView = inflater.inflate(R.layout.fragment_listview, container, false);
 
         adapter = new PubListAdapter(getActivity(), R.layout.listview_item, data, this);

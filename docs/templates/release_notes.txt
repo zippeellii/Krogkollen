@@ -6,6 +6,29 @@ Legend:
 * changes
 --------------------
 
+1.1.0
+
+	MAIN APP
++ Added new icon
++ Added inactivity functionality
++ Added sorting in search results
++ Added a text indicating that the search returned no results
++ Added error messages for backend exceptions
++ List view items are now clickable and moves the user to the the proper detailed view
++ Added search to the list view
+* Back button should now function properly in all screens
+* Application now terminates if there's no internet connection
+* Map no longer zoom in when a pub marker is clicked
+* Landscape mode is now disabled in the detailed view
+* Rewrote OpeningHours class to account for closed pubs
+* Changed background color in the search results to more easily distinguish gray
+- Removed settings
+
+	ADMIN APP
++ Added new icon
++ Added error message for failed connection
+* Moved timer logic to another class to avoid multiple timers to be started
+
 1.0.0 - Search, list view, sorting
 
 	MAIN APP

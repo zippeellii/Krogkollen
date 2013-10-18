@@ -76,7 +76,7 @@ public class Pub implements IPub {
 		int negativeRating,
 		int queueTime,
 		long queueTimeLastUpdatedTimestamp,
-		String ID) 
+		String ID)
 	{
 		this.name = name;
 		this.description = description;

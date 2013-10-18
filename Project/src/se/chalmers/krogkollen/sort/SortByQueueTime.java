@@ -10,7 +10,7 @@ import se.chalmers.krogkollen.pub.IPub;
  * @author Jonathan Nilsfors
  * 
  */
-public class SortByQueueTime extends Sort {
+public class SortByQueueTime extends ASort {
 
 	//This is an implementation of the well know Bubble sorting algorithm
 	@Override

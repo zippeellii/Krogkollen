@@ -8,7 +8,7 @@ import se.chalmers.krogkollen.utils.Preferences;
 
 
 
-public class FilterFavorites extends Sort{
+public class FilterFavorites extends ASort{
 
 	@Override
 	public List<IPub> sortAlgorithm(List<IPub> pubs) {

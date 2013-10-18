@@ -12,7 +12,7 @@ import se.chalmers.krogkollen.utils.Distance;
  * @author Jonathan Nilsfors
  * 
  */
-public class SortByDistance extends Sort{
+public class SortByDistance extends ASort{
 	
 	//This is and implementation of the well know Bubble sorting algorithm
 	@Override

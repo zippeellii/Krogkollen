@@ -10,7 +10,7 @@ import se.chalmers.krogkollen.pub.IPub;
  * @author Jonathan Nilsfors
  *
  */
-public abstract class Sort implements ISort{
+public abstract class ASort implements ISort{
 
 	/**
 	 * Copy a list

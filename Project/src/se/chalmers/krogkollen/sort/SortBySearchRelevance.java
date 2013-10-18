@@ -13,7 +13,7 @@ import se.chalmers.krogkollen.pub.IPub;
  * @author Oskar Karrman
  *
  */
-public class SortBySearchRelevance extends Sort {
+public class SortBySearchRelevance extends ASort {
 	
 	private String search;
 	
@@ -30,7 +30,7 @@ public class SortBySearchRelevance extends Sort {
 	public List<IPub> sortAlgorithm(List<IPub> pubs) {
 		List<IPub> listCopy = this.copyPubList(pubs);
 		
-		Sort secondarySort = new SortByDistance();
+		ASort secondarySort = new SortByDistance();
 		secondarySort.sortAlgorithm(listCopy);
 
 		

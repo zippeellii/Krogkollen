@@ -2,6 +2,23 @@ package se.chalmers.krogkollen.utils;
 
 import se.chalmers.krogkollen.R;
 
+/*
+ * This file is part of Krogkollen.
+ *
+ * Krogkollen is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * Krogkollen is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with Krogkollen.  If not, see <http://www.gnu.org/licenses/>.
+ */
+
 /**
  * A class containing constant values
  * 
@@ -26,4 +43,10 @@ public class Constants {
 	public static final String	SORT_MODE				= "SORT_MODE";
 
 	public static final int		LIST_NUMBER_OF_TABS		= 3;
+
+	/** Identifier for the intent used to start the activity for detailed view. */
+	public static final String	MARKER_PUB_ID			= "se.chalmers.krogkollen.MARKER_PUB_ID";
+
+	/** Key value used when sending intents */
+	public static final String	MAP_PRESENTER_KEY		= "se.chalmers.krogkollen.MAP_PRESENTER_KEY";
 }

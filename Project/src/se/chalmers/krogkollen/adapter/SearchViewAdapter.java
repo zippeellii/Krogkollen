@@ -84,7 +84,7 @@ public class SearchViewAdapter extends ArrayAdapter<IPub> {
 		DecimalFormat numberFormat = new DecimalFormat("#0.00");
 		holder.txtTitle.setText(pub.getName());
 		holder.distanceText.setText((numberFormat.format(Distance.calcDistBetweenTwoLatLng(new LatLng(pub.getLatitude(), pub.getLongitude()), UserLocation.getInstance().getCurrentLatLng()))) + " "
-				+ R.string.distance_km);
+				+ "km");// TODO can this be moved to XML?
 
 		switch (pub.getQueueTime()) {
 			case 1:

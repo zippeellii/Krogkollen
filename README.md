@@ -1,14 +1,12 @@
-Krogkollen 
+﻿Krogkollen 
 ==========
-
-An android application for orientate between pubs and taverns on Chalmers
+An Android application used to navigate between pubs and taverns on Chalmers University of Technology
 
 Installation
 ----------
-
-* Allow your device to install files from unknow sources.(Located in settings)
-* Transfer the .apk file to your android device. 
-* Open your device and go to wherever you put it.
+* Allow your device to install files from unknown sources (located in settings).
+* Transfer the .apk file to your Android device. 
+* Open your device and navigate to wherever you put it.
 * Click the .apk file and accept the terms of agreements.
 * Open and run the application.
 
@@ -27,4 +25,4 @@ Testing
 * Oskar Kärrman
 * Jonathan Nilsfors
 
-Built at Chalmers 2013
+Built at Chalmers University of Technology, 2013

@@ -7,6 +7,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ListView;
 import se.chalmers.krogkollen.R;
+import se.chalmers.krogkollen.adapter.PubListAdapter;
 import se.chalmers.krogkollen.adapter.TabsPagerAdapter;
 import se.chalmers.krogkollen.detailed.DetailedActivity;
 import se.chalmers.krogkollen.map.MapPresenter;

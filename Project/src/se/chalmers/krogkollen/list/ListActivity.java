@@ -126,7 +126,7 @@ public class ListActivity extends FragmentActivity implements IListView{
         }
         return super.onOptionsItemSelected(item);
     }
-    
+    @Override
     public void update(){
         mAdapter.notifyDataSetChanged();
     }

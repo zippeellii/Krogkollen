@@ -1,4 +1,4 @@
-package se.chalmers.krogkollen.list;
+package se.chalmers.krogkollen.adapter;
 
 import android.app.Activity;
 import android.content.Context;
@@ -11,6 +11,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import com.google.android.gms.maps.model.LatLng;
 import se.chalmers.krogkollen.R;
+import se.chalmers.krogkollen.list.SortedListFragment;
 import se.chalmers.krogkollen.map.UserLocation;
 import se.chalmers.krogkollen.pub.IPub;
 import se.chalmers.krogkollen.utils.Distance;

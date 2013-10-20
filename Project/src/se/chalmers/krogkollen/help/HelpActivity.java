@@ -32,13 +32,9 @@ import se.chalmers.krogkollen.utils.Constants;
  */
 public class HelpActivity extends Activity {
 
-	private String	previousActivityKey;	// TODO never used?
-
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-
-		previousActivityKey = getIntent().getStringExtra(Constants.ACTIVITY_FROM);
 
 		setContentView(R.layout.activity_help);
 	}

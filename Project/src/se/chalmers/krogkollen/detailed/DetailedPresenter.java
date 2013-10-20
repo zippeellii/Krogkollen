@@ -58,7 +58,6 @@ public class DetailedPresenter implements IDetailedPresenter {
 		pub = PubUtilities.getInstance().getPub(pubID);
 	}
 
-	// TODO Can this be refactored?
 	@Override
 	public void ratingChanged(int rating) throws NotFoundInBackendException, NoBackendAccessException, BackendNotInitializedException {
 

@@ -85,7 +85,7 @@ public class MapActivity extends Activity implements IMapView {
 				moveCameraToPosition(marker.getPosition(), MapWrapper.INSTANCE.getMap().getCameraPosition().zoom);
 
 				if (marker.getTitle().equalsIgnoreCase(getString(R.string.map_user_name))) {
-					// TODO Open favorites.
+					return true;        // Suppress user marker click
 				} else {
 					// Open detailed view.
 					presenter.pubMarkerClicked(marker.getTitle());

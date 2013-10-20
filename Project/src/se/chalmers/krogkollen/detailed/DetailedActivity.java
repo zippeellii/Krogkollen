@@ -62,8 +62,6 @@ public class DetailedActivity extends Activity implements IDetailedView {
 	private GoogleMap			map;
 	private Marker				marker;
 
-	private String				previousActivityKey; // TODO never used?
-
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 
@@ -75,8 +73,6 @@ public class DetailedActivity extends Activity implements IDetailedView {
 
 		presenter = new DetailedPresenter();
 		presenter.setView(this);
-
-		previousActivityKey = getIntent().getStringExtra(Constants.ACTIVITY_FROM);
 
 		try {
 			presenter.setPub(getIntent().getStringExtra(Constants.MARKER_PUB_ID));

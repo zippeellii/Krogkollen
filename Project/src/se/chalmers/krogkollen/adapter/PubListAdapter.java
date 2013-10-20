@@ -92,7 +92,7 @@ public class PubListAdapter extends ArrayAdapter<IPub> {
 		DecimalFormat numberFormat = new DecimalFormat("#0.00");
 		holder.txtTitle.setText(pub.getName());
 		holder.distanceText.setText("" + (numberFormat.format(Distance.calcDistBetweenTwoLatLng(new LatLng(pub.getLatitude(), pub.getLongitude()), UserLocation.getInstance().getCurrentLatLng())))
-				+ " km"); // TODO possible to get this in xml?
+				+ " km");
 		holder.favoriteStar.setTag(position);
 
 		holder.favoriteStar.setOnClickListener(new View.OnClickListener() {

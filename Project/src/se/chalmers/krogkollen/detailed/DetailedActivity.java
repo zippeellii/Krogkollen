@@ -5,7 +5,6 @@ import android.app.ProgressDialog;
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
 import android.os.Bundle;
-import android.support.v4.app.NavUtils;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.ImageView;
@@ -22,8 +21,6 @@ import se.chalmers.krogkollen.backend.BackendNotInitializedException;
 import se.chalmers.krogkollen.backend.NoBackendAccessException;
 import se.chalmers.krogkollen.backend.NotFoundInBackendException;
 import se.chalmers.krogkollen.help.HelpActivity;
-import se.chalmers.krogkollen.list.ListActivity;
-import se.chalmers.krogkollen.map.MapActivity;
 import se.chalmers.krogkollen.map.MarkerOptionsFactory;
 import se.chalmers.krogkollen.pub.IPub;
 import se.chalmers.krogkollen.utils.Constants;
@@ -52,258 +49,252 @@ import se.chalmers.krogkollen.utils.Constants;
  */
 public class DetailedActivity extends Activity implements IDetailedView {
 
-    /** The presenter connected to the detailed view */
-    private IDetailedPresenter presenter;
+	/** The presenter connected to the detailed view */
+	private IDetailedPresenter	presenter;
 
-    /** A bunch of view elements*/
-    private TextView pubTextView, descriptionTextView,openingHoursTextView,
-            ageRestrictionTextView, entranceFeeTextView, votesUpTextView, votesDownTextView;
-    private ImageView thumbsUpImage, thumbsDownImage, queueIndicator;
-    private MenuItem favoriteStar;
-    private ProgressDialog progressDialog;
+	/** A bunch of view elements */
+	private TextView			pubTextView, descriptionTextView, openingHoursTextView,
+								ageRestrictionTextView, entranceFeeTextView, votesUpTextView, votesDownTextView;
+	private ImageView			thumbsUpImage, thumbsDownImage, queueIndicator;
+	private MenuItem			favoriteStar;
+	private ProgressDialog		progressDialog;
 
-    private GoogleMap map;
-    private Marker marker;
+	private GoogleMap			map;
+	private Marker				marker;
 
-    private String previousActivityKey;
+	@Override
+	public void onCreate(Bundle savedInstanceState) {
 
-    @Override
-    public void onCreate(Bundle savedInstanceState) {
+		// Sets display mode to portrait only.
+		setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
 
-        //Sets display mode to portrait only.
-        setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
+		super.onCreate(savedInstanceState);
+		setContentView(R.layout.activity_detailed);
 
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_detailed);
+		presenter = new DetailedPresenter();
+		presenter.setView(this);
 
-        presenter = new DetailedPresenter();
-        presenter.setView(this);
+		try {
+			presenter.setPub(getIntent().getStringExtra(Constants.MARKER_PUB_ID));
+		} catch (NoBackendAccessException e) {
+			this.showErrorMessage(this.getString(R.string.error_no_backend_access));
+		} catch (NotFoundInBackendException e) {
+			this.showErrorMessage(this.getString(R.string.error_no_backend_item));
+		} catch (BackendNotInitializedException e) {
+			this.showErrorMessage(this.getString(R.string.error_backend_not_initialized));
+		}
 
-        previousActivityKey = getIntent().getStringExtra(Constants.ACTIVITY_FROM);
+		addListeners();
 
-        try {
-            presenter.setPub(getIntent().getStringExtra(MapActivity.MARKER_PUB_ID));
-        } catch (NoBackendAccessException e) {
-            this.showErrorMessage(this.getString(R.string.error_no_backend_access));
-        } catch (NotFoundInBackendException e) {
-            this.showErrorMessage(this.getString(R.string.error_no_backend_item));
-        } catch (BackendNotInitializedException e) {
-            this.showErrorMessage(this.getString(R.string.error_backend_not_initialized));
-        }
+		pubTextView = (TextView) findViewById(R.id.pub_name);
+		descriptionTextView = (TextView) findViewById(R.id.description);
+		openingHoursTextView = (TextView) findViewById(R.id.opening_hours);
+		ageRestrictionTextView = (TextView) findViewById(R.id.age);
+		entranceFeeTextView = (TextView) findViewById(R.id.entrance_fee);
+		queueIndicator = (ImageView) findViewById(R.id.queueIndicator);
+		votesUpTextView = (TextView) findViewById(R.id.thumbsUpTextView);
+		votesDownTextView = (TextView) findViewById(R.id.thumbsDownTextView);
+		thumbsUpImage = (ImageView) findViewById(R.id.thumbsUpButton);
+		thumbsDownImage = (ImageView) findViewById(R.id.thumbsDownButton);
 
-        addListeners();
+		map = ((MapFragment) getFragmentManager().findFragmentById(R.id.map)).getMap();
+		map.setOnMarkerClickListener(new GoogleMap.OnMarkerClickListener() {
+			@Override
+			public boolean onMarkerClick(Marker marker) {
+				return true; // Suppress default behaviour.
+			}
+		});
 
-        pubTextView= (TextView) findViewById(R.id.pub_name);
-        descriptionTextView = (TextView) findViewById(R.id.description);
-        openingHoursTextView = (TextView) findViewById(R.id.opening_hours);
-        ageRestrictionTextView = (TextView) findViewById(R.id.age);
-        entranceFeeTextView = (TextView) findViewById(R.id.entrance_fee);
-        queueIndicator = (ImageView) findViewById(R.id.queueIndicator);
-        votesUpTextView = (TextView) findViewById(R.id.thumbsUpTextView);
-        votesDownTextView = (TextView) findViewById(R.id.thumbsDownTextView);
-        thumbsUpImage = (ImageView) findViewById(R.id.thumbsUpButton);
-        thumbsDownImage = (ImageView) findViewById(R.id.thumbsDownButton);
+		map.getUiSettings().setCompassEnabled(false);
+		map.getUiSettings().setZoomControlsEnabled(false);
 
-        map = ((MapFragment) getFragmentManager().findFragmentById(R.id.map)).getMap();
-        map.setOnMarkerClickListener(new GoogleMap.OnMarkerClickListener() {
-            @Override
-            public boolean onMarkerClick(Marker marker) {
-                return true; // Suppress default behaviour.
-            }
-        });
+		getActionBar().setDisplayUseLogoEnabled(false);
+		getActionBar().setIcon(R.drawable.transparent_spacer);
+		getActionBar().setDisplayHomeAsUpEnabled(true);
+	}
 
-        map.getUiSettings().setCompassEnabled(false);
-        map.getUiSettings().setZoomControlsEnabled(false);
+	@Override
+	public boolean onCreateOptionsMenu(Menu menu) {
+		super.onCreateOptionsMenu(menu);
 
-        getActionBar().setDisplayUseLogoEnabled(false);
-        getActionBar().setIcon(R.drawable.transparent_spacer);
-        getActionBar().setDisplayHomeAsUpEnabled(true);
-    }
+		// Inflate the menu; this adds items to the action bar if it is present.
+		getMenuInflater().inflate(R.menu.detailed, menu);
+		favoriteStar = menu.findItem(R.id.favorite_star);
 
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        super.onCreateOptionsMenu(menu);
+		try {
+			presenter.updateInfo();
+		} catch (NoBackendAccessException e) {
+			this.showErrorMessage(this.getString(R.string.error_no_backend_access));
+		} catch (NotFoundInBackendException e) {
+			this.showErrorMessage(this.getString(R.string.error_no_backend_item));
+		} catch (BackendNotInitializedException e) {
+			this.showErrorMessage(this.getString(R.string.error_backend_not_initialized));
+		}
 
-        // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.detailed, menu);
-        favoriteStar = menu.findItem(R.id.favorite_star);
+		return true;
+	}
 
-        try {
-            presenter.updateInfo();
-        } catch (NoBackendAccessException e) {
-            this.showErrorMessage(this.getString(R.string.error_no_backend_access));
-        } catch (NotFoundInBackendException e) {
-            this.showErrorMessage(this.getString(R.string.error_no_backend_item));
-        } catch (BackendNotInitializedException e) {
-            this.showErrorMessage(this.getString(R.string.error_backend_not_initialized));
-        }
+	@Override
+	public void navigate(Class<?> destination) {
+		Intent intent = new Intent(this, destination);
+		intent.putExtra(Constants.ACTIVITY_FROM, Constants.DETAILED_ACTIVITY_NAME);
+		startActivity(intent);
+	}
 
-        return true;
-    }
+	@Override
+	public void navigate(Class<?> destination, Bundle extras) {
+		Intent intent = new Intent(this, destination);
+		intent.putExtra(Constants.ACTIVITY_FROM, Constants.DETAILED_ACTIVITY_NAME);
+		startActivity(intent);
+	}
 
-    @Override
-    public void navigate(Class<?> destination) {
-        Intent intent = new Intent(this, destination);
-        intent.putExtra(Constants.ACTIVITY_FROM, Constants.DETAILED_ACTIVITY_NAME);
-        startActivity(intent);
-    }
+	@Override
+	public void showErrorMessage(String message) {
+		CharSequence text = message;
+		int duration = Toast.LENGTH_LONG;
 
-    @Override
-    public void navigate(Class<?> destination, Bundle extras) {
-        Intent intent = new Intent(this, destination);
-        intent.putExtra(Constants.ACTIVITY_FROM, Constants.DETAILED_ACTIVITY_NAME);
-        startActivity(intent);
-    }
+		Toast toast = Toast.makeText(this, text, duration);
+		toast.show();
+	}
 
-    @Override
-    public void showErrorMessage(String message) {
-        CharSequence text = message;
-        int duration = Toast.LENGTH_LONG;
+	@Override
+	public void updateText(String pubName, String description, String openingHours, String age, String price) {
+		pubTextView.setText(pubName);
+		descriptionTextView.setText(description);
+		openingHoursTextView.setText(openingHours);
+		ageRestrictionTextView.setText(age);
+		entranceFeeTextView.setText(price);
+	}
 
-        Toast toast = Toast.makeText(this, text, duration);
-        toast.show();
-    }
+	@Override
+	public void updateQueueIndicator(int queueTime) {
+		switch (queueTime) {
+			case 1:
+				queueIndicator.setBackgroundResource(R.drawable.detailed_queue_green);
+				break;
+			case 2:
+				queueIndicator.setBackgroundResource(R.drawable.detailed_queue_yellow);
+				break;
+			case 3:
+				queueIndicator.setBackgroundResource(R.drawable.detailed_queue_red);
+				break;
+			default:
+				queueIndicator.setBackgroundResource(R.drawable.detailed_queue_gray);
+				break;
+		}
+	}
 
-    @Override
-    public void updateText(String pubName, String description, String openingHours, String age, String price) {
-        pubTextView.setText(pubName);
-        descriptionTextView.setText(description);
-        openingHoursTextView.setText(openingHours);
-        ageRestrictionTextView.setText(age);
-        entranceFeeTextView.setText(price);
-    }
+	// Adds listeners to all buttons
+	private void addListeners() {
+		findViewById(R.id.thumbsUpLayout).setOnClickListener(presenter);
+		findViewById(R.id.thumbsDownLayout).setOnClickListener(presenter);
+		findViewById(R.id.navigate).setOnClickListener(presenter);
+	}
 
-    @Override
-    public void updateQueueIndicator(int queueTime) {
-        switch(queueTime) {
-            case 1:
-                queueIndicator.setBackgroundResource(R.drawable.detailed_queue_green);
-                break;
-            case 2:
-                queueIndicator.setBackgroundResource(R.drawable.detailed_queue_yellow);
-                break;
-            case 3:
-                queueIndicator.setBackgroundResource(R.drawable.detailed_queue_red);
-                break;
-            default:
-                queueIndicator.setBackgroundResource(R.drawable.detailed_queue_gray);
-                break;
-        }
-    }
+	/**
+	 * Updates the thumb button pictures.
+	 * 
+	 * @param thumb Represents thumb up, thumb down or neither with 1, -1 or 0.
+	 */
+	public void setThumbs(int thumb) {
+		switch (thumb) {
+			case -1:
+				thumbsDownImage.setBackgroundResource(R.drawable.thumb_down_selected);
+				thumbsUpImage.setBackgroundResource(R.drawable.thumb_up);
+				break;
+			case 1:
+				thumbsUpImage.setBackgroundResource(R.drawable.thumb_up_selected);
+				thumbsDownImage.setBackgroundResource(R.drawable.thumb_down);
+				break;
+			default:
+				thumbsDownImage.setBackgroundResource(R.drawable.thumb_down);
+				thumbsUpImage.setBackgroundResource(R.drawable.thumb_up);
+				break;
+		}
+	}
 
-    // Adds listeners to all buttons
-    private void addListeners(){
-        findViewById(R.id.thumbsUpLayout).setOnClickListener(presenter);
-        findViewById(R.id.thumbsDownLayout).setOnClickListener(presenter);
-        findViewById(R.id.navigate).setOnClickListener(presenter);
-    }
+	/**
+	 * Updates the text showing number of votes.
+	 * 
+	 * @param upVotes Number of up votes.
+	 * @param downVotes Number of down votes.
+	 */
+	public void showVotes(String upVotes, String downVotes) {
+		votesUpTextView.setText(upVotes);
+		votesDownTextView.setText(downVotes);
+	}
 
-    /**
-     * Updates the thumb button pictures.
-     *
-     * @param thumb Represents thumb up, thumb down or neither with 1, -1 or 0.
-     */
-    public void setThumbs(int thumb){
-        switch (thumb){
-            case -1:
-                thumbsDownImage.setBackgroundResource(R.drawable.thumb_down_selected);
-                thumbsUpImage.setBackgroundResource(R.drawable.thumb_up);
-                break;
-            case 1:
-                thumbsUpImage.setBackgroundResource(R.drawable.thumb_up_selected);
-                thumbsDownImage.setBackgroundResource(R.drawable.thumb_down);
-                break;
-            default:
-                thumbsDownImage.setBackgroundResource(R.drawable.thumb_down);
-                thumbsUpImage.setBackgroundResource(R.drawable.thumb_up);
-                break;
-        }
-    }
+	@Override
+	public void addMarker(IPub pub) {
+		if (marker == null) {
+			marker = map.addMarker(MarkerOptionsFactory.createMarkerOptions(getResources().getDisplayMetrics(), getResources(), pub));
+		}
+	}
 
-    /**
-     * Updates the text showing number of votes.
-     *
-     * @param upVotes Number of up votes.
-     * @param downVotes Number of down votes.
-     */
-    public void showVotes(String upVotes, String downVotes){
-        votesUpTextView.setText(upVotes);
-        votesDownTextView.setText(downVotes);
-    }
+	@Override
+	public void removeMarker() {
+		if (marker != null) {
+			marker.remove();
+			marker = null;
+		}
+	}
 
-    @Override
-    public void addMarker(IPub pub) {
-        if (marker == null) {
-            marker = map.addMarker(MarkerOptionsFactory.createMarkerOptions(getResources().getDisplayMetrics() ,getResources(), pub));
-        }
-    }
+	@Override
+	public void navigateToLocation(LatLng latLng, int zoom) {
+		map.animateCamera(CameraUpdateFactory.newCameraPosition(new CameraPosition(latLng, zoom, 0, 45)));
+	}
 
-    @Override
-    public void removeMarker() {
-        if (marker != null) {
-            marker.remove();
-            marker = null;
-        }
-    }
+	@Override
+	public boolean onOptionsItemSelected(MenuItem menuItem) {
+		switch (menuItem.getItemId()) {
+			case R.id.favorite_star:
+				presenter.updateStar();
+				break;
+			case R.id.refresh_info:
+				try {
+					presenter.updateInfo();
+				} catch (NoBackendAccessException e) {
+					this.showErrorMessage(this.getString(R.string.error_no_backend_access));
+				} catch (NotFoundInBackendException e) {
+					this.showErrorMessage(this.getString(R.string.error_no_backend_item));
+				} catch (BackendNotInitializedException e) {
+					this.showErrorMessage(this.getString(R.string.error_backend_not_initialized));
+				}
+				break;
+			case R.id.action_help:
+				navigate(HelpActivity.class);
+				break;
+			case android.R.id.home:
+				finish();
+				return true;
+		}
+		return true;
+	}
 
-    @Override
-    public void navigateToLocation(LatLng latLng, int zoom) {
-        map.animateCamera(CameraUpdateFactory.newCameraPosition(new CameraPosition(latLng, zoom, 0, 45)));
-    }
+	/**
+	 * Updates the star.
+	 * 
+	 * @param isStarFilled Represents if the star is filled or not.
+	 */
+	public void showStar(boolean isStarFilled) {
+		if (isStarFilled) {
+			favoriteStar.setIcon(R.drawable.star_not_filled);
+		} else {
+			favoriteStar.setIcon(R.drawable.star_filled);
+		}
+	}
 
-    @Override
-    public boolean onOptionsItemSelected(MenuItem menuItem){
-        switch(menuItem.getItemId()){
-            case R.id.favorite_star:
-                presenter.updateStar();
-                break;
-            case R.id.refresh_info:
-                try {
-                    presenter.updateInfo();
-                } catch (NoBackendAccessException e) {
-                    this.showErrorMessage(this.getString(R.string.error_no_backend_access));
-                } catch (NotFoundInBackendException e) {
-                    this.showErrorMessage(this.getString(R.string.error_no_backend_item));
-                } catch (BackendNotInitializedException e) {
-                    this.showErrorMessage(this.getString(R.string.error_backend_not_initialized));
-                }
-                break;
-            case R.id.action_help:
-                navigate(HelpActivity.class);
-                break;
-            case android.R.id.home:
-                NavUtils.navigateUpTo(this, new Intent(this,
-                        previousActivityKey.equalsIgnoreCase(Constants.LIST_ACTIVITY_NAME) ?
-                                ListActivity.class : MapActivity.class));
-                return true;
-        }
-        return true;
-    }
+	/**
+	 * Shows a progress dialog indicating that the info is being updated
+	 */
+	public void showProgressDialog() {
+		progressDialog = ProgressDialog.show(this, "", getString(R.string.dialog_updating_info), false, false);
+	}
 
-    /**
-     * Updates the star.
-     * @param isStarFilled Represents if the star is filled or not.
-     */
-    public void showStar(boolean isStarFilled){
-
-        if(isStarFilled){
-            favoriteStar.setIcon(R.drawable.star_not_filled);
-        } else {
-            favoriteStar.setIcon(R.drawable.star_filled);
-        }
-    }
-
-    /**
-     * Shows a progress dialog indicating that the info is being updated
-     */
-    public void showProgressDialog(){
-        progressDialog = ProgressDialog.show(this, "",getString(R.string.dialog_updating_info), false, false);
-    }
-
-    /**
-     * Hides the progress dialog
-     */
-    public void hideProgressDialog(){
-        progressDialog.hide();
-    }
+	/**
+	 * Hides the progress dialog
+	 */
+	public void hideProgressDialog() {
+		progressDialog.hide();
+	}
 }

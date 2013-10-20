@@ -1,12 +1,20 @@
 package se.chalmers.krogkollen.adapter;
 
-
-/**
- * Created with IntelliJ IDEA.
- * User: filipcarlen
- * Date: 2013-10-16
- * Time: 11:17
- * To change this template use File | Settings | File Templates.
+/*
+ * This file is part of Krogkollen.
+ *
+ * Krogkollen is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * Krogkollen is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with Krogkollen.  If not, see <http://www.gnu.org/licenses/>.
  */
 
 import android.app.Activity;
@@ -33,78 +41,78 @@ import java.text.*;
  */
 public class SearchViewAdapter extends ArrayAdapter<IPub> {
 
-    private Context context;
-    private int layoutResourceId;
-    private IPub data[] = null;
-    private View row;
-    private PubHolder holder;
+	private Context		context;
+	private int			layoutResourceId;
+	private IPub		data[]	= null;
+	private View		row;
+	private PubHolder	holder;
 
-    /**
-     * A constructor that creates an SearchViewAdapter.
-     * @param context
-     * @param layoutResourceId
-     * @param data
-     */
-    public SearchViewAdapter(Context context, int layoutResourceId, IPub[] data) {
-        super(context, layoutResourceId, data);
-        this.layoutResourceId = layoutResourceId;
-        this.context = context;
-        this.data = data;
+	/**
+	 * A constructor that creates an SearchViewAdapter.
+	 * 
+	 * @param context
+	 * @param layoutResourceId
+	 * @param data
+	 */
+	public SearchViewAdapter(Context context, int layoutResourceId, IPub[] data) {
+		super(context, layoutResourceId, data);
+		this.layoutResourceId = layoutResourceId;
+		this.context = context;
+		this.data = data;
+	}
 
-    }
+	@Override
+	public View getView(int position, View convertView, ViewGroup parent) {
+		row = convertView;
+		holder = null;
 
-    @Override
-    public View getView(int position, View convertView, ViewGroup parent) {
-        row = convertView;
-        holder = null;
+		if (row == null) {
+			LayoutInflater inflater = ((Activity) context).getLayoutInflater();
+			row = inflater.inflate(layoutResourceId, parent, false);
 
-        if(row == null){
-            LayoutInflater inflater = ((Activity)context).getLayoutInflater();
-            row = inflater.inflate(layoutResourceId, parent, false);
+			holder = new PubHolder();
+			holder.imgIcon = (ImageView) row.findViewById(R.id.listview_image);
+			holder.txtTitle = (TextView) row.findViewById(R.id.listview_title);
+			holder.distanceText = (TextView) row.findViewById(R.id.listview_distance);
 
-            holder = new PubHolder();
-            holder.imgIcon = (ImageView)row.findViewById(R.id.listview_image);
-            holder.txtTitle = (TextView)row.findViewById(R.id.listview_title);
-            holder.distanceText = (TextView)row.findViewById(R.id.listview_distance);
+			row.setTag(holder);
+		} else {
+			holder = (PubHolder) row.getTag();
+		}
 
-            row.setTag(holder);
-        } else {
-            holder = (PubHolder)row.getTag();
-        }
+		IPub pub = data[position];
+		DecimalFormat numberFormat = new DecimalFormat("#0.00");
+		holder.txtTitle.setText(pub.getName());
+		holder.distanceText.setText((numberFormat.format(Distance.calcDistBetweenTwoLatLng(new LatLng(pub.getLatitude(), pub.getLongitude()), UserLocation.getInstance().getCurrentLatLng()))) + " "
+				+ "km");
 
-        IPub pub = data[position];
-        DecimalFormat numberFormat = new DecimalFormat("#0.00");
-        holder.txtTitle.setText(pub.getName());
-        holder.distanceText.setText(""+(numberFormat.format(Distance.calcDistBetweenTwoLatLng(new LatLng(pub.getLatitude(), pub.getLongitude()), UserLocation.getInstance().getCurrentLatLng())))+" km");
+		switch (pub.getQueueTime()) {
+			case 1:
+				holder.imgIcon.setImageResource(R.drawable.detailed_queue_green);
+				break;
+			case 2:
+				holder.imgIcon.setImageResource(R.drawable.detailed_queue_yellow);
+				break;
+			case 3:
+				holder.imgIcon.setImageResource(R.drawable.detailed_queue_red);
+				break;
+			default:
+				holder.imgIcon.setImageResource(R.drawable.detailed_queue_gray);
+				break;
+		}
 
-        switch(pub.getQueueTime()){
-            case 1:
-                holder.imgIcon.setImageResource(R.drawable.detailed_queue_green);
-                break;
-            case 2:
-                holder.imgIcon.setImageResource(R.drawable.detailed_queue_yellow);
-                break;
-            case 3:
-                holder.imgIcon.setImageResource(R.drawable.detailed_queue_red);
-                break;
-            default :
-                holder.imgIcon.setImageResource(R.drawable.detailed_queue_gray);
-                break;
-        }
-        
-        row.setBackgroundColor(Color.WHITE);
-        
-        return row;
-    }
+		row.setBackgroundColor(Color.WHITE);
 
-    /**
-     * Static holder for pubs
-     */
-    static class PubHolder
-    {
-        ImageView imgIcon;
-        TextView txtTitle;
-        TextView distanceText;
-    }
+		return row;
+	}
+
+	/**
+	 * Static holder for pubs
+	 */
+	static class PubHolder
+	{
+		ImageView	imgIcon;
+		TextView	txtTitle;
+		TextView	distanceText;
+	}
 }
-

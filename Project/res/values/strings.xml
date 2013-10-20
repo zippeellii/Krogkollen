@@ -63,6 +63,7 @@ This file is part of Krogkollen.
     <string name="map_updating">Uppdaterar krogar&#8230;</string>
     <string name="map_user_name">user</string>
     <string name="loading_pubs">Laddar krogar&#8230;</string>
+    <string name="distance_km">km</string>
     
     <!--  Error message strings -->
     <string name="error_no_backend_access">Serverfel, kan ej ansluta till servern.\nKontakta Krogkollen.</string>
@@ -78,6 +79,7 @@ This file is part of Krogkollen.
     <!--  Detailed view strings -->
     <string name="dialog_updating_info">Uppdaterar info&#8230;</string>
     <string name="information_text_year">år</string>
+    <string name="information_closed">Stängt</string>
     
     <!-- List view strings -->
     <string name="list_tab_name_queue_time">Kötid</string>

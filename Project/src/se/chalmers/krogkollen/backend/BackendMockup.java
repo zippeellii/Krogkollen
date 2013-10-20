@@ -7,6 +7,23 @@ import se.chalmers.krogkollen.pub.IPub;
 import se.chalmers.krogkollen.pub.OpeningHours;
 import se.chalmers.krogkollen.pub.Pub;
 
+/*
+ * This file is part of Krogkollen.
+ *
+ * Krogkollen is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * Krogkollen is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with Krogkollen.  If not, see <http://www.gnu.org/licenses/>.
+ */
+
 /**
  * A mockup backend that can be used for testing purposes and faster response times
  * 
@@ -15,9 +32,13 @@ import se.chalmers.krogkollen.pub.Pub;
  */
 public class BackendMockup implements IBackend {
 
-	ArrayList<IPub>		pubs			= new ArrayList<IPub>();
-	public boolean		throwNoBackend	= false;
-	public boolean		throwNotFound	= false;
+	ArrayList<IPub>	pubs			= new ArrayList<IPub>();
+
+	/** If changed to true, always throw NoBackendAccessException */
+	public boolean	throwNoBackend	= false;
+
+	/** If changed to true, always throw NotFoundInBackendException */
+	public boolean	throwNotFound	= false;
 
 	/**
 	 * Instantiates a new BackendMockup
@@ -40,12 +61,14 @@ public class BackendMockup implements IBackend {
 		}
 	}
 
+	// Throw NoBackendAccessException
 	private void throwNoBackend() throws NoBackendAccessException {
 		if (throwNoBackend)
 			throw new NoBackendAccessException(
 					"No backend access exception, thrown from mockup backend", 1337);
 	}
 
+	// Throw NotFoundInBackendException
 	private void throwNotFound() throws NotFoundInBackendException {
 		if (throwNotFound)
 			throw new NotFoundInBackendException(

@@ -30,7 +30,7 @@ import java.util.List;
  * 
  * A singleton holding a list of all the pubs, and is used to load data from the server.
  * 
- * @author Albin Garpetun Created 2013-09-22
+ * @author Albin Garpetun
  */
 public class PubUtilities {
 
@@ -56,8 +56,6 @@ public class PubUtilities {
 	/**
 	 * Loads the pubs from the server and puts them in the list of pubs.
 	 * 
-	 * For now this method only adds hardcoded pubs into the list.
-	 * 
 	 * @throws BackendNotInitializedException
 	 * @throws NoBackendAccessException
 	 */
@@ -66,9 +64,9 @@ public class PubUtilities {
 	}
 
 	/**
-	 * Returns the list of pubs.
+	 * Returns the list of all pubs.
 	 * 
-	 * @return The list of pubs.
+	 * @return The list of all pubs.
 	 */
 	public List<IPub> getPubList() {
 		return pubList;
@@ -97,6 +95,6 @@ public class PubUtilities {
 				return pub;
 			}
 		}
-		throw new Resources.NotFoundException("The ID does not match with any pub");// TODO move text to XML
+		throw new Resources.NotFoundException("The ID does not match with any pub");
 	}
 }

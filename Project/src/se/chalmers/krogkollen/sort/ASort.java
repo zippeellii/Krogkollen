@@ -1,6 +1,9 @@
-package se.chalmers.krogkollen.list;
+package se.chalmers.krogkollen.sort;
 
-import se.chalmers.krogkollen.IView;
+import java.util.ArrayList;
+import java.util.List;
+
+import se.chalmers.krogkollen.pub.IPub;
 
 /*
  * This file is part of Krogkollen.
@@ -20,28 +23,24 @@ import se.chalmers.krogkollen.IView;
  */
 
 /**
- * Interface for the ListActivity.
+ * An abstract class for sorting
  * 
- * @author Albin Garpetun Created 2013-09-22
+ * @author Jonathan Nilsfors
+ * 
  */
-public interface IListView extends IView {
+public abstract class ASort implements ISort {
 
 	/**
-	 * Called when sliding between sort modes, selects the new tab
+	 * Copy a list
 	 * 
-	 * @param pos the tab which should be selected
+	 * @param pubs the list of which a copy is required
+	 * @return a copy of the param pubs
 	 */
-	public void setActionBarSelectedNavigationItem(int pos);
-
-	/**
-	 * Called when a tab is clicked, switches to the new tab
-	 * 
-	 * @param pos the tab which should be switched to
-	 */
-	public void setViewPagerCurrentItem(int pos);
-
-	/**
-	 * Updates the listView
-	 */
-	public void update();
+	public List<IPub> copyPubList(final List<IPub> pubs) {
+		List<IPub> list_copy = new ArrayList<IPub>();
+		for (int i = 0; i < pubs.size(); i++) {
+			list_copy.add(pubs.get(i));
+		}
+		return list_copy;
+	}
 }

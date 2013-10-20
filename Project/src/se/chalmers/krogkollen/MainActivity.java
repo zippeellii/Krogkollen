@@ -50,14 +50,14 @@ public class MainActivity extends Activity {
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 
-        setContentView(R.layout.activity_main);
+		setContentView(R.layout.activity_main);
 
-        if (isNetworkAvailable()) {
-            new InitResourcesTask().execute();
-        } else {
-            Toast.makeText(this, R.string.error_no_connection, Toast.LENGTH_LONG).show();
-            this.finish();
-        }
+		if (isNetworkAvailable()) {
+			new InitResourcesTask().execute();
+		} else {
+			Toast.makeText(this, R.string.error_no_connection, Toast.LENGTH_LONG).show();
+			this.finish();
+		}
 	}
 
 	@Override
@@ -66,40 +66,37 @@ public class MainActivity extends Activity {
 		getMenuInflater().inflate(R.menu.main, menu);
 		return true;
 	}
-	
+
 	// Checks if a network connection is available
-    private boolean isNetworkAvailable() {
-        ConnectivityManager connectivityManager
-                = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
-        NetworkInfo activeNetworkInfo = connectivityManager.getActiveNetworkInfo();
-        return activeNetworkInfo != null && activeNetworkInfo.isConnected();
-    }
+	private boolean isNetworkAvailable() {
+		ConnectivityManager connectivityManager = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
+		NetworkInfo activeNetworkInfo = connectivityManager.getActiveNetworkInfo();
+		return activeNetworkInfo != null && activeNetworkInfo.isConnected();
+	}
 
 	// Initiates required functions in another thread
 	private class InitResourcesTask extends AsyncTask<Void, Void, Void> {
 
 		@Override
 		protected Void doInBackground(Void... voids) {
-			
-			//Initiates the preferences holder
+
+			// Initiates the preferences holder
 			Preferences.getInstance().init(getApplicationContext());
 
 			// Tells the backend handler to initialize its server connection
 			// with a backend to Parse.com
-			BackendHandler.getInstance().setBackend(
-					new ParseBackend(MainActivity.this, "WgLQnilANHpjM3xITq0nM0eW8dByIgDDmxJzf6se",
-							"9ZK7yjE1NiD244ymDHb8ZpbbWNNv3RuQq7ceEvJc"));
+			BackendHandler.getInstance().setBackend(new ParseBackend(MainActivity.this, "WgLQnilANHpjM3xITq0nM0eW8dByIgDDmxJzf6se", "9ZK7yjE1NiD244ymDHb8ZpbbWNNv3RuQq7ceEvJc"));
 
 			// If you want to use the mockup backend, comment the above line and
 			// uncomment the line below
-			//BackendHandler.getInstance().setBackend(new BackendMockup(0));
+			// BackendHandler.getInstance().setBackend(new BackendMockup(0));
 
 			try {
 				PubUtilities.getInstance().loadPubList();
 			} catch (NoBackendAccessException e) {
-                Toast.makeText(MainActivity.this, R.string.error_no_backend_access, Toast.LENGTH_LONG).show();
+				Toast.makeText(MainActivity.this, R.string.error_no_backend_access, Toast.LENGTH_LONG).show();
 			} catch (BackendNotInitializedException e) {
-                Toast.makeText(MainActivity.this, R.string.error_backend_not_initialized, Toast.LENGTH_LONG).show();
+				Toast.makeText(MainActivity.this, R.string.error_backend_not_initialized, Toast.LENGTH_LONG).show();
 			}
 
 			// initiate the user location and start the map activity.
@@ -109,11 +106,11 @@ public class MainActivity extends Activity {
 			return null; // No data to send to the post thread work method.
 		}
 
-        @Override
-        protected void onPostExecute(Void result) {
-            // Start the main app when all initialization is finished.
-            Intent intent = new Intent(MainActivity.this, MapActivity.class);
-            startActivity(intent);
-        }
-    }
+		@Override
+		protected void onPostExecute(Void result) {
+			// Start the main app when all initialization is finished.
+			Intent intent = new Intent(MainActivity.this, MapActivity.class);
+			startActivity(intent);
+		}
+	}
 }

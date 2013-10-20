@@ -2,31 +2,39 @@ package se.chalmers.krogkollen.help;
 
 import android.app.ActionBar;
 import android.app.Activity;
-import android.content.Intent;
 import android.os.Bundle;
-import android.support.v4.app.NavUtils;
 import android.view.Menu;
 import android.view.MenuItem;
 import se.chalmers.krogkollen.R;
-import se.chalmers.krogkollen.list.ListActivity;
-import se.chalmers.krogkollen.map.MapActivity;
 import se.chalmers.krogkollen.utils.Constants;
 
+/*
+ * This file is part of Krogkollen.
+ *
+ * Krogkollen is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * Krogkollen is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with Krogkollen.  If not, see <http://www.gnu.org/licenses/>.
+ */
+
 /**
- * Activity for the help screen
+ * Activity for the help screen.
  * 
- * @author Johan Backman 
- * Date: 2013-10-02
+ * @author Johan Backman Date: 2013-10-02
  */
 public class HelpActivity extends Activity {
 
-    private String previousActivityKey;
-
-    @Override
+	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-
-        previousActivityKey = getIntent().getStringExtra(Constants.ACTIVITY_FROM);
 
 		setContentView(R.layout.activity_help);
 	}
@@ -49,9 +57,7 @@ public class HelpActivity extends Activity {
 	public boolean onOptionsItemSelected(MenuItem item) {
 		switch (item.getItemId()) {
 			case android.R.id.home:
-                NavUtils.navigateUpTo(this, new Intent(this,
-                        previousActivityKey.equalsIgnoreCase(Constants.LIST_ACTIVITY_NAME) ?
-                                ListActivity.class : MapActivity.class));
+				finish();
 				return true;
 			default:
 				return super.onOptionsItemSelected(item);

@@ -9,9 +9,7 @@ import android.widget.ArrayAdapter;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
-
 import com.google.android.gms.maps.model.LatLng;
-
 import se.chalmers.krogkollen.R;
 import se.chalmers.krogkollen.list.SortedListFragment;
 import se.chalmers.krogkollen.map.UserLocation;
@@ -21,38 +19,21 @@ import se.chalmers.krogkollen.utils.Preferences;
 
 import java.text.*;
 
-/*
- * This file is part of Krogkollen.
- *
- * Krogkollen is free software: you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
- *
- * Krogkollen is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with Krogkollen.  If not, see <http://www.gnu.org/licenses/>.
- */
-
+// TODO why is this in krogkollen.list while TabsPagerAdapter is in krogkollen.adapter?
 /**
  * An adapter handling the different items in a list
  */
 public class PubListAdapter extends ArrayAdapter<IPub> {
 
-	private Context				context;
-	private int					layoutResourceId;
-	private IPub				data[]	= null;
-	private View				row;
-	private PubHolder			holder;
-	private SortedListFragment	fragment;
+	Context context;
+	int layoutResourceId;
+	IPub data[] = null;
+	View row;
+	PubHolder holder;
+	SortedListFragment fragment;
 
 	/**
 	 * A constructor that creates an PubListAdapter.
-	 * 
 	 * @param context
 	 * @param layoutResourceId
 	 * @param data
@@ -71,19 +52,21 @@ public class PubListAdapter extends ArrayAdapter<IPub> {
 		row = convertView;
 		holder = null;
 
-		if (row == null) {
-			LayoutInflater inflater = ((Activity) context).getLayoutInflater();
+		if(row == null){
+			LayoutInflater inflater = ((Activity)context).getLayoutInflater();
 			row = inflater.inflate(layoutResourceId, parent, false);
 
 			holder = new PubHolder();
-			holder.imgIcon = (ImageView) row.findViewById(R.id.listview_image);
-			holder.txtTitle = (TextView) row.findViewById(R.id.listview_title);
-			holder.distanceText = (TextView) row.findViewById(R.id.listview_distance);
-			holder.favoriteStar = (ImageButton) row.findViewById(R.id.favorite_star_list);
+			holder.imgIcon = (ImageView)row.findViewById(R.id.listview_image);
+			holder.txtTitle = (TextView)row.findViewById(R.id.listview_title);
+			holder.distanceText = (TextView)row.findViewById(R.id.listview_distance);
+			holder.favoriteStar = (ImageButton)row.findViewById(R.id.favorite_star_list);
 
 			row.setTag(holder);
-		} else {
-			holder = (PubHolder) row.getTag();
+		}
+
+		else{
+			holder = (PubHolder)row.getTag();
 		}
 
 		updateStar(Preferences.getInstance().loadPreference(this.getItem(position).getID()), holder);
@@ -91,16 +74,22 @@ public class PubListAdapter extends ArrayAdapter<IPub> {
 		IPub pub = data[position];
 		DecimalFormat numberFormat = new DecimalFormat("#0.00");
 		holder.txtTitle.setText(pub.getName());
-		holder.distanceText.setText("" + (numberFormat.format(Distance.calcDistBetweenTwoLatLng(new LatLng(pub.getLatitude(), pub.getLongitude()), UserLocation.getInstance().getCurrentLatLng())))
-				+ " km");
+		double distance = Distance.calcDistBetweenTwoLatLng(new LatLng(pub.getLatitude(),pub.getLongitude()), UserLocation.getInstance().getCurrentLatLng());
+		if(distance < 1){
+			DecimalFormat numberFormatMeters = new DecimalFormat("#0");
+			holder.distanceText.setText("" + numberFormatMeters.format(distance * 1000) + "m");
+		}
+		else{
+			holder.distanceText.setText(""+(numberFormat.format(Distance.calcDistBetweenTwoLatLng(new LatLng(pub.getLatitude(),pub.getLongitude()), UserLocation.getInstance().getCurrentLatLng())))+" km");
+		}
 		holder.favoriteStar.setTag(position);
 
-		holder.favoriteStar.setOnClickListener(new View.OnClickListener() {
-			PubHolder	tmp	= holder;
 
+		holder.favoriteStar.setOnClickListener(new View.OnClickListener() {
+			PubHolder tmp = holder;
 			@Override
 			public void onClick(View v) {
-				int pos = (Integer) v.getTag();
+				int pos = (Integer)v.getTag();
 				saveFavoriteState(pos);
 				updateStar(Preferences.getInstance().loadPreference(data[pos].getID()), tmp);
 				fragment.update();
@@ -108,7 +97,7 @@ public class PubListAdapter extends ArrayAdapter<IPub> {
 			}
 		});
 
-		switch (pub.getQueueTime()) {
+		switch(pub.getQueueTime()){
 			case 1:
 				holder.imgIcon.setImageResource(R.drawable.detailed_queue_green);
 				break;
@@ -118,17 +107,18 @@ public class PubListAdapter extends ArrayAdapter<IPub> {
 			case 3:
 				holder.imgIcon.setImageResource(R.drawable.detailed_queue_red);
 				break;
-			default:
+			default :
 				holder.imgIcon.setImageResource(R.drawable.detailed_queue_gray);
 				break;
 		}
 		return row;
+
 	}
 
 	/**
 	 * Saves the state of the favorite locally
 	 */
-	public void saveFavoriteState(int pos) {
+	public void saveFavoriteState(int pos){
 		Preferences.getInstance().savePreference(data[pos].getID(), !Preferences.getInstance().loadPreference(data[pos].getID()));
 	}
 
@@ -138,10 +128,11 @@ public class PubListAdapter extends ArrayAdapter<IPub> {
 	 * @param isStarFilled Represents if the star is filled or not.
 	 * @param holder the PubHolder which holds the pub
 	 */
-	public void updateStar(boolean isStarFilled, PubHolder holder) {
-		if (isStarFilled) {
+	public void updateStar(boolean isStarFilled, PubHolder holder){
+		if(isStarFilled){
 			holder.favoriteStar.setBackgroundResource(R.drawable.star_not_filled);
-		} else {
+		}
+		else{
 			holder.favoriteStar.setBackgroundResource(R.drawable.star_filled);
 		}
 	}
@@ -151,9 +142,9 @@ public class PubListAdapter extends ArrayAdapter<IPub> {
 	 */
 	static class PubHolder
 	{
-		ImageView	imgIcon;
-		TextView	txtTitle;
-		TextView	distanceText;
-		ImageButton	favoriteStar;
+		ImageView imgIcon;
+		TextView txtTitle;
+		TextView distanceText;
+		ImageButton favoriteStar;
 	}
 }

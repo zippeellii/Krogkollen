@@ -38,7 +38,7 @@ public class ListModel {
 	}
 
 	/**
-	 * Returns the original pub list sorted as specified by algorithm
+	 * Returns a copy of the original pub list sorted as specified by algorithm
 	 * 
 	 * @param algorithm wanted to use
 	 * @return the sorted list

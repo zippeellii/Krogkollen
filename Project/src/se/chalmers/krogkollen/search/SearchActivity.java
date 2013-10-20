@@ -54,6 +54,8 @@ public class SearchActivity extends ListActivity implements IView {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_search);
 		handleIntent(getIntent());
+
+        getActionBar().setDisplayHomeAsUpEnabled(true);
 	}
 
 	@Override

@@ -17,12 +17,10 @@ import android.os.Bundle;
  *
  * You should have received a copy of the GNU General Public License
  * along with Krogkollen.  If not, see <http://www.gnu.org/licenses/>.
- *
- * Interface for a View class in the MVP design pattern.
  */
 
 /**
- * The basic view functionality.
+ * Interface for a View class in the MVP design pattern
  * 
  * @author Oskar Karrman
  */
@@ -31,14 +29,14 @@ public interface IView {
 	/**
 	 * Navigates to another view
 	 * 
-	 * @param destination
+	 * @param destination the view to navigate to
 	 */
 	public abstract void navigate(Class<?> destination);
 
 	/**
-	 * Navigates no another view
+	 * Navigates to another view
 	 * 
-	 * @param destination
+	 * @param destination the view to navigate to
 	 * @param extras
 	 */
 	public abstract void navigate(Class<?> destination, Bundle extras);

@@ -20,19 +20,20 @@ This file is part of Krogkollen.
 <resources>
     <!-- Strings used in the MainActivity -->
     <string name="app_name">KrogkollenAdmin</string>
-    <string name="login_button_text">Sign in</string>
+    <string name="login_button_text">Logga in</string>
     <string name="wrong_password_message">Fel lösenord eller användarnamn</string>
+    <string name="no_connection_message">Ingen anslutning till internet</string>
     <string name="name_field_hint">Skriv din pubs namn</string>
     <string name="password_field_hint">Skriv din pubs lösenord</string>
-    <string name="database_failure">Connection with database failed, could not load pubs.</string>
+    <string name="database_failure">Databaskopplingen misslyckades.</string>
 
     <!-- Strings used in the ButtonsActivity -->
-    <string name="buttons_activity">Ingen information finns för tillfället.</string>
+    <string name="no_information">Ingen information finns för tillfället.</string>
     <string name="green_button_text">0 – 15 minuter</string>
     <string name="yellow_button_text">15 – 45 minuter</string>
     <string name="red_button_text">Mer än 45 minuter</string>
     <string name="wait_part_one">Vänta</string>
-    <string name="wait_part_two">sekunder mellan klicken.</string>
+    <string name="wait_part_two">sekunder mellan uppdateringarna.</string>
     <string name="queue_now">Nuvarande:</string>
     <string name="ready">Redo för input!</string>
     <string name="green">Grön</string>
@@ -41,7 +42,7 @@ This file is part of Krogkollen.
     <string name="updating">Uppdaterar…</string>
     <string name="logging_in">Loggar in…</string>
     <string name="log_out">Logga ut</string>
-    <string name="logo">The logo</string>
+    <string name="logo">Logga in</string>
     <string name="notification_title">Uppdatera kötiden!</string>
     <string name="notification_subtext">30 minuter har gått</string>
     <string name="notifications">Notiser</string>

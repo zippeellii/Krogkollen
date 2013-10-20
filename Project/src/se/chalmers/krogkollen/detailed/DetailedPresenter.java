@@ -5,7 +5,9 @@ import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.view.View;
+
 import com.google.android.gms.maps.model.LatLng;
+
 import se.chalmers.krogkollen.IView;
 import se.chalmers.krogkollen.R;
 import se.chalmers.krogkollen.backend.BackendHandler;
@@ -15,6 +17,24 @@ import se.chalmers.krogkollen.backend.NotFoundInBackendException;
 import se.chalmers.krogkollen.map.UserLocation;
 import se.chalmers.krogkollen.pub.IPub;
 import se.chalmers.krogkollen.pub.PubUtilities;
+import se.chalmers.krogkollen.utils.Preferences;
+
+/*
+ * This file is part of Krogkollen.
+ *
+ * Krogkollen is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * Krogkollen is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with Krogkollen.  If not, see <http://www.gnu.org/licenses/>.
+ */
 
 /**
  * A presenter class for the detailed view of a pub
@@ -36,17 +56,14 @@ public class DetailedPresenter implements IDetailedPresenter {
 	public void setPub(String pubID) throws NoBackendAccessException, NotFoundInBackendException,
 			BackendNotInitializedException {
 		pub = PubUtilities.getInstance().getPub(pubID);
-		BackendHandler.getInstance().updatePubLocally(pub);
 	}
 
-	// TODO Can this be refactored?
 	@Override
-	public void ratingChanged(int rating) throws NotFoundInBackendException,
-			NoBackendAccessException, BackendNotInitializedException {
+	public void ratingChanged(int rating) throws NotFoundInBackendException, NoBackendAccessException, BackendNotInitializedException {
 
 		if (rating == 1) {
 			if (view.getSharedPreferences(pub.getID(), 0).getInt("thumb", 0) == 1) {
-                view.setThumbs(0);
+				view.setThumbs(0);
 
 				BackendHandler.getInstance().removeRatingVote(pub, 1);
 				pub.setPositiveRating(pub.getPositiveRating() - 1);
@@ -54,7 +71,7 @@ public class DetailedPresenter implements IDetailedPresenter {
 				saveThumbState(0);
 
 			} else if (view.getSharedPreferences(pub.getID(), 0).getInt("thumb", 0) == -1) {
-                view.setThumbs(1);
+				view.setThumbs(1);
 
 				BackendHandler.getInstance().removeRatingVote(pub, -1);
 				pub.setNegativeRating(pub.getNegativeRating() - 1);
@@ -64,7 +81,7 @@ public class DetailedPresenter implements IDetailedPresenter {
 
 				saveThumbState(1);
 			} else {
-                view.setThumbs(1);
+				view.setThumbs(1);
 
 				BackendHandler.getInstance().addRatingVote(pub, 1);
 				pub.setPositiveRating(pub.getPositiveRating() + 1);
@@ -110,133 +127,141 @@ public class DetailedPresenter implements IDetailedPresenter {
 			}
 			saveThumbState(rating);
 		}
-
-        updateVotes();
+		updateVotes();
 	}
 
-    /**
-     * Saves the state of the favorite locally
-     */
-    public void saveFavoriteState(){
-        SharedPreferences.Editor editor = view.getSharedPreferences(pub.getID(), 0).edit();
-        editor.putBoolean("star", (!view.getSharedPreferences(pub.getID(), 0).getBoolean("star", true)));
-        editor.commit();
-    }
+	/**
+	 * Saves the state of the favorite locally
+	 */
+	public void saveFavoriteState() {
+		Preferences.getInstance().savePreference(pub.getID(), !Preferences.getInstance().loadPreference(pub.getID()));
+	}
 
-    /**
-     * Saves the state of the thumb because a user is only allowed to vote 1 time.
-     * @param thumb
-     */
-	private void saveThumbState(int thumb){
+	/**
+	 * Saves the state of the thumb because a user is only allowed to vote 1 time.
+	 * 
+	 * @param thumb
+	 */
+	private void saveThumbState(int thumb) {
 		SharedPreferences.Editor editor = view.getSharedPreferences(pub.getID(), 0).edit();
 		editor.putInt("thumb", thumb);
 		editor.commit();
 	}
 
-    /**
-     * Converts the hour string
-     * @param hour
-     * @return
-     */
-	private String convertOpeningHours(int hour){
-		if(hour / 10 ==0){
-			return "0"+hour;
+	/**
+	 * Converts the hour string, e.g. if 3 is entered, 03 is returned
+	 * 
+	 * @param hour
+	 * @return the converted string
+	 */
+	private String convertOpeningHours(int hour) {
+		if (hour / 10 == 0) {
+			return "0" + hour;
 		}
-		return ""+hour;
+		return "" + hour;
 	}
 
-    /**
-     * Updates the info of a pub
-     * @throws NoBackendAccessException
-     * @throws NotFoundInBackendException
-     * @throws BackendNotInitializedException 
-     */
-    public void updateInfo() throws NoBackendAccessException, NotFoundInBackendException{
-        new UpdateTask().execute();
-    }
+	/**
+	 * Updates the info of a pub
+	 * 
+	 * @throws NoBackendAccessException
+	 * @throws NotFoundInBackendException
+	 */
+	public void updateInfo() throws NoBackendAccessException, NotFoundInBackendException {
+		new UpdateTask().execute();
+	}
 
-    // TODO what does this method do?
-    private class UpdateTask extends AsyncTask<Void, Void, Void>{
-        protected void onPreExecute(){
-            view.showProgressDialog();
-        }
+	// Updates the info about the pub in another thread
+	private class UpdateTask extends AsyncTask<Void, Void, Void> {
+		protected void onPreExecute() {
+			view.showProgressDialog();
+		}
 
-        protected Void doInBackground(Void... voids){
+		protected Void doInBackground(Void... voids) {
+			try {
+				BackendHandler.getInstance().updatePubLocally(pub);
+			} catch (NoBackendAccessException e) {
+				view.showErrorMessage(view.getString(R.string.error_no_backend_access));
+			} catch (NotFoundInBackendException e) {
+				view.showErrorMessage(view.getString(R.string.error_no_backend_item));
+			} catch (BackendNotInitializedException e) {
+				view.showErrorMessage(view.getString(R.string.error_backend_not_initialized));
+			}
+			return null;
+		}
 
-            try {
-                BackendHandler.getInstance().updatePubLocally(pub);
-            } catch (NoBackendAccessException e) {
-                System.out.println("error");
-            } catch (NotFoundInBackendException e) {
-                System.out.println("error");
-            } catch (BackendNotInitializedException e){
-                System.out.println("error");
-            }
-            return null;
-        }
+		protected void onPostExecute(Void result) {
+			view.hideProgressDialog();
+			updateMain();
+		}
+	}
 
-        protected void onPostExecute(Void result){
-            view.hideProgressDialog();
-            updateMain();
-        }
-    }
+	@Override
+	public void onClick(View view) {
+		if (view.getId() == R.id.thumbsDownLayout) {
+			try {
+				ratingChanged(-1);
+			} catch (NoBackendAccessException e) {
+				this.view.showErrorMessage(this.view.getString(R.string.error_no_backend_access));
+			} catch (NotFoundInBackendException e) {
+				this.view.showErrorMessage(this.view.getString(R.string.error_no_backend_item));
+			} catch (BackendNotInitializedException e) {
+				this.view.showErrorMessage(this.view.getString(R.string.error_backend_not_initialized));
+			}
+		}
+		else if (view.getId() == R.id.thumbsUpLayout) {
+			try {
+				ratingChanged(1);
+			} catch (NoBackendAccessException e) {
+				this.view.showErrorMessage(this.view.getString(R.string.error_no_backend_access));
+			} catch (NotFoundInBackendException e) {
+				this.view.showErrorMessage(this.view.getString(R.string.error_no_backend_item));
+			} catch (BackendNotInitializedException e) {
+				this.view.showErrorMessage(this.view.getString(R.string.error_backend_not_initialized));
+			}
+		} else if (view.getId() == R.id.navigate) {
+			Intent i = new Intent(Intent.ACTION_VIEW, Uri.parse("http://maps.google.com/maps?saddr="
+					+ UserLocation.getInstance().getCurrentLatLng().latitude + ","
+					+ UserLocation.getInstance().getCurrentLatLng().longitude + "&daddr="
+					+ pub.getLatitude() + "," + pub.getLongitude()));
+			this.view.startActivity(i);
+		}
+	}
 
+	// Sends the new information to the view for displaying.
+	private void updateMain() {
+		String openingHours;
 
-    @Override
-    public void onClick(View view) {
-        if(view.getId() == R.id.thumbsDownLayout){
-            try {
-                ratingChanged(-1);
-                //updateThumbs();
-            } catch (NotFoundInBackendException e) {
-                System.out.println("error");
-            } catch (NoBackendAccessException e) {
-                System.out.println("error");
-            } catch (BackendNotInitializedException e){
-                System.out.println("error");
-            }
-        }
-        else if(view.getId() == R.id.thumbsUpLayout){
-            try {
-                ratingChanged(1);
-                //updateThumbs();
-            } catch (NotFoundInBackendException e) {
-                System.out.println("error");
-            } catch (NoBackendAccessException e) {
-                System.out.println("error");
-            } catch (BackendNotInitializedException e){
-                System.out.println("error");
-            }
-        } else if (view.getId() == R.id.navigate) {
-            Intent i = new Intent(Intent.ACTION_VIEW, Uri.parse("http://maps.google.com/maps?saddr="
-                    + UserLocation.getInstance().getCurrentLatLng().latitude + ","
-                    + UserLocation.getInstance().getCurrentLatLng().longitude + "&daddr="
-                    + pub.getLatitude() + "," + pub.getLongitude()));
-            this.view.startActivity(i);
-        }
-    }
+		if (pub.getTodaysOpeningHours().isOpen()) {
+			openingHours = this.convertOpeningHours(pub.getTodaysOpeningHours().getOpeningHour())
+					+ " - " + this.convertOpeningHours(pub.getTodaysOpeningHours().getClosingHour());
+		} else {
+			openingHours = view.getString(R.string.information_closed);
+		}
 
-    //Sends the new information to the view for displaying.
-    private void updateMain(){
-        view.updateQueueIndicator(pub.getQueueTime());
-        view.updateText(pub.getName(), pub.getDescription(), convertOpeningHours(pub.getTodaysOpeningHour()) + " - " +
-                (convertOpeningHours(pub.getTodaysClosingHour())), ""+pub.getAgeRestriction() + " år", ""+pub.getEntranceFee()
-                + ":-");
-        view.addMarker(pub);
-        view.navigateToLocation(new LatLng(pub.getLatitude(), pub.getLongitude()), 14);
-        view.showStar(view.getSharedPreferences(pub.getID(), 0).getBoolean("star", true));
-        view.setThumbs(view.getSharedPreferences(pub.getID(), 0).getInt("thumb", 0));
-        updateVotes();
-    }
+		view.updateQueueIndicator(pub.getQueueTime());
+		view.updateText(pub.getName(), pub.getDescription(),
+				openingHours,
+				"" + pub.getAgeRestriction() + " "
+						+ view.getString(R.string.information_text_year), "" + pub.getEntranceFee()
+						+ ":-");
+		view.addMarker(pub);
+		view.navigateToLocation(new LatLng(pub.getLatitude(), pub.getLongitude()), 14);
+		view.showStar(Preferences.getInstance().loadPreference(pub.getID()));
+		view.setThumbs(view.getSharedPreferences(pub.getID(), 0).getInt("thumb", 0));
+		view.removeMarker();
+		view.addMarker(pub);
+		updateVotes();
+	}
 
-    // TODO jAVADOC
-    public void updateStar(){
-        saveFavoriteState();
-        view.showStar(view.getSharedPreferences(pub.getID(), 0).getBoolean("star", true));
-    }
+	@Override
+	public void updateStar() {
+		saveFavoriteState();
+		view.showStar(Preferences.getInstance().loadPreference(pub.getID()));
+	}
 
-    // TODO what does this do?
-    private void updateVotes(){
-        view.showVotes("" + pub.getPositiveRating(), "" + pub.getNegativeRating());
-    }
+	// Updates the votes in the view
+	private void updateVotes() {
+		view.showVotes(String.valueOf(pub.getPositiveRating()), String.valueOf(pub.getNegativeRating()));
+	}
 }

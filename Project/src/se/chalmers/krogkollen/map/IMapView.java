@@ -31,7 +31,7 @@ import se.chalmers.krogkollen.search.ICanSearch;
  * @author Oskar Karrman
  * 
  */
-public interface IMapView extends IView, ICanSearch{
+public interface IMapView extends IView, ICanSearch {
 
 	/**
 	 * Adds the GPS-location of the phone as a marker in the map view.
@@ -59,10 +59,12 @@ public interface IMapView extends IView, ICanSearch{
 	 * @param pos the position to move to.
 	 * @param zoom zoom level.
 	 */
-	public void moveCameraToPosition(LatLng pos, int zoom);
+	public void moveCameraToPosition(LatLng pos, float zoom);
 
 	/**
-	 * Animate the user marker from the current position to the new one.
+	 * ** Method written by Google, found on stackoverflow.com ** ** **
+	 * http://stackoverflow.com/questions/13728041/move-markers-in-google-map-v2-android ** Moves
+	 * the user marker smoothly to a new position.
 	 * 
 	 * @param toPosition position to animate to.
 	 */

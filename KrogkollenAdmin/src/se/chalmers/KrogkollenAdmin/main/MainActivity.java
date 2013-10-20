@@ -5,6 +5,7 @@ import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.pm.ActivityInfo;
 import android.os.Bundle;
 import android.view.KeyEvent;
 import android.view.View;
@@ -41,19 +42,20 @@ import se.chalmers.KrogkollenAdmin.R;
  */
 public class MainActivity extends Activity {
 
-    private Button loginButton;
-    private AutoCompleteTextView userNameField;
-    private EditText passwordField;
-    private ProgressDialog progressDialog;
-    private MainPresenter presenter;
+    private Button                  loginButton;
+    private AutoCompleteTextView    userNameField;
+    private EditText                passwordField;
+    private ProgressDialog          progressDialog;
+    private MainPresenter           presenter;
 
     /**
      * Called when the activity is first created.
-     * <p/>
+     *
      * Initiates all the objects in the class and calls methods to setup server-connection.
      */
     @Override
     public void onCreate(Bundle savedInstanceState) {
+        setRequestedOrientation (ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
         super.onCreate(savedInstanceState);
         setContentView(se.chalmers.KrogkollenAdmin.R.layout.activity_main);
         presenter = new MainPresenter(this);

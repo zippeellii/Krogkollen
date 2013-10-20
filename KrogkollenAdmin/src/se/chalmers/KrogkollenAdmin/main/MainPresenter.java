@@ -34,9 +34,9 @@ import java.util.List;
  */
 public class MainPresenter {
 
-    private String[] pubUsers;
-    private MainActivity view;
-    private Toast toast;
+    private String[]        pubUsers;
+    private MainActivity    view;
+    private Toast           toast;
 
     /**
      * Constructor. Gets called when the MainActivity is started, so they know each other.
@@ -47,6 +47,10 @@ public class MainPresenter {
         view = main;
     }
 
+    /**
+     * Returns an array with pub users.
+     * @return An array with pub users.
+     */
     public String[] getPubUsers() {
         return pubUsers;
     }
@@ -68,6 +72,11 @@ public class MainPresenter {
         new LoginTask().execute(username, password);
     }
 
+    /**
+     * Checks if the user is logged in when starting the application.
+     * If it is, it sends the user to the buttons activity.
+     * If not, it does nothing.
+     */
     public void checkIfLoggedIn() {
         if (ParseUser.getCurrentUser() != null) {
             Intent intent = new Intent(view, ButtonsActivity.class);
@@ -90,11 +99,15 @@ public class MainPresenter {
 
 
             boolean loginSuccess = false;
+            boolean noConnection = false;
 
             try {
                 ParseUser.logIn(strings[0], strings[1]);
                 loginSuccess = true;
             } catch (ParseException e) {
+                if (e.getCode() == ParseException.CONNECTION_FAILED) {
+                    noConnection = true;
+                }
                 e.printStackTrace();
             }
 
@@ -109,19 +122,33 @@ public class MainPresenter {
                 view.startActivity(intent);
             } else {
 
-                view.runOnUiThread(new Runnable() {
-                    public void run() {
-                        // Makes so that toasts doesn't stack.
-                        if (toast != null) {
-                            toast.cancel();
+                if (noConnection) {
+                    view.runOnUiThread(new Runnable() {
+                        public void run() {
+                            // Makes so that toasts doesn't stack.
+                            if (toast != null) {
+                                toast.cancel();
+                            }
+                            toast = Toast.makeText(view, se.chalmers.KrogkollenAdmin.R.string.no_connection_message,
+                                    Toast.LENGTH_SHORT);
+                            toast.setDuration(2);
+                            toast.show();
                         }
-                        toast = Toast.makeText(view, se.chalmers.KrogkollenAdmin.R.string.wrong_password_message,
-                                Toast.LENGTH_SHORT);
-                        toast.setDuration(2);
-                        toast.show();
-                    }
-
-                });
+                    });
+                } else {
+                    view.runOnUiThread(new Runnable() {
+                        public void run() {
+                            // Makes so that toasts doesn't stack.
+                            if (toast != null) {
+                                toast.cancel();
+                            }
+                            toast = Toast.makeText(view, se.chalmers.KrogkollenAdmin.R.string.wrong_password_message,
+                                    Toast.LENGTH_SHORT);
+                            toast.setDuration(2);
+                            toast.show();
+                        }
+                    });
+                }
             }
             return null;
         }

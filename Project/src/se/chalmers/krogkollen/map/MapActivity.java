@@ -21,16 +21,14 @@ import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.CompoundButton.OnCheckedChangeListener;
 import android.widget.Toast;
-
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.Projection;
 import com.google.android.gms.maps.model.*;
-
 import se.chalmers.krogkollen.R;
 import se.chalmers.krogkollen.backend.NoBackendAccessException;
 import se.chalmers.krogkollen.backend.NotFoundInBackendException;
-import se.chalmers.krogkollen.utils.ActivityID;
+import se.chalmers.krogkollen.utils.Constants;
 
 import java.util.ArrayList;
 
@@ -53,271 +51,229 @@ import java.util.ArrayList;
 
 /**
  * The standard implementation of IMapView.
- *
+ * 
  * This is a normal map with the user marked on the map, and with a list of pubs marked on the map.
  */
-
 public class MapActivity extends Activity implements IMapView {
+	private MapPresenter	presenter;
+	private Marker			userMarker;
+	private ProgressDialog	progressDialog;
 
-    /**
-     * Identifier for the intent used to start the activity for detailed view.
-     */
-    public static final String	MARKER_PUB_ID	= "se.chalmers.krogkollen.MARKER_PUB_ID";
+	@Override
+	protected void onCreate(Bundle savedInstanceState) {
+		super.onCreate(savedInstanceState);
+		setContentView(R.layout.activity_map);
 
-    public static final int		USER_ZOOM		= 16;
-    public static final int		MARKER_ZOOM		= 18;
-    public static final int		DEFAULT_ZOOM	= 12;
+		// Get the map from backend.
+		try {
+			MapWrapper.INSTANCE.init(this);
+		} catch (NoBackendAccessException e) {
+			this.showErrorMessage(this.getString(R.string.error_no_backend_access));
+		} catch (NotFoundInBackendException e) {
+			this.showErrorMessage(this.getString(R.string.error_no_backend_item));
+		}
 
-    private MapPresenter		presenter;
-    private Marker				userMarker;
-    private ProgressDialog		progressDialog;
+		// Create a presenter for this view.
+		presenter = new MapPresenter();
+		presenter.setView(this);
 
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_map);
+		MapWrapper.INSTANCE.getMap().setOnMarkerClickListener(new GoogleMap.OnMarkerClickListener() {
+			@Override
+			public boolean onMarkerClick(Marker marker) {
 
-        // Get the map from backend.
-        try {
-            MapWrapper.INSTANCE.init(this);
-        } catch (NoBackendAccessException e) {
-            showErrorMessage(getResources().getString(R.string.error_no_backend_access));
-        } catch (NotFoundInBackendException e) {
-            showErrorMessage(getResources().getString(R.string.error_no_backend_item));
-        }
+				// Move camera to the clicked marker.
+				moveCameraToPosition(marker.getPosition(), MapWrapper.INSTANCE.getMap().getCameraPosition().zoom);
 
-        // Create a presenter for this view.
-        presenter = new MapPresenter();
-        presenter.setView(this);
+				if (marker.getTitle().equalsIgnoreCase(getString(R.string.map_user_name))) {
+					return true;        // Suppress user marker click
+				} else {
+					// Open detailed view.
+					presenter.pubMarkerClicked(marker.getTitle());
+				}
+				return true; // Suppress default behavior; move camera and open info window.
+			}
+		});
 
-        MapWrapper.INSTANCE.getMap().setOnMarkerClickListener(new GoogleMap.OnMarkerClickListener() {
-            @Override
-            public boolean onMarkerClick(Marker marker) {
+		// Remove the default logo icon and add our list icon.
+		ActionBar actionBar = getActionBar();
+		actionBar.setIcon(R.drawable.list_icon);
+		actionBar.setDisplayShowTitleEnabled(false);
+		actionBar.setDisplayHomeAsUpEnabled(true);
+	}
 
-                // Move camera to the clicked marker.
-                moveCameraToPosition(marker.getPosition(), MARKER_ZOOM);
+	@Override
+	public boolean onCreateOptionsMenu(Menu menu) {
+		super.onCreateOptionsMenu(menu);
 
-                if (marker.getTitle().equalsIgnoreCase(getString(R.string.map_user_name))) {
-                    // TODO Open favorites.
-                } else {
-                    // Open detailed view.
-                    presenter.pubMarkerClicked(marker.getTitle());
-                }
-                return true; // Suppress default behavior; move camera and open info window.
-            }
-        });
+		// Inflate the menu; this adds items to the action bar if it is present.
+		getMenuInflater().inflate(R.menu.map, menu);
 
-        // Set the presenter as listener for markers and user indicator.
-        //MapWrapper.INSTANCE.getMap().setOnMarkerClickListener(presenter); // TODO: FIX SO IT WORKS LIKE THIS
+		return true;
+	}
 
-        // Remove the default logo icon and add our list icon.
-        ActionBar actionBar = getActionBar();
-        actionBar.setIcon(R.drawable.list_icon);
-        actionBar.setDisplayHomeAsUpEnabled(true);
-    }
+	@Override
+	public void moveCameraToPosition(LatLng pos, float zoom) {
+		MapWrapper.INSTANCE.getMap().animateCamera(
+				CameraUpdateFactory.newCameraPosition(new CameraPosition(pos, zoom, 0, 0)));
+	}
 
-    // Start the activity in a local method to keep the right context.
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        super.onCreateOptionsMenu(menu);
+	@Override
+	public void addUserMarker(LatLng latLng) {
+		userMarker = MapWrapper.INSTANCE.getMap().addMarker(new MarkerOptions()
+				.position(latLng)
+				.icon(BitmapDescriptorFactory.fromResource(R.drawable.user_marker))
+				.title(getString(R.string.map_user_name)));
+	}
 
-        // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.map, menu);
+	@Override
+	public boolean onOptionsItemSelected(MenuItem menuItem) {
+		presenter.onActionBarClicked(menuItem);
+		return true;
+	}
 
-        return true;
-    }
+	@Override
+	public void animateUserMarker(final LatLng toPosition) {
+		final Handler handler = new Handler();
+		final long start = SystemClock.uptimeMillis();
+		Projection proj = MapWrapper.INSTANCE.getMap().getProjection();
+		Point startPoint = proj.toScreenLocation(userMarker.getPosition());
+		final LatLng startLatLng = proj.fromScreenLocation(startPoint);
+		final long duration = 500;
 
-    /**
-     * Center the Google maps camera on the user.
-     *
-     * @param zoom how close to zoom in on the user.
-     */
-    public void moveCameraToPosition(LatLng pos, int zoom) {
-        MapWrapper.INSTANCE.getMap().animateCamera(
-                CameraUpdateFactory.newCameraPosition(new CameraPosition(pos, zoom, 0, 0)));
-    }
+		final LinearInterpolator interpolator = new LinearInterpolator();
 
-    /**
-     * Adds a user marker to the map.
-     *
-     * @param latLng the user location
-     */
-    public void addUserMarker(LatLng latLng) {
-        userMarker = MapWrapper.INSTANCE.getMap().addMarker(new MarkerOptions()
-                .position(latLng)
-                .icon(BitmapDescriptorFactory.fromResource(R.drawable.user_marker))
-                .title(getString(R.string.map_user_name)));
-    }
+		handler.post(new Runnable() {
+			@Override
+			public void run() {
+				long elapsed = SystemClock.uptimeMillis() - start;
+				float t = interpolator.getInterpolation((float) elapsed / duration);
+				double lng = t * toPosition.longitude + (1 - t) * startLatLng.longitude;
+				double lat = t * toPosition.latitude + (1 - t) * startLatLng.latitude;
+				userMarker.setPosition(new LatLng(lat, lng));
 
-    @Override
-    public boolean onOptionsItemSelected(MenuItem menuItem) {
-        presenter.onActionBarClicked(menuItem);
-        return true;
-    }
+				if (t < 1.0) {
+					// Post again 16ms later.
+					handler.postDelayed(this, 16);
+				}
+			}
+		});
+	}
 
-    /**
-     * ** Method written by Google, found on stackoverflow.com ** **
-     * http://stackoverflow.com/questions/13728041/move-markers-in-google-map-v2-android ** Moves
-     * the user marker smoothly to a new position.
-     *
-     * @param toPosition the position to where the marker will be moved
-     */
-    public void animateUserMarker(final LatLng toPosition) {
-        final Handler handler = new Handler();
-        final long start = SystemClock.uptimeMillis();
-        Projection proj = MapWrapper.INSTANCE.getMap().getProjection();
-        Point startPoint = proj.toScreenLocation(userMarker.getPosition());
-        final LatLng startLatLng = proj.fromScreenLocation(startPoint);
-        final long duration = 500;
+	@Override
+	public SharedPreferences getPreferences() {
+		return this.getPreferences(Context.MODE_PRIVATE);
+	}
 
-        final LinearInterpolator interpolator = new LinearInterpolator();
+	@Override
+	public void showProgressDialog() {
+		progressDialog = ProgressDialog.show(MapActivity.this, "",
+				getString(R.string.map_updating), false, false);
+	}
 
-        handler.post(new Runnable() {
-            @Override
-            public void run() {
-                long elapsed = SystemClock.uptimeMillis() - start;
-                float t = interpolator.getInterpolation((float) elapsed / duration);
-                double lng = t * toPosition.longitude + (1 - t) * startLatLng.longitude;
-                double lat = t * toPosition.latitude + (1 - t) * startLatLng.latitude;
-                userMarker.setPosition(new LatLng(lat, lng));
+	@Override
+	public void hideProgressDialog() {
+		progressDialog.hide();
+	}
 
-                if (t < 1.0) {
-                    // Post again 16ms later.
-                    handler.postDelayed(this, 16);
-                }
-            }
-        });
-    }
+	@Override
+	public void onPause() {
+		super.onPause();
+		presenter.onPause();
+	}
 
-    @Override
-    public SharedPreferences getPreferences() {
-        return this.getPreferences(Context.MODE_PRIVATE);
-    }
+	@Override
+	public void onResume() {
+		super.onResume();
+		presenter.onResume();
+	}
 
-    @Override
-    public void showProgressDialog() {
-        progressDialog = ProgressDialog.show(MapActivity.this, "",
-                getString(R.string.map_updating), false, false);
-    }
+	@Override
+	public void onBackPressed() {
+		Intent intent = new Intent(Intent.ACTION_MAIN);
+		intent.addCategory(Intent.CATEGORY_HOME);
+		startActivity(intent);
+	}
 
-    @Override
-    public void hideProgressDialog() {
-        progressDialog.hide();
-    }
+	@Override
+	public void navigate(Class<?> destination) {
+		Intent intent = new Intent(this, destination);
+		intent.putExtra(Constants.ACTIVITY_FROM, Constants.MAP_ACTIVITY_NAME);
+		startActivity(intent);
+	}
 
-    @Override
-    public void onPause() {
-        super.onPause();
-        presenter.onPause();
-    }
+	@Override
+	public void navigate(Class<?> destination, Bundle extras) {
+		Intent intent = new Intent(this, destination);
+		intent.putExtra(Constants.MARKER_PUB_ID, extras.getString(Constants.MAP_PRESENTER_KEY));
+		intent.putExtra(Constants.ACTIVITY_FROM, Constants.MAP_ACTIVITY_NAME);
+		startActivity(intent);
+	}
 
-    @Override
-    public void onResume() {
-        super.onResume();
-        presenter.onResume();
-    }
+	@Override
+	public void showErrorMessage(String message) {
+		CharSequence text = message;
+		int duration = Toast.LENGTH_LONG;
+		Toast toast = Toast.makeText(this, text, duration);
+		toast.show();
+	}
 
-    @Override
-    public void onBackPressed() {
+	@Override
+	public void showAlertDialog(final String msg, final boolean showCheckbox) {
+		// Create most of the dialog that will be shown if either wifi or gps are disabled.
+		Builder builder = new Builder(this);
+		final ArrayList<Integer> selected = new ArrayList<Integer>();
 
-        // Get what activity you came from originally.
-        int activity = this.getIntent().getIntExtra(ActivityID.ACTIVITY_ID, 0);
-        Intent intent;
-        switch (activity) {
-            case ActivityID.LIST:
-                // TODO do something here
-                // If you came from the list view, return there.
-                // Intent intent = new Intent(this, ListActivity.class);
-                // intent.putExtra(ActivityID.ACTIVITY_ID, CallingActivity.MAP);
-                // this.startActivity(intent);
-                break;
-            default:
-                // If you came from anything else, return to home screen.
-                intent = new Intent(Intent.ACTION_MAIN); // TODO use navigate method
-                intent.addCategory(Intent.CATEGORY_HOME);
-                startActivity(intent);
-                break;
-        }
-    }
+		if (showCheckbox) {
+			// Check box, making it possible to chose not to show this dialog again.
+			View checkBoxView = View.inflate(this, R.layout.checkbox, null);
+			CheckBox checkBox = (CheckBox) checkBoxView.findViewById(R.id.checkbox);
+			checkBox.setOnCheckedChangeListener(new OnCheckedChangeListener() {
 
-    @Override
-    public void navigate(Class<?> destination) {
-        Intent intent = new Intent(this, destination);
-        startActivity(intent);
-    }
+				@Override
+				public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+					if (isChecked) {
+						selected.add(0);
+					} else if (selected.size() != 0) {
+						selected.clear();
+					}
+				}
+			});
+			checkBox.setText(this.getString(R.string.alert_dialog_dont_show_again));
+			builder.setView(checkBoxView);
+		}
+		builder.setTitle(R.string.alert_dialog_title);
+		builder.setMessage(msg);
 
-    @Override
-    public void navigate(Class<?> destination, Bundle extras) {
-        Intent intent = new Intent(this, destination);
-        intent.putExtra(MARKER_PUB_ID, extras.getString(MapPresenter.MAP_PRESENTER_KEY));
-        startActivity(intent);
-    }
+		// Set listeners to the buttons in the dialog and chose appropriate consequences for clicks.
+		builder.setPositiveButton(R.string.alert_dialog_activate,
+				new DialogInterface.OnClickListener() {
+					public void onClick(DialogInterface dialog, int which) {
+						if (showCheckbox) {
+							presenter.saveOption(!selected.isEmpty());
+						}
+						// Send user to location settings on the phone.
+						Intent intent = new Intent(
+								android.provider.Settings.ACTION_LOCATION_SOURCE_SETTINGS);
+						startActivity(intent);
+					}
+				});
 
-    @Override
-    public void showErrorMessage(String message) {
-        CharSequence text = message;
-        int duration = Toast.LENGTH_SHORT;
+		builder.setNegativeButton(R.string.alert_dialog_cancel,
+				new DialogInterface.OnClickListener() {
+					public void onClick(DialogInterface dialog, int which) {
+						if (showCheckbox) {
+							presenter.saveOption(!selected.isEmpty());
+						}
+					}
+				});
 
-        Toast toast = Toast.makeText(this, text, duration);
-        toast.show();
-    }
+		builder.show();
+	}
 
-    @Override
-    public void showAlertDialog(final String msg, final boolean showCheckbox) {
-        // Create most of the dialog that will be shown if either wifi or gps are disabled.
-        Builder builder = new Builder(this);
-        final ArrayList<Integer> selected = new ArrayList<Integer>();
-
-        if (showCheckbox) {
-            // Check box, making it possible to chose not to show this dialog again.
-            View checkBoxView = View.inflate(this, R.layout.checkbox, null);
-            CheckBox checkBox = (CheckBox) checkBoxView.findViewById(R.id.checkbox);
-            checkBox.setOnCheckedChangeListener(new OnCheckedChangeListener() {
-
-                @Override
-                public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                    if (isChecked) {
-                        selected.add(0);
-                    } else if (selected.size() != 0) {
-                        selected.clear();
-                    }
-                }
-            });
-            checkBox.setText(this.getString(R.string.alert_dialog_dont_show_again));
-            builder.setView(checkBoxView);
-        }
-        builder.setTitle(R.string.alert_dialog_title);
-        builder.setMessage(msg);
-
-        // Set listeners to the buttons in the dialog and chose appropriate consequences for clicks.
-        builder.setPositiveButton(R.string.alert_dialog_activate,
-                new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int which) {
-                        if (showCheckbox) {
-                            presenter.saveOption(!selected.isEmpty());
-                        }
-                        // Send user to location settings on the phone.
-                        Intent intent = new Intent(
-                                android.provider.Settings.ACTION_LOCATION_SOURCE_SETTINGS);
-                        startActivity(intent);
-                    }
-                });
-        builder.setNegativeButton(R.string.alert_dialog_cancel,
-                new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int which) {
-                        if (showCheckbox) {
-                            presenter.saveOption(!selected.isEmpty());
-                        }
-                    }
-                });
-
-        builder.show();
-    }
-
-    @Override
-    public Resources getResources() {
-        return super.getResources();
-    }
+	@Override
+	public Resources getResources() {
+		return super.getResources();
+	}
 
 	@Override
 	public void onSearch() {

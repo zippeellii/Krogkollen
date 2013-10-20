@@ -1,7 +1,7 @@
 package se.chalmers.krogkollen.backend;
 
 import java.util.ArrayList;
-import java.util.Date;
+import java.util.Calendar;
 import java.util.List;
 
 import android.content.Context;
@@ -13,12 +13,30 @@ import com.parse.ParseQuery;
 import com.parse.SaveCallback;
 
 import se.chalmers.krogkollen.pub.IPub;
+import se.chalmers.krogkollen.pub.OpeningHours;
 import se.chalmers.krogkollen.pub.Pub;
 import se.chalmers.krogkollen.utils.StringConverter;
 
+/*
+ * This file is part of Krogkollen.
+ *
+ * Krogkollen is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * Krogkollen is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with Krogkollen.  If not, see <http://www.gnu.org/licenses/>.
+ */
+
 /**
- * A singleton backend handling the connection between the client and the server Uses parse.com as
- * backend provider
+ * A backend handling the connection between the client and the server. Uses parse.com as backend
+ * provider
  * 
  * @author Jonathan Nilsfors
  * @author Oskar Karrman
@@ -60,7 +78,7 @@ public class ParseBackend implements IBackend {
 			// Makes it possible to handle as a java.util.List
 			tempList = query.find();
 			for (ParseObject object : tempList) {
-				tempPubList.add(this.convertParseObjecttoIPub(object));
+				tempPubList.add(convertParseObjectToPub(object));
 			}
 		} catch (com.parse.ParseException e1) {
 			throw new NoBackendAccessException(e1.getMessage());
@@ -99,7 +117,7 @@ public class ParseBackend implements IBackend {
 				throw new NoBackendAccessException(e.getMessage());
 			}
 		}
-		return this.convertParseObjecttoIPub(object);
+		return convertParseObjectToPub(object);
 	}
 
 	@Override
@@ -139,7 +157,7 @@ public class ParseBackend implements IBackend {
 	}
 
 	@Override
-	public Date getLatestUpdatedTimestamp(IPub pub) throws NoBackendAccessException,
+	public long getLatestUpdatedTimestamp(IPub pub) throws NoBackendAccessException,
 			NotFoundInBackendException {
 		ParseObject object = new ParseObject("Pub");
 
@@ -148,7 +166,7 @@ public class ParseBackend implements IBackend {
 		} catch (ParseException e) {
 			throw new NotFoundInBackendException(e.getMessage());
 		}
-		return object.getUpdatedAt();
+		return object.getLong("queueTimeLastUpdated");
 	}
 
 	/**
@@ -157,14 +175,102 @@ public class ParseBackend implements IBackend {
 	 * @param object the ParseObject
 	 * @return the IPub representation of the ParseObject
 	 */
-	public IPub convertParseObjecttoIPub(ParseObject object) {
-		int hourFourDigit = StringConverter.convertStringToFragmentedInt(
-				object.getString("openingHours"), 5);
+	public static IPub convertParseObjectToPub(ParseObject object) {
+		int hoursInFourDigits = 0;
+
+		boolean pubClosed = false;
+
+		// today == 1 if Sunday, 2 if Monday ... 7 if Saturday
+		int today = Calendar.getInstance().get(Calendar.DAY_OF_WEEK);
+
+		int hour = Calendar.getInstance().get(Calendar.HOUR_OF_DAY);
+
+		if (hour < 6) {
+			--today;
+		}
+		if (today < 1) {
+			today = today + 7;
+		}
+
+		switch (today) {
+			case Calendar.MONDAY:
+				try {
+					hoursInFourDigits = StringConverter.convertStringToFragmentedInt(object.getString("openingHours"), 1);
+				} catch (IllegalArgumentException e) {
+					pubClosed = true;
+				}
+				break;
+
+			case Calendar.TUESDAY:
+				try {
+					hoursInFourDigits = StringConverter.convertStringToFragmentedInt(object.getString("openingHours"), 2);
+				} catch (IllegalArgumentException e) {
+					pubClosed = true;
+				}
+				break;
+
+			case Calendar.WEDNESDAY:
+				try {
+					hoursInFourDigits = StringConverter.convertStringToFragmentedInt(object.getString("openingHours"), 3);
+				} catch (IllegalArgumentException e) {
+					pubClosed = true;
+				}
+				break;
+
+			case Calendar.THURSDAY:
+				try {
+					hoursInFourDigits = StringConverter.convertStringToFragmentedInt(object.getString("openingHours"), 4);
+				} catch (IllegalArgumentException e) {
+					pubClosed = true;
+				}
+				break;
+
+			case Calendar.FRIDAY:
+				try {
+					hoursInFourDigits = StringConverter.convertStringToFragmentedInt(object.getString("openingHours"), 5);
+				} catch (IllegalArgumentException e) {
+					pubClosed = true;
+				}
+				break;
+
+			case Calendar.SATURDAY:
+				try {
+					hoursInFourDigits = StringConverter.convertStringToFragmentedInt(object.getString("openingHours"), 6);
+				} catch (IllegalArgumentException e) {
+					pubClosed = true;
+				}
+				break;
+
+			case Calendar.SUNDAY:
+				try {
+					hoursInFourDigits = StringConverter.convertStringToFragmentedInt(object.getString("openingHours"), 7);
+				} catch (IllegalArgumentException e) {
+					pubClosed = true;
+				}
+				break;
+		}
+
+		OpeningHours openingHoursToday;
+
+		if (pubClosed) {
+			openingHoursToday = new OpeningHours();
+		} else {
+			openingHoursToday = new OpeningHours(hoursInFourDigits / 100, hoursInFourDigits % 100);
+		}
+
+		long queueTimeLastUpdatedTimestamp = object.getLong("queueTimeLastUpdated");
+		int queueTime = object.getInt("queueTime");
+
+		if (!queueTimeIsRecentlyUpdated(queueTimeLastUpdatedTimestamp)) {
+			queueTime = 0;
+		}
+
 		return new Pub(object.getString("name"), object.getString("description"),
 				object.getDouble("latitude"), object.getDouble("longitude"),
 				object.getInt("ageRestriction"), object.getInt("entranceFee"),
-				(hourFourDigit / 100), (hourFourDigit % 100), object.getInt("posRate"),
-				object.getInt("negRate"), object.getInt("queueTime"), object.getObjectId());
+				openingHoursToday, object.getInt("posRate"),
+				object.getInt("negRate"), queueTime,
+				queueTimeLastUpdatedTimestamp, object.getObjectId());
 	}
 
 	@Override
@@ -184,9 +290,9 @@ public class ParseBackend implements IBackend {
 		tempPub.saveInBackground(new SaveCallback() {
 			public void done(ParseException e) {
 				if (e == null) {
-					// TODO should we do something here?
+					// object saved successfully
 				} else {
-					// TODO notify user
+					// TODO throw something from here, why is it not possible?
 				}
 			}
 		});
@@ -199,22 +305,19 @@ public class ParseBackend implements IBackend {
 		// Create a pointer to an object of class Pub
 		ParseObject tempPub = ParseObject.createWithoutData("Pub", pub.getID());
 
-		// TODO This part can cause problems if a rating is updated after the pub was last refreshed
 		if (rating > 0) {
 			tempPub.increment("posRate", -1);
-			// tempPub.put("posRate", pub.getPositiveRating());
 		} else {
 			tempPub.increment("negRate", -1);
-			// tempPub.put("negRate", pub.getNegativeRating());
 		}
 
 		// Save
 		tempPub.saveInBackground(new SaveCallback() {
 			public void done(ParseException e) {
 				if (e == null) {
-					// TODO should we do something here?
+					// object in backend updated successfully
 				} else {
-					// TODO notify user
+					// TODO throw something, how?
 				}
 			}
 		});
@@ -235,8 +338,28 @@ public class ParseBackend implements IBackend {
 				throw new NoBackendAccessException(e.getMessage());
 			}
 		}
-		pub.setQueueTime(object.getInt("queueTime"));
+		long lastUpdate = object.getLong("queueTimeLastUpdated");
+
+		if (queueTimeIsRecentlyUpdated(lastUpdate)) {
+			pub.setQueueTime(object.getInt("queueTime"));
+		} else {
+			pub.setQueueTime(0);
+		}
+
+		pub.setQueueTimeLastUpdatedTimestamp(lastUpdate);
 		pub.setPositiveRating(object.getInt("posRate"));
 		pub.setNegativeRating(object.getInt("negRate"));
+	}
+
+	// checks if the queue time was recently updated
+	private static boolean queueTimeIsRecentlyUpdated(long queueTimeLastUpdatedTimestamp) {
+		long epochTime = System.currentTimeMillis() / 1000;
+
+		// if the queue time was updated more than 60 minutes ago, it wasn't updated recently
+		if ((epochTime - queueTimeLastUpdatedTimestamp) > 3200) {
+			return false;
+		} else {
+			return true;
+		}
 	}
 }

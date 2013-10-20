@@ -2,10 +2,7 @@ package se.chalmers.krogkollen.map;
 
 import android.view.MenuItem;
 import se.chalmers.krogkollen.IPresenter;
-import se.chalmers.krogkollen.pub.IPub;
 import se.chalmers.krogkollen.utils.IObserver;
-
-import java.util.List;
 
 /*
  * This file is part of Krogkollen.
@@ -25,7 +22,6 @@ import java.util.List;
  */
 
 /**
- * 
  * Interface for a MapPresenter
  * 
  * @author Oskar Karrman
@@ -33,18 +29,10 @@ import java.util.List;
  */
 public interface IMapPresenter extends IPresenter, IObserver {
 
-    /**
-     * Start a search for an IPub object
-     *
-     * @param search the string that the user searched for
-     * @return a list containing zero or more IPub objects that matched the search
-     */
-    public abstract List<IPub> search(String search);
-
 	/**
 	 * Determine what will happen when an action bar item is clicked.
 	 * 
-	 * @param item the menuitem that was clicked.
+	 * @param item the menu item that was clicked.
 	 */
 	public void onActionBarClicked(MenuItem item);
 
@@ -58,5 +46,10 @@ public interface IMapPresenter extends IPresenter, IObserver {
 	 */
 	public void onResume();
 
-    void pubMarkerClicked(String title);
+	/**
+	 * Indicates that a pub marker has been clicked
+	 * 
+	 * @param id the id of the clicked pub
+	 */
+	void pubMarkerClicked(String id);
 }

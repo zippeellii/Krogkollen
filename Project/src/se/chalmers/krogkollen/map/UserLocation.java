@@ -212,7 +212,7 @@ public class UserLocation implements LocationListener, IObservable {
 	 * @param location The new Location that you want to evaluate
 	 * @param currentBestLocation The current Location fix, to which you want to compare the new one
 	 */
-	protected boolean isBetterLocation(Location location, Location currentBestLocation) {
+	private boolean isBetterLocation(Location location, Location currentBestLocation) {
 		if (currentBestLocation == null) {
 			// A new location is always better than no location
 			return true;
@@ -254,7 +254,7 @@ public class UserLocation implements LocationListener, IObservable {
 		return false;
 	}
 
-	/** Checks whether two providers are the same */
+	// Checks whether two providers are the same
 	private boolean isSameProvider(String provider1, String provider2) {
 		if (provider1 == null) {
 			return provider2 == null;

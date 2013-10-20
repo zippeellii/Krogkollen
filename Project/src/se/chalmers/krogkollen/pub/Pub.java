@@ -32,8 +32,7 @@ public class Pub implements IPub {
 
 	private String			name;
 	private String			description;
-	private int				todaysOpeningHour;
-	private int				todaysClosingHour;
+	private OpeningHours	openingHoursToday;
 	private double			latitude;
 	private double			longitude;
 	private int				ageRestriction;
@@ -42,12 +41,13 @@ public class Pub implements IPub {
 	private int				positiveRating;
 	private int				negativeRating;
 	private final String	ID;
+	private long			queueTimeLastUpdatedTimestamp;
 
 	/**
 	 * Create a new Pub object with default values
 	 */
 	public Pub() {
-		this("Name", "Description", 0.0, 0.0, 0, 0, 0, 0, 0, 0, 0, "ID");
+		this("Name", "Description", 51, 11, 18, 100, new OpeningHours(20, 03), 10, 3, 1, 0, "ID");
 	}
 
 	/**
@@ -59,8 +59,7 @@ public class Pub implements IPub {
 	 * @param longitude the longitude position
 	 * @param ageRestriction the age restriction
 	 * @param entranceFee the entrance fee
-	 * @param todaysOpeningHour todays opening hour
-	 * @param todaysClosingHour todays closing hour
+	 * @param openingHours todays opening hours
 	 * @param positiveRating positive rating of the pub
 	 * @param negativeRating negative rating of the pub
 	 * @param queueTime the current queue time of the pub
@@ -72,34 +71,33 @@ public class Pub implements IPub {
 		double longitude,
 		int ageRestriction,
 		int entranceFee,
-		int todaysOpeningHour,
-		int todaysClosingHour,
+		OpeningHours openingHoursToday,
 		int positiveRating,
 		int negativeRating,
 		int queueTime,
-		String ID) {
+		long queueTimeLastUpdatedTimestamp,
+		String ID)
+	{
 		this.name = name;
 		this.description = description;
 		this.latitude = latitude;
 		this.longitude = longitude;
 		this.ageRestriction = ageRestriction;
 		this.entranceFee = entranceFee;
-		this.todaysOpeningHour = todaysOpeningHour;
-		this.todaysClosingHour = todaysClosingHour;
+		this.openingHoursToday = openingHoursToday;
 		this.positiveRating = positiveRating;
 		this.negativeRating = negativeRating;
 		this.queueTime = queueTime;
+		this.queueTimeLastUpdatedTimestamp = queueTimeLastUpdatedTimestamp;
 		this.ID = ID;
 	}
 
 	@Override
 	public OpeningHours getTodaysOpeningHours() {
-		return new OpeningHours(this.todaysOpeningHour, this.todaysClosingHour);
+		return this.openingHoursToday;
 	}
 
-	/**
-	 * @return the coordinates of the pub
-	 */
+	@Override
 	public LatLng getCoordinates() {
 		return new LatLng(this.latitude, this.longitude);
 	}
@@ -167,16 +165,6 @@ public class Pub implements IPub {
 	}
 
 	@Override
-	public int getTodaysOpeningHour() {
-		return this.todaysOpeningHour;
-	}
-
-	@Override
-	public int getTodaysClosingHour() {
-		return this.todaysClosingHour;
-	}
-
-	@Override
 	public double getLatitude() {
 		return this.latitude;
 	}
@@ -184,5 +172,15 @@ public class Pub implements IPub {
 	@Override
 	public double getLongitude() {
 		return this.longitude;
+	}
+
+	@Override
+	public void setQueueTimeLastUpdatedTimestamp(long queueTimeLastUpdatedTimestamp) {
+		this.queueTimeLastUpdatedTimestamp = queueTimeLastUpdatedTimestamp;
+	}
+
+	@Override
+	public long getQueueTimeLastUpdatedTimestamp() {
+		return this.queueTimeLastUpdatedTimestamp;
 	}
 }
